@@ -20,10 +20,10 @@ export default function Contact() {
             className="text-center mb-16"
           >
             <h2 className="text-h1 font-display font-bold text-text-primary mb-6">
-              Let's Create Something Extraordinary
+              Let&apos;s Create Something Extraordinary
             </h2>
             <p className="text-body-lg text-text-secondary max-w-2xl mx-auto">
-              Ready to elevate your brand? Get in touch and let's discuss how 
+              Ready to elevate your brand? Get in touch and let&apos;s discuss how 
               we can bring your vision to life.
             </p>
           </motion.div>

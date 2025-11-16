@@ -56,7 +56,7 @@ export default function Story() {
             </h2>
             <p className="text-body-lg text-text-secondary max-w-2xl mx-auto">
               At Ario Studio, we believe that exceptional design is born from the 
-              perfect marriage of creativity and strategy. We don't just create 
+              perfect marriage of creativity and strategy. We don&apos;t just create 
               beautiful things—we craft experiences that resonate, inspire, and drive results.
             </p>
           </motion.div>
@@ -98,7 +98,7 @@ export default function Story() {
           >
             <div className="bg-gradient-to-r from-electric-blue/10 via-violet/10 to-electric-blue/10 rounded-xlarge p-12 border border-electric-blue/20">
               <blockquote className="text-h3 font-serif text-text-primary text-center italic mb-6">
-                "Design is not just what it looks like and feels like. Design is how it works."
+                &quot;Design is not just what it looks like and feels like. Design is how it works.&quot;
               </blockquote>
               <p className="text-body text-text-secondary text-center">
                 — Steve Jobs
