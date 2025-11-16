@@ -5,23 +5,24 @@
 
 export const theme = {
   colors: {
-    // Primary Foundation
-    deepBlack: '#0A0A0A',
-    charcoal: '#1A1A1A',
-    slate: '#2A2A2A',
+    // Primary Foundation (Neon Noir)
+    voidBlack: '#000000',
+    charcoal: '#0F0F0F',
+    slate: '#1A1A1A',
+    graphite: '#252525',
     
-    // Accent System
-    electricBlue: '#3B82F6',
-    violet: '#8B5CF6',
-    amber: '#F59E0B',
-    emerald: '#10B981',
+    // Primary Accent System
+    neonCyan: '#00F5FF',
+    electricMagenta: '#FF00F5',
+    laserGreen: '#00FF88',
+    amberPulse: '#FFB800',
     
     // Semantic Colors
     textPrimary: '#FFFFFF',
-    textSecondary: '#A1A1AA',
-    textTertiary: '#71717A',
-    borderSubtle: '#27272A',
-    surfaceElevated: '#18181B',
+    textSecondary: '#B0B0B0',
+    textTertiary: '#707070',
+    borderSubtle: '#2A2A2A',
+    surfaceElevated: '#151515',
   },
   
   spacing: {

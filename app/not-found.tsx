@@ -13,7 +13,7 @@ export default function NotFound() {
         </p>
         <Link
           href="/"
-          className="inline-flex items-center gap-2 px-8 py-4 bg-electric-blue text-text-primary font-medium rounded-medium hover:bg-electric-blue/90 shadow-glow transition-all duration-300"
+          className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-neon-cyan to-electric-magenta text-void-black font-medium rounded-medium hover:shadow-glow-hover transition-all duration-300"
         >
           <ArrowLeft size={20} />
           Back to Home

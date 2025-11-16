@@ -49,7 +49,7 @@ export default function Footer() {
                 Ario Studio
               </h3>
               <p className="text-body-sm text-text-secondary mb-6">
-                Creating extraordinary experiences through exceptional design and strategic thinking.
+                We design experiences that evolve. Crafting living systems through exceptional design and strategic thinking.
               </p>
               {/* Social Links */}
               <div className="flex gap-4">
@@ -60,7 +60,7 @@ export default function Footer() {
                       key={social.label}
                       href={social.href}
                       aria-label={social.label}
-                      className="w-10 h-10 bg-surface-elevated rounded-medium flex items-center justify-center text-text-secondary hover:text-electric-blue hover:bg-electric-blue/10 transition-all duration-300 border border-border-subtle"
+                      className="w-10 h-10 bg-surface-elevated rounded-medium flex items-center justify-center text-text-secondary hover:text-neon-cyan hover:bg-neon-cyan/10 transition-all duration-300 border border-border-subtle"
                       whileHover={{ scale: 1.1, y: -2 }}
                       whileTap={{ scale: 0.95 }}
                     >
@@ -112,7 +112,7 @@ export default function Footer() {
             © {currentYear} Ario Studio. All rights reserved.
           </p>
           <p className="text-body-sm text-text-tertiary">
-            Crafted with precision and passion.
+            Designed to evolve.
           </p>
         </motion.div>
       </div>

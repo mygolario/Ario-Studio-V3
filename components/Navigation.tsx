@@ -60,7 +60,7 @@ export default function Navigation() {
                 whileHover={{ y: -2 }}
               >
                 {item.label}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-electric-blue group-hover:w-full transition-all duration-300" />
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-neon-cyan group-hover:w-full transition-all duration-300" />
               </motion.a>
             ))}
           </div>

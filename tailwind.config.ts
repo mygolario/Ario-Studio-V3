@@ -9,23 +9,24 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Primary Foundation
-        'deep-black': '#0A0A0A',
-        'charcoal': '#1A1A1A',
-        'slate': '#2A2A2A',
+        // Primary Foundation (Neon Noir)
+        'void-black': '#000000',
+        'charcoal': '#0F0F0F',
+        'slate': '#1A1A1A',
+        'graphite': '#252525',
         
-        // Accent System
-        'electric-blue': '#3B82F6',
-        'violet': '#8B5CF6',
-        'amber': '#F59E0B',
-        'emerald': '#10B981',
+        // Primary Accent System
+        'neon-cyan': '#00F5FF',
+        'electric-magenta': '#FF00F5',
+        'laser-green': '#00FF88',
+        'amber-pulse': '#FFB800',
         
         // Semantic Colors
         'text-primary': '#FFFFFF',
-        'text-secondary': '#A1A1AA',
-        'text-tertiary': '#71717A',
-        'border-subtle': '#27272A',
-        'surface-elevated': '#18181B',
+        'text-secondary': '#B0B0B0',
+        'text-tertiary': '#707070',
+        'border-subtle': '#2A2A2A',
+        'surface-elevated': '#151515',
       },
       fontFamily: {
         'sans': ['var(--font-inter)', 'system-ui', 'sans-serif'],
@@ -61,8 +62,11 @@ const config: Config = {
         'level-2': '0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3)',
         'level-3': '0 10px 15px rgba(0, 0, 0, 0.5), 0 4px 6px rgba(0, 0, 0, 0.4)',
         'level-4': '0 20px 25px rgba(0, 0, 0, 0.6), 0 10px 10px rgba(0, 0, 0, 0.5)',
-        'glow': '0 0 20px rgba(59, 130, 246, 0.3)',
-        'glow-hover': '0 0 30px rgba(59, 130, 246, 0.5)',
+        'glow': '0 0 20px rgba(0, 245, 255, 0.3)',
+        'glow-hover': '0 0 30px rgba(0, 245, 255, 0.5)',
+        'glow-magenta': '0 0 20px rgba(255, 0, 245, 0.3)',
+        'glow-green': '0 0 20px rgba(0, 255, 136, 0.3)',
+        'glow-amber': '0 0 20px rgba(255, 184, 0, 0.3)',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out',
