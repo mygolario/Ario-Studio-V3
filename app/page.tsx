@@ -1,9 +1,10 @@
 import Navigation from '@/components/Navigation'
 import Hero from '@/components/Hero'
-import Story from '@/components/Story'
+import Philosophy from '@/components/Philosophy'
+import Capabilities from '@/components/Capabilities'
+import Portfolio from '@/components/Portfolio'
 import About from '@/components/About'
 import Services from '@/components/Services'
-import Portfolio from '@/components/Portfolio'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
 
@@ -12,10 +13,11 @@ export default function Home() {
     <main className="relative">
       <Navigation />
       <Hero />
-      <Story />
+      <Philosophy />
+      <Capabilities />
+      <Portfolio />
       <About />
       <Services />
-      <Portfolio />
       <Contact />
       <Footer />
     </main>

@@ -9,24 +9,28 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Primary Foundation (Neon Noir)
-        'void-black': '#000000',
-        'charcoal': '#0F0F0F',
-        'slate': '#1A1A1A',
-        'graphite': '#252525',
+        // Base Colors (Light & Expressive)
+        'pure-white': '#FFFFFF',
+        'warm-gray-50': '#FAFAF9',
+        'warm-gray-100': '#F5F5F4',
+        'warm-gray-200': '#E7E5E4',
+        'warm-gray-600': '#78716C',
+        'warm-gray-800': '#292524',
         
-        // Primary Accent System
-        'neon-cyan': '#00F5FF',
-        'electric-magenta': '#FF00F5',
-        'laser-green': '#00FF88',
-        'amber-pulse': '#FFB800',
+        // Warm AI Accent System
+        'ai-amber': '#FF8C42',
+        'ai-gold': '#FFB84D',
+        'ai-coral': '#FF6B6B',
+        'ai-sky': '#4A90E2',
+        'ai-lavender': '#9B7EDE',
+        'ai-mint': '#6BCF9F',
         
         // Semantic Colors
-        'text-primary': '#FFFFFF',
-        'text-secondary': '#B0B0B0',
-        'text-tertiary': '#707070',
-        'border-subtle': '#2A2A2A',
-        'surface-elevated': '#151515',
+        'text-primary': '#292524',
+        'text-secondary': '#78716C',
+        'text-tertiary': '#A8A29E',
+        'border-subtle': '#E7E5E4',
+        'surface-elevated': '#FAFAF9',
       },
       fontFamily: {
         'sans': ['var(--font-inter)', 'system-ui', 'sans-serif'],
@@ -62,11 +66,11 @@ const config: Config = {
         'level-2': '0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3)',
         'level-3': '0 10px 15px rgba(0, 0, 0, 0.5), 0 4px 6px rgba(0, 0, 0, 0.4)',
         'level-4': '0 20px 25px rgba(0, 0, 0, 0.6), 0 10px 10px rgba(0, 0, 0, 0.5)',
-        'glow': '0 0 20px rgba(0, 245, 255, 0.3)',
-        'glow-hover': '0 0 30px rgba(0, 245, 255, 0.5)',
-        'glow-magenta': '0 0 20px rgba(255, 0, 245, 0.3)',
-        'glow-green': '0 0 20px rgba(0, 255, 136, 0.3)',
-        'glow-amber': '0 0 20px rgba(255, 184, 0, 0.3)',
+        'glow-warm': '0 0 30px rgba(255, 140, 66, 0.2)',
+        'glow-warm-hover': '0 0 40px rgba(255, 140, 66, 0.3)',
+        'glow-soft': '0 0 20px rgba(74, 144, 226, 0.15)',
+        'shadow-warm': '0 4px 20px rgba(255, 140, 66, 0.1)',
+        'shadow-soft': '0 8px 30px rgba(0, 0, 0, 0.08)',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out',

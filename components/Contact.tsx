@@ -1,25 +1,36 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef } from 'react'
 import { Mail, MessageCircle, Calendar, ArrowRight } from 'lucide-react'
 
 export default function Contact() {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  })
+
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
+  const y = useTransform(scrollYProgress, [0, 0.5], [100, 0])
+
   return (
     <section
       id="contact"
+      ref={ref}
       className="relative py-32 md:py-40 lg:py-48 overflow-hidden"
     >
-      {/* Background with animated gradients */}
-      <div className="absolute inset-0 bg-gradient-to-b from-void-black via-charcoal/50 to-void-black">
+      {/* Scene Background - Warm Climax Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-pure-white via-warm-gray-50 to-pure-white">
         <motion.div
-          className="absolute top-1/2 left-1/2 w-[1000px] h-[1000px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[150px] opacity-20"
+          className="absolute top-1/2 left-1/2 w-[1200px] h-[1200px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[180px] opacity-25"
           style={{
-            background: 'radial-gradient(circle, rgba(0,245,255,0.4) 0%, rgba(255,0,245,0.3) 50%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(255,140,66,0.4) 0%, rgba(255,107,107,0.3) 50%, rgba(255,184,77,0.2) 100%)',
           }}
           animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.2, 0.3, 0.2],
-            rotate: [0, 180, 360],
+            scale: [1, 1.4, 1],
+            opacity: [0.25, 0.35, 0.25],
+            rotate: [0, 90, 180, 270, 360],
           }}
           transition={{
             duration: 20,
@@ -30,7 +41,10 @@ export default function Contact() {
       </div>
 
       <div className="container-custom relative z-10">
-        <div className="max-w-4xl mx-auto">
+        <motion.div
+          style={{ opacity, y }}
+          className="max-w-4xl mx-auto"
+        >
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -44,15 +58,15 @@ export default function Contact() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="inline-block text-label text-neon-cyan uppercase tracking-wider mb-6"
+              className="inline-block text-label text-ai-amber uppercase tracking-wider mb-6"
             >
               Get In Touch
             </motion.span>
             <h2 className="text-h1 md:text-[72px] md:leading-[80px] font-display font-bold text-text-primary mb-8">
-              Let&apos;s Build Something
+              Let&apos;s Create
               <br />
-              <span className="bg-gradient-to-r from-neon-cyan via-electric-magenta to-laser-green bg-clip-text text-transparent">
-                That Evolves
+              <span className="bg-gradient-to-r from-ai-amber via-ai-gold to-ai-coral bg-clip-text text-transparent">
+                Something Together
               </span>
             </h2>
             <p className="text-body-lg md:text-xl text-text-secondary max-w-3xl mx-auto leading-relaxed">
@@ -75,30 +89,27 @@ export default function Contact() {
                 title: 'Email Us',
                 description: 'hello@ariostudio.com',
                 href: 'mailto:hello@ariostudio.com',
-                color: 'neon-cyan',
+                color: 'ai-amber',
+                gradient: 'from-ai-amber to-ai-gold',
               },
               {
                 icon: MessageCircle,
                 title: 'Start a Chat',
                 description: 'Quick conversation',
                 href: '#',
-                color: 'electric-magenta',
+                color: 'ai-coral',
+                gradient: 'from-ai-coral to-ai-amber',
               },
               {
                 icon: Calendar,
                 title: 'Book a Call',
                 description: 'Schedule a meeting',
                 href: '#',
-                color: 'laser-green',
+                color: 'ai-gold',
+                gradient: 'from-ai-gold to-ai-coral',
               },
             ].map((option, index) => {
               const Icon = option.icon
-              const colorClasses: Record<string, string> = {
-                'neon-cyan': 'bg-neon-cyan/10 text-neon-cyan border-neon-cyan/20 hover:bg-neon-cyan/20',
-                'electric-magenta': 'bg-electric-magenta/10 text-electric-magenta border-electric-magenta/20 hover:bg-electric-magenta/20',
-                'laser-green': 'bg-laser-green/10 text-laser-green border-laser-green/20 hover:bg-laser-green/20',
-              }
-              const colors = colorClasses[option.color]
               
               return (
                 <motion.a
@@ -108,17 +119,21 @@ export default function Contact() {
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className={`group relative bg-surface-elevated p-8 rounded-large border ${colors.split(' ')[2]} hover:shadow-glow transition-all duration-500 text-center overflow-hidden`}
+                  className={`group relative bg-surface-elevated p-8 rounded-large border hover:shadow-warm transition-all duration-500 text-center overflow-hidden ${
+                    option.color === 'ai-amber' ? 'border-ai-amber/20 hover:border-ai-amber/50' :
+                    option.color === 'ai-coral' ? 'border-ai-coral/20 hover:border-ai-coral/50' :
+                    'border-ai-gold/20 hover:border-ai-gold/50'
+                  }`}
                   whileHover={{ y: -8, scale: 1.02 }}
                 >
                   {/* Hover gradient overlay */}
                   <motion.div
-                    className={`absolute inset-0 ${colors.split(' ')[0]} opacity-0 group-hover:opacity-100`}
+                    className={`absolute inset-0 bg-gradient-to-br ${option.gradient} opacity-0 group-hover:opacity-10`}
                     transition={{ duration: 0.3 }}
                   />
                   
-                  <div className={`relative z-10 w-14 h-14 ${colors.split(' ')[0]} rounded-large flex items-center justify-center mx-auto mb-4 border ${colors.split(' ')[2]} transition-all duration-300 group-hover:scale-110`}>
-                    <Icon size={28} />
+                  <div className={`relative z-10 w-14 h-14 bg-gradient-to-br ${option.gradient} rounded-large flex items-center justify-center mx-auto mb-4 shadow-warm transition-all duration-300 group-hover:scale-110`}>
+                    <Icon className="text-pure-white" size={28} />
                   </div>
                   <h3 className="relative z-10 text-h5 font-display font-bold text-text-primary mb-2">
                     {option.title}
@@ -141,7 +156,7 @@ export default function Contact() {
           >
             <motion.a
               href="mailto:hello@ariostudio.com"
-              className="group relative inline-flex items-center gap-4 px-12 py-6 bg-gradient-to-r from-neon-cyan via-electric-magenta to-neon-cyan text-void-black font-display font-bold text-xl rounded-large overflow-hidden"
+              className="group relative inline-flex items-center gap-4 px-12 py-6 bg-gradient-to-r from-ai-amber via-ai-gold to-ai-coral text-pure-white font-display font-bold text-xl rounded-large overflow-hidden shadow-warm"
               whileHover={{ scale: 1.05, y: -4 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -160,7 +175,7 @@ export default function Contact() {
               
               {/* Animated gradient background */}
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-electric-magenta via-neon-cyan to-electric-magenta opacity-0 group-hover:opacity-100"
+                className="absolute inset-0 bg-gradient-to-r from-ai-coral via-ai-amber to-ai-gold opacity-0 group-hover:opacity-100"
                 animate={{
                   backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
                 }}
@@ -176,12 +191,12 @@ export default function Contact() {
               
               {/* Glow effect */}
               <motion.div
-                className="absolute inset-0 shadow-glow-hover opacity-0 group-hover:opacity-100"
+                className="absolute inset-0 shadow-glow-warm-hover opacity-0 group-hover:opacity-100"
                 transition={{ duration: 0.3 }}
               />
             </motion.a>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
     </section>
   )
