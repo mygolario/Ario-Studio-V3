@@ -147,7 +147,7 @@ export default function Header() {
             {/* Logo */}
             <motion.a
               href="#"
-              className="text-xl font-semibold text-text-primary"
+              className="text-xl font-semibold text-text-primary dark:text-slate-100"
               whileHover={{ opacity: 0.8 }}
               whileTap={{ scale: 0.98 }}
             >
