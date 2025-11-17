@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Linkedin, Twitter, Instagram, Github } from 'lucide-react'
+import { Copy } from '@/content/copy'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -49,7 +50,7 @@ export default function Footer() {
                 Ario Studio
               </h3>
               <p className="text-body-sm text-text-secondary mb-6">
-                Clean, structured, and trustworthy digital experiences.
+                {Copy.footer.description}
               </p>
               {/* Social Links */}
               <div className="flex gap-4">
@@ -112,8 +113,8 @@ export default function Footer() {
                         © {currentYear} Ario Studio. All rights reserved.
                       </p>
                       <p className="text-body-sm text-text-muted">
-            Built with clarity and purpose.
-          </p>
+                        {Copy.footer.tagline}
+                      </p>
         </motion.div>
       </div>
     </footer>

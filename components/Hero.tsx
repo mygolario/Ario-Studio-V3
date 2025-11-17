@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import Button from './Button'
 import { animateHeroIntro, applyHeroParallax, prefersReducedMotion } from '@/lib/gsapClient'
 import HeroBackground from './HeroBackground'
+import { Copy } from '@/content/copy'
 
 /**
  * Hero Section
@@ -164,7 +165,7 @@ export default function Hero() {
               ref={headingRef}
               className="text-hero md:text-[64px] md:leading-[72px] font-semibold text-text-primary"
             >
-              We Design, Build & Automate Modern Digital Experiences.
+              {Copy.hero.title}
             </h1>
 
             {/* Subtext - Layer 2 */}
@@ -172,12 +173,12 @@ export default function Hero() {
               ref={subheadingRef}
               className="text-body-lg md:text-xl text-text-secondary max-w-xl leading-relaxed"
             >
-              A clean, structured, and trustworthy studio focused on clarity, performance, and long-term value.
+              {Copy.hero.subtitle}
             </p>
 
             {/* Visual Chips - Layer 2 */}
             <div ref={chipsRef} className="flex flex-wrap gap-3 pt-2">
-              {['AI-native', 'Cinematic UX', 'Agent-ready'].map((chip) => (
+              {Copy.hero.chips.map((chip) => (
                 <span
                   key={chip}
                   data-chip
@@ -188,19 +189,19 @@ export default function Hero() {
               ))}
             </div>
 
-            {/* Buttons - Layer 1 (closest) */}
-            <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 pt-4">
-              <div data-button>
-                <Button href="#contact" variant="primary">
-                  Start Your Project
-                </Button>
-              </div>
-              <div data-button>
-                <Button href="#portfolio" variant="secondary" icon={false}>
-                  View Our Work
-                </Button>
-              </div>
-            </div>
+                        {/* Buttons - Layer 1 (closest) */}
+                        <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 pt-4">
+                          <div data-button>
+                            <Button href="#contact" variant="primary">
+                              {Copy.hero.ctaPrimary}
+                            </Button>
+                          </div>
+                          <div data-button>
+                            <Button href="#portfolio" variant="secondary" icon={false}>
+                              {Copy.hero.ctaSecondary}
+                            </Button>
+                          </div>
+                        </div>
           </motion.div>
 
           {/* RIGHT COLUMN - 3D Orange Card - Layer 3 */}

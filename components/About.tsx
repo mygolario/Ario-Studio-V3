@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react'
 import { Award, Users, Workflow, TrendingUp } from 'lucide-react'
 import { animateSectionReveal } from '@/lib/gsapClient'
+import { Copy } from '@/content/copy'
 
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -17,28 +18,17 @@ export default function About() {
       })
     }
   }, [])
-  const stats = [
-    {
-      icon: Award,
-      title: 'High-quality engineering standards',
-      description: 'Code that stands the test of time.',
-    },
-    {
-      icon: Users,
-      title: '8+ years combined experience',
-      description: 'Proven track record of delivery.',
-    },
-    {
-      icon: Workflow,
-      title: 'Structured, efficient workflow',
-      description: 'Clear processes from start to finish.',
-    },
-    {
-      icon: TrendingUp,
-      title: 'Long-term, scalable solutions',
-      description: 'Built to grow with your business.',
-    },
-  ]
+  const iconMap: Record<string, typeof Award> = {
+    'High-quality engineering standards': Award,
+    '8+ years combined experience': Users,
+    'Structured, efficient workflow': Workflow,
+    'Long-term, scalable solutions': TrendingUp,
+  }
+
+  const stats = Copy.about.stats.map((stat) => ({
+    ...stat,
+    icon: iconMap[stat.title] || Award,
+  }))
 
   return (
     <section
@@ -60,13 +50,13 @@ export default function About() {
           <div className="text-center mb-16">
             <div className="mb-6">
               <h2 className="text-h1 font-semibold text-text-primary mb-4">
-                About Ario Studio
+                {Copy.about.title}
               </h2>
               {/* Section accent line */}
               <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full mx-auto" />
             </div>
             <p className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
-              We combine modern design, precise engineering and streamlined workflows to deliver clean and reliable digital products.
+              {Copy.about.subtitle}
             </p>
           </div>
 

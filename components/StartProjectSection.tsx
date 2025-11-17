@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import Button from './Button'
 import { animateSectionReveal } from '@/lib/gsapClient'
+import { Copy } from '@/content/copy'
 
 /**
  * Start Project Section
@@ -33,12 +34,7 @@ export default function StartProjectSection() {
     message: '',
   })
 
-  const services = [
-    'Cinematic web experiences',
-    'Next.js engineering',
-    'AI agents & automations',
-    'UX & motion systems',
-  ]
+  const services = Copy.startProject.services
 
   const projectTypes = [
     'Full website',
@@ -179,13 +175,13 @@ export default function StartProjectSection() {
           <div className="text-center mb-16">
             <div className="mb-6">
               <h2 className="text-h1 font-semibold text-text-primary mb-4">
-                Ready to start a project?
+                {Copy.startProject.title}
               </h2>
               {/* Section accent line */}
               <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full mx-auto" />
             </div>
             <p className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
-              Tell us a bit about your idea and we&apos;ll help shape it into a cinematic, AI-native experience.
+              {Copy.startProject.subtitle}
             </p>
           </div>
 

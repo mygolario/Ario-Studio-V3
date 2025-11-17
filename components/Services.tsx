@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { Palette, Code, Zap } from 'lucide-react'
+import { Palette, Code, Zap, Rocket } from 'lucide-react'
 import { animateSectionReveal } from '@/lib/gsapClient'
+import { Copy } from '@/content/copy'
 
 export default function Services() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -17,41 +18,15 @@ export default function Services() {
       })
     }
   }, [])
-  const serviceGroups = [
-    {
-      id: 'ai-native-product-websites',
-      icon: Palette,
-      title: 'AI-Native Product Websites',
-      description: 'Full-stack experiences with AI at the core',
-      items: [
-        'Cinematic marketing sites',
-        'Agent-integrated product pages',
-        'Launch-ready frontends',
-      ],
-    },
-    {
-      id: 'mvps-dashboards',
-      icon: Code,
-      title: 'MVPs & Dashboards',
-      description: 'Fast validation and internal tools',
-      items: [
-        'Early-stage MVP & landing pages',
-        'Agent-ready internal dashboards',
-        'Fast validation builds',
-      ],
-    },
-    {
-      id: 'long-term-design-systems',
-      icon: Zap,
-      title: 'Long-term Design Systems',
-      description: 'Ongoing design partnerships',
-      items: [
-        'UI/UX systems & motion direction',
-        'Ongoing design partnerships',
-        'Strategic design support',
-      ],
-    },
-  ]
+  const serviceIcons = [Palette, Code, Zap, Rocket]
+  
+  const serviceGroups = Copy.services.items.map((item, index) => ({
+    id: item.title.toLowerCase().replace(/\s+/g, '-'),
+    icon: serviceIcons[index] || Palette,
+    title: item.title,
+    description: item.description,
+    items: item.bullets,
+  }))
 
   return (
     <section
@@ -73,18 +48,18 @@ export default function Services() {
           <div className="text-center mb-16">
             <div className="mb-6">
               <h2 className="text-h1 font-semibold text-text-primary mb-4">
-                Our Services
+                {Copy.services.title}
               </h2>
               {/* Section accent line */}
               <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full mx-auto" />
             </div>
             <p className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
-              Comprehensive solutions from design to deployment, built for long-term success.
+              {Copy.services.subtitle}
             </p>
           </div>
 
           {/* Services Grid */}
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {serviceGroups.map((group, index) => {
               const Icon = group.icon
               return (

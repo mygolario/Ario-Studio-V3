@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { animateSectionReveal } from '@/lib/gsapClient'
 import { getAllProjects } from '@/data/projects'
+import { Copy } from '@/content/copy'
 
 export default function Portfolio() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -40,13 +41,13 @@ export default function Portfolio() {
           <div className="text-center mb-16">
             <div className="mb-6">
               <h2 className="text-h1 font-semibold text-text-primary mb-4">
-                Our Work
+                {Copy.work.title}
               </h2>
               {/* Section accent line */}
               <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full mx-auto" />
             </div>
             <p className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
-              Selected projects showcasing clean design and reliable engineering.
+              {Copy.work.subtitle}
             </p>
           </div>
 

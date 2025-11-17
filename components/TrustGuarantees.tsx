@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { CheckCircle2, Clock, Code2, Sparkles } from 'lucide-react'
+import { CheckCircle2, Clock, Code2, Sparkles, Users } from 'lucide-react'
 import { animateSectionReveal } from '@/lib/gsapClient'
+import { Copy } from '@/content/copy'
 
 /**
  * Trust & Guarantees Section
@@ -28,28 +29,18 @@ export default function TrustGuarantees() {
     }
   }, [])
 
-  const trustItems = [
-    {
-      icon: Clock,
-      title: 'Clear timelines & communication',
-      description: 'Structured workflow with regular updates and transparent milestones.',
-    },
-    {
-      icon: Code2,
-      title: 'Production-ready architecture',
-      description: 'Next.js engineering standards built for scale and long-term maintenance.',
-    },
-    {
-      icon: Sparkles,
-      title: 'Cinematic UX & motion-first design',
-      description: 'Experiences that feel alive, with thoughtful animations and interactions.',
-    },
-    {
-      icon: CheckCircle2,
-      title: 'AI-native workflows in mind',
-      description: 'Built with automation and intelligent systems as core considerations.',
-    },
-  ]
+  const iconMap: Record<string, typeof Clock> = {
+    'Clear timelines & communication': Clock,
+    'Production-grade engineering': Code2,
+    'Cinematic UX & motion systems': Sparkles,
+    'AI-native architecture': CheckCircle2,
+    'Founder-friendly execution': Users,
+  }
+
+  const trustItems = Copy.trust.items.map((item) => ({
+    ...item,
+    icon: iconMap[item.title] || CheckCircle2,
+  }))
 
   return (
     <section
@@ -63,13 +54,13 @@ export default function TrustGuarantees() {
           <div className="text-center mb-16">
             <div className="mb-6">
               <h2 className="text-h1 font-semibold text-text-primary mb-4">
-                Why teams work with us
+                {Copy.trust.title}
               </h2>
               {/* Section accent line */}
               <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full mx-auto" />
             </div>
             <p className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
-              Built for real projects. Clear processes, reliable delivery, and long-term value.
+              {Copy.trust.subtitle}
             </p>
           </div>
 

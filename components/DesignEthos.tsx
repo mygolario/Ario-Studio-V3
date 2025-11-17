@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react'
 import { Target, Code, Eye } from 'lucide-react'
 import { animateSectionReveal } from '@/lib/gsapClient'
+import { Copy } from '@/content/copy'
 
 export default function DesignEthos() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -55,46 +56,18 @@ export default function DesignEthos() {
     }
   }, [])
 
-  const processSteps = [
-    {
-      number: '01',
-      title: 'Discover',
-      description: 'We start by understanding your goals, audience, and constraints. Clear objectives inform every decision.',
-    },
-    {
-      number: '02',
-      title: 'Design',
-      description: 'Strategic design that balances creativity with purpose. Every pixel serves a clear function.',
-    },
-    {
-      number: '03',
-      title: 'Build',
-      description: 'Clean, structured engineering with scalable architecture. Built for performance and long-term value.',
-    },
-    {
-      number: '04',
-      title: 'Automate',
-      description: 'AI-native workflows and intelligent automation. Systems that evolve and adapt with your needs.',
-    },
-  ]
+  const processSteps = Copy.process.steps
 
-  const features = [
-    {
-      icon: Target,
-      title: 'Strategy-led approach',
-      description: 'Every decision is informed by clear objectives and measurable outcomes.',
-    },
-    {
-      icon: Code,
-      title: 'Clean, structured engineering',
-      description: 'Scalable architecture built with precision and maintainability in mind.',
-    },
-    {
-      icon: Eye,
-      title: 'Detail-oriented design',
-      description: 'Thoughtful execution that elevates both form and function.',
-    },
-  ]
+  const iconMap = {
+    'Strategy-led approach': Target,
+    'Clean, structured engineering': Code,
+    'Detail-oriented design': Eye,
+  }
+
+  const features = Copy.process.features.map((feature) => ({
+    ...feature,
+    icon: iconMap[feature.title as keyof typeof iconMap] || Target,
+  }))
 
   return (
     <section
@@ -109,14 +82,13 @@ export default function DesignEthos() {
             <div className="space-y-6">
               <div>
                 <h2 className="text-h1 font-semibold text-text-primary mb-4">
-                  Our Philosophy
+                  {Copy.process.title}
                 </h2>
                 {/* Section accent line */}
                 <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full" />
               </div>
               <p className="text-body-lg text-text-secondary leading-relaxed">
-                We focus on clarity, precision and thoughtful execution.  
-                Everything we create is structured, scalable and purpose-driven.
+                {Copy.process.subtitle}
               </p>
             </div>
 
@@ -125,7 +97,7 @@ export default function DesignEthos() {
               {/* Process Visual Journey */}
               <div>
                 <h3 className="text-h4 font-semibold text-text-primary mb-8">
-                  How We Work
+                  {Copy.process.journeyTitle}
                 </h3>
                 
                 {/* Desktop: Horizontal Stepper */}
@@ -197,7 +169,7 @@ export default function DesignEthos() {
               {/* Feature Cards */}
               <div>
                 <h3 className="text-h4 font-semibold text-text-primary mb-6">
-                  Our Approach
+                  {Copy.process.approachTitle}
                 </h3>
                 <div className="space-y-6">
                   {features.map((feature, index) => {
