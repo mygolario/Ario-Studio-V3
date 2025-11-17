@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { useState } from 'react'
 
 interface FeatureIcon3DProps {
-  variant: 'brain' | 'cube' | 'graph' | 'chart'
+  variant: 'brain' | 'cube' | 'graph' | 'chart' | 'stack' | 'orbit'
   size?: 'sm' | 'md' | 'lg'
 }
 
@@ -160,6 +160,72 @@ export default function FeatureIcon3D({ variant, size = 'md' }: FeatureIcon3DPro
                 }}
               />
             ))}
+          </div>
+        )
+
+      case 'stack':
+        return (
+          <div className="relative w-full h-full" style={{ perspective: '150px' }}>
+            {/* Stacked screens/cards */}
+            {[0, 1, 2].map((i) => (
+              <motion.div
+                key={i}
+                className="absolute w-full h-full rounded-md bg-gradient-sunset opacity-70 border-2 border-pure-white/20"
+                style={{
+                  transform: `translateZ(${i * 8}px) translateY(${i * 4}px)`,
+                  zIndex: 3 - i,
+                }}
+                animate={{
+                  y: [i * 4, i * 4 - 2, i * 4],
+                  opacity: [0.7, 0.9, 0.7],
+                }}
+                transition={{
+                  duration: 2.5 + i * 0.3,
+                  repeat: Infinity,
+                  delay: i * 0.2,
+                }}
+              />
+            ))}
+          </div>
+        )
+
+      case 'orbit':
+        return (
+          <div className="relative w-full h-full">
+            {/* Center node */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-gradient-sunset" />
+            {/* Orbiting dots */}
+            {[...Array(5)].map((_, i) => {
+              const angle = (i * 72) * (Math.PI / 180)
+              const radius = 30
+              return (
+                <motion.div
+                  key={i}
+                  className="absolute w-2 h-2 rounded-full bg-gradient-sunset"
+                  style={{
+                    left: '50%',
+                    top: '50%',
+                  }}
+                  animate={{
+                    x: [
+                      Math.cos(angle) * radius,
+                      Math.cos(angle + Math.PI * 2) * radius,
+                    ],
+                    y: [
+                      Math.sin(angle) * radius,
+                      Math.sin(angle + Math.PI * 2) * radius,
+                    ],
+                    scale: [1, 1.4, 1],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: 'linear',
+                    delay: i * 0.1,
+                  }}
+                />
+              )
+            })}
           </div>
         )
 

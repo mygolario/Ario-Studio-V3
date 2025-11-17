@@ -2,7 +2,8 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
-import { Mail, MessageCircle, Calendar, ArrowRight } from 'lucide-react'
+import { Mail, MessageCircle, Calendar } from 'lucide-react'
+import Button from './Button'
 
 export default function Contact() {
   const ref = useRef<HTMLDivElement>(null)
@@ -154,47 +155,13 @@ export default function Contact() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="text-center"
           >
-            <motion.a
-              href="mailto:hello@ariostudio.com"
-              className="group relative inline-flex items-center gap-4 px-12 py-6 bg-gradient-to-r from-ai-amber via-ai-gold to-ai-coral text-pure-white font-display font-bold text-xl rounded-large overflow-hidden shadow-warm"
-              whileHover={{ scale: 1.05, y: -4 }}
-              whileTap={{ scale: 0.98 }}
+            <Button 
+              href="mailto:hello@ariostudio.com" 
+              variant="primary"
+              className="!px-12 !py-6 !text-xl"
             >
-              <span className="relative z-10">Get Started Today</span>
-              <motion.div
-                className="relative z-10"
-                animate={{ x: [0, 4, 0] }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                }}
-              >
-                <ArrowRight size={24} />
-              </motion.div>
-              
-              {/* Animated gradient background */}
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-ai-coral via-ai-amber to-ai-gold opacity-0 group-hover:opacity-100"
-                animate={{
-                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: 'linear',
-                }}
-                style={{
-                  backgroundSize: '200% 100%',
-                }}
-              />
-              
-              {/* Glow effect */}
-              <motion.div
-                className="absolute inset-0 shadow-glow-warm-hover opacity-0 group-hover:opacity-100"
-                transition={{ duration: 0.3 }}
-              />
-            </motion.a>
+              Get Started Today
+            </Button>
           </motion.div>
         </motion.div>
       </div>

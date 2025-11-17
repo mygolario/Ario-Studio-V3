@@ -2,9 +2,22 @@
 
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { useEffect, useRef } from 'react'
-import { ArrowRight } from 'lucide-react'
 import AnimatedGradientBackground from './AnimatedGradientBackground'
+import Button from './Button'
 
+/**
+ * Hero Section
+ * 
+ * To update the hero copy/slogan:
+ * - Main heading: Edit the h1 text (line ~70)
+ * - Subheading: Edit the paragraph text (line ~85)
+ * - Eyebrow: Edit the span text (line ~60)
+ * 
+ * To adjust animations:
+ * - Entrance delay: Modify delay values in motion components (currently 0.2-0.5s)
+ * - 3D card rotation: Adjust rotateX/rotateY ranges in useTransform (line ~15-16)
+ * - Orbiting speed: Change duration in orbiting elements animate props
+ */
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
@@ -12,8 +25,8 @@ export default function Hero() {
   const mouseY = useMotionValue(0)
 
   const springConfig = { damping: 50, stiffness: 100 }
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [10, -10]), springConfig)
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-10, 10]), springConfig)
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [12, -12]), springConfig)
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-12, 12]), springConfig)
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -66,9 +79,9 @@ export default function Hero() {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="text-[48px] leading-[56px] md:text-[64px] md:leading-[72px] lg:text-[72px] lg:leading-[80px] font-bold text-text-primary"
             >
-              Cinematic AI-driven websites for{' '}
+              We design AI-native websites that feel{' '}
               <span className="bg-gradient-sunset bg-clip-text text-transparent">
-                ambitious products.
+                cinematic and ship fast.
               </span>
             </motion.h1>
 
@@ -79,7 +92,7 @@ export default function Hero() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="text-body-lg md:text-xl text-text-secondary max-w-xl leading-relaxed"
             >
-              We craft high-end, animated experiences powered by AI agents and modern product thinking.
+              Ario Studio builds interactive, agent-ready web experiences that turn early-stage ideas into launch-ready products.
             </motion.p>
 
             {/* Buttons */}
@@ -89,32 +102,16 @@ export default function Hero() {
               transition={{ duration: 0.8, delay: 0.5 }}
               className="flex flex-col sm:flex-row gap-4"
             >
-              <motion.a
-                href="#contact"
-                className="group relative px-8 py-4 bg-gradient-sunset text-pure-white font-semibold rounded-large overflow-hidden shadow-warm"
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <span className="relative z-10">Book a Free Discovery Call</span>
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-sunset-red via-sunset-orange to-sunset-gold opacity-0 group-hover:opacity-100"
-                  transition={{ duration: 0.3 }}
-                />
-              </motion.a>
-              
-              <motion.a
-                href="#portfolio"
-                className="group flex items-center gap-2 px-8 py-4 border-2 border-sunset-orange/30 text-text-primary font-semibold rounded-large hover:border-sunset-orange hover:bg-sunset-orange/5 transition-all duration-300"
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <span>View Selected Projects</span>
-                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-              </motion.a>
+              <Button href="#contact" variant="primary">
+                Start a Project
+              </Button>
+              <Button href="#portfolio" variant="secondary" icon={false}>
+                View Selected Work
+              </Button>
             </motion.div>
           </motion.div>
 
-          {/* RIGHT COLUMN - 3D Visual */}
+          {/* RIGHT COLUMN - Enhanced 3D Visual with Orbiting Elements */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9, x: 40 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
@@ -126,7 +123,7 @@ export default function Hero() {
               className="relative w-full max-w-md aspect-square"
               style={{ perspective: '1000px' }}
             >
-              {/* 3D Card/Cube */}
+              {/* 3D Card/Cube with Layered Panels */}
               <motion.div
                 className="relative w-full h-full"
                 style={{
@@ -135,73 +132,119 @@ export default function Hero() {
                   transformStyle: 'preserve-3d',
                 }}
                 animate={{
-                  y: [0, -10, 0],
+                  y: [0, -15, 0],
                 }}
                 transition={{
                   y: {
-                    duration: 4,
+                    duration: 5,
                     repeat: Infinity,
                     ease: 'easeInOut',
                   },
                 }}
               >
-                {/* Front face */}
+                {/* Front face - Main Dashboard */}
                 <div
                   className="absolute inset-0 rounded-xlarge bg-gradient-sunset p-8 shadow-2xl"
                   style={{
-                    transform: 'translateZ(40px)',
+                    transform: 'translateZ(50px)',
                   }}
                 >
                   <div className="h-full flex flex-col justify-between text-pure-white">
                     <div>
                       <div className="w-12 h-12 rounded-lg bg-pure-white/20 backdrop-blur-sm mb-4" />
                       <h3 className="text-2xl font-bold mb-2">AI Studio</h3>
-                      <p className="text-sm opacity-90">Cinematic experiences</p>
+                      <p className="text-sm opacity-90">Agent-ready dashboard</p>
                     </div>
                     <div className="flex gap-2">
                       {[0, 1, 2].map((i) => (
-                        <div
+                        <motion.div
                           key={i}
                           className="flex-1 h-2 rounded-full bg-pure-white/30"
+                          animate={{
+                            scaleX: [1, 1.2, 1],
+                          }}
+                          transition={{
+                            duration: 2 + i * 0.3,
+                            repeat: Infinity,
+                            delay: i * 0.2,
+                          }}
                         />
                       ))}
                     </div>
                   </div>
                 </div>
 
-                {/* Side faces for 3D effect */}
+                {/* Back panel - Secondary Layer */}
                 <div
-                  className="absolute inset-0 rounded-xlarge bg-gradient-to-r from-sunset-red to-sunset-orange opacity-60"
+                  className="absolute inset-0 rounded-xlarge bg-gradient-to-r from-sunset-red to-sunset-orange opacity-70"
                   style={{
-                    transform: 'translateZ(-40px) translateX(20px)',
+                    transform: 'translateZ(-30px) translateX(15px)',
                   }}
                 />
+
+                {/* Side panel - Third Layer */}
                 <div
-                  className="absolute inset-0 rounded-xlarge bg-gradient-to-b from-sunset-yellow to-sunset-gold opacity-40"
+                  className="absolute inset-0 rounded-xlarge bg-gradient-to-b from-sunset-yellow to-sunset-gold opacity-50"
                   style={{
-                    transform: 'translateZ(-40px) translateY(20px)',
+                    transform: 'translateZ(-30px) translateY(15px)',
                   }}
                 />
               </motion.div>
 
-              {/* Floating particles */}
+              {/* Orbiting AI Agent Dots */}
+              {[...Array(8)].map((_, i) => {
+                const angle = (i * 45) * (Math.PI / 180)
+                const radius = 180
+                return (
+                  <motion.div
+                    key={i}
+                    className="absolute w-3 h-3 rounded-full bg-gradient-sunset shadow-warm"
+                    style={{
+                      left: '50%',
+                      top: '50%',
+                      x: '-50%',
+                      y: '-50%',
+                    }}
+                    animate={{
+                      x: [
+                        Math.cos(angle) * radius,
+                        Math.cos(angle + Math.PI * 2) * radius,
+                      ],
+                      y: [
+                        Math.sin(angle) * radius,
+                        Math.sin(angle + Math.PI * 2) * radius,
+                      ],
+                      scale: [1, 1.3, 1],
+                      opacity: [0.7, 1, 0.7],
+                    }}
+                    transition={{
+                      duration: 8 + i * 0.5,
+                      repeat: Infinity,
+                      ease: 'linear',
+                      delay: i * 0.2,
+                    }}
+                  />
+                )
+              })}
+
+              {/* Floating particles around the card */}
               {[...Array(6)].map((_, i) => (
                 <motion.div
-                  key={i}
-                  className="absolute w-2 h-2 rounded-full bg-gradient-sunset opacity-60"
+                  key={`particle-${i}`}
+                  className="absolute w-2 h-2 rounded-full bg-gradient-sunset opacity-40"
                   style={{
-                    left: `${20 + i * 15}%`,
-                    top: `${30 + (i % 3) * 20}%`,
+                    left: `${15 + i * 18}%`,
+                    top: `${25 + (i % 3) * 25}%`,
                   }}
                   animate={{
-                    y: [0, -20, 0],
-                    opacity: [0.6, 1, 0.6],
-                    scale: [1, 1.2, 1],
+                    y: [0, -25, 0],
+                    opacity: [0.4, 0.8, 0.4],
+                    scale: [1, 1.5, 1],
                   }}
                   transition={{
-                    duration: 2 + i * 0.3,
+                    duration: 3 + i * 0.4,
                     repeat: Infinity,
-                    delay: i * 0.2,
+                    delay: i * 0.3,
                   }}
                 />
               ))}

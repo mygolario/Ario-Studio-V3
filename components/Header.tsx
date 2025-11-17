@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ArrowRight } from 'lucide-react'
 import AnimatedGradientBackground from './AnimatedGradientBackground'
 import FeatureIcon3D from './FeatureIcon3D'
+import Button from './Button'
 
 interface MegaMenuItem {
   title: string
@@ -144,17 +145,16 @@ export default function Header() {
             </nav>
 
             {/* CTA Button */}
-            <motion.a
-              href="#contact"
-              className="hidden lg:block px-6 py-3 bg-gradient-sunset text-pure-white font-semibold rounded-large hover:shadow-warm transition-all duration-300"
+            <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.5 }}
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.98 }}
+              className="hidden lg:block"
             >
-              Let&apos;s Talk
-            </motion.a>
+              <Button href="#contact" variant="primary" className="!px-6 !py-3" icon={false}>
+                Start a Project
+              </Button>
+            </motion.div>
 
             {/* Mobile Menu Button */}
             <button
@@ -203,12 +203,17 @@ export default function Header() {
                               initial={{ opacity: 0, y: 20 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ delay: index * 0.1 }}
-                              className="group relative bg-surface-elevated p-6 rounded-large border border-border-subtle hover:border-sunset-orange/50 transition-all duration-300 hover:shadow-warm overflow-hidden"
-                              whileHover={{ y: -4, scale: 1.02 }}
-                              style={{
-                                transformStyle: 'preserve-3d',
-                                perspective: '1000px',
-                              }}
+              className="group relative bg-surface-elevated p-6 rounded-large border border-border-subtle hover:border-sunset-orange/50 transition-all duration-300 hover:shadow-warm overflow-hidden"
+              whileHover={{ 
+                y: -8, 
+                scale: 1.03,
+                rotateX: 2,
+                rotateY: -2,
+              }}
+              style={{
+                transformStyle: 'preserve-3d',
+                perspective: '1000px',
+              }}
                             >
                               {/* Hover gradient overlay */}
                               <motion.div
@@ -264,13 +269,11 @@ export default function Header() {
                     {item.label}
                   </a>
                 ))}
-                <a
-                  href="#contact"
-                  className="block mt-4 px-6 py-3 bg-gradient-sunset text-pure-white font-semibold rounded-large text-center"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Let&apos;s Talk
-                </a>
+                <div className="mt-4" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Button href="#contact" variant="primary" className="w-full" icon={false}>
+                    Start a Project
+                  </Button>
+                </div>
               </div>
             </motion.div>
           )}

@@ -19,42 +19,42 @@ export default function Portfolio() {
       title: 'Luxury Fashion Brand',
       category: 'Brand Identity',
       description: 'Complete brand transformation for a high-end fashion label, including visual identity and digital presence.',
-      gradient: 'from-ai-amber/20 via-ai-gold/20 to-ai-coral/20',
+      gradient: 'from-sunset-orange/20 via-sunset-gold/20 to-sunset-yellow/20',
       tags: ['Branding', 'Web Design', 'Strategy'],
     },
     {
       title: 'Tech Startup Platform',
       category: 'Web Development',
       description: 'Modern SaaS platform with intuitive UX and powerful functionality for growing businesses.',
-      gradient: 'from-ai-sky/20 via-ai-lavender/20 to-ai-sky/20',
+      gradient: 'from-sunset-gold/20 via-sunset-yellow/20 to-sunset-gold/20',
       tags: ['Web App', 'UI/UX', 'Development'],
     },
     {
       title: 'Global E-Commerce',
       category: 'Digital Strategy',
       description: 'End-to-end digital transformation for an international retail brand, driving 300% growth.',
-      gradient: 'from-ai-coral/20 via-ai-mint/20 to-ai-coral/20',
+      gradient: 'from-sunset-red/20 via-sunset-orange/20 to-sunset-red/20',
       tags: ['Strategy', 'Design', 'E-commerce'],
     },
     {
       title: 'Creative Agency Rebrand',
       category: 'Brand Identity',
       description: 'Bold new identity system that reflects the agency&apos;s innovative approach and creative vision.',
-      gradient: 'from-ai-gold/20 via-ai-amber/20 to-ai-gold/20',
+      gradient: 'from-sunset-yellow/20 via-sunset-gold/20 to-sunset-yellow/20',
       tags: ['Branding', 'Motion', 'Identity'],
     },
     {
       title: 'Healthcare Innovation',
       category: 'UI/UX Design',
       description: 'Patient-centered digital experience that simplifies complex healthcare information and processes.',
-      gradient: 'from-ai-lavender/20 via-ai-sky/20 to-ai-lavender/20',
+      gradient: 'from-sunset-orange/20 via-sunset-red/20 to-sunset-orange/20',
       tags: ['UX Design', 'Healthcare', 'Accessibility'],
     },
     {
       title: 'Financial Services App',
       category: 'Web Development',
       description: 'Secure, elegant mobile-first application for managing investments and financial planning.',
-      gradient: 'from-ai-mint/20 via-ai-coral/20 to-ai-mint/20',
+      gradient: 'from-sunset-gold/20 via-sunset-orange/20 to-sunset-gold/20',
       tags: ['Mobile App', 'FinTech', 'Design'],
     },
   ]
@@ -103,7 +103,7 @@ export default function Portfolio() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="inline-block text-label text-ai-amber uppercase tracking-wider mb-6"
+              className="inline-block text-label text-sunset-orange uppercase tracking-wider mb-6 font-medium"
             >
               Our Work
             </motion.span>
@@ -125,7 +125,7 @@ export default function Portfolio() {
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, margin: '-50px' }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="group relative bg-surface-elevated rounded-xlarge border border-border-subtle hover:border-ai-amber/50 overflow-hidden transition-all duration-500 hover:shadow-warm cursor-pointer"
+                  className="group relative bg-surface-elevated rounded-xlarge border border-border-subtle hover:border-sunset-orange/50 overflow-hidden transition-all duration-500 hover:shadow-warm cursor-pointer"
                 whileHover={{ y: -12, scale: 1.02 }}
               >
                 {/* Image Placeholder with animated gradient */}
@@ -154,7 +154,7 @@ export default function Portfolio() {
                   />
                   
                   <div className="absolute bottom-6 left-6 right-6 z-10">
-                    <span className="text-label text-ai-amber uppercase tracking-wider font-medium bg-pure-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
+                    <span className="text-label text-sunset-orange uppercase tracking-wider font-medium bg-pure-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
                       {project.category}
                     </span>
                   </div>
@@ -162,7 +162,7 @@ export default function Portfolio() {
 
                 {/* Content */}
                 <div className="p-6 relative z-10">
-                  <h3 className="text-h4 font-display font-bold text-text-primary mb-3 group-hover:text-ai-amber transition-colors">
+                  <h3 className="text-h4 font-display font-bold text-text-primary mb-3 group-hover:text-sunset-orange transition-colors">
                     {project.title}
                   </h3>
                   <p className="text-body-sm text-text-secondary mb-4">
@@ -174,7 +174,7 @@ export default function Portfolio() {
                     {project.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="text-label text-text-tertiary bg-warm-gray-100 border border-border-subtle px-3 py-1 rounded-full group-hover:border-ai-amber/30 transition-colors"
+                        className="text-label text-text-tertiary bg-warm-gray-100 border border-border-subtle px-3 py-1 rounded-full group-hover:border-sunset-orange/30 transition-colors"
                       >
                         {tag}
                       </span>
@@ -182,7 +182,7 @@ export default function Portfolio() {
                   </div>
 
                   {/* Link */}
-                  <div className="flex items-center gap-2 text-ai-amber group-hover:gap-3 transition-all">
+                  <div className="flex items-center gap-2 text-sunset-orange group-hover:gap-3 transition-all">
                     <span className="text-body-sm font-medium">View Case Study</span>
                     <motion.div
                       animate={{ x: [0, 4, 0] }}

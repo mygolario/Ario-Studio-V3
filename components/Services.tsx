@@ -26,43 +26,43 @@ export default function Services() {
       icon: Palette,
       title: 'Brand Identity',
       description: 'Complete brand systems including logos, color palettes, typography, and brand guidelines.',
-      color: 'ai-amber',
-      gradient: 'from-ai-amber to-ai-gold',
+      color: 'sunset-orange',
+      gradient: 'from-sunset-orange to-sunset-gold',
     },
     {
       icon: Code,
       title: 'Web Development',
       description: 'Custom websites and web applications built with modern technologies and best practices.',
-      color: 'ai-sky',
-      gradient: 'from-ai-sky to-ai-lavender',
+      color: 'sunset-gold',
+      gradient: 'from-sunset-gold to-sunset-yellow',
     },
     {
       icon: Smartphone,
       title: 'UI/UX Design',
       description: 'User-centered design that creates intuitive, beautiful, and effective digital experiences.',
-      color: 'ai-coral',
-      gradient: 'from-ai-coral to-ai-mint',
+      color: 'sunset-red',
+      gradient: 'from-sunset-red to-sunset-orange',
     },
     {
       icon: BarChart3,
       title: 'Digital Strategy',
       description: 'Data-driven strategies that align design with business objectives and user needs.',
-      color: 'ai-gold',
-      gradient: 'from-ai-gold to-ai-amber',
+      color: 'sunset-yellow',
+      gradient: 'from-sunset-yellow to-sunset-gold',
     },
     {
       icon: Video,
       title: 'Motion Design',
       description: 'Cinematic animations and motion graphics that bring your brand to life.',
-      color: 'ai-lavender',
-      gradient: 'from-ai-lavender to-ai-sky',
+      color: 'sunset-orange',
+      gradient: 'from-sunset-orange to-sunset-red',
     },
     {
       icon: PenTool,
       title: 'Creative Direction',
       description: 'End-to-end creative direction for campaigns, launches, and brand transformations.',
-      color: 'ai-mint',
-      gradient: 'from-ai-mint to-ai-coral',
+      color: 'sunset-gold',
+      gradient: 'from-sunset-gold to-sunset-orange',
     },
   ]
 
@@ -110,7 +110,7 @@ export default function Services() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="inline-block text-label text-ai-amber uppercase tracking-wider mb-6"
+              className="inline-block text-label text-sunset-orange uppercase tracking-wider mb-6 font-medium"
             >
               Our Services
             </motion.span>
@@ -135,7 +135,7 @@ export default function Services() {
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: true, margin: '-50px' }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="group relative bg-surface-elevated p-8 rounded-large border border-border-subtle hover:border-ai-amber/50 transition-all duration-500 hover:shadow-warm cursor-pointer overflow-hidden"
+                  className="group relative bg-surface-elevated p-8 rounded-large border border-border-subtle hover:border-sunset-orange/50 transition-all duration-500 hover:shadow-warm cursor-pointer overflow-hidden"
                   whileHover={{ y: -12, scale: 1.02 }}
                 >
                   {/* Hover gradient overlay */}
@@ -148,13 +148,13 @@ export default function Services() {
                   <motion.div
                     className="absolute inset-0 rounded-large opacity-0 group-hover:opacity-100"
                     style={{
-                      background: service.color === 'ai-amber' 
-                        ? 'linear-gradient(135deg, rgba(255,140,66,0.1), transparent)' 
-                        : service.color === 'ai-sky'
-                        ? 'linear-gradient(135deg, rgba(74,144,226,0.1), transparent)'
-                        : service.color === 'ai-coral'
-                        ? 'linear-gradient(135deg, rgba(255,107,107,0.1), transparent)'
-                        : 'linear-gradient(135deg, rgba(255,184,77,0.1), transparent)',
+                      background: service.color === 'sunset-orange' 
+                        ? 'linear-gradient(135deg, rgba(255,106,61,0.1), transparent)' 
+                        : service.color === 'sunset-gold'
+                        ? 'linear-gradient(135deg, rgba(255,179,71,0.1), transparent)'
+                        : service.color === 'sunset-red'
+                        ? 'linear-gradient(135deg, rgba(255,77,77,0.1), transparent)'
+                        : 'linear-gradient(135deg, rgba(255,215,95,0.1), transparent)',
                     }}
                     transition={{ duration: 0.3 }}
                   />
