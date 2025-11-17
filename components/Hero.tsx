@@ -144,7 +144,7 @@ export default function Hero() {
   return (
     <section 
       ref={heroSectionRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-pure-white dark:bg-slate-900"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-base"
     >
       {/* Cinematic Animated Background */}
       <HeroBackground />
@@ -162,7 +162,7 @@ export default function Hero() {
             {/* Main Heading - Layer 1 (closest) */}
             <h1 
               ref={headingRef}
-              className="text-hero md:text-[64px] md:leading-[72px] font-semibold text-text-primary dark:text-slate-100"
+              className="text-hero md:text-[64px] md:leading-[72px] font-semibold text-text-primary"
             >
               We Design, Build & Automate Modern Digital Experiences.
             </h1>
@@ -170,7 +170,7 @@ export default function Hero() {
             {/* Subtext - Layer 2 */}
             <p 
               ref={subheadingRef}
-              className="text-body-lg md:text-xl text-text-secondary dark:text-slate-300 max-w-xl leading-relaxed"
+              className="text-body-lg md:text-xl text-text-secondary max-w-xl leading-relaxed"
             >
               A clean, structured, and trustworthy studio focused on clarity, performance, and long-term value.
             </p>
@@ -181,7 +181,7 @@ export default function Hero() {
                 <span
                   key={chip}
                   data-chip
-                  className="text-body-sm font-medium text-text-secondary dark:text-slate-300 border border-gray-200 dark:border-slate-700 px-4 py-1.5 rounded-full bg-pure-white dark:bg-slate-800 hover:border-orange hover:text-orange hover:bg-orange/5 dark:hover:bg-orange/10 hover:scale-105 hover:-translate-y-0.5 transition-all duration-200 cursor-default"
+                  className="text-body-sm font-medium text-text-secondary border border-border-subtle px-4 py-1.5 rounded-full bg-surface hover:border-orange hover:text-orange hover:bg-orange/5 hover:scale-105 hover:-translate-y-0.5 transition-all duration-200 cursor-default"
                 >
                   {chip}
                 </span>

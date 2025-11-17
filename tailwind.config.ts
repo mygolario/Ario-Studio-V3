@@ -10,7 +10,23 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Base Colors (Minimal & Professional)
+        // Theme Token Colors (use CSS variables)
+        'base': 'var(--color-base)',
+        'surface': 'var(--color-surface)',
+        'surface-alt': 'var(--color-surface-alt)',
+        'elevated': 'var(--color-elevated)',
+        'text-primary': 'var(--color-text-primary)',
+        'text-secondary': 'var(--color-text-secondary)',
+        'text-muted': 'var(--color-text-muted)',
+        'border-subtle': 'var(--color-border-subtle)',
+        'border-medium': 'var(--color-border-medium)',
+        
+        // Accent Colors (consistent across themes)
+        'orange': 'var(--color-accent)',
+        'orange-light': 'var(--color-accent-light)',
+        'orange-dark': 'var(--color-accent-dark)',
+        
+        // Legacy support (deprecated, use tokens above)
         'pure-white': '#FFFFFF',
         'gray-50': '#FAFAFA',
         'gray-100': '#F5F5F5',
@@ -18,18 +34,6 @@ const config: Config = {
         'gray-400': '#9CA3AF',
         'gray-600': '#4B5563',
         'gray-800': '#1F2937',
-        
-        // Accent Color (Orange for CTA)
-        'orange': '#FF6A3D',
-        'orange-light': '#FF8C6B',
-        'orange-dark': '#E55A2D',
-        
-        // Semantic Colors
-        'text-primary': '#111111',
-        'text-secondary': '#555555',
-        'text-muted': '#888888',
-        'border-subtle': '#EAEAEA',
-        'surface-elevated': '#FAFAFA',
       },
       fontFamily: {
         'sans': ['var(--font-inter)', 'system-ui', 'sans-serif'],

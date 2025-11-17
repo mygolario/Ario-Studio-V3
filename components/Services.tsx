@@ -57,7 +57,7 @@ export default function Services() {
     <section
       ref={sectionRef}
       id="services"
-      className="relative py-32 overflow-hidden bg-pure-white dark:bg-slate-900"
+      className="relative py-32 overflow-hidden bg-base"
     >
       {/* Subtle background pattern */}
       <div 
@@ -72,13 +72,13 @@ export default function Services() {
           {/* Header */}
           <div className="text-center mb-16">
             <div className="mb-6">
-              <h2 className="text-h1 font-semibold text-text-primary dark:text-slate-100 mb-4">
+              <h2 className="text-h1 font-semibold text-text-primary mb-4">
                 Our Services
               </h2>
               {/* Section accent line */}
               <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full mx-auto" />
             </div>
-            <p className="text-body-lg text-text-secondary dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
               Comprehensive solutions from design to deployment, built for long-term success.
             </p>
           </div>
@@ -92,22 +92,22 @@ export default function Services() {
                   key={group.title}
                   id={group.id}
                   data-animate-child
-                  className="group bg-pure-white dark:bg-slate-800 border border-border-subtle dark:border-slate-700 rounded-xl p-8 hover:shadow-card dark:hover:shadow-lg dark:hover:shadow-black/20 hover:-translate-y-1 hover:border-orange/30 dark:hover:border-orange/30 transition-all duration-200 cursor-pointer scroll-mt-24"
+                  className="group bg-surface border border-border-subtle rounded-xl p-8 hover:shadow-card hover:-translate-y-1 hover:border-orange/30 transition-all duration-200 cursor-pointer scroll-mt-24"
                 >
-                  <div className="w-14 h-14 rounded-xl border border-gray-200 dark:border-slate-600 flex items-center justify-center mb-6 group-hover:border-orange transition-colors">
-                    <Icon size={28} className="text-text-secondary dark:text-slate-300 group-hover:text-orange transition-colors" />
+                  <div className="w-14 h-14 rounded-xl border border-border-subtle flex items-center justify-center mb-6 group-hover:border-orange transition-colors">
+                    <Icon size={28} className="text-text-secondary group-hover:text-orange transition-colors" />
                   </div>
-                  <h3 className="text-h4 font-semibold text-text-primary dark:text-slate-100 mb-2">
+                  <h3 className="text-h4 font-semibold text-text-primary mb-2">
                     {group.title}
                   </h3>
-                  <p className="text-body-sm text-text-secondary dark:text-slate-300 mb-6">
+                  <p className="text-body-sm text-text-secondary mb-6">
                     {group.description}
                   </p>
                   <ul className="space-y-3">
                     {group.items.map((item) => (
                       <li key={item} className="flex items-start gap-3 group/item">
                         <span className="text-orange mt-1.5 group-hover/item:scale-110 transition-transform duration-200">•</span>
-                        <span className="text-body text-text-secondary dark:text-slate-300 group-hover/item:text-text-primary dark:group-hover/item:text-slate-100 transition-colors duration-200">{item}</span>
+                        <span className="text-body text-text-secondary group-hover/item:text-text-primary transition-colors duration-200">{item}</span>
                       </li>
                     ))}
                   </ul>

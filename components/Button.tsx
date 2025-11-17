@@ -29,7 +29,7 @@ export default function Button({
   const baseClasses = 'group relative px-8 py-4 font-medium rounded-full transition-all duration-200 flex items-center gap-2 justify-center focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 dark:focus:ring-offset-slate-900'
   
   const primaryClasses = 'bg-orange text-pure-white shadow-soft hover:shadow-card hover:scale-105 active:scale-[0.97] hover:brightness-105'
-  const secondaryClasses = 'bg-transparent border-2 border-gray-200 dark:border-slate-600 text-text-primary dark:text-slate-100 hover:border-orange hover:text-orange hover:scale-105 active:scale-[0.97] hover:bg-orange/5 dark:hover:bg-orange/10'
+              const secondaryClasses = 'bg-transparent border-2 border-border-subtle text-text-primary hover:border-orange hover:text-orange hover:scale-105 active:scale-[0.97] hover:bg-orange/5'
 
   const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (onClick) {

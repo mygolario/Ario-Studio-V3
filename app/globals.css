@@ -6,6 +6,36 @@
   --font-inter: 'Inter', system-ui, sans-serif;
   --font-display: 'Space Grotesk', system-ui, sans-serif;
   --font-serif: 'Playfair Display', serif;
+  
+  /* Theme Tokens - Day Mode (Default) */
+  --color-base: #FFFFFF;
+  --color-surface: #FFFFFF;
+  --color-surface-alt: #FAFAFA;
+  --color-elevated: #FFFFFF;
+  --color-text-primary: #111111;
+  --color-text-secondary: #555555;
+  --color-text-muted: #888888;
+  --color-border-subtle: #EAEAEA;
+  --color-border-medium: #D1D5DB;
+  --color-accent: #FF6A3D;
+  --color-accent-light: #FF8C6B;
+  --color-accent-dark: #E55A2D;
+}
+
+/* Night Mode Theme Tokens */
+.night-mode {
+  --color-base: #0F172A;
+  --color-surface: #1E293B;
+  --color-surface-alt: #1E293B;
+  --color-elevated: #334155;
+  --color-text-primary: #F1F5F9;
+  --color-text-secondary: #CBD5E1;
+  --color-text-muted: #94A3B8;
+  --color-border-subtle: #334155;
+  --color-border-medium: #475569;
+  --color-accent: #FF6A3D;
+  --color-accent-light: #FF8C6B;
+  --color-accent-dark: #E55A2D;
 }
 
 * {
@@ -19,17 +49,12 @@ html {
 }
 
 body {
-  background-color: #FFFFFF;
-  color: #111111;
+  background-color: var(--color-base);
+  color: var(--color-text-primary);
   overflow-x: hidden;
   position: relative;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Night Mode Styles */
-.night-mode body {
-  background-color: #0F172A;
-  color: #F1F5F9;
+  transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Custom scrollbar */
@@ -87,9 +112,21 @@ a, button {
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Theme transition utilities */
+/* Theme transition utilities - smooth theme switching */
 * {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              color 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+  body {
+    transition: none !important;
+  }
 }
 
 /* Utility classes */

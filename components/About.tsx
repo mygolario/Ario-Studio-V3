@@ -44,7 +44,7 @@ export default function About() {
     <section
       ref={sectionRef}
       id="about"
-      className="relative py-32 overflow-hidden bg-gray-50 dark:bg-slate-800/50"
+      className="relative py-32 overflow-hidden bg-surface-alt"
     >
       {/* Subtle background pattern */}
       <div 
@@ -59,13 +59,13 @@ export default function About() {
           {/* Header */}
           <div className="text-center mb-16">
             <div className="mb-6">
-              <h2 className="text-h1 font-semibold text-text-primary dark:text-slate-100 mb-4">
+              <h2 className="text-h1 font-semibold text-text-primary mb-4">
                 About Ario Studio
               </h2>
               {/* Section accent line */}
               <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full mx-auto" />
             </div>
-            <p className="text-body-lg text-text-secondary dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
               We combine modern design, precise engineering and streamlined workflows to deliver clean and reliable digital products.
             </p>
           </div>
@@ -82,13 +82,13 @@ export default function About() {
                 >
                   {/* Subtle UI element - floating pill */}
                   <div className="absolute -top-2 -right-2 w-3 h-3 rounded-full bg-orange/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="w-16 h-16 rounded-xl border border-gray-200 dark:border-slate-600 flex items-center justify-center mx-auto mb-4 bg-pure-white dark:bg-slate-800 shadow-soft dark:shadow-lg dark:shadow-black/20 group-hover:shadow-card dark:group-hover:shadow-xl dark:group-hover:shadow-black/30 group-hover:-translate-y-1 group-hover:border-orange group-hover:scale-105 transition-all duration-200">
-                    <Icon size={28} className="text-text-secondary dark:text-slate-300 group-hover:text-orange transition-colors duration-200" />
+                  <div className="w-16 h-16 rounded-xl border border-border-subtle flex items-center justify-center mx-auto mb-4 bg-surface shadow-soft group-hover:shadow-card group-hover:-translate-y-1 group-hover:border-orange group-hover:scale-105 transition-all duration-200">
+                    <Icon size={28} className="text-text-secondary group-hover:text-orange transition-colors duration-200" />
                   </div>
-                  <h3 className="text-h5 font-semibold text-text-primary dark:text-slate-100 mb-2 group-hover:text-orange transition-colors duration-200">
+                  <h3 className="text-h5 font-semibold text-text-primary mb-2 group-hover:text-orange transition-colors duration-200">
                     {stat.title}
                   </h3>
-                  <p className="text-body-sm text-text-secondary dark:text-slate-300 group-hover:text-text-primary dark:group-hover:text-slate-100 transition-colors duration-200">
+                  <p className="text-body-sm text-text-secondary group-hover:text-text-primary transition-colors duration-200">
                     {stat.description}
                   </p>
                 </div>
