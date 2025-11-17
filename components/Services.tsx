@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { Palette, Code, Zap, Rocket } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Palette, Code, Zap } from 'lucide-react'
 import { animateSectionReveal } from '@/lib/gsapClient'
 import { Copy } from '@/content/copy'
 
@@ -39,7 +40,7 @@ export default function Services() {
       id="services"
       className="relative py-32 overflow-hidden bg-base"
     >
-      {/* Subtle background pattern */}
+      {/* Enhanced background with subtle neon accents */}
       <div 
         className="absolute inset-0 opacity-[0.02] dark:opacity-[0.05]"
         style={{
@@ -47,11 +48,25 @@ export default function Services() {
           backgroundSize: '40px 40px',
         }}
       />
+      {/* Subtle gradient overlay for depth */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-orange/5 opacity-30 pointer-events-none" />
       <div className="container-custom">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-16">
+          <div className="text-center mb-16" data-animate-child>
             <div className="mb-6">
+              {/* Section Label */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, ease: 'easeOut' }}
+                className="mb-4"
+              >
+                <span className="text-label text-orange uppercase tracking-wider font-medium">
+                  {Copy.services.label}
+                </span>
+              </motion.div>
               <h2 className="text-h1 font-semibold text-text-primary mb-4">
                 {Copy.services.title}
               </h2>
@@ -68,30 +83,77 @@ export default function Services() {
             {serviceGroups.map((group, index) => {
               const Icon = group.icon
               return (
-                <div
+                <motion.div
                   key={group.title}
                   id={group.id}
                   data-animate-child
-                  className="group bg-surface border border-border-subtle rounded-xl p-8 hover:shadow-card hover:-translate-y-1 hover:border-orange/30 transition-all duration-200 cursor-pointer scroll-mt-24"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    duration: 0.8,
+                    ease: 'easeOut',
+                    delay: index * 0.15,
+                  }}
+                  whileHover={{
+                    scale: 1.02,
+                    y: -4,
+                  }}
+                  className="group relative bg-surface border border-border-subtle rounded-xl p-8 hover:shadow-card-hover hover:border-orange/50 transition-all duration-300 cursor-pointer scroll-mt-24 overflow-hidden"
                 >
-                  <div className="w-14 h-14 rounded-xl border border-border-subtle flex items-center justify-center mb-6 group-hover:border-orange transition-colors">
-                    <Icon size={28} className="text-text-secondary group-hover:text-orange transition-colors" />
+                  {/* Subtle inner glow on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-orange/0 via-orange/0 to-orange/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl" />
+                  
+                  {/* Subtle light streak effect on hover */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                    <div 
+                      className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-orange/30 to-transparent"
+                      style={{
+                        transform: 'translateY(-50%)',
+                      }}
+                    />
                   </div>
-                  <h3 className="text-h4 font-semibold text-text-primary mb-2">
-                    {group.title}
-                  </h3>
-                  <p className="text-body-sm text-text-secondary mb-6">
-                    {group.description}
-                  </p>
-                  <ul className="space-y-3">
-                    {group.items.map((item) => (
-                      <li key={item} className="flex items-start gap-3 group/item">
-                        <span className="text-orange mt-1.5 group-hover/item:scale-110 transition-transform duration-200">•</span>
-                        <span className="text-body text-text-secondary group-hover/item:text-text-primary transition-colors duration-200">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+
+                  {/* Icon Container */}
+                  <div className="relative z-10 w-14 h-14 rounded-xl border border-border-subtle flex items-center justify-center mb-6 group-hover:border-orange group-hover:bg-orange/5 transition-all duration-300">
+                    <Icon size={28} className="text-text-secondary group-hover:text-orange transition-colors duration-300" />
+                  </div>
+
+                  {/* Content */}
+                  <div className="relative z-10">
+                    {/* Pill Label */}
+                    <div className="mb-3">
+                      <span className="inline-block text-label text-orange/80 uppercase tracking-wider font-medium text-xs mb-2">
+                        {group.title}
+                      </span>
+                    </div>
+                    
+                    <h3 className="text-h4 font-semibold text-text-primary mb-3">
+                      {group.title}
+                    </h3>
+                    <p className="text-body-sm text-text-secondary mb-6 leading-relaxed">
+                      {group.description}
+                    </p>
+                    <ul className="space-y-3">
+                      {group.items.map((item, itemIndex) => (
+                        <motion.li
+                          key={item}
+                          initial={{ opacity: 0, x: -10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{
+                            duration: 0.5,
+                            delay: (index * 0.15) + (itemIndex * 0.1) + 0.3,
+                          }}
+                          className="flex items-start gap-3 group/item"
+                        >
+                          <span className="text-orange mt-1.5 group-hover/item:scale-110 transition-transform duration-200 flex-shrink-0">•</span>
+                          <span className="text-body text-text-secondary group-hover/item:text-text-primary transition-colors duration-200">{item}</span>
+                        </motion.li>
+                      ))}
+                    </ul>
+                  </div>
+                </motion.div>
               )
             })}
           </div>

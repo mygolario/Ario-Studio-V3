@@ -21,34 +21,35 @@ export const Copy = {
     chips: ['AI-native', 'Cinematic UX', 'Agent-ready'],
   },
   services: {
-    title: 'What We Do',
-    subtitle: 'End-to-end solutions from concept to launch, designed for modern product teams.',
+    label: 'What we do',
+    title: 'Design, build, and automate your next experience.',
+    subtitle: 'Ario Studio combines cinematic design, modern engineering, and AI-driven automation to ship web experiences that feel alive and perform in the real world.',
     items: [
       {
         title: 'Design',
         description: 'Cinematic interfaces, premium aesthetics, and brand-first visuals.',
         bullets: [
-          'Motion-first visual systems',
-          'Product identity & branding',
-          'Conversion-optimized layouts',
+          'High-end landing pages and marketing sites',
+          'Portfolio and studio websites with expressive visuals',
+          'Brand-aligned UI systems with consistent components',
         ],
       },
       {
         title: 'Build',
         description: 'Next.js engineering, performance-first architecture, and clean systems built for scale.',
         bullets: [
-          'Scalable frontend architecture',
-          'Performance & SEO optimization',
-          'Type-safe, maintainable code',
+          'Production-grade Next.js frontends',
+          'Fast, responsive layouts optimized for modern devices',
+          'Clean, maintainable codebases ready to grow',
         ],
       },
       {
         title: 'Automate',
         description: 'AI integration, workflow automation, and custom intelligent agents.',
         bullets: [
-          'AI agent integrations',
-          'Automated workflows & processes',
-          'Intelligent system design',
+          'AI-powered chat and support experiences',
+          'Automated workflows connecting tools and services',
+          'Smart systems that reduce manual work',
         ],
       },
     ],
