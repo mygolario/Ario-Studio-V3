@@ -64,7 +64,7 @@ export default function DesignEthos() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="group bg-pure-white border border-border-subtle rounded-xl p-6 hover:shadow-card transition-all duration-300"
+                    className="group bg-pure-white border border-border-subtle rounded-2xl p-6 hover:shadow-card transition-all duration-300"
                     whileHover={{ y: -2 }}
                   >
                     <div className="flex items-start gap-4">

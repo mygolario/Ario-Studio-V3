@@ -1,29 +1,98 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Menu, X, ChevronDown } from 'lucide-react'
 import Button from './Button'
+import { useActiveSection } from '@/lib/useActiveSection'
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null)
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false)
+  const megaMenuRef = useRef<HTMLDivElement>(null)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const activeSection = useActiveSection()
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20)
+      // Close mega menu on scroll
+      if (activeMegaMenu) {
+        setActiveMegaMenu(null)
+      }
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [activeMegaMenu])
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && activeMegaMenu) {
+        setActiveMegaMenu(null)
+      }
+    }
+    window.addEventListener('keydown', handleEscape)
+    return () => window.removeEventListener('keydown', handleEscape)
+  }, [activeMegaMenu])
+
+  const megaMenuContent = {
+    'Services': {
+      columns: [
+        {
+          title: 'We Design',
+          description: 'Clean, structured design systems',
+          items: [
+            'Clean UI/UX systems',
+            'Brand identity & visual frameworks',
+            'High-clarity interface layouts',
+          ],
+        },
+        {
+          title: 'We Build',
+          description: 'Reliable, scalable engineering',
+          items: [
+            'Next.js engineering',
+            'Performance & SEO standards',
+            'Reliable, scalable architecture',
+          ],
+        },
+        {
+          title: 'We Automate',
+          description: 'Intelligent workflow systems',
+          items: [
+            'AI workflows & integrations',
+            'Custom automation agents',
+            'System intelligence setup',
+          ],
+        },
+      ],
+    },
+  }
 
   const navItems = [
-    { label: 'Services', href: '#services' },
-    { label: 'Work', href: '#portfolio' },
-    { label: 'Process', href: '#philosophy' },
-    { label: 'About', href: '#about' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'Services', href: '#services', hasMegaMenu: true, id: 'services' },
+    { label: 'Work', href: '#portfolio', id: 'portfolio' },
+    { label: 'Process', href: '#philosophy', id: 'philosophy' },
+    { label: 'About', href: '#about', id: 'about' },
+    { label: 'Contact', href: '#contact', id: 'contact' },
   ]
+
+  const handleMouseEnter = (label: string) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+    if (label === 'Services') {
+      setActiveMegaMenu('Services')
+    }
+  }
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setActiveMegaMenu(null)
+    }, 200)
+  }
 
   return (
     <>
@@ -36,6 +105,7 @@ export default function Header() {
             ? 'bg-pure-white/95 backdrop-blur-sm shadow-header border-b border-border-subtle'
             : 'bg-pure-white'
         }`}
+        onMouseLeave={handleMouseLeave}
       >
         <div className="container-custom">
           <div className="flex items-center justify-between h-20">
@@ -51,22 +121,33 @@ export default function Header() {
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-10">
-              {navItems.map((item) => (
-                <motion.a
-                  key={item.href}
-                  href={item.href}
-                  className="relative text-body text-text-secondary hover:text-text-primary font-medium transition-colors duration-300"
-                  whileHover={{ y: -1 }}
-                >
-                  {item.label}
-                  <motion.span
-                    className="absolute bottom-0 left-0 h-0.5 bg-orange"
-                    initial={{ width: 0 }}
-                    whileHover={{ width: '100%' }}
-                    transition={{ duration: 0.3, ease: 'easeOut' }}
-                  />
-                </motion.a>
-              ))}
+              {navItems.map((item) => {
+                const isActive = activeSection === item.id
+                return (
+                  <div
+                    key={item.href}
+                    className="relative"
+                    onMouseEnter={() => item.hasMegaMenu && handleMouseEnter(item.label)}
+                  >
+                    <motion.a
+                      href={item.href}
+                      className={`relative text-body font-medium transition-colors duration-300 ${
+                        isActive ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'
+                      }`}
+                      whileHover={{ y: -1 }}
+                    >
+                      {item.label}
+                      <motion.span
+                        className="absolute bottom-0 left-0 h-0.5 bg-orange"
+                        initial={{ width: 0 }}
+                        animate={{ width: isActive ? '100%' : 0 }}
+                        whileHover={{ width: '100%' }}
+                        transition={{ duration: 0.3, ease: 'easeOut' }}
+                      />
+                    </motion.a>
+                  </div>
+                )
+              })}
             </nav>
 
             {/* CTA Button */}
@@ -92,6 +173,50 @@ export default function Header() {
           </div>
         </div>
 
+        {/* Mega Menu */}
+        <AnimatePresence>
+          {activeMegaMenu && megaMenuContent[activeMegaMenu as keyof typeof megaMenuContent] && (
+            <motion.div
+              ref={megaMenuRef}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="absolute top-full left-0 right-0 bg-pure-white border-b border-border-subtle shadow-card"
+              onMouseEnter={() => setActiveMegaMenu(activeMegaMenu)}
+              onMouseLeave={handleMouseLeave}
+            >
+              <div className="container-custom py-12">
+                <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+                  {megaMenuContent[activeMegaMenu as keyof typeof megaMenuContent].columns.map((column, index) => (
+                    <motion.div
+                      key={column.title}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <h3 className="text-h5 font-semibold text-text-primary mb-2">
+                        {column.title}
+                      </h3>
+                      <p className="text-body-sm text-text-secondary mb-4">
+                        {column.description}
+                      </p>
+                      <ul className="space-y-2">
+                        {column.items.map((item) => (
+                          <li key={item} className="flex items-start gap-2">
+                            <span className="text-orange mt-1.5">•</span>
+                            <span className="text-body-sm text-text-secondary">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Mobile Menu */}
         <motion.div
           initial={false}
@@ -104,14 +229,48 @@ export default function Header() {
         >
           <div className="container-custom py-6 space-y-4">
             {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="block text-body text-text-secondary hover:text-text-primary transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {item.label}
-              </a>
+              <div key={item.href}>
+                {item.hasMegaMenu ? (
+                  <div>
+                    <button
+                      onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+                      className="flex items-center justify-between w-full text-body text-text-secondary hover:text-text-primary transition-colors"
+                    >
+                      <span>{item.label}</span>
+                      <ChevronDown
+                        size={18}
+                        className={`transition-transform ${mobileServicesOpen ? 'rotate-180' : ''}`}
+                      />
+                    </button>
+                    {mobileServicesOpen && megaMenuContent['Services'] && (
+                      <div className="mt-3 ml-4 space-y-4">
+                        {megaMenuContent['Services'].columns.map((column) => (
+                          <div key={column.title}>
+                            <h4 className="text-body font-medium text-text-primary mb-2">
+                              {column.title}
+                            </h4>
+                            <ul className="space-y-1.5 ml-4">
+                              {column.items.map((item) => (
+                                <li key={item} className="text-body-sm text-text-secondary">
+                                  {item}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <a
+                    href={item.href}
+                    className="block text-body text-text-secondary hover:text-text-primary transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item.label}
+                  </a>
+                )}
+              </div>
             ))}
             <div className="mt-4" onClick={() => setIsMobileMenuOpen(false)}>
               <Button href="#contact" variant="primary" className="w-full" icon={false}>

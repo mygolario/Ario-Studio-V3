@@ -58,15 +58,15 @@ export default function Portfolio() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group bg-pure-white rounded-xl overflow-hidden border border-border-subtle hover:shadow-card transition-all duration-300"
+                className="group bg-pure-white rounded-xl overflow-hidden border border-border-subtle hover:shadow-card-hover transition-all duration-300"
                 whileHover={{ y: -2 }}
               >
                 {/* Image Placeholder */}
-                <div className="relative h-64 bg-gray-200 overflow-hidden">
+                <div className="relative h-64 bg-gray-200 overflow-hidden rounded-t-xl">
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.3 }}
+                    whileHover={{ scale: 1.08 }}
+                    transition={{ duration: 0.4, ease: 'easeOut' }}
                   />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <p className="text-text-muted text-sm">Project mockup</p>

@@ -7,7 +7,8 @@ export default function Services() {
   const serviceGroups = [
     {
       icon: Palette,
-      title: 'Design',
+      title: 'We Design',
+      description: 'Clean, structured design systems',
       items: [
         'Clean UI/UX systems',
         'Brand identity & visual frameworks',
@@ -16,7 +17,8 @@ export default function Services() {
     },
     {
       icon: Code,
-      title: 'Build',
+      title: 'We Build',
+      description: 'Reliable, scalable engineering',
       items: [
         'Next.js engineering',
         'Performance & SEO standards',
@@ -25,7 +27,8 @@ export default function Services() {
     },
     {
       icon: Zap,
-      title: 'Automate',
+      title: 'We Automate',
+      description: 'Intelligent workflow systems',
       items: [
         'AI workflows & integrations',
         'Custom automation agents',
@@ -74,9 +77,12 @@ export default function Services() {
                   <div className="w-14 h-14 rounded-xl border border-gray-200 flex items-center justify-center mb-6 group-hover:border-orange transition-colors">
                     <Icon size={28} className="text-text-secondary group-hover:text-orange transition-colors" />
                   </div>
-                  <h3 className="text-h4 font-semibold text-text-primary mb-6">
+                  <h3 className="text-h4 font-semibold text-text-primary mb-2">
                     {group.title}
                   </h3>
+                  <p className="text-body-sm text-text-secondary mb-6">
+                    {group.description}
+                  </p>
                   <ul className="space-y-3">
                     {group.items.map((item) => (
                       <li key={item} className="flex items-start gap-3">
