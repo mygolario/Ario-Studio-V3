@@ -11,19 +11,19 @@
 
 export const Copy = {
   hero: {
-    title: 'Cinematic AI-native experiences for modern startups.',
-    subtitle: 'Design, build, and automate digital products with cinematic UX and intelligent systems. Built for founders who value clarity, performance, and long-term impact.',
+    title: 'We design and build cinematic, AI-powered web experiences.',
+    subtitle: 'High-end design, expressive motion, and intelligent systems—crafted for brands that demand more.',
     ctaPrimary: 'Start Your Project',
     ctaSecondary: 'View Our Work',
     chips: ['AI-native', 'Cinematic UX', 'Agent-ready'],
   },
   services: {
-    title: 'What We Build',
+    title: 'What We Do',
     subtitle: 'End-to-end solutions from concept to launch, designed for modern product teams.',
     items: [
       {
-        title: 'Design + UX',
-        description: 'Cinematic interfaces and expressive interactions tailored for impact.',
+        title: 'Design',
+        description: 'Cinematic interfaces, premium aesthetics, and brand-first visuals.',
         bullets: [
           'Motion-first visual systems',
           'Product identity & branding',
@@ -31,8 +31,8 @@ export const Copy = {
         ],
       },
       {
-        title: 'Next.js Engineering',
-        description: 'Fast, modern, production-ready builds with clean architecture.',
+        title: 'Build',
+        description: 'Next.js engineering, performance-first architecture, and clean systems built for scale.',
         bullets: [
           'Scalable frontend architecture',
           'Performance & SEO optimization',
@@ -40,21 +40,12 @@ export const Copy = {
         ],
       },
       {
-        title: 'AI Automation',
-        description: 'Agent workflows, smart integrations, and intelligent internal systems.',
+        title: 'Automate',
+        description: 'AI integration, workflow automation, and custom intelligent agents.',
         bullets: [
           'AI agent integrations',
           'Automated workflows & processes',
           'Intelligent system design',
-        ],
-      },
-      {
-        title: 'Product Launch',
-        description: 'End-to-end build support for founders launching digital products.',
-        bullets: [
-          'MVP development & validation',
-          'Launch-ready frontends',
-          'Ongoing iteration support',
         ],
       },
     ],

@@ -23,7 +23,7 @@ export default function Services() {
       })
     }
   }, [])
-  const serviceIcons = [Palette, Code, Zap, Rocket]
+  const serviceIcons = [Palette, Code, Zap]
   
   const serviceGroups = Copy.services.items.map((item, index) => ({
     id: item.title.toLowerCase().replace(/\s+/g, '-'),
@@ -64,7 +64,7 @@ export default function Services() {
           </div>
 
           {/* Services Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             {serviceGroups.map((group, index) => {
               const Icon = group.icon
               return (
