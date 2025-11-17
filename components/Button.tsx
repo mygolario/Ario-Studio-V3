@@ -31,11 +31,48 @@ export default function Button({
   const primaryClasses = 'bg-orange text-pure-white shadow-soft hover:shadow-card'
   const secondaryClasses = 'bg-transparent border-2 border-gray-200 text-text-primary hover:border-orange hover:text-orange'
 
-  const Component = href ? motion.a : motion.button
+  const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (onClick) {
+      onClick()
+    }
+    
+    // Handle smooth scrolling for internal links
+    if (href && href.startsWith('#')) {
+      e.preventDefault()
+      const element = document.querySelector(href)
+      if (element) {
+        const headerHeight = 80
+        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+        const offsetPosition = elementPosition - headerHeight
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth',
+        })
+      }
+    }
+  }
+
+  if (href) {
+    return (
+      <motion.a
+        href={href}
+        onClick={handleAnchorClick}
+        className={`${baseClasses} ${variant === 'primary' ? primaryClasses : secondaryClasses} ${className}`}
+        whileHover={{ 
+          scale: 1.01,
+        }}
+        whileTap={{ scale: 0.99 }}
+      >
+        <span className="relative z-10">{children}</span>
+        {icon && (
+          <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform duration-300" />
+        )}
+      </motion.a>
+    )
+  }
 
   return (
-    <Component
-      href={href}
+    <motion.button
       onClick={onClick}
       className={`${baseClasses} ${variant === 'primary' ? primaryClasses : secondaryClasses} ${className}`}
       whileHover={{ 
@@ -47,6 +84,6 @@ export default function Button({
       {icon && (
         <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform duration-300" />
       )}
-    </Component>
+    </motion.button>
   )
 }

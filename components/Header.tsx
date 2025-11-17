@@ -43,32 +43,50 @@ export default function Header() {
         {
           title: 'AI-Native Product Websites',
           description: 'Full-stack experiences with AI at the core',
+          sectionId: 'ai-native-product-websites',
           items: [
-            'Cinematic marketing sites',
-            'Agent-integrated product pages',
-            'Launch-ready frontends',
+            { text: 'Cinematic marketing sites', href: '#ai-native-product-websites' },
+            { text: 'Agent-integrated product pages', href: '#ai-native-product-websites' },
+            { text: 'Launch-ready frontends', href: '#ai-native-product-websites' },
           ],
         },
         {
           title: 'MVPs & Dashboards',
           description: 'Fast validation and internal tools',
+          sectionId: 'mvps-dashboards',
           items: [
-            'Early-stage MVP & landing pages',
-            'Agent-ready internal dashboards',
-            'Fast validation builds',
+            { text: 'Early-stage MVP & landing pages', href: '#mvps-dashboards' },
+            { text: 'Agent-ready internal dashboards', href: '#mvps-dashboards' },
+            { text: 'Fast validation builds', href: '#mvps-dashboards' },
           ],
         },
         {
           title: 'Long-term Design Systems',
           description: 'Ongoing design partnerships',
+          sectionId: 'long-term-design-systems',
           items: [
-            'UI/UX systems & motion direction',
-            'Ongoing design partnerships',
-            'Strategic design support',
+            { text: 'UI/UX systems & motion direction', href: '#long-term-design-systems' },
+            { text: 'Ongoing design partnerships', href: '#long-term-design-systems' },
+            { text: 'Strategic design support', href: '#long-term-design-systems' },
           ],
         },
       ],
     },
+  }
+
+  const handleMegaMenuItemClick = (href: string) => {
+    setActiveMegaMenu(null)
+    const element = document.querySelector(href)
+    if (element) {
+      const headerHeight = 80
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+      const offsetPosition = elementPosition - headerHeight
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      })
+    }
   }
 
   const navItems = [
@@ -148,7 +166,7 @@ export default function Header() {
                     {item.hasMegaMenu ? (
                       <motion.button
                         onClick={() => setActiveMegaMenu(activeMegaMenu === 'Services' ? null : 'Services')}
-                        className={`relative text-body font-medium transition-colors duration-300 ${
+                        className={`relative text-body font-medium transition-colors duration-300 cursor-pointer ${
                           activeMegaMenu === 'Services' ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'
                         }`}
                         whileHover={{ y: -1 }}
@@ -170,6 +188,19 @@ export default function Header() {
                     ) : (
                       <motion.a
                         href={item.href}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          const element = document.querySelector(item.href)
+                          if (element) {
+                            const headerHeight = 80
+                            const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+                            const offsetPosition = elementPosition - headerHeight
+                            window.scrollTo({
+                              top: offsetPosition,
+                              behavior: 'smooth',
+                            })
+                          }
+                        }}
                         className={`relative text-body font-medium transition-colors duration-300 ${
                           isActive ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'
                         }`}
@@ -256,9 +287,14 @@ export default function Header() {
                       </p>
                       <ul className="space-y-2">
                         {column.items.map((item) => (
-                          <li key={item} className="flex items-start gap-2">
-                            <span className="text-orange mt-1.5">•</span>
-                            <span className="text-body-sm text-text-secondary">{item}</span>
+                          <li key={item.text}>
+                            <button
+                              onClick={() => handleMegaMenuItemClick(item.href)}
+                              className="w-full text-left flex items-start gap-2 group/item hover:text-orange transition-colors cursor-pointer"
+                            >
+                              <span className="text-orange mt-1.5 group-hover/item:scale-110 transition-transform">•</span>
+                              <span className="text-body-sm text-text-secondary group-hover/item:text-orange transition-colors">{item.text}</span>
+                            </button>
                           </li>
                         ))}
                       </ul>
@@ -304,8 +340,17 @@ export default function Header() {
                             </h4>
                             <ul className="space-y-1.5 ml-4">
                               {column.items.map((item) => (
-                                <li key={item} className="text-body-sm text-text-secondary">
-                                  {item}
+                                <li key={item.text}>
+                                  <button
+                                    onClick={() => {
+                                      setIsMobileMenuOpen(false)
+                                      setMobileServicesOpen(false)
+                                      handleMegaMenuItemClick(item.href)
+                                    }}
+                                    className="text-left text-body-sm text-text-secondary hover:text-orange transition-colors cursor-pointer w-full"
+                                  >
+                                    {item.text}
+                                  </button>
                                 </li>
                               ))}
                             </ul>
@@ -318,7 +363,20 @@ export default function Header() {
                   <a
                     href={item.href}
                     className="block text-body text-text-secondary hover:text-text-primary transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      setIsMobileMenuOpen(false)
+                      const element = document.querySelector(item.href)
+                      if (element) {
+                        const headerHeight = 80
+                        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+                        const offsetPosition = elementPosition - headerHeight
+                        window.scrollTo({
+                          top: offsetPosition,
+                          behavior: 'smooth',
+                        })
+                      }
+                    }}
                   >
                     {item.label}
                   </a>

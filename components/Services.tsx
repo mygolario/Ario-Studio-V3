@@ -6,33 +6,36 @@ import { Palette, Code, Zap } from 'lucide-react'
 export default function Services() {
   const serviceGroups = [
     {
+      id: 'ai-native-product-websites',
       icon: Palette,
-      title: 'We Design',
-      description: 'Clean, structured design systems',
+      title: 'AI-Native Product Websites',
+      description: 'Full-stack experiences with AI at the core',
       items: [
-        'Clean UI/UX systems',
-        'Brand identity & visual frameworks',
-        'High-clarity interface layouts',
+        'Cinematic marketing sites',
+        'Agent-integrated product pages',
+        'Launch-ready frontends',
       ],
     },
     {
+      id: 'mvps-dashboards',
       icon: Code,
-      title: 'We Build',
-      description: 'Reliable, scalable engineering',
+      title: 'MVPs & Dashboards',
+      description: 'Fast validation and internal tools',
       items: [
-        'Next.js engineering',
-        'Performance & SEO standards',
-        'Reliable, scalable architecture',
+        'Early-stage MVP & landing pages',
+        'Agent-ready internal dashboards',
+        'Fast validation builds',
       ],
     },
     {
+      id: 'long-term-design-systems',
       icon: Zap,
-      title: 'We Automate',
-      description: 'Intelligent workflow systems',
+      title: 'Long-term Design Systems',
+      description: 'Ongoing design partnerships',
       items: [
-        'AI workflows & integrations',
-        'Custom automation agents',
-        'System intelligence setup',
+        'UI/UX systems & motion direction',
+        'Ongoing design partnerships',
+        'Strategic design support',
       ],
     },
   ]
@@ -79,11 +82,12 @@ export default function Services() {
               return (
                 <motion.div
                   key={group.title}
+                  id={group.id}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="group bg-pure-white border border-border-subtle rounded-xl p-8 hover:shadow-card transition-all duration-300"
+                  className="group bg-pure-white border border-border-subtle rounded-xl p-8 hover:shadow-card transition-all duration-300 scroll-mt-24"
                   whileHover={{ y: -2 }}
                 >
                   <div className="w-14 h-14 rounded-xl border border-gray-200 flex items-center justify-center mb-6 group-hover:border-orange transition-colors">
