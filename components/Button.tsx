@@ -8,9 +8,11 @@ interface ButtonProps {
   children: ReactNode
   href?: string
   variant?: 'primary' | 'secondary'
-  onClick?: () => void
+  onClick?: (e?: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => void
   className?: string
   icon?: boolean
+  type?: 'button' | 'submit' | 'reset'
+  disabled?: boolean
 }
 
 /**
@@ -25,11 +27,15 @@ export default function Button({
   onClick,
   className = '',
   icon = true,
+  type = 'button',
+  disabled = false,
 }: ButtonProps) {
-  const baseClasses = 'group relative px-8 py-4 font-medium rounded-full transition-all duration-200 flex items-center gap-2 justify-center focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2'
+  const baseClasses = `group relative px-8 py-4 font-medium rounded-full transition-all duration-200 flex items-center gap-2 justify-center focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 ${
+    disabled ? 'opacity-50 cursor-not-allowed' : ''
+  }`
   
-  const primaryClasses = 'bg-orange text-pure-white shadow-soft hover:shadow-card hover:scale-105 active:scale-[0.97] hover:brightness-105'
-              const secondaryClasses = 'bg-transparent border-2 border-border-subtle text-text-primary hover:border-orange hover:text-orange hover:scale-105 active:scale-[0.97] hover:bg-orange/5'
+  const primaryClasses = 'bg-orange text-pure-white shadow-soft hover:shadow-card hover:scale-105 active:scale-[0.97] hover:brightness-105 disabled:hover:scale-100 disabled:hover:shadow-soft'
+  const secondaryClasses = 'bg-transparent border-2 border-border-subtle text-text-primary hover:border-orange hover:text-orange hover:scale-105 active:scale-[0.97] hover:bg-orange/5 disabled:hover:scale-100'
 
   const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (onClick) {
@@ -58,13 +64,11 @@ export default function Button({
         href={href}
         onClick={handleAnchorClick}
         className={`${baseClasses} ${variant === 'primary' ? primaryClasses : secondaryClasses} ${className}`}
-        whileHover={{ 
-          scale: 1.05,
-        }}
-        whileTap={{ scale: 0.97 }}
+        whileHover={disabled ? {} : { scale: 1.05 }}
+        whileTap={disabled ? {} : { scale: 0.97 }}
       >
         <span className="relative z-10">{children}</span>
-        {icon && (
+        {icon && !disabled && (
           <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform duration-300" />
         )}
       </motion.a>
@@ -73,15 +77,15 @@ export default function Button({
 
   return (
     <motion.button
+      type={type}
       onClick={onClick}
+      disabled={disabled}
       className={`${baseClasses} ${variant === 'primary' ? primaryClasses : secondaryClasses} ${className}`}
-      whileHover={{ 
-        scale: 1.05,
-      }}
-      whileTap={{ scale: 0.97 }}
+      whileHover={disabled ? {} : { scale: 1.05 }}
+      whileTap={disabled ? {} : { scale: 0.97 }}
     >
       <span className="relative z-10">{children}</span>
-      {icon && (
+      {icon && !disabled && (
         <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform duration-300" />
       )}
     </motion.button>
