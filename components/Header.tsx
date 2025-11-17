@@ -253,10 +253,7 @@ export default function Header() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              className="absolute top-full left-0 right-0 bg-pure-white border-b border-border-subtle rounded-b-xl z-50"
-              style={{
-                boxShadow: '0 18px 40px rgba(0, 0, 0, 0.08)',
-              }}
+              className="absolute top-full left-0 right-0 z-50"
               onMouseEnter={() => {
                 if (timeoutRef.current) {
                   clearTimeout(timeoutRef.current)
@@ -265,41 +262,78 @@ export default function Header() {
               }}
               onMouseLeave={handleMouseLeave}
             >
-              <div className="container-custom py-12">
-                <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto" onMouseEnter={() => {
-                  if (timeoutRef.current) {
-                    clearTimeout(timeoutRef.current)
-                    timeoutRef.current = null
-                  }
-                }}>
-                  {megaMenuContent[activeMegaMenu as keyof typeof megaMenuContent].columns.map((column, index) => (
-                    <motion.div
-                      key={column.title}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                    >
-                      <h3 className="text-h5 font-semibold text-text-primary mb-2">
-                        {column.title}
-                      </h3>
-                      <p className="text-body-sm text-text-secondary mb-4">
-                        {column.description}
+              <div className="container-custom py-8">
+                <div className="max-w-6xl mx-auto">
+                  {/* Floating Panel */}
+                  <div 
+                    className="bg-pure-white rounded-2xl border border-border-subtle overflow-hidden"
+                    style={{
+                      boxShadow: '0 20px 50px rgba(0, 0, 0, 0.1)',
+                    }}
+                  >
+                    {/* Header Row */}
+                    <div className="px-8 pt-6 pb-4 border-b border-border-subtle flex items-center justify-between">
+                      <p className="text-body-sm font-medium text-text-secondary">
+                        What we can build for you
                       </p>
-                      <ul className="space-y-2">
-                        {column.items.map((item) => (
-                          <li key={item.text}>
-                            <button
-                              onClick={() => handleMegaMenuItemClick(item.href)}
-                              className="w-full text-left flex items-start gap-2 group/item hover:text-orange transition-colors cursor-pointer"
-                            >
-                              <span className="text-orange mt-1.5 group-hover/item:scale-110 transition-transform">•</span>
-                              <span className="text-body-sm text-text-secondary group-hover/item:text-orange transition-colors">{item.text}</span>
-                            </button>
-                          </li>
+                      <span className="text-label text-orange bg-orange/10 border border-orange/20 px-3 py-1 rounded-full font-medium">
+                        AI-native
+                      </span>
+                    </div>
+
+                    {/* Columns Grid */}
+                    <div className="px-8 py-6">
+                      <div className="grid md:grid-cols-3 gap-8">
+                        {megaMenuContent[activeMegaMenu as keyof typeof megaMenuContent].columns.map((column, index) => (
+                          <motion.div
+                            key={column.title}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.1 }}
+                            className="relative"
+                          >
+                            {/* Vertical Divider (except last column) */}
+                            {index < 2 && (
+                              <div className="absolute right-0 top-0 bottom-0 w-px bg-border-subtle" />
+                            )}
+
+                            {/* Column Content */}
+                            <div className="pr-8">
+                              <h3 className="text-h5 font-semibold text-text-primary mb-3">
+                                {column.title}
+                              </h3>
+                              <p className="text-body-sm text-text-secondary mb-6 leading-relaxed">
+                                {column.description}
+                              </p>
+                              
+                              {/* Service Button Cards */}
+                              <div className="space-y-2.5">
+                                {column.items.map((item) => (
+                                  <motion.button
+                                    key={item.text}
+                                    onClick={() => handleMegaMenuItemClick(item.href)}
+                                    className="w-full text-left group/item"
+                                    whileHover={{ y: -1 }}
+                                    transition={{ duration: 0.2 }}
+                                  >
+                                    <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 hover:bg-orange/5 hover:border-orange/30 transition-all duration-200">
+                                      {/* Visual Marker */}
+                                      <div className="flex-shrink-0 w-2 h-2 rounded-full bg-orange opacity-60 group-hover/item:opacity-100 group-hover/item:scale-125 transition-all" />
+                                      
+                                      {/* Text */}
+                                      <span className="text-body-sm font-medium text-text-primary group-hover/item:text-orange transition-colors">
+                                        {item.text}
+                                      </span>
+                                    </div>
+                                  </motion.button>
+                                ))}
+                              </div>
+                            </div>
+                          </motion.div>
                         ))}
-                      </ul>
-                    </motion.div>
-                  ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -332,28 +366,33 @@ export default function Header() {
                       />
                     </button>
                     {mobileServicesOpen && megaMenuContent['Services'] && (
-                      <div className="mt-3 ml-4 space-y-4">
+                      <div className="mt-4 ml-4 space-y-6">
                         {megaMenuContent['Services'].columns.map((column) => (
                           <div key={column.title}>
-                            <h4 className="text-body font-medium text-text-primary mb-2">
+                            <h4 className="text-body font-semibold text-text-primary mb-2">
                               {column.title}
                             </h4>
-                            <ul className="space-y-1.5 ml-4">
+                            <p className="text-body-sm text-text-secondary mb-3">
+                              {column.description}
+                            </p>
+                            <div className="space-y-2">
                               {column.items.map((item) => (
-                                <li key={item.text}>
-                                  <button
-                                    onClick={() => {
-                                      setIsMobileMenuOpen(false)
-                                      setMobileServicesOpen(false)
-                                      handleMegaMenuItemClick(item.href)
-                                    }}
-                                    className="text-left text-body-sm text-text-secondary hover:text-orange transition-colors cursor-pointer w-full"
-                                  >
+                                <button
+                                  key={item.text}
+                                  onClick={() => {
+                                    setIsMobileMenuOpen(false)
+                                    setMobileServicesOpen(false)
+                                    handleMegaMenuItemClick(item.href)
+                                  }}
+                                  className="w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg bg-gray-50 border border-gray-100 hover:bg-orange/5 hover:border-orange/30 transition-all"
+                                >
+                                  <div className="flex-shrink-0 w-2 h-2 rounded-full bg-orange opacity-60" />
+                                  <span className="text-body-sm font-medium text-text-primary">
                                     {item.text}
-                                  </button>
-                                </li>
+                                  </span>
+                                </button>
                               ))}
-                            </ul>
+                            </div>
                           </div>
                         ))}
                       </div>
