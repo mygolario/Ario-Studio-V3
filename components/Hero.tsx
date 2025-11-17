@@ -1,9 +1,10 @@
 'use client'
 
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Button from './Button'
-import { animateHeroIntro } from '@/lib/gsapClient'
+import { animateHeroIntro, applyHeroParallax, prefersReducedMotion } from '@/lib/gsapClient'
+import HeroBackground from './HeroBackground'
 
 /**
  * Hero Section
@@ -30,6 +31,9 @@ export default function Hero() {
   const backRotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [4, -4]), springConfig)
   const backRotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-4, 4]), springConfig)
 
+  const [introComplete, setIntroComplete] = useState(false)
+  const heroSectionRef = useRef<HTMLElement>(null)
+
   // Hero intro animation on page load
   useEffect(() => {
     animateHeroIntro({
@@ -39,7 +43,71 @@ export default function Hero() {
       buttons: buttonsRef,
       card: cardWrapperRef,
     })
+    
+    // Mark intro as complete after animation duration
+    const timer = setTimeout(() => {
+      setIntroComplete(true)
+    }, 2000) // Allow time for intro animation to complete
+
+    return () => clearTimeout(timer)
   }, [])
+
+  // Apply scroll-based parallax after intro completes
+  useEffect(() => {
+    if (!introComplete) return
+
+    applyHeroParallax({
+      heading: { ref: headingRef, speed: 0.2 }, // Slowest - closest layer
+      subheading: { ref: subheadingRef, speed: 0.4 },
+      chips: { ref: chipsRef, speed: 0.5 },
+      buttons: { ref: buttonsRef, speed: 0.6 },
+      card: { ref: cardWrapperRef, speed: 0.3 },
+    })
+  }, [introComplete])
+
+  // Mouse-based parallax for Hero content (desktop only, after intro)
+  const heroMouseX = useMotionValue(0)
+  const heroMouseY = useMotionValue(0)
+  const heroParallaxX = useSpring(useTransform(heroMouseX, [-1, 1], [-8, 8]), { damping: 30, stiffness: 150 })
+  const heroParallaxY = useSpring(useTransform(heroMouseY, [-1, 1], [-8, 8]), { damping: 30, stiffness: 150 })
+
+  useEffect(() => {
+    if (!introComplete || prefersReducedMotion()) return
+    if (typeof window === 'undefined') return
+
+    // Only enable on desktop (screen width > 1024px)
+    const isDesktop = window.innerWidth > 1024
+    if (!isDesktop) return
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!heroSectionRef.current) return
+      const rect = heroSectionRef.current.getBoundingClientRect()
+      const centerX = rect.left + rect.width / 2
+      const centerY = rect.top + rect.height / 2
+      const xPos = (e.clientX - centerX) / (rect.width / 2)
+      const yPos = (e.clientY - centerY) / (rect.height / 2)
+      heroMouseX.set(Math.max(-1, Math.min(1, xPos * 0.3))) // Very subtle movement
+      heroMouseY.set(Math.max(-1, Math.min(1, yPos * 0.3)))
+    }
+
+    const handleMouseLeave = () => {
+      heroMouseX.set(0)
+      heroMouseY.set(0)
+    }
+
+    const section = heroSectionRef.current
+    if (section) {
+      section.addEventListener('mousemove', handleMouseMove)
+      section.addEventListener('mouseleave', handleMouseLeave)
+    }
+
+    return () => {
+      if (section) {
+        section.removeEventListener('mousemove', handleMouseMove)
+        section.removeEventListener('mouseleave', handleMouseLeave)
+      }
+    }
+  }, [introComplete, heroMouseX, heroMouseY])
 
   // 3D card mouse tilt effect
   useEffect(() => {
@@ -74,21 +142,24 @@ export default function Hero() {
   }, [mouseX, mouseY])
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-pure-white dark:bg-slate-900">
-      {/* Subtle Pattern Background */}
-      <div 
-        className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
-        style={{
-          backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-        }}
-      />
+    <section 
+      ref={heroSectionRef}
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-pure-white dark:bg-slate-900"
+    >
+      {/* Cinematic Animated Background */}
+      <HeroBackground />
 
       <div className="container-custom relative z-10 py-32">
         <div className="grid lg:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
           {/* LEFT COLUMN - Text + CTAs */}
-          <div className="space-y-8">
-            {/* Main Heading */}
+          <motion.div 
+            className="space-y-8"
+            style={{
+              x: heroParallaxX,
+              y: heroParallaxY,
+            }}
+          >
+            {/* Main Heading - Layer 1 (closest) */}
             <h1 
               ref={headingRef}
               className="text-hero md:text-[64px] md:leading-[72px] font-semibold text-text-primary dark:text-slate-100"
@@ -96,7 +167,7 @@ export default function Hero() {
               We Design, Build & Automate Modern Digital Experiences.
             </h1>
 
-            {/* Subtext */}
+            {/* Subtext - Layer 2 */}
             <p 
               ref={subheadingRef}
               className="text-body-lg md:text-xl text-text-secondary dark:text-slate-300 max-w-xl leading-relaxed"
@@ -104,7 +175,7 @@ export default function Hero() {
               A clean, structured, and trustworthy studio focused on clarity, performance, and long-term value.
             </p>
 
-            {/* Visual Chips */}
+            {/* Visual Chips - Layer 2 */}
             <div ref={chipsRef} className="flex flex-wrap gap-3 pt-2">
               {['AI-native', 'Cinematic UX', 'Agent-ready'].map((chip) => (
                 <span
@@ -117,7 +188,7 @@ export default function Hero() {
               ))}
             </div>
 
-            {/* Buttons */}
+            {/* Buttons - Layer 1 (closest) */}
             <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 pt-4">
               <div data-button>
                 <Button href="#contact" variant="primary">
@@ -130,12 +201,16 @@ export default function Hero() {
                 </Button>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          {/* RIGHT COLUMN - 3D Orange Card */}
-          <div
+          {/* RIGHT COLUMN - 3D Orange Card - Layer 3 */}
+          <motion.div
             ref={cardWrapperRef}
             className="hidden lg:flex items-center justify-center"
+            style={{
+              x: heroParallaxX,
+              y: heroParallaxY,
+            }}
           >
             <div 
               ref={containerRef}
@@ -246,7 +321,7 @@ export default function Hero() {
                 </div>
               </motion.div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

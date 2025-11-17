@@ -199,3 +199,46 @@ export const cleanupScrollTriggers = () => {
   }
 }
 
+/**
+ * Apply scroll-based parallax to Hero elements
+ * 
+ * @param elements - Object with refs to hero elements and their parallax speeds
+ */
+export const applyHeroParallax = (elements: {
+  heading?: { ref: React.RefObject<HTMLElement>; speed: number }
+  subheading?: { ref: React.RefObject<HTMLElement>; speed: number }
+  buttons?: { ref: React.RefObject<HTMLElement>; speed: number }
+  card?: { ref: React.RefObject<HTMLElement>; speed: number }
+  chips?: { ref: React.RefObject<HTMLElement>; speed: number }
+}) => {
+  if (typeof window === 'undefined') return
+
+  // Skip parallax if user prefers reduced motion
+  if (prefersReducedMotion()) {
+    return
+  }
+
+  const heroSection = elements.heading?.ref.current?.closest('section')
+  if (!heroSection) return
+
+  // Create ScrollTrigger for each element
+  Object.entries(elements).forEach(([key, config]) => {
+    if (!config?.ref.current) return
+
+    const element = config.ref.current
+    const speed = config.speed || 0.3 // Default speed multiplier
+
+    ScrollTrigger.create({
+      trigger: heroSection,
+      start: 'top top',
+      end: 'bottom top',
+      scrub: 1,
+      onUpdate: (self) => {
+        const progress = self.progress
+        const translateY = progress * 20 * speed // Max 20px movement
+        gsap.set(element, { y: translateY })
+      },
+    })
+  })
+}
+
