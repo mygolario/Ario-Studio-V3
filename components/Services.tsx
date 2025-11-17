@@ -5,8 +5,13 @@ import { motion } from 'framer-motion'
 import { Palette, Code, Zap } from 'lucide-react'
 import { animateSectionReveal } from '@/lib/gsapClient'
 import { Copy } from '@/content/copy'
+import { Service } from '@prisma/client'
 
-export default function Services() {
+interface ServicesProps {
+  services?: Service[]
+}
+
+export default function Services({ services = [] }: ServicesProps) {
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -24,15 +29,35 @@ export default function Services() {
       })
     }
   }, [])
+  
   const serviceIcons = [Palette, Code, Zap]
   
-  const serviceGroups = Copy.services.items.map((item, index) => ({
-    id: item.title.toLowerCase().replace(/\s+/g, '-'),
-    icon: serviceIcons[index] || Palette,
-    title: item.title,
-    description: item.description,
-    items: item.bullets,
-  }))
+  // Use database services if available, otherwise fallback to copy
+  const serviceGroups = services.length > 0
+    ? services.map((service, index) => {
+        const items = Array.isArray(service.items) ? service.items : []
+        return {
+          id: service.slug || service.title.toLowerCase().replace(/\s+/g, '-'),
+          icon: serviceIcons[index] || Palette,
+          title: service.title,
+          description: service.subtitle || '',
+          items: items as string[],
+          pillLabel: service.pillLabel || service.title,
+        }
+      })
+    : Copy.services.items.map((item, index) => ({
+        id: item.title.toLowerCase().replace(/\s+/g, '-'),
+        icon: serviceIcons[index] || Palette,
+        title: item.title,
+        description: item.description,
+        items: item.bullets,
+        pillLabel: item.title,
+      }))
+  
+  // Don't render section if no services
+  if (serviceGroups.length === 0) {
+    return null
+  }
 
   return (
     <section
@@ -122,11 +147,13 @@ export default function Services() {
                   {/* Content */}
                   <div className="relative z-10">
                     {/* Pill Label */}
-                    <div className="mb-3">
-                      <span className="inline-block text-label text-orange/80 uppercase tracking-wider font-medium text-xs mb-2">
-                        {group.title}
-                      </span>
-                    </div>
+                    {group.pillLabel && (
+                      <div className="mb-3">
+                        <span className="inline-block text-label text-orange/80 uppercase tracking-wider font-medium text-xs mb-2">
+                          {group.pillLabel}
+                        </span>
+                      </div>
+                    )}
                     
                     <h3 className="text-h4 font-semibold text-text-primary mb-3">
                       {group.title}

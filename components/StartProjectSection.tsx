@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useTransition } from 'react'
 import { motion } from 'framer-motion'
 import Button from './Button'
 import { animateSectionReveal } from '@/lib/gsapClient'
 import { Copy } from '@/content/copy'
+import { createLeadAction, type CreateLeadActionResult } from '@/app/actions/create-lead'
 
 /**
  * Start Project Section
@@ -21,9 +22,8 @@ import { Copy } from '@/content/copy'
  */
 export default function StartProjectSection() {
   const sectionRef = useRef<HTMLElement>(null)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSuccess, setIsSuccess] = useState(false)
-  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [isPending, startTransition] = useTransition()
+  const [result, setResult] = useState<CreateLeadActionResult | null>(null)
   const [selectedService, setSelectedService] = useState<string | null>(null)
 
   const [formData, setFormData] = useState({
@@ -68,31 +68,9 @@ export default function StartProjectSection() {
     }
   }, [])
 
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return emailRegex.test(email)
-  }
-
-  const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {}
-
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required'
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required'
-    } else if (!validateEmail(formData.email)) {
-      newErrors.email = 'Please enter a valid email address'
-    }
-
-    if (!formData.message.trim()) {
-      newErrors.message = 'Message is required'
-    }
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+  // Extract errors from result
+  const errors = result && !result.success ? result.errors || {} : {}
+  const isSuccess = result?.success === true
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -100,12 +78,8 @@ export default function StartProjectSection() {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
     // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors((prev) => {
-        const newErrors = { ...prev }
-        delete newErrors[name]
-        return newErrors
-      })
+    if (result && !result.success && result.errors?.[name as keyof typeof result.errors]) {
+      setResult(null)
     }
   }
 
@@ -124,48 +98,43 @@ export default function StartProjectSection() {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (!validateForm()) {
-      return
+    // Build servicesNeeded array from selectedService
+    const servicesNeeded = selectedService ? [selectedService] : []
+
+    // Create FormData
+    const formDataObj = new FormData()
+    formDataObj.append('name', formData.name)
+    formDataObj.append('email', formData.email)
+    formDataObj.append('message', formData.message)
+    if (formData.projectType) {
+      formDataObj.append('projectType', formData.projectType)
     }
+    if (formData.budget) {
+      formDataObj.append('budget', formData.budget)
+    }
+    if (servicesNeeded.length > 0) {
+      formDataObj.append('servicesNeeded', servicesNeeded.join(','))
+    }
+    formDataObj.append('source', 'start_project_form')
 
-    setIsSubmitting(true)
-    setErrors({})
+    startTransition(async () => {
+      const actionResult = await createLeadAction(formDataObj)
+      setResult(actionResult)
 
-    // TODO: Replace this with actual API call
-    // Example:
-    // try {
-    //   const response = await fetch('/api/contact', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(formData),
-    //   })
-    //   if (response.ok) {
-    //     setIsSuccess(true)
-    //     setFormData({ name: '', email: '', projectType: '', budget: '', message: '' })
-    //   } else {
-    //     setErrors({ submit: 'Something went wrong. Please try again.' })
-    //   }
-    // } catch (error) {
-    //   setErrors({ submit: 'Network error. Please try again.' })
-    // } finally {
-    //   setIsSubmitting(false)
-    // }
-
-    // Simulate API call
-    setTimeout(() => {
-      setIsSuccess(true)
-      setIsSubmitting(false)
-      setFormData({ name: '', email: '', projectType: '', budget: '', message: '' })
-      setSelectedService(null)
-      
-      // Reset success message after 5 seconds
-      setTimeout(() => {
-        setIsSuccess(false)
-      }, 5000)
-    }, 1500)
+      if (actionResult.success) {
+        // Clear form on success
+        setFormData({ name: '', email: '', projectType: '', budget: '', message: '' })
+        setSelectedService(null)
+        
+        // Reset success message after 5 seconds
+        setTimeout(() => {
+          setResult(null)
+        }, 5000)
+      }
+    })
   }
 
   return (
@@ -485,10 +454,10 @@ export default function StartProjectSection() {
                     <div className="pt-4">
                       <button
                         type="submit"
-                        disabled={isSubmitting}
+                        disabled={isPending}
                         className="w-full group relative px-8 py-4 font-medium rounded-full transition-all duration-200 flex items-center gap-2 justify-center focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 bg-orange text-pure-white shadow-soft hover:shadow-card hover:scale-105 active:scale-[0.97] hover:brightness-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-soft"
                       >
-                        {isSubmitting ? (
+                        {isPending ? (
                           <span className="flex items-center gap-2">
                             <svg
                               className="animate-spin h-5 w-5"
@@ -533,8 +502,11 @@ export default function StartProjectSection() {
                       </button>
                     </div>
 
-                    {errors.submit && (
-                      <p className="text-body-sm text-red-500 text-center">{errors.submit}</p>
+                    {result && !result.success && result.message && (
+                      <p className="text-body-sm text-red-500 text-center">{result.message}</p>
+                    )}
+                    {result && !result.success && result.errors?._form && (
+                      <p className="text-body-sm text-red-500 text-center">{result.errors._form}</p>
                     )}
                   </form>
                 )}

@@ -5,10 +5,26 @@ import Link from 'next/link'
 import { animateSectionReveal } from '@/lib/gsapClient'
 import { getAllProjects } from '@/data/projects'
 import { Copy } from '@/content/copy'
+import { Project } from '@prisma/client'
 
-export default function Portfolio() {
+interface PortfolioProps {
+  projects?: Project[]
+}
+
+export default function Portfolio({ projects: dbProjects = [] }: PortfolioProps) {
   const sectionRef = useRef<HTMLElement>(null)
-  const projects = getAllProjects()
+  
+  // Use database projects if available, otherwise fallback to static data
+  const projects = dbProjects.length > 0
+    ? dbProjects.map((project) => ({
+        slug: project.slug,
+        title: project.title,
+        subtitle: project.shortDescription || '',
+        tags: project.tags || [],
+        thumbnail: project.thumbnailUrl || undefined,
+        status: 'Live' as const, // Default status, can be enhanced later
+      }))
+    : getAllProjects()
 
   useEffect(() => {
     if (sectionRef.current) {
@@ -58,8 +74,13 @@ export default function Portfolio() {
           </div>
 
           {/* Projects Grid */}
-          <div className="grid md:grid-cols-2 gap-8">
-            {projects.map((project, index) => (
+          {projects.length === 0 ? (
+            <div className="text-center py-16">
+              <p className="text-text-secondary">No projects available at the moment.</p>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-8">
+              {projects.map((project, index) => (
               <Link
                 key={project.slug}
                 href={`/work/${project.slug}`}
@@ -124,8 +145,9 @@ export default function Portfolio() {
                   </div>
                 </div>
               </Link>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>

@@ -4,8 +4,13 @@ import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { animateSectionReveal } from '@/lib/gsapClient'
 import { Copy } from '@/content/copy'
+import { ProcessStep } from '@prisma/client'
 
-export default function DesignEthos() {
+interface DesignEthosProps {
+  processSteps?: ProcessStep[]
+}
+
+export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosProps) {
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -61,7 +66,14 @@ export default function DesignEthos() {
     }
   }, [])
 
-  const processSteps = Copy.process.steps
+  // Use database process steps if available, otherwise fallback to copy
+  const processSteps = dbSteps.length > 0
+    ? dbSteps.map((step, index) => ({
+        number: String(index + 1).padStart(2, '0'),
+        title: step.title,
+        description: step.description,
+      }))
+    : Copy.process.steps
 
   return (
     <section

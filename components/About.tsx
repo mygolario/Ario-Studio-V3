@@ -5,8 +5,13 @@ import { motion } from 'framer-motion'
 import { CheckCircle2 } from 'lucide-react'
 import { animateSectionReveal } from '@/lib/gsapClient'
 import { Copy } from '@/content/copy'
+import { Highlight } from '@prisma/client'
 
-export default function About() {
+interface AboutProps {
+  highlights?: Highlight[]
+}
+
+export default function About({ highlights: dbHighlights = [] }: AboutProps) {
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -88,7 +93,10 @@ export default function About() {
               {Copy.about.subSectionTitle}
             </h3>
             <ul className="grid md:grid-cols-2 gap-4">
-              {Copy.about.principles.map((principle, index) => (
+              {(dbHighlights.length > 0
+                ? dbHighlights.map((h) => h.title)
+                : Copy.about.principles
+              ).map((principle, index) => (
                 <motion.li
                   key={principle}
                   initial={{ opacity: 0, x: -10 }}

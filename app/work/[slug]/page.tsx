@@ -1,15 +1,32 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { getProjectBySlug as getDbProjectBySlug } from '@/lib/db'
 import { getProjectBySlug, getAllProjects } from '@/data/projects'
 import CaseStudyHero from '@/components/CaseStudyHero'
 import CaseStudyContent from '@/components/CaseStudyContent'
 import Button from '@/components/Button'
 import Footer from '@/components/Footer'
+import { Project as DbProject } from '@prisma/client'
 
 /**
  * Generate static params for all projects
  */
 export async function generateStaticParams() {
+  try {
+    // Try database first
+    const { getProjects } = await import('@/lib/db')
+    const dbProjects = await getProjects().catch(() => [])
+    
+    if (dbProjects.length > 0) {
+      return dbProjects.map((project) => ({
+        slug: project.slug,
+      }))
+    }
+  } catch (error) {
+    // Fallback to static data
+  }
+  
+  // Fallback to static data
   const projects = getAllProjects()
   return projects.map((project) => ({
     slug: project.slug,
@@ -20,7 +37,27 @@ export async function generateStaticParams() {
  * Generate metadata for each project page
  */
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const project = getProjectBySlug(params.slug)
+  // Try database first
+  let project: any = null
+  try {
+    const dbProject = await getDbProjectBySlug(params.slug).catch(() => null)
+    if (dbProject) {
+      project = {
+        title: dbProject.title,
+        subtitle: dbProject.shortDescription || '',
+        overview: dbProject.longDescription || dbProject.shortDescription || '',
+        heroImage: dbProject.heroImageUrl || undefined,
+        slug: dbProject.slug,
+      }
+    }
+  } catch (error) {
+    // Fallback to static data
+  }
+  
+  // Fallback to static data
+  if (!project) {
+    project = getProjectBySlug(params.slug)
+  }
 
   if (!project) {
     return {
@@ -64,16 +101,49 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 /**
+ * Convert database project to component format
+ */
+function adaptDbProjectToComponent(dbProject: DbProject) {
+  return {
+    slug: dbProject.slug,
+    title: dbProject.title,
+    subtitle: dbProject.shortDescription || '',
+    role: dbProject.role || 'Design & Build',
+    tags: dbProject.tags || [],
+    thumbnail: dbProject.thumbnailUrl || undefined,
+    heroImage: dbProject.heroImageUrl || undefined,
+    overview: dbProject.longDescription || dbProject.shortDescription || '',
+    problem: 'TODO: Add problem description', // Database doesn't have this field yet
+    solution: 'TODO: Add solution description', // Database doesn't have this field yet
+    stack: [], // Database doesn't have this field yet
+    highlights: [], // Database doesn't have this field yet
+    status: dbProject.liveUrl ? ('Live' as const) : ('In development' as const),
+    sections: [],
+  }
+}
+
+/**
  * Case Study Page
  * 
  * Dynamic route for individual project case studies.
- * 
- * To customize content:
- * - Edit the project data in data/projects.ts
- * - Modify the layout in CaseStudyHero and CaseStudyContent components
+ * Uses database if available, falls back to static data.
  */
-export default function CaseStudyPage({ params }: { params: { slug: string } }) {
-  const project = getProjectBySlug(params.slug)
+export default async function CaseStudyPage({ params }: { params: { slug: string } }) {
+  // Try database first
+  let project: any = null
+  try {
+    const dbProject = await getDbProjectBySlug(params.slug).catch(() => null)
+    if (dbProject) {
+      project = adaptDbProjectToComponent(dbProject)
+    }
+  } catch (error) {
+    // Fallback to static data
+  }
+  
+  // Fallback to static data
+  if (!project) {
+    project = getProjectBySlug(params.slug)
+  }
 
   if (!project) {
     notFound()

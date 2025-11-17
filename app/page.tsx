@@ -6,21 +6,30 @@ import DesignEthos from '@/components/DesignEthos'
 import About from '@/components/About'
 import StartProjectSection from '@/components/StartProjectSection'
 import Footer from '@/components/Footer'
+import { getServices, getFeaturedProjects, getProcessSteps, getHighlights } from '@/lib/db'
 
-export default function Home() {
+export default async function Home() {
+  // Fetch all data from database
+  const [services, projects, processSteps, highlights] = await Promise.all([
+    getServices().catch(() => []),
+    getFeaturedProjects().catch(() => []),
+    getProcessSteps().catch(() => []),
+    getHighlights('about').catch(() => []),
+  ])
+
   return (
     <main className="relative">
       <Header />
       {/* Scene 1: HERO */}
       <Hero />
       {/* Scene 2: WHAT WE DO */}
-      <Services />
+      <Services services={services} />
       {/* Scene 3: OUR WORK */}
-      <Portfolio />
+      <Portfolio projects={projects} />
       {/* Scene 4: OUR PROCESS */}
-      <DesignEthos />
+      <DesignEthos processSteps={processSteps} />
       {/* Scene 5: ABOUT ARIO STUDIO */}
-      <About />
+      <About highlights={highlights} />
       {/* Scene 6: FINAL CTA */}
       <StartProjectSection />
       <Footer />
