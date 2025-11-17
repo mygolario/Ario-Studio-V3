@@ -41,30 +41,30 @@ export default function Header() {
     'Services': {
       columns: [
         {
-          title: 'We Design',
-          description: 'Clean, structured design systems',
+          title: 'AI-Native Product Websites',
+          description: 'Full-stack experiences with AI at the core',
           items: [
-            'Clean UI/UX systems',
-            'Brand identity & visual frameworks',
-            'High-clarity interface layouts',
+            'Cinematic marketing sites',
+            'Agent-integrated product pages',
+            'Launch-ready frontends',
           ],
         },
         {
-          title: 'We Build',
-          description: 'Reliable, scalable engineering',
+          title: 'MVPs & Dashboards',
+          description: 'Fast validation and internal tools',
           items: [
-            'Next.js engineering',
-            'Performance & SEO standards',
-            'Reliable, scalable architecture',
+            'Early-stage MVP & landing pages',
+            'Agent-ready internal dashboards',
+            'Fast validation builds',
           ],
         },
         {
-          title: 'We Automate',
-          description: 'Intelligent workflow systems',
+          title: 'Long-term Design Systems',
+          description: 'Ongoing design partnerships',
           items: [
-            'AI workflows & integrations',
-            'Custom automation agents',
-            'System intelligence setup',
+            'UI/UX systems & motion direction',
+            'Ongoing design partnerships',
+            'Strategic design support',
           ],
         },
       ],
@@ -145,30 +145,46 @@ export default function Header() {
                     className="relative"
                     onMouseEnter={() => item.hasMegaMenu && handleMouseEnter(item.label)}
                   >
-                    <motion.a
-                      href={item.href}
-                      className={`relative text-body font-medium transition-colors duration-300 ${
-                        isActive ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'
-                      } ${item.hasMegaMenu && activeMegaMenu === 'Services' ? 'text-text-primary' : ''}`}
-                      whileHover={{ y: -1 }}
-                    >
-                      {item.label}
-                      {item.hasMegaMenu && (
+                    {item.hasMegaMenu ? (
+                      <motion.button
+                        onClick={() => setActiveMegaMenu(activeMegaMenu === 'Services' ? null : 'Services')}
+                        className={`relative text-body font-medium transition-colors duration-300 ${
+                          activeMegaMenu === 'Services' ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'
+                        }`}
+                        whileHover={{ y: -1 }}
+                      >
+                        {item.label}
                         <ChevronDown 
                           size={14} 
                           className={`inline-block ml-1 transition-transform duration-300 ${
                             activeMegaMenu === 'Services' ? 'rotate-180' : ''
                           }`}
                         />
-                      )}
-                      <motion.span
-                        className="absolute bottom-0 left-0 h-0.5 bg-orange"
-                        initial={{ width: 0 }}
-                        animate={{ width: isActive || (item.hasMegaMenu && activeMegaMenu === 'Services') ? '100%' : 0 }}
-                        whileHover={{ width: '100%' }}
-                        transition={{ duration: 0.3, ease: 'easeOut' }}
-                      />
-                    </motion.a>
+                        <motion.span
+                          className="absolute bottom-0 left-0 h-0.5 bg-orange"
+                          initial={{ width: 0 }}
+                          animate={{ width: activeMegaMenu === 'Services' ? '100%' : 0 }}
+                          transition={{ duration: 0.3, ease: 'easeOut' }}
+                        />
+                      </motion.button>
+                    ) : (
+                      <motion.a
+                        href={item.href}
+                        className={`relative text-body font-medium transition-colors duration-300 ${
+                          isActive ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'
+                        }`}
+                        whileHover={{ y: -1 }}
+                      >
+                        {item.label}
+                        <motion.span
+                          className="absolute bottom-0 left-0 h-0.5 bg-orange"
+                          initial={{ width: 0 }}
+                          animate={{ width: isActive ? '100%' : 0 }}
+                          whileHover={{ width: '100%' }}
+                          transition={{ duration: 0.3, ease: 'easeOut' }}
+                        />
+                      </motion.a>
+                    )}
                   </div>
                 )
               })}
@@ -206,7 +222,10 @@ export default function Header() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              className="absolute top-full left-0 right-0 bg-pure-white border-b border-border-subtle shadow-card rounded-b-xl"
+              className="absolute top-full left-0 right-0 bg-pure-white border-b border-border-subtle rounded-b-xl z-50"
+              style={{
+                boxShadow: '0 18px 40px rgba(0, 0, 0, 0.08)',
+              }}
               onMouseEnter={() => {
                 if (timeoutRef.current) {
                   clearTimeout(timeoutRef.current)

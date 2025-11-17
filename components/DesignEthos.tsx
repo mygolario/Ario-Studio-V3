@@ -59,6 +59,30 @@ export default function DesignEthos() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="space-y-6"
             >
+              {/* 3-Step Process Visual Row */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="grid grid-cols-3 gap-4 mb-8"
+              >
+                {[
+                  { label: 'Discover', icon: '1' },
+                  { label: 'Design', icon: '2' },
+                  { label: 'Build & Automate', icon: '3' },
+                ].map((step, index) => (
+                  <div
+                    key={step.label}
+                    className="group relative bg-pure-white border border-border-subtle rounded-xl p-4 text-center hover:shadow-card transition-all duration-300"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-orange/10 border border-orange/20 flex items-center justify-center mx-auto mb-2 group-hover:bg-orange/20 transition-colors">
+                      <span className="text-orange font-semibold text-sm">{step.icon}</span>
+                    </div>
+                    <p className="text-body-sm font-medium text-text-primary">{step.label}</p>
+                  </div>
+                ))}
+              </motion.div>
               {features.map((feature, index) => {
                 const Icon = feature.icon
                 return (

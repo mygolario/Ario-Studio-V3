@@ -85,6 +85,18 @@ export default function Hero() {
               A clean, structured, and trustworthy studio focused on clarity, performance, and long-term value.
             </p>
 
+            {/* Visual Chips */}
+            <div className="flex flex-wrap gap-3 pt-2">
+              {['AI-native', 'Cinematic UX', 'Agent-ready'].map((chip) => (
+                <span
+                  key={chip}
+                  className="text-body-sm font-medium text-text-secondary border border-gray-200 px-4 py-1.5 rounded-full bg-pure-white hover:border-orange hover:text-orange transition-colors"
+                >
+                  {chip}
+                </span>
+              ))}
+            </div>
+
             {/* Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Button href="#contact" variant="primary">
@@ -108,39 +120,39 @@ export default function Hero() {
               className="relative w-full max-w-md"
               style={{ perspective: '1000px' }}
             >
-              {/* Back Layer 1 - Darker Orange/Coral */}
+              {/* Back Layer 1 - Darker Orange */}
               <motion.div
-                className="absolute inset-0 rounded-[24px] opacity-50"
+                className="absolute inset-0 rounded-[24px] opacity-40"
                 style={{
-                  background: 'linear-gradient(to top, #E55A2D 0%, #FF6A3D 100%)',
+                  background: '#E55A2D', // Darker shade of orange
                   transform: 'translate(15px, 20px)',
                   rotateX: backRotateX,
                   rotateY: backRotateY,
                   transformStyle: 'preserve-3d',
-                  boxShadow: '0 10px 30px rgba(0, 0, 0, 0.12)',
+                  boxShadow: '0 10px 30px rgba(229, 90, 45, 0.2)',
                 }}
               />
 
               {/* Back Layer 2 - Medium Orange */}
               <motion.div
-                className="absolute inset-0 rounded-[24px] opacity-60"
+                className="absolute inset-0 rounded-[24px] opacity-50"
                 style={{
-                  background: 'linear-gradient(to top, #FF6A3D 0%, #FF8C6B 100%)',
+                  background: '#FF8C6B', // Lighter shade of orange
                   transform: 'translate(8px, 12px)',
                   rotateX: backRotateX,
                   rotateY: backRotateY,
                   transformStyle: 'preserve-3d',
-                  boxShadow: '0 8px 25px rgba(0, 0, 0, 0.1)',
+                  boxShadow: '0 8px 25px rgba(255, 140, 107, 0.15)',
                 }}
               />
 
-              {/* Main Orange Card */}
+              {/* Main Orange Card - Matching Primary Button Color */}
               <motion.div
                 ref={cardRef}
                 className="relative rounded-[24px] p-12 cursor-pointer"
                 style={{
-                  background: 'linear-gradient(to top, #FF8C42 0%, #FFB347 60%, #FFD75F 100%)',
-                  boxShadow: '0 18px 40px rgba(0, 0, 0, 0.18)',
+                  background: '#FF6A3D', // Same as primary button
+                  boxShadow: '0 18px 40px rgba(255, 106, 61, 0.25)',
                   rotateX,
                   rotateY,
                   translateZ,
@@ -151,9 +163,35 @@ export default function Hero() {
                 <div 
                   className="absolute inset-0 rounded-[24px] pointer-events-none"
                   style={{
-                    background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.15) 0%, transparent 50%)',
+                    background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2) 0%, transparent 60%)',
                   }}
                 />
+                
+                {/* Very subtle tone-on-tone depth circles (optional, minimal) */}
+                <div className="absolute inset-0 rounded-[24px] overflow-hidden pointer-events-none">
+                  <div 
+                    className="absolute rounded-full opacity-[0.08]"
+                    style={{
+                      width: '120px',
+                      height: '120px',
+                      background: 'rgba(229, 90, 45, 0.3)',
+                      top: '20%',
+                      right: '15%',
+                      filter: 'blur(40px)',
+                    }}
+                  />
+                  <div 
+                    className="absolute rounded-full opacity-[0.06]"
+                    style={{
+                      width: '80px',
+                      height: '80px',
+                      background: 'rgba(255, 140, 66, 0.3)',
+                      bottom: '25%',
+                      left: '20%',
+                      filter: 'blur(30px)',
+                    }}
+                  />
+                </div>
 
                 {/* Content */}
                 <div className="relative z-10 h-full flex flex-col justify-between text-pure-white">
