@@ -82,6 +82,7 @@ export default function Header() {
   const handleMouseEnter = (label: string) => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
     }
     if (label === 'Services') {
       setActiveMegaMenu('Services')
@@ -91,8 +92,23 @@ export default function Header() {
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       setActiveMegaMenu(null)
-    }, 200)
+    }, 300) // Increased delay to prevent flicker
   }
+
+  const handleClickOutside = (e: MouseEvent) => {
+    if (megaMenuRef.current && !megaMenuRef.current.contains(e.target as Node)) {
+      setActiveMegaMenu(null)
+    }
+  }
+
+  useEffect(() => {
+    if (activeMegaMenu) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [activeMegaMenu])
 
   return (
     <>
@@ -133,14 +149,22 @@ export default function Header() {
                       href={item.href}
                       className={`relative text-body font-medium transition-colors duration-300 ${
                         isActive ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'
-                      }`}
+                      } ${item.hasMegaMenu && activeMegaMenu === 'Services' ? 'text-text-primary' : ''}`}
                       whileHover={{ y: -1 }}
                     >
                       {item.label}
+                      {item.hasMegaMenu && (
+                        <ChevronDown 
+                          size={14} 
+                          className={`inline-block ml-1 transition-transform duration-300 ${
+                            activeMegaMenu === 'Services' ? 'rotate-180' : ''
+                          }`}
+                        />
+                      )}
                       <motion.span
                         className="absolute bottom-0 left-0 h-0.5 bg-orange"
                         initial={{ width: 0 }}
-                        animate={{ width: isActive ? '100%' : 0 }}
+                        animate={{ width: isActive || (item.hasMegaMenu && activeMegaMenu === 'Services') ? '100%' : 0 }}
                         whileHover={{ width: '100%' }}
                         transition={{ duration: 0.3, ease: 'easeOut' }}
                       />
@@ -182,12 +206,22 @@ export default function Header() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              className="absolute top-full left-0 right-0 bg-pure-white border-b border-border-subtle shadow-card"
-              onMouseEnter={() => setActiveMegaMenu(activeMegaMenu)}
+              className="absolute top-full left-0 right-0 bg-pure-white border-b border-border-subtle shadow-card rounded-b-xl"
+              onMouseEnter={() => {
+                if (timeoutRef.current) {
+                  clearTimeout(timeoutRef.current)
+                  timeoutRef.current = null
+                }
+              }}
               onMouseLeave={handleMouseLeave}
             >
               <div className="container-custom py-12">
-                <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+                <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto" onMouseEnter={() => {
+                  if (timeoutRef.current) {
+                    clearTimeout(timeoutRef.current)
+                    timeoutRef.current = null
+                  }
+                }}>
                   {megaMenuContent[activeMegaMenu as keyof typeof megaMenuContent].columns.map((column, index) => (
                     <motion.div
                       key={column.title}

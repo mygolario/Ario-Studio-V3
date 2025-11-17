@@ -31,6 +31,14 @@ export default function Portfolio() {
       id="portfolio"
       className="relative py-32 overflow-hidden bg-gray-50"
     >
+      {/* Subtle background pattern */}
+      <div 
+        className="absolute inset-0 opacity-[0.02]"
+        style={{
+          backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)',
+          backgroundSize: '32px 32px',
+        }}
+      />
       <div className="container-custom">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
@@ -41,9 +49,13 @@ export default function Portfolio() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-h1 font-semibold text-text-primary mb-6">
-              Our Work
-            </h2>
+            <div className="mb-6">
+              <h2 className="text-h1 font-semibold text-text-primary mb-4">
+                Our Work
+              </h2>
+              {/* Section accent line */}
+              <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full mx-auto" />
+            </div>
             <p className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
               Selected projects showcasing clean design and reliable engineering.
             </p>

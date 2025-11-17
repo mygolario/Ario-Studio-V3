@@ -19,14 +19,16 @@ export default function Contact() {
             className="text-center space-y-8"
           >
             {/* Header */}
-            <div>
-              <h2 className="text-h1 font-semibold text-text-primary mb-6">
+            <div className="mb-6">
+              <h2 className="text-h1 font-semibold text-text-primary mb-4">
                 Let&apos;s build something with long-term value.
               </h2>
-              <p className="text-body-lg text-text-secondary leading-relaxed">
-                Clear timelines, structured communication, and a professional workflow.
-              </p>
+              {/* Section accent line */}
+              <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full mx-auto" />
             </div>
+            <p className="text-body-lg text-text-secondary leading-relaxed mb-8">
+              Clear timelines, structured communication, and a professional workflow.
+            </p>
 
             {/* CTA Button */}
             <div className="pt-4">

@@ -110,77 +110,76 @@ export default function Hero() {
             >
               {/* Back Layer 1 - Darker Orange/Coral */}
               <motion.div
-                className="absolute inset-0 rounded-[28px] bg-gradient-to-br from-orange-dark to-orange opacity-60"
+                className="absolute inset-0 rounded-[24px] opacity-50"
                 style={{
+                  background: 'linear-gradient(to top, #E55A2D 0%, #FF6A3D 100%)',
                   transform: 'translate(15px, 20px)',
                   rotateX: backRotateX,
                   rotateY: backRotateY,
                   transformStyle: 'preserve-3d',
+                  boxShadow: '0 10px 30px rgba(0, 0, 0, 0.12)',
                 }}
               />
 
               {/* Back Layer 2 - Medium Orange */}
               <motion.div
-                className="absolute inset-0 rounded-[28px] bg-gradient-to-br from-orange to-orange-light opacity-70"
+                className="absolute inset-0 rounded-[24px] opacity-60"
                 style={{
+                  background: 'linear-gradient(to top, #FF6A3D 0%, #FF8C6B 100%)',
                   transform: 'translate(8px, 12px)',
                   rotateX: backRotateX,
                   rotateY: backRotateY,
                   transformStyle: 'preserve-3d',
+                  boxShadow: '0 8px 25px rgba(0, 0, 0, 0.1)',
                 }}
               />
 
               {/* Main Orange Card */}
               <motion.div
                 ref={cardRef}
-                className="relative rounded-[28px] p-12 shadow-card cursor-pointer"
+                className="relative rounded-[24px] p-12 cursor-pointer"
                 style={{
-                  background: 'linear-gradient(to top, #FF6A3D 0%, #FFB347 50%, #FFD75F 100%)',
+                  background: 'linear-gradient(to top, #FF8C42 0%, #FFB347 60%, #FFD75F 100%)',
+                  boxShadow: '0 18px 40px rgba(0, 0, 0, 0.18)',
                   rotateX,
                   rotateY,
                   translateZ,
                   transformStyle: 'preserve-3d',
                 }}
               >
-                {/* Decorative Dots/Bubbles */}
-                <div className="absolute inset-0 rounded-[28px] overflow-hidden pointer-events-none">
-                  {[...Array(12)].map((_, i) => {
-                    const size = Math.random() * 8 + 4
-                    const left = Math.random() * 100
-                    const top = Math.random() * 100
-                    const opacity = Math.random() * 0.3 + 0.1
-                    return (
-                      <div
-                        key={i}
-                        className="absolute rounded-full bg-white"
-                        style={{
-                          width: `${size}px`,
-                          height: `${size}px`,
-                          left: `${left}%`,
-                          top: `${top}%`,
-                          opacity,
-                        }}
-                      />
-                    )
-                  })}
-                </div>
+                {/* Subtle inner glow overlay */}
+                <div 
+                  className="absolute inset-0 rounded-[24px] pointer-events-none"
+                  style={{
+                    background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.15) 0%, transparent 50%)',
+                  }}
+                />
 
                 {/* Content */}
                 <div className="relative z-10 h-full flex flex-col justify-between text-pure-white">
                   <div>
-                    {/* Top-left square block */}
-                    <div className="w-14 h-14 rounded-xl bg-white/30 backdrop-blur-sm mb-6" />
+                    {/* Top-left square block - refined */}
+                    <div 
+                      className="w-14 h-14 rounded-xl mb-6"
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.25)',
+                        backdropFilter: 'blur(8px)',
+                      }}
+                    />
                     
                     <h3 className="text-2xl font-semibold mb-2">AI Studio</h3>
                     <p className="text-base opacity-90">Agent-ready dashboard</p>
                   </div>
                   
-                  {/* Bottom decorative bar */}
+                  {/* Bottom decorative bar - simplified */}
                   <div className="flex gap-3 mt-8">
                     {[0, 1, 2].map((i) => (
                       <div
                         key={i}
-                        className="flex-1 h-1.5 rounded-full bg-white/20"
+                        className="flex-1 h-1 rounded-full"
+                        style={{
+                          background: 'rgba(255, 255, 255, 0.25)',
+                        }}
                       />
                     ))}
                   </div>

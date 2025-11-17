@@ -38,9 +38,13 @@ export default function DesignEthos() {
               transition={{ duration: 0.6 }}
               className="space-y-6"
             >
-              <h2 className="text-h1 font-semibold text-text-primary">
-                Our Philosophy
-              </h2>
+              <div>
+                <h2 className="text-h1 font-semibold text-text-primary mb-4">
+                  Our Philosophy
+                </h2>
+                {/* Section accent line */}
+                <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full" />
+              </div>
               <p className="text-body-lg text-text-secondary leading-relaxed">
                 We focus on clarity, precision and thoughtful execution.  
                 Everything we create is structured, scalable and purpose-driven.

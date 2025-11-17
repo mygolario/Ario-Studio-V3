@@ -42,6 +42,14 @@ export default function Services() {
       id="services"
       className="relative py-32 overflow-hidden bg-pure-white"
     >
+      {/* Subtle background pattern */}
+      <div 
+        className="absolute inset-0 opacity-[0.02]"
+        style={{
+          backgroundImage: 'linear-gradient(to right, #000 1px, transparent 1px), linear-gradient(to bottom, #000 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+        }}
+      />
       <div className="container-custom">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
@@ -52,9 +60,13 @@ export default function Services() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-h1 font-semibold text-text-primary mb-6">
-              Our Services
-            </h2>
+            <div className="mb-6">
+              <h2 className="text-h1 font-semibold text-text-primary mb-4">
+                Our Services
+              </h2>
+              {/* Section accent line */}
+              <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full mx-auto" />
+            </div>
             <p className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
               Comprehensive solutions from design to deployment, built for long-term success.
             </p>
