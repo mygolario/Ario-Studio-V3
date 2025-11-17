@@ -63,6 +63,8 @@ export default function Hero() {
       chips: { ref: chipsRef, speed: 0.5 },
       buttons: { ref: buttonsRef, speed: 0.6 },
       card: { ref: cardWrapperRef, speed: 0.3 },
+    }).catch(() => {
+      // Silently fail if parallax can't be applied
     })
   }, [introComplete])
 

@@ -12,12 +12,43 @@
 
 'use client'
 
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+// Dynamic GSAP imports for better tree-shaking
+let gsap: typeof import('gsap').gsap
+let ScrollTrigger: typeof import('gsap/ScrollTrigger').ScrollTrigger
 
-// Register ScrollTrigger plugin (client-side only)
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger)
+// Lazy load GSAP only when needed
+async function loadGSAP(): Promise<{ gsap: typeof import('gsap').gsap; ScrollTrigger: typeof import('gsap/ScrollTrigger').ScrollTrigger }> {
+  if (typeof window === 'undefined') {
+    throw new Error('GSAP can only be loaded on the client side')
+  }
+  
+  if (!gsap) {
+    const gsapModule = await import('gsap')
+    gsap = gsapModule.gsap
+  }
+  
+  if (!ScrollTrigger) {
+    const scrollTriggerModule = await import('gsap/ScrollTrigger')
+    ScrollTrigger = scrollTriggerModule.ScrollTrigger
+    gsap.registerPlugin(ScrollTrigger)
+  }
+  
+  return { gsap, ScrollTrigger }
+}
+
+// Initialize GSAP on first use
+let gsapPromise: Promise<{ gsap: typeof import('gsap').gsap; ScrollTrigger: typeof import('gsap/ScrollTrigger').ScrollTrigger }> | null = null
+
+function getGSAP(): Promise<{ gsap: typeof import('gsap').gsap; ScrollTrigger: typeof import('gsap/ScrollTrigger').ScrollTrigger }> {
+  if (typeof window === 'undefined') {
+    return Promise.reject(new Error('GSAP can only be loaded on the client side'))
+  }
+  
+  if (!gsapPromise) {
+    gsapPromise = loadGSAP()
+  }
+  
+  return gsapPromise
 }
 
 /**
@@ -34,7 +65,7 @@ export const prefersReducedMotion = (): boolean => {
  * @param ref - React ref to the section element
  * @param options - Animation options
  */
-export const animateSectionReveal = (
+export const animateSectionReveal = async (
   ref: React.RefObject<HTMLElement>,
   options?: {
     y?: number
@@ -45,12 +76,27 @@ export const animateSectionReveal = (
   }
 ) => {
   if (typeof window === 'undefined' || !ref.current) return
+  
+  // Skip animation if tab is not visible
+  if (document.visibilityState !== 'visible') {
+    if (ref.current) {
+      ref.current.style.opacity = '1'
+      ref.current.style.transform = 'translateY(0)'
+    }
+    return
+  }
 
   // Skip animation if user prefers reduced motion
   if (prefersReducedMotion()) {
-    gsap.set(ref.current, { opacity: 1, y: 0 })
+    if (ref.current) {
+      ref.current.style.opacity = '1'
+      ref.current.style.transform = 'translateY(0)'
+    }
     return
   }
+
+  const { gsap: gsapInstance, ScrollTrigger: ScrollTriggerInstance } = await getGSAP()
+  if (!gsapInstance || !ScrollTriggerInstance) return
 
   const {
     y = 30,
@@ -61,7 +107,7 @@ export const animateSectionReveal = (
   } = options || {}
 
   // Animate main container
-  gsap.fromTo(
+  gsapInstance.fromTo(
     ref.current,
     {
       opacity: 0,
@@ -85,7 +131,7 @@ export const animateSectionReveal = (
   // Animate child elements with stagger
   const children = ref.current.querySelectorAll('[data-animate-child]')
   if (children.length > 0) {
-    gsap.fromTo(
+    gsapInstance.fromTo(
       children,
       {
         opacity: 0,
@@ -113,7 +159,7 @@ export const animateSectionReveal = (
  * 
  * @param elements - Object with refs to hero elements
  */
-export const animateHeroIntro = (elements: {
+export const animateHeroIntro = async (elements: {
   heading?: React.RefObject<HTMLElement>
   subheading?: React.RefObject<HTMLElement>
   buttons?: React.RefObject<HTMLElement>
@@ -121,18 +167,33 @@ export const animateHeroIntro = (elements: {
   card?: React.RefObject<HTMLElement>
 }) => {
   if (typeof window === 'undefined') return
-
-  // Skip animation if user prefers reduced motion
-  if (prefersReducedMotion()) {
+  
+  // Skip animation if tab is not visible
+  if (document.visibilityState !== 'visible') {
     Object.values(elements).forEach((ref) => {
       if (ref?.current) {
-        gsap.set(ref.current, { opacity: 1, y: 0 })
+        ref.current.style.opacity = '1'
+        ref.current.style.transform = 'translateY(0)'
       }
     })
     return
   }
 
-  const timeline = gsap.timeline({ defaults: { ease: 'power3.out' } })
+  // Skip animation if user prefers reduced motion
+  if (prefersReducedMotion()) {
+    Object.values(elements).forEach((ref) => {
+      if (ref?.current) {
+        ref.current.style.opacity = '1'
+        ref.current.style.transform = 'translateY(0)'
+      }
+    })
+    return
+  }
+
+  const { gsap: gsapInstance } = await getGSAP()
+  if (!gsapInstance) return
+
+  const timeline = gsapInstance.timeline({ defaults: { ease: 'power3.out' } })
 
   // Animate heading
   if (elements.heading?.current) {
@@ -193,9 +254,12 @@ export const animateHeroIntro = (elements: {
 /**
  * Cleanup ScrollTrigger instances
  */
-export const cleanupScrollTriggers = () => {
+export const cleanupScrollTriggers = async () => {
   if (typeof window !== 'undefined') {
-    ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
+    const { ScrollTrigger: ScrollTriggerInstance } = await getGSAP()
+    if (ScrollTriggerInstance) {
+      ScrollTriggerInstance.getAll().forEach((trigger) => trigger.kill())
+    }
   }
 }
 
@@ -204,7 +268,7 @@ export const cleanupScrollTriggers = () => {
  * 
  * @param elements - Object with refs to hero elements and their parallax speeds
  */
-export const applyHeroParallax = (elements: {
+export const applyHeroParallax = async (elements: {
   heading?: { ref: React.RefObject<HTMLElement>; speed: number }
   subheading?: { ref: React.RefObject<HTMLElement>; speed: number }
   buttons?: { ref: React.RefObject<HTMLElement>; speed: number }
@@ -213,10 +277,20 @@ export const applyHeroParallax = (elements: {
 }) => {
   if (typeof window === 'undefined') return
 
+  // Disable parallax on mobile/low-power devices
+  const isMobile = window.innerWidth < 768
+  if (isMobile) return
+
+  // Skip parallax if tab is not visible
+  if (document.visibilityState !== 'visible') return
+
   // Skip parallax if user prefers reduced motion
   if (prefersReducedMotion()) {
     return
   }
+
+  const { gsap: gsapInstance, ScrollTrigger: ScrollTriggerInstance } = await getGSAP()
+  if (!gsapInstance || !ScrollTriggerInstance) return
 
   const heroSection = elements.heading?.ref.current?.closest('section')
   if (!heroSection) return
@@ -228,7 +302,7 @@ export const applyHeroParallax = (elements: {
     const element = config.ref.current
     const speed = config.speed || 0.3 // Default speed multiplier
 
-    ScrollTrigger.create({
+    ScrollTriggerInstance.create({
       trigger: heroSection,
       start: 'top top',
       end: 'bottom top',
@@ -236,7 +310,7 @@ export const applyHeroParallax = (elements: {
       onUpdate: (self) => {
         const progress = self.progress
         const translateY = progress * 20 * speed // Max 20px movement
-        gsap.set(element, { y: translateY })
+        gsapInstance.set(element, { y: translateY })
       },
     })
   })

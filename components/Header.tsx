@@ -3,11 +3,13 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ChevronDown } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 import Button from './Button'
 import ThemeToggle from './ThemeToggle'
 import { useActiveSection } from '@/lib/useActiveSection'
 
 export default function Header() {
+  const pathname = usePathname()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null)
@@ -157,7 +159,10 @@ export default function Header() {
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-10">
               {navItems.map((item) => {
-                const isActive = activeSection === item.id
+                // For case study pages, highlight "Work" nav item
+                const isActive = pathname.startsWith('/work') 
+                  ? item.id === 'portfolio'
+                  : activeSection === item.id
                 return (
                   <div
                     key={item.href}

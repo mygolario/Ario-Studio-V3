@@ -28,9 +28,38 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     }
   }
 
+  const baseUrl = 'https://ario-studio-v3.vercel.app'
+  const ogImage = project.heroImage 
+    ? `${baseUrl}${project.heroImage}` 
+    : `${baseUrl}/og/og-main.png`
+
   return {
-    title: `${project.title} | Ario Studio`,
-    description: project.subtitle,
+    title: `${project.title} – Case Study`,
+    description: project.overview || project.subtitle || 'Project case study.',
+    openGraph: {
+      title: project.title,
+      description: project.overview || project.subtitle,
+      url: `${baseUrl}/work/${project.slug}`,
+      siteName: 'Ario Studio',
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: `${project.title} – Case Study`,
+        },
+      ],
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: project.title,
+      description: project.overview || project.subtitle,
+      images: [ogImage],
+    },
+    alternates: {
+      canonical: `${baseUrl}/work/${project.slug}`,
+    },
   }
 }
 

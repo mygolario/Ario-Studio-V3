@@ -15,6 +15,11 @@ export default function Services() {
         duration: 0.8,
         ease: 'power3.out',
         stagger: 0.1,
+      }).catch(() => {
+        if (sectionRef.current) {
+          sectionRef.current.style.opacity = '1'
+          sectionRef.current.style.transform = 'translateY(0)'
+        }
       })
     }
   }, [])

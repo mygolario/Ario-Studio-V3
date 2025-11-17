@@ -18,6 +18,12 @@ export default function CaseStudyHero({ project }: { project: Project }) {
         y: 30,
         duration: 0.8,
         ease: 'power3.out',
+      }).catch(() => {
+        // Fallback: show section immediately if GSAP fails
+        if (heroRef.current) {
+          heroRef.current.style.opacity = '1'
+          heroRef.current.style.transform = 'translateY(0)'
+        }
       })
     }
   }, [])
