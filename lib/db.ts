@@ -132,3 +132,47 @@ export async function updateLeadStatus(id: string, status: string, internalNotes
   })
 }
 
+export async function updateLead(id: string, data: { status?: string; internalNotes?: string }) {
+  return await prisma.lead.update({
+    where: { id },
+    data: {
+      ...(data.status && { status: data.status }),
+      ...(data.internalNotes !== undefined && { internalNotes: data.internalNotes }),
+    },
+  })
+}
+
+export async function getLeadStats() {
+  const [total, newLeads, last7Days] = await Promise.all([
+    prisma.lead.count(),
+    prisma.lead.count({ where: { status: 'new' } }),
+    prisma.lead.count({
+      where: {
+        createdAt: {
+          gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+        },
+      },
+    }),
+  ])
+
+  // Count by status
+  const statusCounts = await prisma.lead.groupBy({
+    by: ['status'],
+    _count: {
+      id: true,
+    },
+  })
+
+  const statusMap: Record<string, number> = {}
+  statusCounts.forEach((item) => {
+    statusMap[item.status] = item._count.id
+  })
+
+  return {
+    total,
+    new: newLeads,
+    last7Days,
+    byStatus: statusMap,
+  }
+}
+

@@ -16,6 +16,7 @@ This website represents a premium, internationally-recognized creative agency wi
 
 - Node.js 18+ 
 - npm or yarn
+- PostgreSQL database (for production features)
 
 ### Installation
 
@@ -24,12 +25,35 @@ This website represents a premium, internationally-recognized creative agency wi
 npm install
 ```
 
-2. Run the development server:
+2. Set up environment variables:
+```bash
+# Database
+DATABASE_URL="postgresql://user:password@localhost:5432/dbname"
+
+# Admin Authentication (required for /admin routes)
+ADMIN_EMAIL="admin@example.com"
+ADMIN_PASSWORD="your-secure-password"
+NEXTAUTH_SECRET="your-nextauth-secret-key" # Generate with: openssl rand -base64 32
+
+# Optional: Email notifications (for lead form)
+RESEND_API_KEY="your-resend-api-key"
+LEAD_NOTIFICATION_EMAIL="notifications@example.com"
+EMAIL_FROM="onboarding@resend.dev"
+```
+
+3. Set up the database:
+```bash
+npm run prisma:generate
+npm run prisma:migrate
+npm run prisma:seed  # Optional: seed with sample data
+```
+
+4. Run the development server:
 ```bash
 npm run dev
 ```
 
-3. Open [http://localhost:3000](http://localhost:3000) in your browser.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## 🏗️ Tech Stack
 
@@ -82,6 +106,9 @@ See `CREATIVE_DIRECTION.md` for complete design system documentation.
 - ✅ Performance-optimized animations
 - ✅ Modern, clean architecture
 - ✅ TypeScript for type safety
+- ✅ Admin dashboard for lead management
+- ✅ NextAuth authentication
+- ✅ Dynamic content from database
 
 ## 📱 Responsive Breakpoints
 
@@ -89,6 +116,26 @@ See `CREATIVE_DIRECTION.md` for complete design system documentation.
 - **Tablet:** 768px - 1023px
 - **Desktop:** 1024px - 1439px
 - **Large Desktop:** 1440px+
+
+## 🔐 Admin Dashboard
+
+The admin dashboard is available at `/admin` and provides:
+
+- **Lead Management:** View, filter, and update leads
+- **Dashboard:** Overview of lead statistics
+- **Authentication:** Secure admin-only access via NextAuth
+
+### Accessing the Admin Dashboard
+
+1. Navigate to `/admin/login`
+2. Sign in with credentials from `ADMIN_EMAIL` and `ADMIN_PASSWORD`
+3. Access the dashboard at `/admin`
+
+### Admin Routes
+
+- `/admin` - Dashboard with lead overview
+- `/admin/leads` - Full leads list with filtering
+- `/admin/leads/[id]` - Individual lead detail and management
 
 ## 🚢 Deployment
 
@@ -103,6 +150,16 @@ Start production server:
 ```bash
 npm start
 ```
+
+### Environment Variables for Production
+
+Ensure all required environment variables are set in your deployment platform (Vercel, etc.):
+
+- `DATABASE_URL` - PostgreSQL connection string
+- `ADMIN_EMAIL` - Admin login email
+- `ADMIN_PASSWORD` - Admin login password
+- `NEXTAUTH_SECRET` - Secret key for NextAuth (required)
+- `NEXTAUTH_URL` - Your production URL (e.g., `https://yourdomain.com`)
 
 ## 📄 License
 
