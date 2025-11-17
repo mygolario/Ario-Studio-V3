@@ -75,6 +75,15 @@ export const animateSectionReveal = async (
     trigger?: string
   }
 ) => {
+  // Default unified animation values
+  const defaults = {
+    y: 30,
+    duration: 0.8,
+    ease: 'power3.out',
+    stagger: 0.1,
+  }
+  
+  const config = { ...defaults, ...options }
   if (typeof window === 'undefined' || !ref.current) return
   
   // Skip animation if tab is not visible
@@ -98,20 +107,18 @@ export const animateSectionReveal = async (
   const { gsap: gsapInstance, ScrollTrigger: ScrollTriggerInstance } = await getGSAP()
   if (!gsapInstance || !ScrollTriggerInstance) return
 
-  const {
-    y = 30,
-    duration = 0.8,
-    ease = 'power3.out',
-    stagger = 0.1,
-    trigger,
-  } = options || {}
+  const yOffset = config.y
+  const duration = config.duration
+  const ease = config.ease
+  const stagger = config.stagger
+  const trigger = options?.trigger
 
   // Animate main container
   gsapInstance.fromTo(
     ref.current,
     {
       opacity: 0,
-      y: y,
+      y: yOffset,
     },
     {
       opacity: 1,
@@ -135,7 +142,7 @@ export const animateSectionReveal = async (
       children,
       {
         opacity: 0,
-        y: y * 0.5,
+        y: yOffset * 0.5,
       },
       {
         opacity: 1,

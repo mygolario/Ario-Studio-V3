@@ -52,7 +52,7 @@ export default function About() {
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, ease: 'easeOut' }}
+                transition={{ duration: 0.6, ease: 'power3.out' }}
                 className="mb-4"
               >
                 <span className="text-label text-orange uppercase tracking-wider font-medium">
@@ -69,7 +69,7 @@ export default function About() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
+              transition={{ duration: 0.8, ease: 'power3.out', delay: 0.2 }}
               className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed"
             >
               {Copy.about.subtitle}
@@ -81,7 +81,7 @@ export default function About() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: 'easeOut', delay: 0.4 }}
+              transition={{ duration: 0.8, ease: 'power3.out', delay: 0.4 }}
             className="bg-surface border border-border-subtle rounded-xl p-8 md:p-12"
           >
             <h3 className="text-h4 font-semibold text-text-primary mb-6">
@@ -96,7 +96,7 @@ export default function About() {
                   viewport={{ once: true }}
                   transition={{
                     duration: 0.5,
-                    ease: 'easeOut',
+                    ease: 'power3.out',
                     delay: 0.5 + (index * 0.1),
                   }}
                   className="flex items-start gap-3 group"

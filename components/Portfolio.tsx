@@ -64,10 +64,23 @@ export default function Portfolio() {
                 key={project.slug}
                 href={`/work/${project.slug}`}
                 data-animate-child
-                className="group bg-surface rounded-xl overflow-hidden border border-border-subtle hover:shadow-card-hover hover:-translate-y-2 transition-all duration-200 cursor-pointer block"
+                className="group bg-surface rounded-xl overflow-hidden border border-border-subtle hover:shadow-card-hover hover:-translate-y-2 hover:border-orange/50 transition-all duration-300 cursor-pointer block relative"
               >
+                {/* Subtle inner glow on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-orange/0 via-orange/0 to-orange/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl z-0" />
+                
+                {/* Subtle light streak effect on hover */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-0">
+                  <div 
+                    className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-orange/30 to-transparent"
+                    style={{
+                      transform: 'translateY(-50%)',
+                    }}
+                  />
+                </div>
+                
                 {/* Image Placeholder with Overlay */}
-                <div className="relative h-64 bg-surface-alt overflow-hidden rounded-t-xl">
+                <div className="relative h-64 bg-surface-alt overflow-hidden rounded-t-xl z-10">
                   <div className="absolute inset-0 bg-gradient-to-br from-surface-alt to-elevated group-hover:scale-110 transition-transform duration-500 ease-out" />
                   
                   {/* Overlay - appears on hover */}

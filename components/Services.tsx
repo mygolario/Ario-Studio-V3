@@ -60,7 +60,7 @@ export default function Services() {
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, ease: 'easeOut' }}
+                transition={{ duration: 0.6, ease: 'power3.out' }}
                 className="mb-4"
               >
                 <span className="text-label text-orange uppercase tracking-wider font-medium">
@@ -90,11 +90,11 @@ export default function Services() {
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{
-                    duration: 0.8,
-                    ease: 'easeOut',
-                    delay: index * 0.15,
-                  }}
+                      transition={{
+                        duration: 0.8,
+                        ease: 'easeOut',
+                        delay: index * 0.1,
+                      }}
                   whileHover={{
                     scale: 1.02,
                     y: -4,
@@ -141,10 +141,11 @@ export default function Services() {
                           initial={{ opacity: 0, x: -10 }}
                           whileInView={{ opacity: 1, x: 0 }}
                           viewport={{ once: true }}
-                          transition={{
-                            duration: 0.5,
-                            delay: (index * 0.15) + (itemIndex * 0.1) + 0.3,
-                          }}
+                      transition={{
+                        duration: 0.5,
+                        ease: 'easeOut',
+                        delay: (index * 0.1) + (itemIndex * 0.08) + 0.3,
+                      }}
                           className="flex items-start gap-3 group/item"
                         >
                           <span className="text-orange mt-1.5 group-hover/item:scale-110 transition-transform duration-200 flex-shrink-0">•</span>

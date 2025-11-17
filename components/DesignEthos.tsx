@@ -82,7 +82,7 @@ export default function DesignEthos() {
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, ease: 'easeOut' }}
+                transition={{ duration: 0.6, ease: 'power3.out' }}
                 className="mb-4"
               >
                 <span className="text-label text-orange uppercase tracking-wider font-medium">
@@ -138,7 +138,7 @@ export default function DesignEthos() {
                       viewport={{ once: true }}
                       transition={{
                         duration: 0.8,
-                        ease: 'easeOut',
+                        ease: 'power3.out',
                         delay: index * 0.1,
                       }}
                       whileHover={{
@@ -181,7 +181,7 @@ export default function DesignEthos() {
                   viewport={{ once: true }}
                   transition={{
                     duration: 0.6,
-                    ease: 'easeOut',
+                    ease: 'power3.out',
                     delay: index * 0.1,
                   }}
                   className="group relative pl-8"

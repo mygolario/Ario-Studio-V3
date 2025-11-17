@@ -44,11 +44,21 @@ export default function Footer() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.6, ease: 'power3.out' }}
+              className="relative"
             >
-              <h3 className="text-2xl font-semibold text-text-primary mb-4">
-                Ario Studio
-              </h3>
+              <div className="relative">
+                <h3 className="text-2xl font-semibold text-text-primary mb-4 relative z-10">
+                  Ario Studio
+                </h3>
+                <motion.div
+                  className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-orange/30 to-transparent opacity-50"
+                  initial={{ scaleY: 0 }}
+                  whileInView={{ scaleY: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, ease: 'easeOut' }}
+                />
+              </div>
               <p className="text-body-sm text-text-secondary mb-6">
                 {Copy.footer.description}
               </p>
@@ -82,18 +92,35 @@ export default function Footer() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: categoryIndex * 0.1 }}
             >
-                          <h4 className="text-h6 font-semibold text-text-primary mb-4">
-                {category}
-              </h4>
+              <div className="relative">
+                <h4 className="text-h6 font-semibold text-text-primary mb-4 relative z-10">
+                  {category}
+                </h4>
+                <motion.div
+                  className="absolute -left-2 top-0 bottom-0 w-1 bg-gradient-to-b from-orange/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  initial={{ scaleY: 0 }}
+                  whileInView={{ scaleY: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: categoryIndex * 0.1 + 0.3 }}
+                />
+              </div>
               <ul className="space-y-3">
                 {links.map((link) => (
                   <li key={link.label}>
-                    <a
+                    <motion.a
                       href={link.href}
-                                  className="text-body-sm text-text-secondary hover:text-orange transition-colors"
+                      className="text-body-sm text-text-secondary hover:text-orange transition-colors relative inline-block group/link"
+                      whileHover={{ x: 2 }}
                     >
-                      {link.label}
-                    </a>
+                      <span className="relative z-10">{link.label}</span>
+                      <motion.span
+                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-orange opacity-0 group-hover/link:opacity-100 transition-opacity duration-200"
+                        initial={{ scaleX: 0 }}
+                        whileHover={{ scaleX: 1 }}
+                        transition={{ duration: 0.2, ease: 'easeOut' }}
+                        style={{ transformOrigin: 'left' }}
+                      />
+                    </motion.a>
                   </li>
                 ))}
               </ul>

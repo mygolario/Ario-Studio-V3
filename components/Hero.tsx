@@ -377,12 +377,16 @@ export default function Hero() {
         ref={scrollIndicatorRef}
         initial={{ opacity: 0 }}
         animate={{ opacity: hasScrolled ? 0 : 1 }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
         className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex flex-col items-center gap-2"
       >
-        <span className="text-body-sm text-text-muted font-medium">
+        <motion.span
+          className="text-body-sm text-text-muted font-medium"
+          animate={{ opacity: hasScrolled ? 0 : [0.6, 1, 0.6] }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+        >
           {Copy.hero.scrollIndicator}
-        </span>
+        </motion.span>
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{

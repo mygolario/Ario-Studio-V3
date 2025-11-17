@@ -137,10 +137,10 @@ export default function Header() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.4, ease: 'easeOut' }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-250 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
-            ? 'bg-base/95 backdrop-blur-sm shadow-header border-b border-border-subtle'
-            : 'bg-base'
+            ? 'bg-base/95 backdrop-blur-md shadow-header border-b border-border-subtle'
+            : 'bg-base/80 backdrop-blur-sm'
         }`}
         onMouseLeave={handleMouseLeave}
       >
@@ -149,15 +149,19 @@ export default function Header() {
             {/* Logo */}
             <motion.a
               href="#"
-              className="text-xl font-semibold text-text-primary transition-colors duration-250"
+              className="text-xl font-semibold text-text-primary transition-colors duration-250 relative group"
               whileHover={{ opacity: 0.8 }}
               whileTap={{ scale: 0.98 }}
             >
-              Ario Studio
+              <span className="relative z-10">Ario Studio</span>
+              <motion.span
+                className="absolute inset-0 bg-orange/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{ transform: 'scale(1.5)' }}
+              />
             </motion.a>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-10">
+            <nav className="hidden lg:flex items-center gap-12">
               {navItems.map((item) => {
                 // For case study pages, highlight "Work" nav item
                 const isActive = pathname.startsWith('/work') 
@@ -172,15 +176,15 @@ export default function Header() {
                     {item.hasMegaMenu ? (
                       <motion.button
                         onClick={() => setActiveMegaMenu(activeMegaMenu === 'Services' ? null : 'Services')}
-                        className={`relative text-body font-medium transition-all duration-200 cursor-pointer ${
+                        className={`relative text-body font-medium transition-all duration-200 cursor-pointer group/nav ${
                           activeMegaMenu === 'Services' ? 'text-orange' : 'text-text-secondary hover:text-orange'
                         }`}
                         whileHover={{ y: -1 }}
                       >
-                        {item.label}
+                        <span className="relative z-10">{item.label}</span>
                         <ChevronDown 
                           size={14} 
-                          className={`inline-block ml-1 transition-transform duration-200 ${
+                          className={`inline-block ml-1 transition-transform duration-200 relative z-10 ${
                             activeMegaMenu === 'Services' ? 'rotate-180' : ''
                           }`}
                         />
@@ -189,6 +193,10 @@ export default function Header() {
                           initial={{ width: 0 }}
                           animate={{ width: activeMegaMenu === 'Services' ? '100%' : 0 }}
                           transition={{ duration: 0.2, ease: 'easeOut' }}
+                        />
+                        <motion.span
+                          className="absolute inset-0 bg-orange/5 rounded-md opacity-0 group-hover/nav:opacity-100 transition-opacity duration-200"
+                          style={{ transform: 'scale(1.2)' }}
                         />
                       </motion.button>
                     ) : (
@@ -211,18 +219,22 @@ export default function Header() {
                           }
                           // External links (like /#portfolio) will navigate normally
                         }}
-                        className={`relative text-body font-medium transition-all duration-200 ${
+                        className={`relative text-body font-medium transition-all duration-200 group/nav ${
                           isActive ? 'text-text-primary' : 'text-text-secondary hover:text-orange'
                         }`}
                         whileHover={{ y: -1 }}
                       >
-                        {item.label}
+                        <span className="relative z-10">{item.label}</span>
                         <motion.span
                           className="absolute bottom-0 left-0 h-0.5 bg-orange"
                           initial={{ width: 0 }}
                           animate={{ width: isActive ? '100%' : 0 }}
                           whileHover={{ width: '100%' }}
                           transition={{ duration: 0.2, ease: 'easeOut' }}
+                        />
+                        <motion.span
+                          className="absolute inset-0 bg-orange/5 rounded-md opacity-0 group-hover/nav:opacity-100 transition-opacity duration-200"
+                          style={{ transform: 'scale(1.2)' }}
                         />
                       </motion.a>
                     )}
@@ -232,11 +244,20 @@ export default function Header() {
             </nav>
 
             {/* Theme Toggle & CTA */}
-            <div className="hidden lg:flex items-center gap-4">
+            <div className="hidden lg:flex items-center gap-6">
               <ThemeToggle />
-              <Button href="#contact" variant="secondary" className="!px-6 !py-3" icon={false}>
-                Start a Project
-              </Button>
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Button href="#contact" variant="secondary" className="!px-6 !py-3 relative group/cta" icon={false}>
+                  <span className="relative z-10">Start a Project</span>
+                  <motion.span
+                    className="absolute inset-0 bg-orange/10 rounded-full opacity-0 group-hover/cta:opacity-100 transition-opacity duration-300"
+                    style={{ transform: 'scale(1.1)' }}
+                  />
+                </Button>
+              </motion.div>
             </div>
 
             {/* Mobile Menu Button */}

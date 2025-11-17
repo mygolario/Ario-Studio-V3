@@ -129,8 +129,11 @@ export const Copy = {
     ],
   },
   startProject: {
-    title: 'Ready to start a project?',
-    subtitle: 'Tell us a bit about your idea and we\'ll help shape it into a cinematic, AI-native experience.',
+    label: "Let's collaborate",
+    title: "Let's build your next digital experience.",
+    subtitle: "Whether you're launching a brand, upgrading your website, or integrating AI automation, Ario Studio is ready to bring it to life with cinematic design and modern engineering.",
+    ctaPrimary: 'Start a project',
+    ctaSecondary: 'Contact',
     services: [
       'Cinematic web experiences',
       'Next.js engineering',

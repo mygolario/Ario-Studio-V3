@@ -124,7 +124,7 @@ export default function StartProjectSection() {
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!validateForm()) {
@@ -174,72 +174,156 @@ export default function StartProjectSection() {
       id="contact"
       className="relative py-32 overflow-hidden bg-base"
     >
-      <div className="container-custom">
+      {/* Enhanced background with cinematic glow */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-orange/5 to-transparent opacity-30 pointer-events-none" />
+      
+      {/* Subtle vertical light streak */}
+      <div className="absolute top-0 bottom-0 left-1/2 transform -translate-x-1/2 w-px bg-gradient-to-b from-transparent via-orange/20 to-transparent opacity-50 pointer-events-none" />
+      
+      <div className="container-custom relative z-10">
         <div className="max-w-6xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-16">
-            <div className="mb-6">
-              <h2 className="text-h1 font-semibold text-text-primary mb-4">
+          {/* Header with CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: 'power3.out' }}
+            className="text-center mb-20"
+          >
+            {/* Section Label */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, ease: 'power3.out' }}
+              className="mb-4"
+            >
+              <span className="text-label text-orange uppercase tracking-wider font-medium">
+                {Copy.startProject.label}
+              </span>
+            </motion.div>
+
+            {/* Main Heading with cinematic glow */}
+            <div className="relative inline-block mb-6">
+              {/* Glow effect behind heading */}
+              <div className="absolute inset-0 bg-gradient-to-r from-orange/20 via-orange/10 to-orange/20 blur-3xl opacity-50 -z-10" />
+              <h2 className="text-h1 md:text-[56px] md:leading-[64px] font-semibold text-text-primary mb-4 relative z-10">
                 {Copy.startProject.title}
               </h2>
-              {/* Section accent line */}
-              <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full mx-auto" />
             </div>
-            <p className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
+            
+            {/* Section accent line */}
+            <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full mx-auto mb-6" />
+            
+            {/* Subheading */}
+            <motion.p
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: 'power3.out', delay: 0.2 }}
+              className="text-body-lg md:text-xl text-text-secondary max-w-2xl mx-auto leading-relaxed mb-12"
+            >
               {Copy.startProject.subtitle}
-            </p>
-          </div>
+            </motion.p>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
-            {/* LEFT COLUMN - Services Pills */}
-            <div className="space-y-8">
-              <div>
-                <h3 className="text-h4 font-semibold text-text-primary mb-6">
-                  What we can help with
-                </h3>
-                <div className="flex flex-wrap gap-3">
-                  {services.map((service, index) => (
-                    <motion.button
-                      key={service}
-                      data-animate-child
-                      onClick={() => handleServiceClick(service)}
-                      className={`px-4 py-2 rounded-full text-body-sm font-medium transition-all duration-200 border ${
-                        selectedService === service
-                          ? 'bg-orange text-pure-white border-orange shadow-soft'
-                          : 'bg-surface text-text-secondary border-border-subtle hover:border-orange hover:text-orange hover:bg-orange/5'
-                      }`}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      {service}
-                    </motion.button>
-                  ))}
+            {/* CTA Buttons - Staggered */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: 'power3.out', delay: 0.4 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            >
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, ease: 'power3.out', delay: 0.5 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <Button href="#contact-form" variant="primary" className="!px-10 !py-5 !text-lg">
+                  {Copy.startProject.ctaPrimary}
+                </Button>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, ease: 'power3.out', delay: 0.6 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <Button href="#contact-form" variant="secondary" icon={false} className="!px-10 !py-5 !text-lg">
+                  {Copy.startProject.ctaSecondary}
+                </Button>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+
+          {/* Form Section */}
+          <motion.div
+            id="contact-form"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: 'power3.out', delay: 0.6 }}
+            className="max-w-6xl mx-auto"
+          >
+            <div className="grid lg:grid-cols-2 gap-12 items-start">
+              {/* LEFT COLUMN - Services Pills */}
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-h4 font-semibold text-text-primary mb-6">
+                    What we can help with
+                  </h3>
+                  <div className="flex flex-wrap gap-3">
+                    {services.map((service, index) => (
+                      <motion.button
+                        key={service}
+                        data-animate-child
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 0.7 + (index * 0.1) }}
+                        onClick={() => handleServiceClick(service)}
+                        className={`px-4 py-2 rounded-full text-body-sm font-medium transition-all duration-200 border ${
+                          selectedService === service
+                            ? 'bg-orange text-pure-white border-orange shadow-soft'
+                            : 'bg-surface text-text-secondary border-border-subtle hover:border-orange hover:text-orange hover:bg-orange/5'
+                        }`}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        {service}
+                      </motion.button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Additional Info */}
+                <div className="pt-8 border-t border-border-subtle">
+                  <p className="text-body-sm text-text-muted mb-4">
+                    We respond within 24 hours.
+                  </p>
+                  <a
+                    href="mailto:hello@ariostudio.com"
+                    className="text-body-lg text-text-secondary hover:text-orange transition-colors"
+                  >
+                    hello@ariostudio.com
+                  </a>
                 </div>
               </div>
 
-              {/* Additional Info */}
-              <div className="pt-8 border-t border-border-subtle">
-                <p className="text-body-sm text-text-muted mb-4">
-                  We respond within 24 hours.
-                </p>
-                <a
-                  href="mailto:hello@ariostudio.com"
-                  className="text-body-lg text-text-secondary hover:text-orange transition-colors"
+              {/* RIGHT COLUMN - Form */}
+              <div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.8 }}
+                  className="bg-surface border border-border-subtle rounded-2xl p-8 shadow-soft hover:shadow-card transition-all duration-200"
                 >
-                  hello@ariostudio.com
-                </a>
-              </div>
-            </div>
-
-            {/* RIGHT COLUMN - Form */}
-            <div>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="bg-surface border border-border-subtle rounded-2xl p-8 shadow-soft hover:shadow-card transition-all duration-200"
-              >
                 {isSuccess ? (
                   <div className="text-center py-8">
                     <motion.div
@@ -454,9 +538,10 @@ export default function StartProjectSection() {
                     )}
                   </form>
                 )}
-              </motion.div>
+                </motion.div>
+              </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
