@@ -1,7 +1,6 @@
 import Header from '@/components/Header'
 import Hero from '@/components/Hero'
 import DesignEthos from '@/components/DesignEthos'
-import WhatWeDo from '@/components/WhatWeDo'
 import Portfolio from '@/components/Portfolio'
 import About from '@/components/About'
 import Services from '@/components/Services'
@@ -14,10 +13,9 @@ export default function Home() {
       <Header />
       <Hero />
       <DesignEthos />
-      <WhatWeDo />
+      <Services />
       <Portfolio />
       <About />
-      <Services />
       <Contact />
       <Footer />
     </main>

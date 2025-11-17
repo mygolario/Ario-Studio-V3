@@ -34,7 +34,7 @@ export default function Footer() {
   }
 
   return (
-    <footer className="relative border-t border-border-subtle bg-warm-gray-50">
+    <footer className="relative border-t border-border-subtle bg-gray-50">
       <div className="container-custom py-16">
         <div className="grid md:grid-cols-4 gap-12 mb-12">
           {/* Brand Column */}
@@ -45,11 +45,11 @@ export default function Footer() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h3 className="text-2xl font-display font-bold bg-gradient-sunset bg-clip-text text-transparent mb-4">
+              <h3 className="text-2xl font-semibold text-text-primary mb-4">
                 Ario Studio
               </h3>
               <p className="text-body-sm text-text-secondary mb-6">
-                We design experiences that evolve. Crafting living systems through exceptional design and strategic thinking.
+                Clean, structured, and trustworthy digital experiences.
               </p>
               {/* Social Links */}
               <div className="flex gap-4">
@@ -60,8 +60,8 @@ export default function Footer() {
                       key={social.label}
                       href={social.href}
                       aria-label={social.label}
-                      className="w-10 h-10 bg-surface-elevated rounded-medium flex items-center justify-center text-text-secondary hover:text-sunset-orange hover:bg-sunset-orange/10 transition-all duration-300 border border-border-subtle"
-                      whileHover={{ scale: 1.1, y: -2 }}
+                      className="w-10 h-10 bg-pure-white rounded-medium flex items-center justify-center text-text-secondary hover:text-orange hover:bg-orange/5 transition-all duration-300 border border-border-subtle"
+                      whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
                       <Icon size={18} />
@@ -81,7 +81,7 @@ export default function Footer() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: categoryIndex * 0.1 }}
             >
-              <h4 className="text-h6 font-display font-bold text-text-primary mb-4">
+              <h4 className="text-h6 font-semibold text-text-primary mb-4">
                 {category}
               </h4>
               <ul className="space-y-3">
@@ -89,7 +89,7 @@ export default function Footer() {
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      className="text-body-sm text-text-secondary hover:text-sunset-orange transition-colors"
+                      className="text-body-sm text-text-secondary hover:text-orange transition-colors"
                     >
                       {link.label}
                     </a>
@@ -108,11 +108,11 @@ export default function Footer() {
           transition={{ duration: 0.6 }}
           className="pt-8 border-t border-border-subtle flex flex-col md:flex-row justify-between items-center gap-4"
         >
-          <p className="text-body-sm text-text-tertiary">
+          <p className="text-body-sm text-text-muted">
             © {currentYear} Ario Studio. All rights reserved.
           </p>
-          <p className="text-body-sm text-text-tertiary">
-            Designed to evolve.
+          <p className="text-body-sm text-text-muted">
+            Built with clarity and purpose.
           </p>
         </motion.div>
       </div>

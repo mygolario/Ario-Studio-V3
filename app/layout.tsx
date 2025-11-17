@@ -1,29 +1,18 @@
 import type { Metadata } from 'next'
-import { Inter, Space_Grotesk, Playfair_Display } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import './globals.css'
 
 const inter = Inter({ 
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
-})
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  variable: '--font-display',
-  display: 'swap',
-})
-
-const playfairDisplay = Playfair_Display({
-  subsets: ['latin'],
-  variable: '--font-serif',
-  display: 'swap',
+  weight: ['400', '500', '600'],
 })
 
 export const metadata: Metadata = {
-  title: 'Ario Studio — World-Class Creative Agency',
-  description: 'A premium creative studio delivering exceptional design, strategy, and digital experiences.',
-  keywords: ['creative agency', 'design studio', 'branding', 'digital design'],
+  title: 'Ario Studio — Modern Digital Experiences',
+  description: 'A clean, structured, and trustworthy studio focused on clarity, performance, and long-term value.',
+  keywords: ['web design', 'web development', 'digital agency', 'automation'],
 }
 
 export default function RootLayout({
@@ -33,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${spaceGrotesk.variable} font-display antialiased`}>
+      <body className={`${inter.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>
