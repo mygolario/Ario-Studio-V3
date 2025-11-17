@@ -1,9 +1,22 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useEffect, useRef } from 'react'
 import { Award, Users, Workflow, TrendingUp } from 'lucide-react'
+import { animateSectionReveal } from '@/lib/gsapClient'
 
 export default function About() {
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    if (sectionRef.current) {
+      animateSectionReveal(sectionRef, {
+        y: 30,
+        duration: 0.8,
+        ease: 'power3.out',
+        stagger: 0.1,
+      })
+    }
+  }, [])
   const stats = [
     {
       icon: Award,
@@ -29,6 +42,7 @@ export default function About() {
 
   return (
     <section
+      ref={sectionRef}
       id="about"
       className="relative py-32 overflow-hidden bg-gray-50 dark:bg-slate-800/50"
     >
@@ -43,13 +57,7 @@ export default function About() {
       <div className="container-custom">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
+          <div className="text-center mb-16">
             <div className="mb-6">
               <h2 className="text-h1 font-semibold text-text-primary dark:text-slate-100 mb-4">
                 About Ario Studio
@@ -60,19 +68,16 @@ export default function About() {
             <p className="text-body-lg text-text-secondary dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
               We combine modern design, precise engineering and streamlined workflows to deliver clean and reliable digital products.
             </p>
-          </motion.div>
+          </div>
 
           {/* Stats Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, index) => {
               const Icon = stat.icon
               return (
-                <motion.div
+                <div
                   key={stat.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  data-animate-child
                   className="text-center relative group"
                 >
                   {/* Subtle UI element - floating pill */}
@@ -86,7 +91,7 @@ export default function About() {
                   <p className="text-body-sm text-text-secondary dark:text-slate-300">
                     {stat.description}
                   </p>
-                </motion.div>
+                </div>
               )
             })}
           </div>

@@ -1,23 +1,30 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useEffect, useRef } from 'react'
 import Button from './Button'
+import { animateSectionReveal } from '@/lib/gsapClient'
 
 export default function Contact() {
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    if (sectionRef.current) {
+      animateSectionReveal(sectionRef, {
+        y: 30,
+        duration: 0.8,
+        ease: 'power3.out',
+      })
+    }
+  }, [])
   return (
     <section
+      ref={sectionRef}
       id="contact"
       className="relative py-32 overflow-hidden bg-pure-white dark:bg-slate-900"
     >
       <div className="container-custom">
         <div className="max-w-3xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.6 }}
-            className="text-center space-y-8"
-          >
+          <div className="text-center space-y-8">
             {/* Header */}
             <div className="mb-6">
               <h2 className="text-h1 font-semibold text-text-primary dark:text-slate-100 mb-4">
@@ -51,7 +58,7 @@ export default function Contact() {
             <p className="text-body-sm text-text-muted dark:text-slate-400 pt-2">
               We respond within 24 hours.
             </p>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

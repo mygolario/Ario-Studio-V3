@@ -1,8 +1,21 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useEffect, useRef } from 'react'
+import { animateSectionReveal } from '@/lib/gsapClient'
 
 export default function Portfolio() {
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    if (sectionRef.current) {
+      animateSectionReveal(sectionRef, {
+        y: 30,
+        duration: 0.8,
+        ease: 'power3.out',
+        stagger: 0.1,
+      })
+    }
+  }, [])
   const projects = [
     {
       title: 'Tech Startup Platform',
@@ -28,6 +41,7 @@ export default function Portfolio() {
 
   return (
     <section
+      ref={sectionRef}
       id="portfolio"
       className="relative py-32 overflow-hidden bg-gray-50 dark:bg-slate-800/50"
     >
@@ -42,13 +56,7 @@ export default function Portfolio() {
       <div className="container-custom">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
+          <div className="text-center mb-16">
             <div className="mb-6">
               <h2 className="text-h1 font-semibold text-text-primary dark:text-slate-100 mb-4">
                 Our Work
@@ -59,27 +67,19 @@ export default function Portfolio() {
             <p className="text-body-lg text-text-secondary dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
               Selected projects showcasing clean design and reliable engineering.
             </p>
-          </motion.div>
+          </div>
 
           {/* Projects Grid */}
           <div className="grid md:grid-cols-2 gap-8">
             {projects.map((project, index) => (
-              <motion.div
+              <div
                 key={project.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                data-animate-child
                 className="group bg-pure-white dark:bg-slate-800 rounded-xl overflow-hidden border border-border-subtle dark:border-slate-700 hover:shadow-card-hover dark:hover:shadow-xl dark:hover:shadow-black/30 transition-all duration-300"
-                whileHover={{ y: -2 }}
               >
                 {/* Image Placeholder */}
                 <div className="relative h-64 bg-gray-200 dark:bg-slate-700 overflow-hidden rounded-t-xl">
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-slate-600 dark:to-slate-700"
-                    whileHover={{ scale: 1.08 }}
-                    transition={{ duration: 0.4, ease: 'easeOut' }}
-                  />
+                  <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-slate-600 dark:to-slate-700 group-hover:scale-105 transition-transform duration-400" />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <p className="text-text-muted dark:text-slate-400 text-sm">Project mockup</p>
                   </div>
@@ -106,7 +106,7 @@ export default function Portfolio() {
                     ))}
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>

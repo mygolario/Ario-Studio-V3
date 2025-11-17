@@ -1,9 +1,22 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useEffect, useRef } from 'react'
 import { Palette, Code, Zap } from 'lucide-react'
+import { animateSectionReveal } from '@/lib/gsapClient'
 
 export default function Services() {
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    if (sectionRef.current) {
+      animateSectionReveal(sectionRef, {
+        y: 30,
+        duration: 0.8,
+        ease: 'power3.out',
+        stagger: 0.1,
+      })
+    }
+  }, [])
   const serviceGroups = [
     {
       id: 'ai-native-product-websites',
@@ -42,6 +55,7 @@ export default function Services() {
 
   return (
     <section
+      ref={sectionRef}
       id="services"
       className="relative py-32 overflow-hidden bg-pure-white dark:bg-slate-900"
     >
@@ -56,13 +70,7 @@ export default function Services() {
       <div className="container-custom">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
+          <div className="text-center mb-16">
             <div className="mb-6">
               <h2 className="text-h1 font-semibold text-text-primary dark:text-slate-100 mb-4">
                 Our Services
@@ -73,22 +81,18 @@ export default function Services() {
             <p className="text-body-lg text-text-secondary dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
               Comprehensive solutions from design to deployment, built for long-term success.
             </p>
-          </motion.div>
+          </div>
 
           {/* Services Grid */}
           <div className="grid md:grid-cols-3 gap-8">
             {serviceGroups.map((group, index) => {
               const Icon = group.icon
               return (
-                <motion.div
+                <div
                   key={group.title}
                   id={group.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  data-animate-child
                   className="group bg-pure-white dark:bg-slate-800 border border-border-subtle dark:border-slate-700 rounded-xl p-8 hover:shadow-card dark:hover:shadow-lg dark:hover:shadow-black/20 transition-all duration-300 scroll-mt-24"
-                  whileHover={{ y: -2 }}
                 >
                   <div className="w-14 h-14 rounded-xl border border-gray-200 dark:border-slate-600 flex items-center justify-center mb-6 group-hover:border-orange transition-colors">
                     <Icon size={28} className="text-text-secondary dark:text-slate-300 group-hover:text-orange transition-colors" />
@@ -107,7 +111,7 @@ export default function Services() {
                       </li>
                     ))}
                   </ul>
-                </motion.div>
+                </div>
               )
             })}
           </div>

@@ -3,6 +3,7 @@
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { useEffect, useRef } from 'react'
 import Button from './Button'
+import { animateHeroIntro } from '@/lib/gsapClient'
 
 /**
  * Hero Section
@@ -12,6 +13,11 @@ import Button from './Button'
 export default function Hero() {
   const cardRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  const cardWrapperRef = useRef<HTMLDivElement>(null)
+  const headingRef = useRef<HTMLHeadingElement>(null)
+  const subheadingRef = useRef<HTMLParagraphElement>(null)
+  const chipsRef = useRef<HTMLDivElement>(null)
+  const buttonsRef = useRef<HTMLDivElement>(null)
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
 
@@ -24,6 +30,18 @@ export default function Hero() {
   const backRotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [4, -4]), springConfig)
   const backRotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-4, 4]), springConfig)
 
+  // Hero intro animation on page load
+  useEffect(() => {
+    animateHeroIntro({
+      heading: headingRef,
+      subheading: subheadingRef,
+      chips: chipsRef,
+      buttons: buttonsRef,
+      card: cardWrapperRef,
+    })
+  }, [])
+
+  // 3D card mouse tilt effect
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!cardRef.current) return
@@ -69,27 +87,29 @@ export default function Hero() {
       <div className="container-custom relative z-10 py-32">
         <div className="grid lg:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
           {/* LEFT COLUMN - Text + CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-            className="space-y-8"
-          >
+          <div className="space-y-8">
             {/* Main Heading */}
-            <h1 className="text-hero md:text-[64px] md:leading-[72px] font-semibold text-text-primary dark:text-slate-100">
+            <h1 
+              ref={headingRef}
+              className="text-hero md:text-[64px] md:leading-[72px] font-semibold text-text-primary dark:text-slate-100"
+            >
               We Design, Build & Automate Modern Digital Experiences.
             </h1>
 
             {/* Subtext */}
-            <p className="text-body-lg md:text-xl text-text-secondary dark:text-slate-300 max-w-xl leading-relaxed">
+            <p 
+              ref={subheadingRef}
+              className="text-body-lg md:text-xl text-text-secondary dark:text-slate-300 max-w-xl leading-relaxed"
+            >
               A clean, structured, and trustworthy studio focused on clarity, performance, and long-term value.
             </p>
 
             {/* Visual Chips */}
-            <div className="flex flex-wrap gap-3 pt-2">
+            <div ref={chipsRef} className="flex flex-wrap gap-3 pt-2">
               {['AI-native', 'Cinematic UX', 'Agent-ready'].map((chip) => (
                 <span
                   key={chip}
+                  data-chip
                   className="text-body-sm font-medium text-text-secondary dark:text-slate-300 border border-gray-200 dark:border-slate-700 px-4 py-1.5 rounded-full bg-pure-white dark:bg-slate-800 hover:border-orange hover:text-orange transition-colors"
                 >
                   {chip}
@@ -98,21 +118,23 @@ export default function Hero() {
             </div>
 
             {/* Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button href="#contact" variant="primary">
-                Start Your Project
-              </Button>
-              <Button href="#portfolio" variant="secondary" icon={false}>
-                View Our Work
-              </Button>
+            <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 pt-4">
+              <div data-button>
+                <Button href="#contact" variant="primary">
+                  Start Your Project
+                </Button>
+              </div>
+              <div data-button>
+                <Button href="#portfolio" variant="secondary" icon={false}>
+                  View Our Work
+                </Button>
+              </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* RIGHT COLUMN - 3D Orange Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
+          <div
+            ref={cardWrapperRef}
             className="hidden lg:flex items-center justify-center"
           >
             <div 
@@ -224,7 +246,7 @@ export default function Hero() {
                 </div>
               </motion.div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

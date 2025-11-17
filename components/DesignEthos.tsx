@@ -1,9 +1,23 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useEffect, useRef } from 'react'
 import { Target, Code, Eye } from 'lucide-react'
+import { animateSectionReveal } from '@/lib/gsapClient'
 
 export default function DesignEthos() {
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    if (sectionRef.current) {
+      animateSectionReveal(sectionRef, {
+        y: 30,
+        duration: 0.8,
+        ease: 'power3.out',
+        stagger: 0.1,
+      })
+    }
+  }, [])
+
   const features = [
     {
       icon: Target,
@@ -24,6 +38,7 @@ export default function DesignEthos() {
 
   return (
     <section
+      ref={sectionRef}
       id="philosophy"
       className="relative py-32 overflow-hidden bg-pure-white dark:bg-slate-900"
     >
@@ -31,13 +46,7 @@ export default function DesignEthos() {
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             {/* LEFT COLUMN */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.6 }}
-              className="space-y-6"
-            >
+            <div className="space-y-6">
               <div>
                 <h2 className="text-h1 font-semibold text-text-primary dark:text-slate-100 mb-4">
                   Our Philosophy
@@ -49,24 +58,12 @@ export default function DesignEthos() {
                 We focus on clarity, precision and thoughtful execution.  
                 Everything we create is structured, scalable and purpose-driven.
               </p>
-            </motion.div>
+            </div>
 
             {/* RIGHT COLUMN - Feature Cards */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="space-y-6"
-            >
+            <div className="space-y-6">
               {/* 3-Step Process Visual Row */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="grid grid-cols-3 gap-4 mb-8"
-              >
+              <div className="grid grid-cols-3 gap-4 mb-8">
                 {[
                   { label: 'Discover', icon: '1' },
                   { label: 'Design', icon: '2' },
@@ -82,18 +79,14 @@ export default function DesignEthos() {
                     <p className="text-body-sm font-medium text-text-primary dark:text-slate-100">{step.label}</p>
                   </div>
                 ))}
-              </motion.div>
+              </div>
               {features.map((feature, index) => {
                 const Icon = feature.icon
                 return (
-                  <motion.div
+                  <div
                     key={feature.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    data-animate-child
                     className="group bg-pure-white dark:bg-slate-800 border border-border-subtle dark:border-slate-700 rounded-2xl p-6 hover:shadow-card dark:hover:shadow-lg dark:hover:shadow-black/20 transition-all duration-300"
-                    whileHover={{ y: -2 }}
                   >
                     <div className="flex items-start gap-4">
                       <div className="flex-shrink-0 w-12 h-12 rounded-lg border border-gray-200 dark:border-slate-600 flex items-center justify-center group-hover:border-orange transition-colors">
@@ -108,10 +101,10 @@ export default function DesignEthos() {
                         </p>
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
                 )
               })}
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
