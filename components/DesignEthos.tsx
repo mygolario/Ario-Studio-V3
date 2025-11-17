@@ -18,6 +18,66 @@ export default function DesignEthos() {
     }
   }, [])
 
+  // Handle connector line fill on hover (desktop only)
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const isDesktop = window.innerWidth >= 1024
+    if (!isDesktop) return
+
+    const stepCards = document.querySelectorAll('[data-step-index]')
+    const connector = document.getElementById('process-connector')
+
+    const handleMouseEnter = (e: Event) => {
+      const target = e.currentTarget as HTMLElement
+      const index = parseInt(target.getAttribute('data-step-index') || '0')
+      if (connector) {
+        const width = ((index + 1) / stepCards.length) * 100
+        connector.style.width = `${width}%`
+      }
+    }
+
+    const handleMouseLeave = () => {
+      if (connector) {
+        connector.style.width = '0%'
+      }
+    }
+
+    stepCards.forEach((card) => {
+      card.addEventListener('mouseenter', handleMouseEnter)
+      card.addEventListener('mouseleave', handleMouseLeave)
+    })
+
+    return () => {
+      stepCards.forEach((card) => {
+        card.removeEventListener('mouseenter', handleMouseEnter)
+        card.removeEventListener('mouseleave', handleMouseLeave)
+      })
+    }
+  }, [])
+
+  const processSteps = [
+    {
+      number: '01',
+      title: 'Discover',
+      description: 'We start by understanding your goals, audience, and constraints. Clear objectives inform every decision.',
+    },
+    {
+      number: '02',
+      title: 'Design',
+      description: 'Strategic design that balances creativity with purpose. Every pixel serves a clear function.',
+    },
+    {
+      number: '03',
+      title: 'Build',
+      description: 'Clean, structured engineering with scalable architecture. Built for performance and long-term value.',
+    },
+    {
+      number: '04',
+      title: 'Automate',
+      description: 'AI-native workflows and intelligent automation. Systems that evolve and adapt with your needs.',
+    },
+  ]
+
   const features = [
     {
       icon: Target,
@@ -60,50 +120,112 @@ export default function DesignEthos() {
               </p>
             </div>
 
-            {/* RIGHT COLUMN - Feature Cards */}
-            <div className="space-y-6">
-              {/* 3-Step Process Visual Row */}
-              <div className="grid grid-cols-3 gap-4 mb-8">
-                {[
-                  { label: 'Discover', icon: '1' },
-                  { label: 'Design', icon: '2' },
-                  { label: 'Build & Automate', icon: '3' },
-                ].map((step, index) => (
-                  <div
-                    key={step.label}
-                    className="group relative bg-pure-white dark:bg-slate-800 border border-border-subtle dark:border-slate-700 rounded-xl p-4 text-center hover:shadow-card dark:hover:shadow-lg dark:hover:shadow-black/20 transition-all duration-300"
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-orange/10 dark:bg-orange/20 border border-orange/20 dark:border-orange/30 flex items-center justify-center mx-auto mb-2 group-hover:bg-orange/20 dark:group-hover:bg-orange/30 transition-colors">
-                      <span className="text-orange font-semibold text-sm">{step.icon}</span>
+            {/* RIGHT COLUMN - Process Journey & Feature Cards */}
+            <div className="space-y-12">
+              {/* Process Visual Journey */}
+              <div>
+                <h3 className="text-h4 font-semibold text-text-primary dark:text-slate-100 mb-8">
+                  How We Work
+                </h3>
+                
+                {/* Desktop: Horizontal Stepper */}
+                <div className="hidden lg:block">
+                  <div className="relative">
+                    {/* Connector Line */}
+                    <div className="absolute top-12 left-0 right-0 h-0.5 bg-gray-200 dark:bg-slate-700" />
+                    <div className="absolute top-12 left-0 h-0.5 bg-gradient-to-r from-orange to-orange-light transition-all duration-500" 
+                         style={{ width: '0%' }} 
+                         id="process-connector" />
+                    
+                    {/* Steps */}
+                    <div className="grid grid-cols-4 gap-4 relative">
+                      {processSteps.map((step, index) => (
+                        <div
+                          key={step.number}
+                          data-animate-child
+                          data-step-index={index}
+                          className="group relative"
+                        >
+                          <div className="bg-pure-white dark:bg-slate-800 border border-border-subtle dark:border-slate-700 rounded-xl p-6 hover:shadow-card dark:hover:shadow-lg dark:hover:shadow-black/20 hover:-translate-y-1 hover:border-orange/30 dark:hover:border-orange/30 transition-all duration-200 cursor-pointer">
+                            {/* Step Number */}
+                            <div className="w-12 h-12 rounded-lg bg-orange/10 dark:bg-orange/20 border border-orange/20 dark:border-orange/30 flex items-center justify-center mb-4 group-hover:bg-orange/20 dark:group-hover:bg-orange/30 group-hover:border-orange group-hover:scale-105 transition-all duration-200">
+                              <span className="text-orange font-semibold text-lg">{step.number}</span>
+                            </div>
+                            <h4 className="text-h5 font-semibold text-text-primary dark:text-slate-100 mb-2 group-hover:text-orange transition-colors duration-200">
+                              {step.title}
+                            </h4>
+                            <p className="text-body-sm text-text-secondary dark:text-slate-300">
+                              {step.description}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                    <p className="text-body-sm font-medium text-text-primary dark:text-slate-100">{step.label}</p>
                   </div>
-                ))}
-              </div>
-              {features.map((feature, index) => {
-                const Icon = feature.icon
-                return (
-                  <div
-                    key={feature.title}
-                    data-animate-child
-                    className="group bg-pure-white dark:bg-slate-800 border border-border-subtle dark:border-slate-700 rounded-2xl p-6 hover:shadow-card dark:hover:shadow-lg dark:hover:shadow-black/20 hover:-translate-y-2 hover:border-orange/30 dark:hover:border-orange/30 transition-all duration-200 cursor-pointer"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-12 h-12 rounded-lg border border-gray-200 dark:border-slate-600 flex items-center justify-center group-hover:border-orange transition-colors">
-                        <Icon size={24} className="text-text-secondary dark:text-slate-300 group-hover:text-orange transition-colors" />
+                </div>
+
+                {/* Mobile: Vertical Timeline */}
+                <div className="lg:hidden space-y-6">
+                  {processSteps.map((step, index) => (
+                    <div
+                      key={step.number}
+                      data-animate-child
+                      className="group relative pl-8"
+                    >
+                      {/* Timeline Line */}
+                      {index < processSteps.length - 1 && (
+                        <div className="absolute left-3 top-12 bottom-0 w-0.5 bg-gray-200 dark:bg-slate-700" />
+                      )}
+                      {/* Timeline Dot */}
+                      <div className="absolute left-0 top-3 w-6 h-6 rounded-full bg-orange/10 dark:bg-orange/20 border-2 border-orange/30 dark:border-orange/40 flex items-center justify-center group-hover:bg-orange/20 dark:group-hover:bg-orange/30 group-hover:border-orange group-hover:scale-110 transition-all duration-200">
+                        <span className="text-orange text-xs font-semibold">{step.number}</span>
                       </div>
-                      <div className="flex-1">
-                        <h3 className="text-h5 font-semibold text-text-primary dark:text-slate-100 mb-2">
-                          {feature.title}
-                        </h3>
-                        <p className="text-body text-text-secondary dark:text-slate-300">
-                          {feature.description}
+                      
+                      <div className="bg-pure-white dark:bg-slate-800 border border-border-subtle dark:border-slate-700 rounded-xl p-6 hover:shadow-card dark:hover:shadow-lg dark:hover:shadow-black/20 hover:-translate-y-1 hover:border-orange/30 dark:hover:border-orange/30 transition-all duration-200">
+                        <h4 className="text-h5 font-semibold text-text-primary dark:text-slate-100 mb-2 group-hover:text-orange transition-colors duration-200">
+                          {step.title}
+                        </h4>
+                        <p className="text-body-sm text-text-secondary dark:text-slate-300">
+                          {step.description}
                         </p>
                       </div>
                     </div>
-                  </div>
-                )
-              })}
+                  ))}
+                </div>
+              </div>
+
+              {/* Feature Cards */}
+              <div>
+                <h3 className="text-h4 font-semibold text-text-primary dark:text-slate-100 mb-6">
+                  Our Approach
+                </h3>
+                <div className="space-y-6">
+                  {features.map((feature, index) => {
+                    const Icon = feature.icon
+                    return (
+                      <div
+                        key={feature.title}
+                        data-animate-child
+                        className="group bg-pure-white dark:bg-slate-800 border border-border-subtle dark:border-slate-700 rounded-2xl p-6 hover:shadow-card dark:hover:shadow-lg dark:hover:shadow-black/20 hover:-translate-y-2 hover:border-orange/30 dark:hover:border-orange/30 transition-all duration-200 cursor-pointer"
+                      >
+                        <div className="flex items-start gap-4">
+                          <div className="flex-shrink-0 w-12 h-12 rounded-lg border border-gray-200 dark:border-slate-600 flex items-center justify-center group-hover:border-orange transition-colors">
+                            <Icon size={24} className="text-text-secondary dark:text-slate-300 group-hover:text-orange transition-colors" />
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-h5 font-semibold text-text-primary dark:text-slate-100 mb-2">
+                              {feature.title}
+                            </h3>
+                            <p className="text-body text-text-secondary dark:text-slate-300">
+                              {feature.description}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
             </div>
           </div>
         </div>
