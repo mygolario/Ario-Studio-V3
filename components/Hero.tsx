@@ -2,6 +2,7 @@
 
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
+import { ChevronDown } from 'lucide-react'
 import Button from './Button'
 import { animateHeroIntro, applyHeroParallax, prefersReducedMotion } from '@/lib/gsapClient'
 import HeroBackground from './HeroBackground'
@@ -10,16 +11,19 @@ import { Copy } from '@/content/copy'
 /**
  * Hero Section
  * 
- * Minimal, professional hero with premium 3D orange card with mouse tilt.
+ * Cinematic, AI-studio style hero with layered background, smooth motion, and clear CTAs.
  */
 export default function Hero() {
   const cardRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const cardWrapperRef = useRef<HTMLDivElement>(null)
+  const eyebrowRef = useRef<HTMLDivElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
   const subheadingRef = useRef<HTMLParagraphElement>(null)
+  const supportingLineRef = useRef<HTMLParagraphElement>(null)
   const chipsRef = useRef<HTMLDivElement>(null)
   const buttonsRef = useRef<HTMLDivElement>(null)
+  const scrollIndicatorRef = useRef<HTMLDivElement>(null)
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
 
@@ -33,13 +37,29 @@ export default function Hero() {
   const backRotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-4, 4]), springConfig)
 
   const [introComplete, setIntroComplete] = useState(false)
+  const [hasScrolled, setHasScrolled] = useState(false)
   const heroSectionRef = useRef<HTMLElement>(null)
+
+  // Track scroll to fade scroll indicator
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setHasScrolled(true)
+      } else {
+        setHasScrolled(false)
+      }
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   // Hero intro animation on page load
   useEffect(() => {
     animateHeroIntro({
+      eyebrow: eyebrowRef,
       heading: headingRef,
       subheading: subheadingRef,
+      supportingLine: supportingLineRef,
       chips: chipsRef,
       buttons: buttonsRef,
       card: cardWrapperRef,
@@ -156,12 +176,25 @@ export default function Hero() {
         <div className="grid lg:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
           {/* LEFT COLUMN - Text + CTAs */}
           <motion.div 
-            className="space-y-8"
+            className="space-y-6"
             style={{
               x: heroParallaxX,
               y: heroParallaxY,
             }}
           >
+            {/* Eyebrow / Label */}
+            <motion.div
+              ref={eyebrowRef}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+              className="inline-block"
+            >
+              <span className="text-label text-orange uppercase tracking-wider font-medium">
+                {Copy.hero.eyebrow}
+              </span>
+            </motion.div>
+
             {/* Main Heading - Layer 1 (closest) */}
             <h1 
               ref={headingRef}
@@ -178,6 +211,17 @@ export default function Hero() {
               {Copy.hero.subtitle}
             </p>
 
+            {/* Supporting Line */}
+            <motion.p
+              ref={supportingLineRef}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: 'easeOut', delay: 0.3 }}
+              className="text-body text-text-secondary max-w-xl leading-relaxed"
+            >
+              {Copy.hero.supportingLine}
+            </motion.p>
+
             {/* Visual Chips - Layer 2 */}
             <div ref={chipsRef} className="flex flex-wrap gap-3 pt-2">
               {Copy.hero.chips.map((chip) => (
@@ -191,19 +235,19 @@ export default function Hero() {
               ))}
             </div>
 
-                        {/* Buttons - Layer 1 (closest) */}
-                        <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 pt-4">
-                          <div data-button>
-                            <Button href="#contact" variant="primary">
-                              {Copy.hero.ctaPrimary}
-                            </Button>
-                          </div>
-                          <div data-button>
-                            <Button href="#portfolio" variant="secondary" icon={false}>
-                              {Copy.hero.ctaSecondary}
-                            </Button>
-                          </div>
-                        </div>
+            {/* Buttons - Layer 1 (closest) */}
+            <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 pt-4">
+              <div data-button>
+                <Button href="#portfolio" variant="primary">
+                  {Copy.hero.ctaPrimary}
+                </Button>
+              </div>
+              <div data-button>
+                <Button href="#contact" variant="secondary" icon={false}>
+                  {Copy.hero.ctaSecondary}
+                </Button>
+              </div>
+            </div>
           </motion.div>
 
           {/* RIGHT COLUMN - 3D Orange Card - Layer 3 */}
@@ -327,6 +371,29 @@ export default function Hero() {
           </motion.div>
         </div>
       </div>
+
+      {/* Scroll Indicator */}
+      <motion.div
+        ref={scrollIndicatorRef}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: hasScrolled ? 0 : 1 }}
+        transition={{ duration: 0.3 }}
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex flex-col items-center gap-2"
+      >
+        <span className="text-body-sm text-text-muted font-medium">
+          {Copy.hero.scrollIndicator}
+        </span>
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        >
+          <ChevronDown size={20} className="text-text-muted" />
+        </motion.div>
+      </motion.div>
     </section>
   )
 }

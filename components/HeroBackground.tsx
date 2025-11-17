@@ -34,73 +34,82 @@ export default function HeroBackground() {
       {/* Base gradient overlay for readability */}
       <div className="absolute inset-0 bg-pure-white/70 dark:bg-slate-900/75" />
       
-      {/* Animated gradient blobs - subtle AI galaxy feel */}
+      {/* Animated gradient blobs - subtle AI galaxy feel with enhanced cinematic motion */}
       {!reducedMotion ? (
         <>
-          {/* Blob 1 - Top left - Orange/Warm */}
+          {/* Blob 1 - Top left - Orange/Warm - Enhanced floating */}
           <motion.div
             className="absolute rounded-full blur-[150px]"
             style={{
               width: '600px',
               height: '600px',
-              background: 'radial-gradient(circle, rgba(255,106,61,0.15) 0%, rgba(255,179,71,0.1) 50%, transparent 70%)',
+              background: 'radial-gradient(circle, rgba(255,106,61,0.18) 0%, rgba(255,179,71,0.12) 50%, transparent 70%)',
               top: '5%',
               left: '5%',
             }}
+            initial={{ opacity: 0, scale: 0.8 }}
             animate={{
-              x: [0, 30, -20, 0],
-              y: [0, -25, 20, 0],
-              scale: [1, 1.1, 0.95, 1],
+              opacity: 1,
+              x: [0, 40, -30, 0],
+              y: [0, -35, 25, 0],
+              scale: [1, 1.15, 0.9, 1],
             }}
             transition={{
-              duration: 35,
-              repeat: Infinity,
-              ease: 'easeInOut',
+              opacity: { duration: 1.5, ease: 'easeOut' },
+              x: { duration: 35, repeat: Infinity, ease: 'easeInOut' },
+              y: { duration: 35, repeat: Infinity, ease: 'easeInOut' },
+              scale: { duration: 35, repeat: Infinity, ease: 'easeInOut' },
             }}
           />
 
-          {/* Blob 2 - Bottom right - Gold/Yellow */}
+          {/* Blob 2 - Bottom right - Gold/Yellow - Enhanced floating */}
           <motion.div
             className="absolute rounded-full blur-[180px]"
             style={{
               width: '700px',
               height: '700px',
-              background: 'radial-gradient(circle, rgba(255,179,71,0.12) 0%, rgba(255,215,95,0.08) 50%, transparent 70%)',
+              background: 'radial-gradient(circle, rgba(255,179,71,0.15) 0%, rgba(255,215,95,0.1) 50%, transparent 70%)',
               bottom: '10%',
               right: '10%',
             }}
+            initial={{ opacity: 0, scale: 0.8 }}
             animate={{
-              x: [0, -40, 30, 0],
-              y: [0, 35, -25, 0],
-              scale: [1, 0.9, 1.15, 1],
+              opacity: 1,
+              x: [0, -50, 40, 0],
+              y: [0, 45, -30, 0],
+              scale: [1, 0.85, 1.2, 1],
             }}
             transition={{
-              duration: 40,
-              repeat: Infinity,
-              ease: 'easeInOut',
+              opacity: { duration: 1.5, ease: 'easeOut', delay: 0.2 },
+              x: { duration: 40, repeat: Infinity, ease: 'easeInOut' },
+              y: { duration: 40, repeat: Infinity, ease: 'easeInOut' },
+              scale: { duration: 40, repeat: Infinity, ease: 'easeInOut' },
             }}
           />
 
-          {/* Blob 3 - Center - Soft orange */}
+          {/* Blob 3 - Center - Soft orange - Enhanced floating */}
           <motion.div
             className="absolute rounded-full blur-[120px]"
             style={{
               width: '500px',
               height: '500px',
-              background: 'radial-gradient(circle, rgba(255,77,77,0.1) 0%, rgba(255,106,61,0.08) 50%, transparent 70%)',
+              background: 'radial-gradient(circle, rgba(255,77,77,0.12) 0%, rgba(255,106,61,0.1) 50%, transparent 70%)',
               top: '45%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
             }}
+            initial={{ opacity: 0, scale: 0.8 }}
             animate={{
-              x: [0, 25, -30, 0],
-              y: [0, -20, 30, 0],
-              scale: [1, 1.05, 0.98, 1],
+              opacity: 1,
+              x: [0, 30, -35, 0],
+              y: [0, -25, 35, 0],
+              scale: [1, 1.1, 0.95, 1],
             }}
             transition={{
-              duration: 30,
-              repeat: Infinity,
-              ease: 'easeInOut',
+              opacity: { duration: 1.5, ease: 'easeOut', delay: 0.4 },
+              x: { duration: 30, repeat: Infinity, ease: 'easeInOut' },
+              y: { duration: 30, repeat: Infinity, ease: 'easeInOut' },
+              scale: { duration: 30, repeat: Infinity, ease: 'easeInOut' },
             }}
           />
         </>

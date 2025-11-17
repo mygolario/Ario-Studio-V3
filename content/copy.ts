@@ -11,10 +11,13 @@
 
 export const Copy = {
   hero: {
+    eyebrow: 'AI-driven web studio',
     title: 'We design and build cinematic, AI-powered web experiences.',
     subtitle: 'High-end design, expressive motion, and intelligent systems—crafted for brands that demand more.',
-    ctaPrimary: 'Start Your Project',
-    ctaSecondary: 'View Our Work',
+    supportingLine: 'From concept to launch, we combine visual storytelling, modern engineering, and AI automation to build experiences that feel alive.',
+    ctaPrimary: 'View work',
+    ctaSecondary: "Let's talk",
+    scrollIndicator: 'Scroll to explore',
     chips: ['AI-native', 'Cinematic UX', 'Agent-ready'],
   },
   services: {

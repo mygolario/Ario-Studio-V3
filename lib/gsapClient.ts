@@ -160,8 +160,10 @@ export const animateSectionReveal = async (
  * @param elements - Object with refs to hero elements
  */
 export const animateHeroIntro = async (elements: {
+  eyebrow?: React.RefObject<HTMLElement>
   heading?: React.RefObject<HTMLElement>
   subheading?: React.RefObject<HTMLElement>
+  supportingLine?: React.RefObject<HTMLElement>
   buttons?: React.RefObject<HTMLElement>
   chips?: React.RefObject<HTMLElement>
   card?: React.RefObject<HTMLElement>
@@ -195,12 +197,22 @@ export const animateHeroIntro = async (elements: {
 
   const timeline = gsapInstance.timeline({ defaults: { ease: 'power3.out' } })
 
+  // Animate eyebrow first
+  if (elements.eyebrow?.current) {
+    timeline.fromTo(
+      elements.eyebrow.current,
+      { opacity: 0, y: 10 },
+      { opacity: 1, y: 0, duration: 0.6 }
+    )
+  }
+
   // Animate heading
   if (elements.heading?.current) {
     timeline.fromTo(
       elements.heading.current,
       { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 0.8 }
+      { opacity: 1, y: 0, duration: 0.8 },
+      elements.eyebrow?.current ? '-=0.3' : undefined
     )
   }
 
@@ -211,6 +223,16 @@ export const animateHeroIntro = async (elements: {
       { opacity: 0, y: 25 },
       { opacity: 1, y: 0, duration: 0.7 },
       '-=0.4'
+    )
+  }
+
+  // Animate supporting line (after subheading)
+  if (elements.supportingLine?.current) {
+    timeline.fromTo(
+      elements.supportingLine.current,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.6 },
+      '-=0.3'
     )
   }
 
