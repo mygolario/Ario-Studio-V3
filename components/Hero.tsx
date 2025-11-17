@@ -1,166 +1,214 @@
 'use client'
 
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { useEffect, useRef } from 'react'
-import { ArrowDown } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
+import AnimatedGradientBackground from './AnimatedGradientBackground'
 
 export default function Hero() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const cardRef = useRef<HTMLDivElement>(null)
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+
+  const springConfig = { damping: 50, stiffness: 100 }
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [10, -10]), springConfig)
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-10, 10]), springConfig)
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!cardRef.current) return
+      const rect = cardRef.current.getBoundingClientRect()
+      const xPos = (e.clientX - rect.left) / rect.width - 0.5
+      const yPos = (e.clientY - rect.top) / rect.height - 0.5
+      mouseX.set(xPos)
+      mouseY.set(yPos)
+    }
+
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [mouseX, mouseY])
+
   return (
     <section 
+      ref={containerRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Living Background Gradient - Warm AI Amber/Gold/Coral */}
-      <div className="absolute inset-0 bg-gradient-to-br from-warm-gray-50 via-pure-white to-warm-gray-50">
-        {/* Animated gradient orb */}
-        <motion.div
-          className="absolute top-1/4 right-1/4 w-[800px] h-[800px] rounded-full blur-[120px] opacity-30"
-          style={{
-            background: 'radial-gradient(circle, rgba(255,140,66,0.4) 0%, rgba(255,184,77,0.3) 50%, rgba(255,107,107,0.2) 100%)',
-          }}
-          animate={{
-            scale: [1, 1.3, 1],
-            x: [0, 50, 0],
-            y: [0, -30, 0],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-        
-        {/* Secondary warm gradient */}
-        <motion.div
-          className="absolute bottom-1/4 left-1/4 w-[600px] h-[600px] rounded-full blur-[100px] opacity-20"
-          style={{
-            background: 'radial-gradient(circle, rgba(255,184,77,0.3) 0%, rgba(255,140,66,0.2) 50%, transparent 70%)',
-          }}
-          animate={{
-            scale: [1, 1.2, 1],
-            x: [0, -40, 0],
-            y: [0, 40, 0],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-      </div>
+      {/* Animated Gradient Background */}
+      <AnimatedGradientBackground variant="hero" intensity="high" />
+      
+      {/* Subtle overlay for text readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-pure-white/60 via-pure-white/40 to-pure-white/60 pointer-events-none z-10" />
 
-      {/* Subtle AI pattern overlay */}
-      <div className="absolute inset-0 opacity-[0.02]">
-        <div 
-          className="absolute inset-0"
-          style={{
-            backgroundImage: 'linear-gradient(rgba(255,140,66,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,140,66,0.1) 1px, transparent 1px)',
-            backgroundSize: '60px 60px',
-          }}
-        />
-      </div>
-
-      <div className="container-custom relative z-10">
-        <div className="max-w-5xl mx-auto text-center">
-          {/* Main Headline */}
+      <div className="container-custom relative z-20">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* LEFT COLUMN - Text + CTAs */}
           <motion.div
-            initial={{ opacity: 0, y: 60, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="mb-10"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="space-y-8"
           >
-            <motion.h1
-              className="text-[64px] leading-[72px] md:text-[80px] md:leading-[88px] lg:text-[96px] lg:leading-[104px] font-display font-bold text-text-primary mb-8"
+            {/* Eyebrow */}
+            <motion.span
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="inline-block text-label text-sunset-orange uppercase tracking-wider font-medium"
             >
-              Welcome to
-              <br />
-              <span className="relative inline-block">
-                <motion.span
-                  className="bg-gradient-to-r from-ai-amber via-ai-gold to-ai-coral bg-clip-text text-transparent bg-[length:200%_100%]"
-                  animate={{
-                    backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                  }}
-                  transition={{
-                    duration: 5,
-                    repeat: Infinity,
-                    ease: 'linear',
-                  }}
-                >
-                  Ario Studio
-                </motion.span>
-                <motion.span
-                  className="absolute -bottom-3 left-0 right-0 h-1 bg-gradient-to-r from-ai-amber via-ai-gold to-ai-coral opacity-40 rounded-full"
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{ delay: 1, duration: 0.8 }}
-                />
+              Ario Studio · AI-Native Web Design
+            </motion.span>
+
+            {/* Main Heading */}
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="text-[48px] leading-[56px] md:text-[64px] md:leading-[72px] lg:text-[72px] lg:leading-[80px] font-bold text-text-primary"
+            >
+              Cinematic AI-driven websites for{' '}
+              <span className="bg-gradient-sunset bg-clip-text text-transparent">
+                ambitious products.
               </span>
             </motion.h1>
+
+            {/* Subtext */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-body-lg md:text-xl text-text-secondary max-w-xl leading-relaxed"
+            >
+              We craft high-end, animated experiences powered by AI agents and modern product thinking.
+            </motion.p>
+
+            {/* Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="flex flex-col sm:flex-row gap-4"
+            >
+              <motion.a
+                href="#contact"
+                className="group relative px-8 py-4 bg-gradient-sunset text-pure-white font-semibold rounded-large overflow-hidden shadow-warm"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <span className="relative z-10">Book a Free Discovery Call</span>
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-sunset-red via-sunset-orange to-sunset-gold opacity-0 group-hover:opacity-100"
+                  transition={{ duration: 0.3 }}
+                />
+              </motion.a>
+              
+              <motion.a
+                href="#portfolio"
+                className="group flex items-center gap-2 px-8 py-4 border-2 border-sunset-orange/30 text-text-primary font-semibold rounded-large hover:border-sunset-orange hover:bg-sunset-orange/5 transition-all duration-300"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <span>View Selected Projects</span>
+                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+              </motion.a>
+            </motion.div>
           </motion.div>
 
-          {/* Subheadline */}
-          <motion.p
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="text-body-lg md:text-xl text-text-secondary mb-12 max-w-3xl mx-auto leading-relaxed"
-          >
-            We design experiences that evolve. A warm, intelligent creative studio 
-            crafting living systems for brands that want to grow.
-          </motion.p>
-
-          {/* CTA Buttons */}
+          {/* RIGHT COLUMN - 3D Visual */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+            initial={{ opacity: 0, scale: 0.9, x: 40 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ duration: 1, delay: 0.4 }}
+            className="hidden lg:flex items-center justify-center"
           >
-            <motion.a
-              href="#contact"
-              className="group relative px-10 py-5 bg-gradient-to-r from-ai-amber to-ai-gold text-pure-white font-display font-bold text-lg rounded-large overflow-hidden shadow-warm"
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.98 }}
+            <div
+              ref={cardRef}
+              className="relative w-full max-w-md aspect-square"
+              style={{ perspective: '1000px' }}
             >
-              <span className="relative z-10">Start Your Project</span>
+              {/* 3D Card/Cube */}
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-ai-gold to-ai-coral opacity-0 group-hover:opacity-100"
-                transition={{ duration: 0.3 }}
-              />
-            </motion.a>
-            <motion.a
-              href="#portfolio"
-              className="px-10 py-5 border-2 border-ai-amber/30 text-text-primary font-display font-bold text-lg rounded-large hover:border-ai-amber hover:bg-ai-amber/5 hover:shadow-warm transition-all duration-300 backdrop-blur-sm"
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              View Our Work
-            </motion.a>
+                className="relative w-full h-full"
+                style={{
+                  rotateX,
+                  rotateY,
+                  transformStyle: 'preserve-3d',
+                }}
+                animate={{
+                  y: [0, -10, 0],
+                }}
+                transition={{
+                  y: {
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  },
+                }}
+              >
+                {/* Front face */}
+                <div
+                  className="absolute inset-0 rounded-xlarge bg-gradient-sunset p-8 shadow-2xl"
+                  style={{
+                    transform: 'translateZ(40px)',
+                  }}
+                >
+                  <div className="h-full flex flex-col justify-between text-pure-white">
+                    <div>
+                      <div className="w-12 h-12 rounded-lg bg-pure-white/20 backdrop-blur-sm mb-4" />
+                      <h3 className="text-2xl font-bold mb-2">AI Studio</h3>
+                      <p className="text-sm opacity-90">Cinematic experiences</p>
+                    </div>
+                    <div className="flex gap-2">
+                      {[0, 1, 2].map((i) => (
+                        <div
+                          key={i}
+                          className="flex-1 h-2 rounded-full bg-pure-white/30"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Side faces for 3D effect */}
+                <div
+                  className="absolute inset-0 rounded-xlarge bg-gradient-to-r from-sunset-red to-sunset-orange opacity-60"
+                  style={{
+                    transform: 'translateZ(-40px) translateX(20px)',
+                  }}
+                />
+                <div
+                  className="absolute inset-0 rounded-xlarge bg-gradient-to-b from-sunset-yellow to-sunset-gold opacity-40"
+                  style={{
+                    transform: 'translateZ(-40px) translateY(20px)',
+                  }}
+                />
+              </motion.div>
+
+              {/* Floating particles */}
+              {[...Array(6)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-2 h-2 rounded-full bg-gradient-sunset opacity-60"
+                  style={{
+                    left: `${20 + i * 15}%`,
+                    top: `${30 + (i % 3) * 20}%`,
+                  }}
+                  animate={{
+                    y: [0, -20, 0],
+                    opacity: [0.6, 1, 0.6],
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{
+                    duration: 2 + i * 0.3,
+                    repeat: Infinity,
+                    delay: i * 0.2,
+                  }}
+                />
+              ))}
+            </div>
           </motion.div>
         </div>
       </div>
-
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 0.5 }}
-        className="absolute bottom-12 left-1/2 transform -translate-x-1/2 z-10"
-      >
-        <motion.a
-          href="#philosophy"
-          className="flex flex-col items-center gap-3 text-text-secondary hover:text-ai-amber transition-colors group"
-          animate={{ y: [0, 12, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          <span className="text-label uppercase tracking-wider">Scroll</span>
-          <motion.div
-            animate={{ y: [0, 4, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-          >
-            <ArrowDown size={20} className="text-ai-amber group-hover:text-ai-coral transition-colors" />
-          </motion.div>
-        </motion.a>
-      </motion.div>
     </section>
   )
 }

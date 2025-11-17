@@ -45,7 +45,7 @@ export default function Footer() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h3 className="text-2xl font-display font-bold bg-gradient-to-r from-ai-amber to-ai-gold bg-clip-text text-transparent mb-4">
+              <h3 className="text-2xl font-display font-bold bg-gradient-sunset bg-clip-text text-transparent mb-4">
                 Ario Studio
               </h3>
               <p className="text-body-sm text-text-secondary mb-6">
@@ -60,7 +60,7 @@ export default function Footer() {
                       key={social.label}
                       href={social.href}
                       aria-label={social.label}
-                      className="w-10 h-10 bg-surface-elevated rounded-medium flex items-center justify-center text-text-secondary hover:text-ai-amber hover:bg-ai-amber/10 transition-all duration-300 border border-border-subtle"
+                      className="w-10 h-10 bg-surface-elevated rounded-medium flex items-center justify-center text-text-secondary hover:text-sunset-orange hover:bg-sunset-orange/10 transition-all duration-300 border border-border-subtle"
                       whileHover={{ scale: 1.1, y: -2 }}
                       whileTap={{ scale: 0.95 }}
                     >
@@ -89,7 +89,7 @@ export default function Footer() {
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      className="text-body-sm text-text-secondary hover:text-ai-amber transition-colors"
+                      className="text-body-sm text-text-secondary hover:text-sunset-orange transition-colors"
                     >
                       {link.label}
                     </a>

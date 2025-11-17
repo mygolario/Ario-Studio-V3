@@ -33,7 +33,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.variable} ${spaceGrotesk.variable} ${playfairDisplay.variable} font-sans antialiased`}>
+      <body className={`${spaceGrotesk.variable} font-display antialiased`}>
         {children}
       </body>
     </html>

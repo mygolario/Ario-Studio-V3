@@ -19,22 +19,22 @@ export default function Capabilities() {
       icon: Palette,
       title: 'We Design',
       description: 'Beautiful, intuitive interfaces that users love. Every pixel crafted with intention and care.',
-      gradient: 'from-ai-amber to-ai-gold',
-      color: 'ai-amber',
+      gradient: 'from-sunset-orange to-sunset-gold',
+      color: 'sunset-orange',
     },
     {
       icon: Code,
       title: 'We Build',
       description: 'Robust, scalable digital products. Modern tech stack, clean code, flawless execution.',
-      gradient: 'from-ai-sky to-ai-lavender',
-      color: 'ai-sky',
+      gradient: 'from-sunset-gold to-sunset-yellow',
+      color: 'sunset-gold',
     },
     {
       icon: Zap,
       title: 'We Automate',
       description: 'Intelligent systems that work for you. AI-enhanced workflows that evolve and adapt.',
-      gradient: 'from-ai-coral to-ai-mint',
-      color: 'ai-coral',
+      gradient: 'from-sunset-red to-sunset-orange',
+      color: 'sunset-red',
     },
   ]
 
@@ -81,7 +81,7 @@ export default function Capabilities() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="inline-block text-label text-ai-amber uppercase tracking-wider mb-6"
+              className="inline-block text-label text-sunset-orange uppercase tracking-wider mb-6 font-medium"
             >
               Our Capabilities
             </motion.span>
@@ -106,7 +106,7 @@ export default function Capabilities() {
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: true, margin: '-50px' }}
                   transition={{ duration: 0.8, delay: index * 0.2 }}
-                  className="group relative bg-surface-elevated p-10 rounded-xlarge border border-border-subtle hover:border-ai-amber/50 transition-all duration-500 hover:shadow-warm overflow-hidden"
+                  className="group relative bg-surface-elevated p-10 rounded-xlarge border border-border-subtle hover:border-sunset-orange/50 transition-all duration-500 hover:shadow-warm overflow-hidden"
                   whileHover={{ y: -12, scale: 1.02 }}
                 >
                   {/* Gradient background on hover */}

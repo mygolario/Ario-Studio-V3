@@ -17,7 +17,13 @@ const config: Config = {
         'warm-gray-600': '#78716C',
         'warm-gray-800': '#292524',
         
-        // Warm AI Accent System
+        // Sunset Gradient Theme
+        'sunset-orange': '#FF6A3D',
+        'sunset-gold': '#FFB347',
+        'sunset-yellow': '#FFD75F',
+        'sunset-red': '#FF4D4D',
+        
+        // Warm AI Accent System (keeping for compatibility)
         'ai-amber': '#FF8C42',
         'ai-gold': '#FFB84D',
         'ai-coral': '#FF6B6B',
@@ -33,9 +39,14 @@ const config: Config = {
         'surface-elevated': '#FAFAF9',
       },
       fontFamily: {
-        'sans': ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        'sans': ['var(--font-display)', 'system-ui', 'sans-serif'],
         'display': ['var(--font-display)', 'system-ui', 'sans-serif'],
         'serif': ['var(--font-serif)', 'serif'],
+      },
+      backgroundImage: {
+        'gradient-sunset': 'linear-gradient(135deg, #FF6A3D 0%, #FFB347 50%, #FFD75F 100%)',
+        'gradient-sunset-soft': 'linear-gradient(135deg, rgba(255,106,61,0.1) 0%, rgba(255,179,71,0.1) 50%, rgba(255,215,95,0.1) 100%)',
+        'gradient-sunset-radial': 'radial-gradient(circle, #FF6A3D 0%, #FFB347 50%, #FFD75F 100%)',
       },
       fontSize: {
         'hero': ['72px', { lineHeight: '80px', fontWeight: '700', letterSpacing: '-2px' }],
