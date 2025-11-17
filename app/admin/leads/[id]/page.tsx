@@ -87,7 +87,7 @@ export default async function LeadDetailPage({
                 <div>
                   <div className="text-body-sm text-text-muted mb-1">Services Needed</div>
                   <div className="flex flex-wrap gap-2">
-                    {lead.servicesNeeded.map((service, idx) => (
+                    {lead.servicesNeeded.map((service: string, idx: number) => (
                       <span
                         key={idx}
                         className="text-body-sm text-text-secondary bg-surface-alt border border-border-subtle px-3 py-1 rounded-full"
