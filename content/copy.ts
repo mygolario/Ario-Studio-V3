@@ -55,44 +55,34 @@ export const Copy = {
     ],
   },
   process: {
-    title: 'Our Philosophy',
-    subtitle: 'We focus on clarity, precision and thoughtful execution. Everything we create is structured, scalable and purpose-driven.',
-    journeyTitle: 'How We Work',
+    label: 'Our process',
+    title: 'A clear, creative and efficient workflow.',
+    subtitle: 'From the first spark of an idea to launch and automation, each step is designed for clarity, creativity, and impact.',
     steps: [
       {
         number: '01',
-        title: 'Discover',
-        description: 'We clarify goals, constraints, and what success looks like.',
+        title: 'Discovery',
+        description: 'Understanding goals, audience, and brand direction.',
       },
       {
         number: '02',
         title: 'Design',
-        description: 'Cinematic UX, motion-first visuals, and a cohesive product identity.',
+        description: 'Crafting cinematic visuals, systems, and user flows.',
       },
       {
         number: '03',
         title: 'Build',
-        description: 'Production-ready engineering built on Next.js + modern AI stack.',
+        description: 'Developing performance-first, scalable interfaces.',
       },
       {
         number: '04',
-        title: 'Launch',
-        description: 'Deployment, optimization, and ongoing iteration when needed.',
-      },
-    ],
-    approachTitle: 'Our Approach',
-    features: [
-      {
-        title: 'Strategy-led approach',
-        description: 'Every decision is informed by clear objectives and measurable outcomes.',
+        title: 'Optimize',
+        description: 'Refining visuals, interactions and speed for a polished experience.',
       },
       {
-        title: 'Clean, structured engineering',
-        description: 'Scalable architecture built with precision and maintainability in mind.',
-      },
-      {
-        title: 'Detail-oriented design',
-        description: 'Thoughtful execution that elevates both form and function.',
+        number: '05',
+        title: 'Automate',
+        description: 'Adding AI-driven systems to reduce manual work and amplify results.',
       },
     ],
   },
@@ -127,25 +117,15 @@ export const Copy = {
     subtitle: 'Selected work and ongoing projects.',
   },
   about: {
-    title: 'About Ario Studio',
-    subtitle: 'We combine modern design, precise engineering and streamlined workflows to deliver clean and reliable digital products.',
-    stats: [
-      {
-        title: 'High-quality engineering standards',
-        description: 'Code that stands the test of time.',
-      },
-      {
-        title: '8+ years combined experience',
-        description: 'Proven track record of delivery.',
-      },
-      {
-        title: 'Structured, efficient workflow',
-        description: 'Clear processes from start to finish.',
-      },
-      {
-        title: 'Long-term, scalable solutions',
-        description: 'Built to grow with your business.',
-      },
+    label: 'About',
+    title: 'Ario Studio is a cinematic, AI-driven web design practice.',
+    subtitle: 'Led by Ario Kaveh, Ario Studio blends cinematic aesthetics, modern engineering, and AI automation to create digital experiences that feel alive. Every project combines design, motion, and intelligent systems—crafted with precision and intention.',
+    subSectionTitle: 'What defines our work:',
+    principles: [
+      'Attention to detail',
+      'High-end design sensibility',
+      'Modern, scalable architecture',
+      'AI-first problem solving',
     ],
   },
   startProject: {

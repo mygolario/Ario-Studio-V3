@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { Target, Code, Eye } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { animateSectionReveal } from '@/lib/gsapClient'
 import { Copy } from '@/content/copy'
 
@@ -63,146 +63,148 @@ export default function DesignEthos() {
 
   const processSteps = Copy.process.steps
 
-  const iconMap = {
-    'Strategy-led approach': Target,
-    'Clean, structured engineering': Code,
-    'Detail-oriented design': Eye,
-  }
-
-  const features = Copy.process.features.map((feature) => ({
-    ...feature,
-    icon: iconMap[feature.title as keyof typeof iconMap] || Target,
-  }))
-
   return (
     <section
       ref={sectionRef}
       id="philosophy"
       className="relative py-32 overflow-hidden bg-base"
     >
-      <div className="container-custom">
+      {/* Subtle background enhancement */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-orange/5 opacity-20 pointer-events-none" />
+      
+      <div className="container-custom relative z-10">
         <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            {/* LEFT COLUMN */}
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-h1 font-semibold text-text-primary mb-4">
-                  {Copy.process.title}
-                </h2>
-                {/* Section accent line */}
-                <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full" />
-              </div>
-              <p className="text-body-lg text-text-secondary leading-relaxed">
-                {Copy.process.subtitle}
-              </p>
+          {/* Header */}
+          <div className="text-center mb-16" data-animate-child>
+            <div className="mb-6">
+              {/* Section Label */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, ease: 'easeOut' }}
+                className="mb-4"
+              >
+                <span className="text-label text-orange uppercase tracking-wider font-medium">
+                  {Copy.process.label}
+                </span>
+              </motion.div>
+              <h2 className="text-h1 font-semibold text-text-primary mb-4">
+                {Copy.process.title}
+              </h2>
+              {/* Section accent line */}
+              <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full mx-auto" />
             </div>
+            <p className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
+              {Copy.process.subtitle}
+            </p>
+          </div>
 
-            {/* RIGHT COLUMN - Process Journey & Feature Cards */}
-            <div className="space-y-12">
-              {/* Process Visual Journey */}
-              <div>
-                <h3 className="text-h4 font-semibold text-text-primary mb-8">
-                  {Copy.process.journeyTitle}
-                </h3>
+          {/* Process Steps */}
+          <div>
                 
-                {/* Desktop: Horizontal Stepper */}
-                <div className="hidden lg:block">
-                  <div className="relative">
-                    {/* Connector Line */}
-                    <div className="absolute top-12 left-0 right-0 h-0.5 bg-border-subtle" />
-                    <div className="absolute top-12 left-0 h-0.5 bg-gradient-to-r from-orange to-orange-light transition-all duration-500" 
-                         style={{ width: '0%' }} 
-                         id="process-connector" />
-                    
-                    {/* Steps */}
-                    <div className="grid grid-cols-4 gap-4 relative">
-                      {processSteps.map((step, index) => (
-                        <div
-                          key={step.number}
-                          data-animate-child
-                          data-step-index={index}
-                          className="group relative"
-                        >
-                          <div className="bg-surface border border-border-subtle rounded-xl p-6 hover:shadow-card hover:-translate-y-1 hover:border-orange/30 transition-all duration-200 cursor-pointer">
-                            {/* Step Number */}
-                            <div className="w-12 h-12 rounded-lg bg-orange/10 border border-orange/20 flex items-center justify-center mb-4 group-hover:bg-orange/20 group-hover:border-orange group-hover:scale-105 transition-all duration-200">
-                              <span className="text-orange font-semibold text-lg">{step.number}</span>
-                            </div>
-                            <h4 className="text-h5 font-semibold text-text-primary mb-2 group-hover:text-orange transition-colors duration-200">
-                              {step.title}
-                            </h4>
-                            <p className="text-body-sm text-text-secondary">
-                              {step.description}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Mobile: Vertical Timeline */}
-                <div className="lg:hidden space-y-6">
+            {/* Desktop: Horizontal Stepper */}
+            <div className="hidden lg:block">
+              <div className="relative">
+                {/* Connector Line */}
+                <div className="absolute top-12 left-0 right-0 h-0.5 bg-border-subtle" />
+                <motion.div
+                  className="absolute top-12 left-0 h-0.5 bg-gradient-to-r from-orange via-orange-light to-orange transition-all duration-500"
+                  style={{ width: '0%' }}
+                  id="process-connector"
+                  animate={{
+                    boxShadow: [
+                      '0 0 0px rgba(255, 106, 61, 0)',
+                      '0 0 8px rgba(255, 106, 61, 0.3)',
+                      '0 0 0px rgba(255, 106, 61, 0)',
+                    ],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                />
+                
+                {/* Steps */}
+                <div className="grid grid-cols-5 gap-4 relative">
                   {processSteps.map((step, index) => (
-                    <div
+                    <motion.div
                       key={step.number}
                       data-animate-child
-                      className="group relative pl-8"
+                      data-step-index={index}
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{
+                        duration: 0.8,
+                        ease: 'easeOut',
+                        delay: index * 0.1,
+                      }}
+                      whileHover={{
+                        scale: 1.02,
+                        y: -2,
+                      }}
+                      className="group relative"
                     >
-                      {/* Timeline Line */}
-                      {index < processSteps.length - 1 && (
-                        <div className="absolute left-3 top-12 bottom-0 w-0.5 bg-border-subtle" />
-                      )}
-                      {/* Timeline Dot */}
-                      <div className="absolute left-0 top-3 w-6 h-6 rounded-full bg-orange/10 border-2 border-orange/30 flex items-center justify-center group-hover:bg-orange/20 group-hover:border-orange group-hover:scale-110 transition-all duration-200">
-                        <span className="text-orange text-xs font-semibold">{step.number}</span>
+                      <div className="bg-surface border border-border-subtle rounded-xl p-6 hover:shadow-card-hover hover:border-orange/50 transition-all duration-300 cursor-pointer relative overflow-hidden">
+                        {/* Subtle inner glow on hover */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-orange/0 via-orange/0 to-orange/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl" />
+                        
+                        <div className="relative z-10">
+                          {/* Step Number */}
+                          <div className="w-12 h-12 rounded-lg bg-orange/10 border border-orange/20 flex items-center justify-center mb-4 group-hover:bg-orange/20 group-hover:border-orange group-hover:scale-105 transition-all duration-300">
+                            <span className="text-orange font-semibold text-lg">{step.number}</span>
+                          </div>
+                          <h4 className="text-h5 font-semibold text-text-primary mb-2 group-hover:text-orange transition-colors duration-300">
+                            {step.title}
+                          </h4>
+                          <p className="text-body-sm text-text-secondary leading-relaxed">
+                            {step.description}
+                          </p>
+                        </div>
                       </div>
-                      
-                      <div className="bg-surface border border-border-subtle rounded-xl p-6 hover:shadow-card hover:-translate-y-1 hover:border-orange/30 transition-all duration-200">
-                        <h4 className="text-h5 font-semibold text-text-primary mb-2 group-hover:text-orange transition-colors duration-200">
-                          {step.title}
-                        </h4>
-                        <p className="text-body-sm text-text-secondary">
-                          {step.description}
-                        </p>
-                      </div>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               </div>
+            </div>
 
-              {/* Feature Cards */}
-              <div>
-                <h3 className="text-h4 font-semibold text-text-primary mb-6">
-                  {Copy.process.approachTitle}
-                </h3>
-                <div className="space-y-6">
-                  {features.map((feature, index) => {
-                    const Icon = feature.icon
-                    return (
-                      <div
-                        key={feature.title}
-                        data-animate-child
-                        className="group bg-surface border border-border-subtle rounded-2xl p-6 hover:shadow-card hover:-translate-y-2 hover:border-orange/30 transition-all duration-200 cursor-pointer"
-                      >
-                        <div className="flex items-start gap-4">
-                          <div className="flex-shrink-0 w-12 h-12 rounded-lg border border-border-subtle flex items-center justify-center group-hover:border-orange transition-colors">
-                            <Icon size={24} className="text-text-secondary group-hover:text-orange transition-colors" />
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="text-h5 font-semibold text-text-primary mb-2">
-                              {feature.title}
-                            </h3>
-                            <p className="text-body text-text-secondary">
-                              {feature.description}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
+            {/* Mobile: Vertical Timeline */}
+            <div className="lg:hidden space-y-6">
+              {processSteps.map((step, index) => (
+                <motion.div
+                  key={step.number}
+                  data-animate-child
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    duration: 0.6,
+                    ease: 'easeOut',
+                    delay: index * 0.1,
+                  }}
+                  className="group relative pl-8"
+                >
+                  {/* Timeline Line */}
+                  {index < processSteps.length - 1 && (
+                    <div className="absolute left-3 top-12 bottom-0 w-0.5 bg-border-subtle" />
+                  )}
+                  {/* Timeline Dot */}
+                  <div className="absolute left-0 top-3 w-6 h-6 rounded-full bg-orange/10 border-2 border-orange/30 flex items-center justify-center group-hover:bg-orange/20 group-hover:border-orange group-hover:scale-110 transition-all duration-300">
+                    <span className="text-orange text-xs font-semibold">{step.number}</span>
+                  </div>
+                  
+                  <div className="bg-surface border border-border-subtle rounded-xl p-6 hover:shadow-card hover:-translate-y-1 hover:border-orange/50 transition-all duration-300">
+                    <h4 className="text-h5 font-semibold text-text-primary mb-2 group-hover:text-orange transition-colors duration-300">
+                      {step.title}
+                    </h4>
+                    <p className="text-body-sm text-text-secondary leading-relaxed">
+                      {step.description}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </div>
