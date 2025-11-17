@@ -25,7 +25,7 @@ export default function DesignEthos() {
   return (
     <section
       id="philosophy"
-      className="relative py-32 overflow-hidden bg-pure-white"
+      className="relative py-32 overflow-hidden bg-pure-white dark:bg-slate-900"
     >
       <div className="container-custom">
         <div className="max-w-6xl mx-auto">
@@ -39,13 +39,13 @@ export default function DesignEthos() {
               className="space-y-6"
             >
               <div>
-                <h2 className="text-h1 font-semibold text-text-primary mb-4">
+                <h2 className="text-h1 font-semibold text-text-primary dark:text-slate-100 mb-4">
                   Our Philosophy
                 </h2>
                 {/* Section accent line */}
                 <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full" />
               </div>
-              <p className="text-body-lg text-text-secondary leading-relaxed">
+              <p className="text-body-lg text-text-secondary dark:text-slate-300 leading-relaxed">
                 We focus on clarity, precision and thoughtful execution.  
                 Everything we create is structured, scalable and purpose-driven.
               </p>
@@ -74,12 +74,12 @@ export default function DesignEthos() {
                 ].map((step, index) => (
                   <div
                     key={step.label}
-                    className="group relative bg-pure-white border border-border-subtle rounded-xl p-4 text-center hover:shadow-card transition-all duration-300"
+                    className="group relative bg-pure-white dark:bg-slate-800 border border-border-subtle dark:border-slate-700 rounded-xl p-4 text-center hover:shadow-card dark:hover:shadow-lg dark:hover:shadow-black/20 transition-all duration-300"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-orange/10 border border-orange/20 flex items-center justify-center mx-auto mb-2 group-hover:bg-orange/20 transition-colors">
+                    <div className="w-10 h-10 rounded-lg bg-orange/10 dark:bg-orange/20 border border-orange/20 dark:border-orange/30 flex items-center justify-center mx-auto mb-2 group-hover:bg-orange/20 dark:group-hover:bg-orange/30 transition-colors">
                       <span className="text-orange font-semibold text-sm">{step.icon}</span>
                     </div>
-                    <p className="text-body-sm font-medium text-text-primary">{step.label}</p>
+                    <p className="text-body-sm font-medium text-text-primary dark:text-slate-100">{step.label}</p>
                   </div>
                 ))}
               </motion.div>
@@ -92,18 +92,18 @@ export default function DesignEthos() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="group bg-pure-white border border-border-subtle rounded-2xl p-6 hover:shadow-card transition-all duration-300"
+                    className="group bg-pure-white dark:bg-slate-800 border border-border-subtle dark:border-slate-700 rounded-2xl p-6 hover:shadow-card dark:hover:shadow-lg dark:hover:shadow-black/20 transition-all duration-300"
                     whileHover={{ y: -2 }}
                   >
                     <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-12 h-12 rounded-lg border border-gray-200 flex items-center justify-center group-hover:border-orange transition-colors">
-                        <Icon size={24} className="text-text-secondary group-hover:text-orange transition-colors" />
+                      <div className="flex-shrink-0 w-12 h-12 rounded-lg border border-gray-200 dark:border-slate-600 flex items-center justify-center group-hover:border-orange transition-colors">
+                        <Icon size={24} className="text-text-secondary dark:text-slate-300 group-hover:text-orange transition-colors" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-h5 font-semibold text-text-primary mb-2">
+                        <h3 className="text-h5 font-semibold text-text-primary dark:text-slate-100 mb-2">
                           {feature.title}
                         </h3>
-                        <p className="text-body text-text-secondary">
+                        <p className="text-body text-text-secondary dark:text-slate-300">
                           {feature.description}
                         </p>
                       </div>

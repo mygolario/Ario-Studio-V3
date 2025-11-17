@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import Button from './Button'
+import ThemeToggle from './ThemeToggle'
 import { useActiveSection } from '@/lib/useActiveSection'
 
 export default function Header() {
@@ -136,8 +137,8 @@ export default function Header() {
         transition={{ duration: 0.4, ease: 'easeOut' }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
-            ? 'bg-pure-white/95 backdrop-blur-sm shadow-header border-b border-border-subtle'
-            : 'bg-pure-white'
+            ? 'bg-pure-white/95 dark:bg-slate-900/95 backdrop-blur-sm shadow-header border-b border-border-subtle dark:border-slate-700'
+            : 'bg-pure-white dark:bg-slate-900'
         }`}
         onMouseLeave={handleMouseLeave}
       >
@@ -167,7 +168,7 @@ export default function Header() {
                       <motion.button
                         onClick={() => setActiveMegaMenu(activeMegaMenu === 'Services' ? null : 'Services')}
                         className={`relative text-body font-medium transition-colors duration-300 cursor-pointer ${
-                          activeMegaMenu === 'Services' ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'
+                          activeMegaMenu === 'Services' ? 'text-text-primary dark:text-slate-100' : 'text-text-secondary dark:text-slate-300 hover:text-text-primary dark:hover:text-slate-100'
                         }`}
                         whileHover={{ y: -1 }}
                       >
@@ -202,7 +203,7 @@ export default function Header() {
                           }
                         }}
                         className={`relative text-body font-medium transition-colors duration-300 ${
-                          isActive ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'
+                          isActive ? 'text-text-primary dark:text-slate-100' : 'text-text-secondary dark:text-slate-300 hover:text-text-primary dark:hover:text-slate-100'
                         }`}
                         whileHover={{ y: -1 }}
                       >
@@ -221,17 +222,13 @@ export default function Header() {
               })}
             </nav>
 
-            {/* CTA Button */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="hidden lg:block"
-            >
+            {/* Theme Toggle & CTA */}
+            <div className="hidden lg:flex items-center gap-4">
+              <ThemeToggle />
               <Button href="#contact" variant="secondary" className="!px-6 !py-3" icon={false}>
                 Start a Project
               </Button>
-            </motion.div>
+            </div>
 
             {/* Mobile Menu Button */}
             <button
@@ -266,17 +263,17 @@ export default function Header() {
                 <div className="max-w-6xl mx-auto">
                   {/* Floating Panel */}
                   <div 
-                    className="bg-pure-white rounded-2xl border border-border-subtle overflow-hidden"
+                    className="bg-pure-white dark:bg-slate-800 rounded-2xl border border-border-subtle dark:border-slate-700 overflow-hidden"
                     style={{
                       boxShadow: '0 20px 50px rgba(0, 0, 0, 0.1)',
                     }}
                   >
                     {/* Header Row */}
-                    <div className="px-8 pt-6 pb-4 border-b border-border-subtle flex items-center justify-between">
-                      <p className="text-body-sm font-medium text-text-secondary">
+                    <div className="px-8 pt-6 pb-4 border-b border-border-subtle dark:border-slate-700 flex items-center justify-between">
+                      <p className="text-body-sm font-medium text-text-secondary dark:text-slate-300">
                         What we can build for you
                       </p>
-                      <span className="text-label text-orange bg-orange/10 border border-orange/20 px-3 py-1 rounded-full font-medium">
+                      <span className="text-label text-orange bg-orange/10 dark:bg-orange/20 border border-orange/20 dark:border-orange/30 px-3 py-1 rounded-full font-medium">
                         AI-native
                       </span>
                     </div>
@@ -294,15 +291,15 @@ export default function Header() {
                           >
                             {/* Vertical Divider (except last column) */}
                             {index < 2 && (
-                              <div className="absolute right-0 top-0 bottom-0 w-px bg-border-subtle" />
+                              <div className="absolute right-0 top-0 bottom-0 w-px bg-border-subtle dark:bg-slate-700" />
                             )}
 
                             {/* Column Content */}
                             <div className="pr-8">
-                              <h3 className="text-h5 font-semibold text-text-primary mb-3">
+                              <h3 className="text-h5 font-semibold text-text-primary dark:text-slate-100 mb-3">
                                 {column.title}
                               </h3>
-                              <p className="text-body-sm text-text-secondary mb-6 leading-relaxed">
+                              <p className="text-body-sm text-text-secondary dark:text-slate-300 mb-6 leading-relaxed">
                                 {column.description}
                               </p>
                               
@@ -316,12 +313,12 @@ export default function Header() {
                                     whileHover={{ y: -1 }}
                                     transition={{ duration: 0.2 }}
                                   >
-                                    <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 hover:bg-orange/5 hover:border-orange/30 transition-all duration-200">
+                                    <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gray-50 dark:bg-slate-700/50 border border-gray-100 dark:border-slate-600 hover:bg-orange/5 dark:hover:bg-orange/10 hover:border-orange/30 dark:hover:border-orange/30 transition-all duration-200">
                                       {/* Visual Marker */}
                                       <div className="flex-shrink-0 w-2 h-2 rounded-full bg-orange opacity-60 group-hover/item:opacity-100 group-hover/item:scale-125 transition-all" />
                                       
                                       {/* Text */}
-                                      <span className="text-body-sm font-medium text-text-primary group-hover/item:text-orange transition-colors">
+                                      <span className="text-body-sm font-medium text-text-primary dark:text-slate-200 group-hover/item:text-orange transition-colors">
                                         {item.text}
                                       </span>
                                     </div>
@@ -348,7 +345,7 @@ export default function Header() {
             opacity: isMobileMenuOpen ? 1 : 0,
           }}
           transition={{ duration: 0.3 }}
-          className="lg:hidden overflow-hidden bg-pure-white border-t border-border-subtle"
+          className="lg:hidden overflow-hidden bg-pure-white dark:bg-slate-900 border-t border-border-subtle dark:border-slate-700"
         >
           <div className="container-custom py-6 space-y-4">
             {navItems.map((item) => (
@@ -422,10 +419,15 @@ export default function Header() {
                 )}
               </div>
             ))}
-            <div className="mt-4" onClick={() => setIsMobileMenuOpen(false)}>
-              <Button href="#contact" variant="primary" className="w-full" icon={false}>
-                Start a Project
-              </Button>
+            <div className="mt-4 space-y-3">
+              <div onClick={() => setIsMobileMenuOpen(false)}>
+                <ThemeToggle />
+              </div>
+              <div onClick={() => setIsMobileMenuOpen(false)}>
+                <Button href="#contact" variant="primary" className="w-full" icon={false}>
+                  Start a Project
+                </Button>
+              </div>
             </div>
           </div>
         </motion.div>

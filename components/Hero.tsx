@@ -56,10 +56,10 @@ export default function Hero() {
   }, [mouseX, mouseY])
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-pure-white">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-pure-white dark:bg-slate-900">
       {/* Subtle Pattern Background */}
       <div 
-        className="absolute inset-0 opacity-[0.03]"
+        className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
         style={{
           backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)',
           backgroundSize: '40px 40px',
@@ -76,12 +76,12 @@ export default function Hero() {
             className="space-y-8"
           >
             {/* Main Heading */}
-            <h1 className="text-hero md:text-[64px] md:leading-[72px] font-semibold text-text-primary">
+            <h1 className="text-hero md:text-[64px] md:leading-[72px] font-semibold text-text-primary dark:text-slate-100">
               We Design, Build & Automate Modern Digital Experiences.
             </h1>
 
             {/* Subtext */}
-            <p className="text-body-lg md:text-xl text-text-secondary max-w-xl leading-relaxed">
+            <p className="text-body-lg md:text-xl text-text-secondary dark:text-slate-300 max-w-xl leading-relaxed">
               A clean, structured, and trustworthy studio focused on clarity, performance, and long-term value.
             </p>
 
@@ -90,7 +90,7 @@ export default function Hero() {
               {['AI-native', 'Cinematic UX', 'Agent-ready'].map((chip) => (
                 <span
                   key={chip}
-                  className="text-body-sm font-medium text-text-secondary border border-gray-200 px-4 py-1.5 rounded-full bg-pure-white hover:border-orange hover:text-orange transition-colors"
+                  className="text-body-sm font-medium text-text-secondary dark:text-slate-300 border border-gray-200 dark:border-slate-700 px-4 py-1.5 rounded-full bg-pure-white dark:bg-slate-800 hover:border-orange hover:text-orange transition-colors"
                 >
                   {chip}
                 </span>
