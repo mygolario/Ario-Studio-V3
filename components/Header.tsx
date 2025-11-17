@@ -167,15 +167,15 @@ export default function Header() {
                     {item.hasMegaMenu ? (
                       <motion.button
                         onClick={() => setActiveMegaMenu(activeMegaMenu === 'Services' ? null : 'Services')}
-                        className={`relative text-body font-medium transition-colors duration-300 cursor-pointer ${
-                          activeMegaMenu === 'Services' ? 'text-text-primary dark:text-slate-100' : 'text-text-secondary dark:text-slate-300 hover:text-text-primary dark:hover:text-slate-100'
+                        className={`relative text-body font-medium transition-all duration-200 cursor-pointer ${
+                          activeMegaMenu === 'Services' ? 'text-orange dark:text-orange' : 'text-text-secondary dark:text-slate-300 hover:text-orange dark:hover:text-orange'
                         }`}
                         whileHover={{ y: -1 }}
                       >
                         {item.label}
                         <ChevronDown 
                           size={14} 
-                          className={`inline-block ml-1 transition-transform duration-300 ${
+                          className={`inline-block ml-1 transition-transform duration-200 ${
                             activeMegaMenu === 'Services' ? 'rotate-180' : ''
                           }`}
                         />
@@ -183,7 +183,7 @@ export default function Header() {
                           className="absolute bottom-0 left-0 h-0.5 bg-orange"
                           initial={{ width: 0 }}
                           animate={{ width: activeMegaMenu === 'Services' ? '100%' : 0 }}
-                          transition={{ duration: 0.3, ease: 'easeOut' }}
+                          transition={{ duration: 0.2, ease: 'easeOut' }}
                         />
                       </motion.button>
                     ) : (
@@ -202,8 +202,8 @@ export default function Header() {
                             })
                           }
                         }}
-                        className={`relative text-body font-medium transition-colors duration-300 ${
-                          isActive ? 'text-text-primary dark:text-slate-100' : 'text-text-secondary dark:text-slate-300 hover:text-text-primary dark:hover:text-slate-100'
+                        className={`relative text-body font-medium transition-all duration-200 ${
+                          isActive ? 'text-text-primary dark:text-slate-100' : 'text-text-secondary dark:text-slate-300 hover:text-orange dark:hover:text-orange'
                         }`}
                         whileHover={{ y: -1 }}
                       >
@@ -213,7 +213,7 @@ export default function Header() {
                           initial={{ width: 0 }}
                           animate={{ width: isActive ? '100%' : 0 }}
                           whileHover={{ width: '100%' }}
-                          transition={{ duration: 0.3, ease: 'easeOut' }}
+                          transition={{ duration: 0.2, ease: 'easeOut' }}
                         />
                       </motion.a>
                     )}

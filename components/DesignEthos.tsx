@@ -86,7 +86,7 @@ export default function DesignEthos() {
                   <div
                     key={feature.title}
                     data-animate-child
-                    className="group bg-pure-white dark:bg-slate-800 border border-border-subtle dark:border-slate-700 rounded-2xl p-6 hover:shadow-card dark:hover:shadow-lg dark:hover:shadow-black/20 transition-all duration-300"
+                    className="group bg-pure-white dark:bg-slate-800 border border-border-subtle dark:border-slate-700 rounded-2xl p-6 hover:shadow-card dark:hover:shadow-lg dark:hover:shadow-black/20 hover:-translate-y-2 hover:border-orange/30 dark:hover:border-orange/30 transition-all duration-200 cursor-pointer"
                   >
                     <div className="flex items-start gap-4">
                       <div className="flex-shrink-0 w-12 h-12 rounded-lg border border-gray-200 dark:border-slate-600 flex items-center justify-center group-hover:border-orange transition-colors">

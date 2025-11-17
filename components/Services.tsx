@@ -92,7 +92,7 @@ export default function Services() {
                   key={group.title}
                   id={group.id}
                   data-animate-child
-                  className="group bg-pure-white dark:bg-slate-800 border border-border-subtle dark:border-slate-700 rounded-xl p-8 hover:shadow-card dark:hover:shadow-lg dark:hover:shadow-black/20 transition-all duration-300 scroll-mt-24"
+                  className="group bg-pure-white dark:bg-slate-800 border border-border-subtle dark:border-slate-700 rounded-xl p-8 hover:shadow-card dark:hover:shadow-lg dark:hover:shadow-black/20 hover:-translate-y-1 hover:border-orange/30 dark:hover:border-orange/30 transition-all duration-200 cursor-pointer scroll-mt-24"
                 >
                   <div className="w-14 h-14 rounded-xl border border-gray-200 dark:border-slate-600 flex items-center justify-center mb-6 group-hover:border-orange transition-colors">
                     <Icon size={28} className="text-text-secondary dark:text-slate-300 group-hover:text-orange transition-colors" />
@@ -105,9 +105,9 @@ export default function Services() {
                   </p>
                   <ul className="space-y-3">
                     {group.items.map((item) => (
-                      <li key={item} className="flex items-start gap-3">
-                        <span className="text-orange mt-1.5">•</span>
-                        <span className="text-body text-text-secondary dark:text-slate-300">{item}</span>
+                      <li key={item} className="flex items-start gap-3 group/item">
+                        <span className="text-orange mt-1.5 group-hover/item:scale-110 transition-transform duration-200">•</span>
+                        <span className="text-body text-text-secondary dark:text-slate-300 group-hover/item:text-text-primary dark:group-hover/item:text-slate-100 transition-colors duration-200">{item}</span>
                       </li>
                     ))}
                   </ul>

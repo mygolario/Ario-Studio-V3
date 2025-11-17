@@ -110,7 +110,7 @@ export default function Hero() {
                 <span
                   key={chip}
                   data-chip
-                  className="text-body-sm font-medium text-text-secondary dark:text-slate-300 border border-gray-200 dark:border-slate-700 px-4 py-1.5 rounded-full bg-pure-white dark:bg-slate-800 hover:border-orange hover:text-orange transition-colors"
+                  className="text-body-sm font-medium text-text-secondary dark:text-slate-300 border border-gray-200 dark:border-slate-700 px-4 py-1.5 rounded-full bg-pure-white dark:bg-slate-800 hover:border-orange hover:text-orange hover:bg-orange/5 dark:hover:bg-orange/10 hover:scale-105 hover:-translate-y-0.5 transition-all duration-200 cursor-default"
                 >
                   {chip}
                 </span>

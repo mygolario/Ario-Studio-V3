@@ -75,19 +75,29 @@ export default function Portfolio() {
               <div
                 key={project.title}
                 data-animate-child
-                className="group bg-pure-white dark:bg-slate-800 rounded-xl overflow-hidden border border-border-subtle dark:border-slate-700 hover:shadow-card-hover dark:hover:shadow-xl dark:hover:shadow-black/30 transition-all duration-300"
+                className="group bg-pure-white dark:bg-slate-800 rounded-xl overflow-hidden border border-border-subtle dark:border-slate-700 hover:shadow-card-hover dark:hover:shadow-xl dark:hover:shadow-black/30 hover:-translate-y-2 transition-all duration-200 cursor-pointer"
               >
-                {/* Image Placeholder */}
+                {/* Image Placeholder with Overlay */}
                 <div className="relative h-64 bg-gray-200 dark:bg-slate-700 overflow-hidden rounded-t-xl">
-                  <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-slate-600 dark:to-slate-700 group-hover:scale-105 transition-transform duration-400" />
-                  <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-slate-600 dark:to-slate-700 group-hover:scale-110 transition-transform duration-500 ease-out" />
+                  
+                  {/* Overlay - appears on hover */}
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-200 flex items-center justify-center">
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-center px-6">
+                      <p className="text-pure-white text-body font-medium mb-2">{project.title}</p>
+                      <p className="text-pure-white/80 text-body-sm">{project.description}</p>
+                    </div>
+                  </div>
+                  
+                  {/* Default content - hidden on hover */}
+                  <div className="absolute inset-0 flex items-center justify-center group-hover:opacity-0 transition-opacity duration-200">
                     <p className="text-text-muted dark:text-slate-400 text-sm">Project mockup</p>
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className="p-6">
-                  <h3 className="text-h4 font-semibold text-text-primary dark:text-slate-100 mb-3">
+                  <h3 className="text-h4 font-semibold text-text-primary dark:text-slate-100 mb-3 group-hover:text-orange transition-colors duration-200">
                     {project.title}
                   </h3>
                   <p className="text-body text-text-secondary dark:text-slate-300 mb-4">
@@ -99,7 +109,7 @@ export default function Portfolio() {
                     {project.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="text-label text-text-muted dark:text-slate-400 bg-gray-50 dark:bg-slate-700/50 border border-gray-200 dark:border-slate-600 px-3 py-1 rounded-full"
+                        className="text-label text-text-muted dark:text-slate-400 bg-gray-50 dark:bg-slate-700/50 border border-gray-200 dark:border-slate-600 px-3 py-1 rounded-full hover:border-orange hover:text-orange hover:bg-orange/5 dark:hover:bg-orange/10 transition-all duration-200 cursor-default"
                       >
                         {tag}
                       </span>
