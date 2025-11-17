@@ -1,10 +1,13 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import Link from 'next/link'
 import { animateSectionReveal } from '@/lib/gsapClient'
+import { getAllProjects } from '@/data/projects'
 
 export default function Portfolio() {
   const sectionRef = useRef<HTMLElement>(null)
+  const projects = getAllProjects()
 
   useEffect(() => {
     if (sectionRef.current) {
@@ -16,28 +19,6 @@ export default function Portfolio() {
       })
     }
   }, [])
-  const projects = [
-    {
-      title: 'Tech Startup Platform',
-      description: 'Modern SaaS platform with intuitive UX and powerful functionality.',
-      tags: ['UI/UX', 'Web', 'Next.js'],
-    },
-    {
-      title: 'E-Commerce Experience',
-      description: 'Streamlined shopping experience with focus on conversion and performance.',
-      tags: ['Web', 'E-commerce', 'Automation'],
-    },
-    {
-      title: 'Brand Identity System',
-      description: 'Complete visual identity and design system for growing company.',
-      tags: ['Design', 'Branding', 'UI/UX'],
-    },
-    {
-      title: 'Internal Dashboard',
-      description: 'Custom dashboard for team productivity and data visualization.',
-      tags: ['Web', 'Automation', 'Dashboard'],
-    },
-  ]
 
   return (
     <section
@@ -72,10 +53,11 @@ export default function Portfolio() {
           {/* Projects Grid */}
           <div className="grid md:grid-cols-2 gap-8">
             {projects.map((project, index) => (
-              <div
-                key={project.title}
+              <Link
+                key={project.slug}
+                href={`/work/${project.slug}`}
                 data-animate-child
-                className="group bg-surface rounded-xl overflow-hidden border border-border-subtle hover:shadow-card-hover hover:-translate-y-2 transition-all duration-200 cursor-pointer"
+                className="group bg-surface rounded-xl overflow-hidden border border-border-subtle hover:shadow-card-hover hover:-translate-y-2 transition-all duration-200 cursor-pointer block"
               >
                 {/* Image Placeholder with Overlay */}
                 <div className="relative h-64 bg-surface-alt overflow-hidden rounded-t-xl">
@@ -85,23 +67,28 @@ export default function Portfolio() {
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-200 flex items-center justify-center">
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-center px-6">
                       <p className="text-pure-white text-body font-medium mb-2">{project.title}</p>
-                      <p className="text-pure-white/80 text-body-sm">{project.description}</p>
+                      <p className="text-pure-white/80 text-body-sm">{project.subtitle}</p>
                     </div>
                   </div>
                   
                   {/* Default content - hidden on hover */}
                   <div className="absolute inset-0 flex items-center justify-center group-hover:opacity-0 transition-opacity duration-200">
-                    <p className="text-text-muted text-sm">Project mockup</p>
+                    <p className="text-text-muted text-sm">View case study</p>
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className="p-6">
-                  <h3 className="text-h4 font-semibold text-text-primary mb-3 group-hover:text-orange transition-colors duration-200">
-                    {project.title}
-                  </h3>
+                  <div className="flex items-start justify-between mb-2">
+                    <h3 className="text-h4 font-semibold text-text-primary group-hover:text-orange transition-colors duration-200">
+                      {project.title}
+                    </h3>
+                    <span className="text-label text-text-muted bg-surface-alt border border-border-subtle px-2 py-1 rounded text-xs">
+                      {project.status}
+                    </span>
+                  </div>
                   <p className="text-body text-text-secondary mb-4">
-                    {project.description}
+                    {project.subtitle}
                   </p>
 
                   {/* Tags */}
@@ -116,7 +103,7 @@ export default function Portfolio() {
                     ))}
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

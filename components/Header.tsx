@@ -92,7 +92,7 @@ export default function Header() {
 
   const navItems = [
     { label: 'Services', href: '#services', hasMegaMenu: true, id: 'services' },
-    { label: 'Work', href: '#portfolio', id: 'portfolio' },
+    { label: 'Work', href: '/#portfolio', id: 'portfolio' },
     { label: 'Process', href: '#philosophy', id: 'philosophy' },
     { label: 'About', href: '#about', id: 'about' },
     { label: 'Contact', href: '#contact', id: 'contact' },
@@ -190,17 +190,21 @@ export default function Header() {
                       <motion.a
                         href={item.href}
                         onClick={(e) => {
-                          e.preventDefault()
-                          const element = document.querySelector(item.href)
-                          if (element) {
-                            const headerHeight = 80
-                            const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
-                            const offsetPosition = elementPosition - headerHeight
-                            window.scrollTo({
-                              top: offsetPosition,
-                              behavior: 'smooth',
-                            })
+                          // Handle internal links with hash
+                          if (item.href.startsWith('#')) {
+                            e.preventDefault()
+                            const element = document.querySelector(item.href)
+                            if (element) {
+                              const headerHeight = 80
+                              const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+                              const offsetPosition = elementPosition - headerHeight
+                              window.scrollTo({
+                                top: offsetPosition,
+                                behavior: 'smooth',
+                              })
+                            }
                           }
+                          // External links (like /#portfolio) will navigate normally
                         }}
                         className={`relative text-body font-medium transition-all duration-200 ${
                           isActive ? 'text-text-primary' : 'text-text-secondary hover:text-orange'
@@ -400,17 +404,23 @@ export default function Header() {
                     href={item.href}
                     className="block text-body text-text-secondary hover:text-text-primary transition-colors"
                     onClick={(e) => {
-                      e.preventDefault()
-                      setIsMobileMenuOpen(false)
-                      const element = document.querySelector(item.href)
-                      if (element) {
-                        const headerHeight = 80
-                        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
-                        const offsetPosition = elementPosition - headerHeight
-                        window.scrollTo({
-                          top: offsetPosition,
-                          behavior: 'smooth',
-                        })
+                      // Handle internal links with hash
+                      if (item.href.startsWith('#')) {
+                        e.preventDefault()
+                        setIsMobileMenuOpen(false)
+                        const element = document.querySelector(item.href)
+                        if (element) {
+                          const headerHeight = 80
+                          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+                          const offsetPosition = elementPosition - headerHeight
+                          window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth',
+                          })
+                        }
+                      } else {
+                        // External links (like /#portfolio) will navigate normally
+                        setIsMobileMenuOpen(false)
                       }
                     }}
                   >
