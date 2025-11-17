@@ -6,7 +6,9 @@ import CaseStudyHero from '@/components/CaseStudyHero'
 import CaseStudyContent from '@/components/CaseStudyContent'
 import Button from '@/components/Button'
 import Footer from '@/components/Footer'
-import { Project as DbProject } from '@prisma/client'
+
+// Type for database project (inferred from Prisma)
+type DbProject = NonNullable<Awaited<ReturnType<typeof getDbProjectBySlug>>>
 
 /**
  * Generate static params for all projects
