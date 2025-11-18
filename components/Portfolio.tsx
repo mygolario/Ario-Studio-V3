@@ -33,30 +33,33 @@ export default function Portfolio({ projects: dbProjects = [] }: PortfolioProps)
     : getAllProjects()
   
   // Apply translations to projects if available (for Farsi version)
+  // Default language is 'fa', so always try to use Farsi unless explicitly 'en'
   const projects = rawProjects.map((project) => {
-    // Always check for Farsi translations (default language is 'fa')
-    // Only skip if language is explicitly 'en'
-    const shouldUseFarsi = language === 'fa' || (language !== 'en' && typeof language === 'string')
+    // Check if we should use Farsi (default is 'fa')
+    const useFarsi = language !== 'en'
     
-    if (shouldUseFarsi) {
-      const workTranslations = t.work as any
-      if (workTranslations?.projects && project.slug) {
-        const projectTranslation = workTranslations.projects[project.slug as keyof typeof workTranslations.projects]
+    if (useFarsi) {
+      // Get Farsi translations from the translation object
+      const workTranslations = (t.work as any)?.projects
+      
+      if (workTranslations && project.slug) {
+        // Look up translation by slug
+        const faTranslation = workTranslations[project.slug]
         
-        if (projectTranslation) {
-          // Use Farsi translations - replace all fields completely
+        if (faTranslation) {
+          // Replace all fields with Farsi translations
           return {
             ...project,
-            title: projectTranslation.title || project.title,
-            subtitle: projectTranslation.subtitle || project.subtitle,
-            status: (projectTranslation.status || project.status) as typeof project.status,
-            tags: projectTranslation.tags || project.tags,
+            title: faTranslation.title,
+            subtitle: faTranslation.subtitle,
+            status: faTranslation.status as typeof project.status,
+            tags: faTranslation.tags,
           }
         }
       }
     }
     
-    // Fallback to original project data if no translation found or language is EN
+    // Return original English data if language is EN or translation not found
     return project
   })
 
