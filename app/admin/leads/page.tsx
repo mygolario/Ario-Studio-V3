@@ -81,17 +81,17 @@ export default async function LeadsPage({
                       </a>
                     </td>
                     <td className="p-4">
-                      {lead.aiPriorityScore ? (
+                      {(lead as any).aiPriorityScore ? (
                         <span
                           className={`inline-block px-2 py-1 rounded text-body-sm font-medium ${
-                            lead.aiPriorityScore >= 4
+                            (lead as any).aiPriorityScore >= 4
                               ? 'bg-orange/20 text-orange border border-orange/40 font-semibold'
-                              : lead.aiPriorityScore >= 3
+                              : (lead as any).aiPriorityScore >= 3
                               ? 'bg-orange/10 text-orange border border-orange/20'
                               : 'bg-surface-alt text-text-muted border border-border-subtle'
                           }`}
                         >
-                          {lead.aiPriorityScore}/5
+                          {(lead as any).aiPriorityScore}/5
                         </span>
                       ) : (
                         <span className="text-body-sm text-text-muted">—</span>

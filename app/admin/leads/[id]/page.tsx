@@ -15,6 +15,13 @@ export default async function LeadDetailPage({
     notFound()
   }
 
+  // Type assertion to ensure AI fields are recognized
+  const leadWithAI = lead as typeof lead & {
+    aiTags?: string[]
+    aiPriorityScore?: number | null
+    aiNotes?: string | null
+  }
+
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('en-US', {
       month: 'long',
@@ -114,19 +121,19 @@ export default async function LeadDetailPage({
               <h2 className="text-h4 font-semibold text-text-primary">AI Insights</h2>
               <ReanalyzeLeadButton leadId={lead.id} />
             </div>
-            {lead.aiSummary || lead.aiTags?.length > 0 || lead.aiPriorityScore || lead.aiNotes ? (
+            {(leadWithAI.aiSummary || (leadWithAI.aiTags && leadWithAI.aiTags.length > 0) || leadWithAI.aiPriorityScore || leadWithAI.aiNotes) ? (
               <div className="space-y-4">
-                {lead.aiSummary && (
+                {leadWithAI.aiSummary && (
                   <div>
                     <div className="text-body-sm text-text-muted mb-2">Summary</div>
-                    <p className="text-body text-text-secondary leading-relaxed">{lead.aiSummary}</p>
+                    <p className="text-body text-text-secondary leading-relaxed">{leadWithAI.aiSummary}</p>
                   </div>
                 )}
-                {lead.aiTags && lead.aiTags.length > 0 && (
+                {leadWithAI.aiTags && Array.isArray(leadWithAI.aiTags) && leadWithAI.aiTags.length > 0 && (
                   <div>
                     <div className="text-body-sm text-text-muted mb-2">Tags</div>
                     <div className="flex flex-wrap gap-2">
-                      {lead.aiTags.map((tag: string, idx: number) => (
+                      {leadWithAI.aiTags.map((tag: string, idx: number) => (
                         <span
                           key={idx}
                           className="text-body-sm text-text-secondary bg-orange/10 border border-orange/20 px-3 py-1 rounded-full"
@@ -137,26 +144,26 @@ export default async function LeadDetailPage({
                     </div>
                   </div>
                 )}
-                {lead.aiPriorityScore && (
+                {leadWithAI.aiPriorityScore && (
                   <div>
                     <div className="text-body-sm text-text-muted mb-2">Priority Score</div>
                     <span
                       className={`inline-block px-3 py-1.5 rounded text-body font-medium ${
-                        lead.aiPriorityScore >= 4
+                        leadWithAI.aiPriorityScore >= 4
                           ? 'bg-orange/20 text-orange border border-orange/40 font-semibold'
-                          : lead.aiPriorityScore >= 3
+                          : leadWithAI.aiPriorityScore >= 3
                           ? 'bg-orange/10 text-orange border border-orange/20'
                           : 'bg-surface-alt text-text-muted border border-border-subtle'
                       }`}
                     >
-                      {lead.aiPriorityScore}/5
+                      {leadWithAI.aiPriorityScore}/5
                     </span>
                   </div>
                 )}
-                {lead.aiNotes && (
+                {leadWithAI.aiNotes && (
                   <div>
                     <div className="text-body-sm text-text-muted mb-2">Suggested Next Steps</div>
-                    <p className="text-body-sm text-text-secondary leading-relaxed italic">{lead.aiNotes}</p>
+                    <p className="text-body-sm text-text-secondary leading-relaxed italic">{leadWithAI.aiNotes}</p>
                   </div>
                 )}
               </div>
