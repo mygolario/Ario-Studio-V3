@@ -1,4 +1,5 @@
 import { Lead } from '@prisma/client'
+import { Resend } from 'resend'
 
 /**
  * Send a lead notification email
@@ -21,25 +22,6 @@ export async function sendLeadNotificationEmail(lead: Lead): Promise<void> {
   }
 
   try {
-    // Try to use Resend if available
-    // Use Function constructor to avoid webpack analyzing the import
-    let Resend: any = null
-    try {
-      // Dynamic require that webpack can't analyze
-      const requireResend = new Function('return require("resend")')
-      const resendModule = requireResend()
-      Resend = resendModule.Resend || resendModule.default?.Resend || resendModule.default
-    } catch (importError) {
-      // Resend package not installed - that's okay, email is optional
-      console.warn('Resend package not installed. Email notifications disabled. Install with: npm install resend')
-      return
-    }
-
-    if (!Resend) {
-      console.warn('Resend package not available. Email notifications disabled.')
-      return
-    }
-
     const resend = new Resend(apiKey)
 
     const subject = `New Lead: ${lead.name}${lead.companyName ? ` from ${lead.companyName}` : ''}`
@@ -69,10 +51,10 @@ Lead ID: ${lead.id}
     `.trim()
 
     await resend.emails.send({
-      from: process.env.ARION_STUDIO_FROM_EMAIL || process.env.EMAIL_FROM || 'onboarding@resend.dev',
+      from: process.env.ARIO_STUDIO_FROM_EMAIL || process.env.EMAIL_FROM || 'Ario Studio <onboarding@resend.dev>',
       to: toEmail,
       subject,
-      text: body,
+      html: `<pre style="font-family: sans-serif; white-space: pre-wrap;">${body}</pre>`,
     })
 
     console.log(`Lead notification email sent for lead: ${lead.id}`)
@@ -93,7 +75,7 @@ Lead ID: ${lead.id}
  */
 export async function sendLeadAutoReplyEmail(lead: Lead): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY
-  const fromEmail = process.env.ARION_STUDIO_FROM_EMAIL || process.env.EMAIL_FROM || 'onboarding@resend.dev'
+  const fromEmail = process.env.ARIO_STUDIO_FROM_EMAIL || process.env.EMAIL_FROM || 'Ario Studio <onboarding@resend.dev>'
 
   // Skip if email is not configured
   if (!apiKey) {
@@ -102,22 +84,6 @@ export async function sendLeadAutoReplyEmail(lead: Lead): Promise<void> {
   }
 
   try {
-    // Try to use Resend if available
-    let Resend: any = null
-    try {
-      const requireResend = new Function('return require("resend")')
-      const resendModule = requireResend()
-      Resend = resendModule.Resend || resendModule.default?.Resend || resendModule.default
-    } catch (importError) {
-      console.warn('Resend package not installed. Auto-reply emails disabled. Install with: npm install resend')
-      return
-    }
-
-    if (!Resend) {
-      console.warn('Resend package not available. Auto-reply emails disabled.')
-      return
-    }
-
     const resend = new Resend(apiKey)
 
     const subject = 'Thanks for reaching out to Ario Studio'
@@ -152,7 +118,7 @@ Cinematic, AI-driven web experiences`
       from: fromEmail,
       to: lead.email,
       subject,
-      text: body,
+      html: `<pre style="font-family: sans-serif; white-space: pre-wrap;">${body}</pre>`,
     })
 
     console.log(`Auto-reply email sent to lead: ${lead.id}`)
