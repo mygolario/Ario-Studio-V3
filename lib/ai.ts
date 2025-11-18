@@ -17,11 +17,18 @@ export type LeadEnrichment = z.infer<typeof LeadEnrichmentSchema>
  */
 function getAIConfig() {
   const provider = process.env.AI_PROVIDER || 'openai'
+  
+  // Support both Liara-specific vars and OpenAI vars with custom base URL
   const apiKey = provider === 'liara' 
-    ? process.env.API_KEY 
+    ? (process.env.API_KEY || process.env.OPENAI_API_KEY)
     : process.env.OPENAI_API_KEY
-  const baseUrl = provider === 'liara'
-    ? process.env.BASE_URL || 'https://ai.liara.ir/api/v1'
+  
+  // Check for custom base URL (for Liara or other OpenAI-compatible providers)
+  const customBaseUrl = process.env.OPENAI_BASE_URL || process.env.BASE_URL
+  const baseUrl = customBaseUrl 
+    ? customBaseUrl.replace(/\/$/, '') // Remove trailing slash
+    : provider === 'liara'
+    ? 'https://ai.liara.ir/api/v1'
     : 'https://api.openai.com/v1'
   
   return { provider, apiKey, baseUrl }

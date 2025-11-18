@@ -16,13 +16,15 @@ export async function sendLeadNotificationEmail(lead: Lead): Promise<void> {
   // Skip if email is not configured
   if (!apiKey || !toEmail) {
     console.warn(
-      'Email notification skipped: RESEND_API_KEY or LEAD_NOTIFICATION_EMAIL not configured'
+      `Email notification skipped: RESEND_API_KEY=${!!apiKey}, toEmail=${!!toEmail}, LEAD_NOTIFICATION_EMAIL=${process.env.LEAD_NOTIFICATION_EMAIL}, ADMIN_EMAIL=${process.env.ADMIN_EMAIL}`
     )
     return
   }
 
   try {
     const resend = new Resend(apiKey)
+    
+    console.log(`Attempting to send lead notification email to: ${toEmail}`)
 
     const subject = `New Lead: ${lead.name}${lead.companyName ? ` from ${lead.companyName}` : ''}`
     
@@ -50,17 +52,27 @@ Submitted: ${lead.createdAt.toLocaleString()}
 Lead ID: ${lead.id}
     `.trim()
 
-    await resend.emails.send({
-      from: process.env.ARIO_STUDIO_FROM_EMAIL || process.env.EMAIL_FROM || 'Ario Studio <onboarding@resend.dev>',
+    const fromEmail = process.env.ARIO_STUDIO_FROM_EMAIL || process.env.EMAIL_FROM || 'Ario Studio <onboarding@resend.dev>'
+    
+    console.log(`Sending email from: ${fromEmail}, to: ${toEmail}, subject: ${subject}`)
+    
+    const result = await resend.emails.send({
+      from: fromEmail,
       to: toEmail,
       subject,
       html: `<pre style="font-family: sans-serif; white-space: pre-wrap;">${body}</pre>`,
     })
 
-    console.log(`Lead notification email sent for lead: ${lead.id}`)
-  } catch (error) {
-    // Log error but don't throw - email failure shouldn't break form submission
-    console.error('Failed to send lead notification email:', error)
+    console.log(`Lead notification email sent successfully for lead: ${lead.id}`, result)
+  } catch (error: any) {
+    // Log detailed error but don't throw - email failure shouldn't break form submission
+    console.error('Failed to send lead notification email:', {
+      error: error?.message || error,
+      stack: error?.stack,
+      response: error?.response,
+      status: error?.status,
+      leadId: lead.id,
+    })
     // Don't re-throw - let caller handle gracefully
   }
 }
@@ -79,12 +91,14 @@ export async function sendLeadAutoReplyEmail(lead: Lead): Promise<void> {
 
   // Skip if email is not configured
   if (!apiKey) {
-    console.warn('Auto-reply email skipped: RESEND_API_KEY not configured')
+    console.warn(`Auto-reply email skipped: RESEND_API_KEY=${!!apiKey}`)
     return
   }
 
   try {
     const resend = new Resend(apiKey)
+    
+    console.log(`Attempting to send auto-reply email to lead: ${lead.email}`)
 
     const subject = 'Thanks for reaching out to Ario Studio'
 
@@ -114,17 +128,26 @@ Ario Studio Team
 Ario Studio
 Cinematic, AI-driven web experiences`
 
-    await resend.emails.send({
+    console.log(`Sending auto-reply from: ${fromEmail}, to: ${lead.email}, subject: ${subject}`)
+    
+    const result = await resend.emails.send({
       from: fromEmail,
       to: lead.email,
       subject,
       html: `<pre style="font-family: sans-serif; white-space: pre-wrap;">${body}</pre>`,
     })
 
-    console.log(`Auto-reply email sent to lead: ${lead.id}`)
-  } catch (error) {
-    // Log error but don't throw - email failure shouldn't break form submission
-    console.error('Failed to send lead auto-reply email:', error)
+    console.log(`Auto-reply email sent successfully to lead: ${lead.id}`, result)
+  } catch (error: any) {
+    // Log detailed error but don't throw - email failure shouldn't break form submission
+    console.error('Failed to send lead auto-reply email:', {
+      error: error?.message || error,
+      stack: error?.stack,
+      response: error?.response,
+      status: error?.status,
+      leadId: lead.id,
+      leadEmail: lead.email,
+    })
     // Don't re-throw - let caller handle gracefully
   }
 }
