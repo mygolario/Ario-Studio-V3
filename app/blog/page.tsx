@@ -4,6 +4,9 @@ import { getPublishedBlogPosts } from '@/lib/db'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
+// Revalidate blog listing every 3600 seconds (1 hour)
+export const revalidate = 3600
+
 export default async function BlogPage() {
   const posts = await getPublishedBlogPosts().catch(() => [])
 

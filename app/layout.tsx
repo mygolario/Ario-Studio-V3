@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import PageTransition from '@/components/ui/PageTransition'
+import { Analytics } from '@vercel/analytics/react'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -14,24 +15,27 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL('https://ario-studio-v3.vercel.app'),
   title: {
-    default: 'Ario Studio – Cinematic AI-Native Experiences',
+    default: 'Ario Studio — Design • Build • Automate',
     template: '%s | Ario Studio',
   },
   description:
-    'We design and build cinematic AI-native web experiences, motion-first interfaces, and production-grade Next.js systems for modern founders.',
+    'Cinematic UX, high-performance engineering, and AI-driven innovation. Ario Studio builds modern, expressive, and intelligent web experiences.',
   keywords: [
-    'AI Studio',
-    'Cinematic Web Design',
-    'Next.js Agency',
-    'Web Motion',
-    'Ario Studio',
+    'Web Design',
+    'Next.js',
     'AI Automation',
-    'Founder Tools',
+    'Cinematic UX',
+    'Full-stack Developer',
+    'Ario Studio',
+    'Web Development',
+    'AI Integration',
+    'Motion Design',
+    'Production Engineering',
   ],
   openGraph: {
-    title: 'Ario Studio',
+    title: 'Ario Studio — Design • Build • Automate',
     description:
-      'Cinematic AI-native experiences. Next.js engineering. Motion-first design.',
+      'Cinematic UX, high-performance engineering, and AI-driven innovation. Ario Studio builds modern, expressive, and intelligent web experiences.',
     url: 'https://ario-studio-v3.vercel.app',
     siteName: 'Ario Studio',
     images: [
@@ -39,7 +43,7 @@ export const metadata: Metadata = {
         url: '/og/og-main.png',
         width: 1200,
         height: 630,
-        alt: 'Ario Studio – Cinematic AI Experiences',
+        alt: 'Ario Studio — Design • Build • Automate',
       },
     ],
     locale: 'en_US',
@@ -47,9 +51,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Ario Studio',
+    title: 'Ario Studio — Design • Build • Automate',
     description:
-      'Cinematic AI-native experiences for modern founders.',
+      'Cinematic UX, high-performance engineering, and AI-driven innovation.',
     images: ['/og/og-main.png'],
   },
   alternates: {
@@ -64,12 +68,56 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        {/* Structured Data - Organization */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'Ario Studio',
+              url: 'https://ario-studio-v3.vercel.app',
+              logo: 'https://ario-studio-v3.vercel.app/og/og-main.png',
+              description:
+                'Cinematic UX, high-performance engineering, and AI-driven innovation. Ario Studio builds modern, expressive, and intelligent web experiences.',
+              sameAs: [],
+              contactPoint: {
+                '@type': 'ContactPoint',
+                email: 'hello@ariostudio.com',
+                contactType: 'Customer Service',
+              },
+            }),
+          }}
+        />
+        {/* Structured Data - WebSite */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: 'Ario Studio',
+              url: 'https://ario-studio-v3.vercel.app',
+              potentialAction: {
+                '@type': 'SearchAction',
+                target: {
+                  '@type': 'EntryPoint',
+                  urlTemplate: 'https://ario-studio-v3.vercel.app/search?q={search_term_string}',
+                },
+                'query-input': 'required name=search_term_string',
+              },
+            }),
+          }}
+        />
+      </head>
       <body className={`${inter.variable} font-sans antialiased transition-colors duration-300`}>
         <ThemeProvider>
           <PageTransition>
             {children}
           </PageTransition>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   )

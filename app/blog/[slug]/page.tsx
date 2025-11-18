@@ -5,6 +5,9 @@ import { getBlogPostBySlug, getPublishedBlogPosts } from '@/lib/db'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
+// Revalidate blog posts every 3600 seconds (1 hour)
+export const revalidate = 3600
+
 export async function generateStaticParams() {
   const posts = await getPublishedBlogPosts().catch(() => [])
   return posts.map((post) => ({
@@ -56,8 +59,37 @@ export default async function BlogPostPage({
     notFound()
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'
+  
+  // Article structured data
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.excerpt,
+    image: post.coverImageUrl ? [post.coverImageUrl] : [],
+    datePublished: post.publishedAt,
+    dateModified: post.updatedAt || post.publishedAt,
+    author: {
+      '@type': 'Organization',
+      name: 'Ario Studio',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Ario Studio',
+      logo: {
+        '@type': 'ImageObject',
+        url: `${baseUrl}/og/og-main.png`,
+      },
+    },
+  }
+
   return (
     <main className="relative min-h-screen bg-base">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <Header />
       
       {/* Cover Image */}

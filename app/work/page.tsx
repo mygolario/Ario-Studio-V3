@@ -3,6 +3,9 @@ import Image from 'next/image'
 import { getProjects } from '@/lib/db'
 import { Copy } from '@/content/copy'
 
+// Revalidate work listing every 3600 seconds (1 hour)
+export const revalidate = 3600
+
 export default async function WorkPage() {
   const projects = await getProjects().catch(() => [])
 

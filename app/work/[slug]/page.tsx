@@ -11,6 +11,9 @@ import Footer from '@/components/Footer'
 // Type for database project (inferred from Prisma)
 type DbProject = NonNullable<Awaited<ReturnType<typeof getDbProjectBySlug>>>
 
+// Revalidate project pages every 3600 seconds (1 hour)
+export const revalidate = 3600
+
 /**
  * Generate static params for all projects
  */
