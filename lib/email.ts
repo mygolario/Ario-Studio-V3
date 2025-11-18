@@ -14,10 +14,11 @@ import { Resend } from 'resend'
  * Never use a custom domain email unless it's verified in Resend.
  */
 function getVerifiedSenderEmail(): string {
-  // Priority: ARIO_STUDIO_FROM_EMAIL > EMAIL_FROM > Resend default
+  // Priority: RESEND_FROM > ARIO_STUDIO_FROM_EMAIL > EMAIL_FROM > Resend default
   // If no custom sender is set, use Resend's default verified sender
   // Format: 'Name <email>' (recommended by Resend)
-  return process.env.ARIO_STUDIO_FROM_EMAIL || 
+  return process.env.RESEND_FROM || 
+         process.env.ARIO_STUDIO_FROM_EMAIL || 
          process.env.EMAIL_FROM || 
          'Ario Studio <onboarding@resend.dev>' // Resend's default verified sender with name (works without custom domain)
 }
@@ -71,33 +72,50 @@ export async function sendLeadNotificationEmail(lead: Lead): Promise<void> {
     
     console.log(`Attempting to send admin notification email to: ${adminEmails.join(', ')}`)
 
-    const subject = `New Lead: ${lead.name}${lead.companyName ? ` from ${lead.companyName}` : ''}`
+    const subject = 'New contact from Ario Studio'
     
     // Build email body - notification for admin
-    const body = `New lead submitted from ${lead.source}
+    const htmlBody = `
+      <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 16px; color: #111;">New Contact from Ario Studio</h2>
+      
+      <div style="margin-bottom: 24px;">
+        <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px; color: #333;">Contact Information</h3>
+        <p style="margin: 4px 0; color: #555;"><strong>Name:</strong> ${lead.name}</p>
+        <p style="margin: 4px 0; color: #555;"><strong>Email:</strong> ${lead.email}</p>
+        ${lead.companyName ? `<p style="margin: 4px 0; color: #555;"><strong>Company:</strong> ${lead.companyName}</p>` : ''}
+      </div>
 
-Contact Information:
-- Name: ${lead.name}
-- Email: ${lead.email}
-${lead.companyName ? `- Company: ${lead.companyName}` : ''}
+      ${lead.budgetRange || lead.timeline || (lead.servicesNeeded && lead.servicesNeeded.length > 0) ? `
+      <div style="margin-bottom: 24px;">
+        <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px; color: #333;">Project Details</h3>
+        ${lead.budgetRange ? `<p style="margin: 4px 0; color: #555;"><strong>Budget:</strong> ${lead.budgetRange}</p>` : ''}
+        ${lead.timeline ? `<p style="margin: 4px 0; color: #555;"><strong>Timeline:</strong> ${lead.timeline}</p>` : ''}
+        ${lead.servicesNeeded && lead.servicesNeeded.length > 0
+          ? `<p style="margin: 4px 0; color: #555;"><strong>Services Needed:</strong> ${lead.servicesNeeded.join(', ')}</p>`
+          : ''}
+      </div>
+      ` : ''}
 
-Project Details:
-${lead.budgetRange ? `- Budget: ${lead.budgetRange}` : ''}
-${lead.timeline ? `- Timeline: ${lead.timeline}` : ''}
-${lead.servicesNeeded && lead.servicesNeeded.length > 0
-  ? `- Services Needed: ${lead.servicesNeeded.join(', ')}`
-  : ''}
+      <div style="margin-bottom: 24px;">
+        <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px; color: #333;">Message</h3>
+        <div style="background: #f5f5f5; padding: 16px; border-radius: 8px; color: #333; white-space: pre-wrap; line-height: 1.6;">${lead.message}</div>
+      </div>
 
-Message:
-${lead.message}
+      ${lead.aiSummary || lead.aiPriorityScore || (lead.aiTags && lead.aiTags.length > 0) ? `
+      <div style="margin-bottom: 24px; padding: 12px; background: #f9f9f9; border-radius: 8px; border-left: 3px solid #ff6b35;">
+        <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #333;">AI Analysis</h3>
+        ${lead.aiSummary ? `<p style="margin: 4px 0; color: #555; font-size: 14px;"><strong>Summary:</strong> ${lead.aiSummary}</p>` : ''}
+        ${lead.aiPriorityScore ? `<p style="margin: 4px 0; color: #555; font-size: 14px;"><strong>Priority Score:</strong> ${lead.aiPriorityScore}/5</p>` : ''}
+        ${lead.aiTags && lead.aiTags.length > 0 ? `<p style="margin: 4px 0; color: #555; font-size: 14px;"><strong>Tags:</strong> ${lead.aiTags.join(', ')}</p>` : ''}
+      </div>
+      ` : ''}
 
-${lead.aiSummary ? `\nAI Summary:\n${lead.aiSummary}\n` : ''}
-${lead.aiPriorityScore ? `Priority Score: ${lead.aiPriorityScore}/5\n` : ''}
-${lead.aiTags && lead.aiTags.length > 0 ? `Tags: ${lead.aiTags.join(', ')}\n` : ''}
-
----
-Submitted: ${lead.createdAt.toLocaleString()}
-Lead ID: ${lead.id}`.trim()
+      <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #eaeaea; font-size: 12px; color: #888;">
+        <p style="margin: 2px 0;">Submitted: ${lead.createdAt.toLocaleString()}</p>
+        <p style="margin: 2px 0;">Source: ${lead.source}</p>
+        <p style="margin: 2px 0;">Lead ID: ${lead.id}</p>
+      </div>
+    `.trim()
 
     const fromEmail = getVerifiedSenderEmail()
     
@@ -110,7 +128,7 @@ Lead ID: ${lead.id}`.trim()
       to: adminEmails, // Array of admin emails - sends to all
       replyTo: lead.email, // Admin can reply directly to the lead
       subject,
-      html: `<pre style="font-family: sans-serif; white-space: pre-wrap;">${body}</pre>`,
+      html: htmlBody,
     })
 
     const results = result
