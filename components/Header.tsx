@@ -43,40 +43,18 @@ export default function Header() {
     return () => window.removeEventListener('keydown', handleEscape)
   }, [activeMegaMenu])
 
+  // Get mega menu content from translations
   const megaMenuContent = {
     'Services': {
-      columns: [
-        {
-          title: 'AI-Native Product Websites',
-          description: 'Full-stack experiences with AI at the core',
-          sectionId: 'ai-native-product-websites',
-          items: [
-            { text: 'Cinematic marketing sites', href: '#ai-native-product-websites' },
-            { text: 'Agent-integrated product pages', href: '#ai-native-product-websites' },
-            { text: 'Launch-ready frontends', href: '#ai-native-product-websites' },
-          ],
-        },
-        {
-          title: 'MVPs & Dashboards',
-          description: 'Fast validation and internal tools',
-          sectionId: 'mvps-dashboards',
-          items: [
-            { text: 'Early-stage MVP & landing pages', href: '#mvps-dashboards' },
-            { text: 'Agent-ready internal dashboards', href: '#mvps-dashboards' },
-            { text: 'Fast validation builds', href: '#mvps-dashboards' },
-          ],
-        },
-        {
-          title: 'Long-term Design Systems',
-          description: 'Ongoing design partnerships',
-          sectionId: 'long-term-design-systems',
-          items: [
-            { text: 'UI/UX systems & motion direction', href: '#long-term-design-systems' },
-            { text: 'Ongoing design partnerships', href: '#long-term-design-systems' },
-            { text: 'Strategic design support', href: '#long-term-design-systems' },
-          ],
-        },
-      ],
+      columns: t.megaMenu.columns.map((column, index) => ({
+        title: column.title,
+        description: column.description,
+        sectionId: index === 0 ? 'ai-native-product-websites' : index === 1 ? 'mvps-dashboards' : 'long-term-design-systems',
+        items: column.items.map((item) => ({
+          text: item,
+          href: index === 0 ? '#ai-native-product-websites' : index === 1 ? '#mvps-dashboards' : '#long-term-design-systems',
+        })),
+      })),
     },
   }
 
@@ -187,7 +165,7 @@ export default function Header() {
                         <span className="relative z-10">{item.label}</span>
                         <ChevronDown 
                           size={14} 
-                          className={`inline-block ml-1 transition-transform duration-200 relative z-10 ${
+                          className={`inline-block ml-1 rtl:ml-0 rtl:mr-1 transition-transform duration-200 relative z-10 ${
                             activeMegaMenu === 'Services' ? 'rotate-180' : ''
                           }`}
                         />
@@ -305,10 +283,10 @@ export default function Header() {
                     {/* Header Row */}
                     <div className="px-8 pt-6 pb-4 border-b border-border-subtle flex items-center justify-between">
                       <p className="text-body-sm font-medium text-text-secondary">
-                        What we can build for you
+                        {t.megaMenu.header}
                       </p>
                       <span className="text-label text-orange bg-orange/10 border border-orange/20 px-3 py-1 rounded-full font-medium">
-                        AI-native
+                        {t.megaMenu.aiNative}
                       </span>
                     </div>
 
@@ -325,11 +303,11 @@ export default function Header() {
                           >
                             {/* Vertical Divider (except last column) */}
                             {index < 2 && (
-                              <div className="absolute right-0 top-0 bottom-0 w-px bg-border-subtle" />
+                              <div className="absolute right-0 top-0 bottom-0 w-px bg-border-subtle rtl:right-auto rtl:left-0" />
                             )}
 
                             {/* Column Content */}
-                            <div className="pr-8">
+                            <div className="pr-8 rtl:pr-0 rtl:pl-8">
                               <h3 className="text-h5 font-semibold text-text-primary mb-3">
                                 {column.title}
                               </h3>
@@ -343,11 +321,11 @@ export default function Header() {
                                   <motion.button
                                     key={item.text}
                                     onClick={() => handleMegaMenuItemClick(item.href)}
-                                    className="w-full text-left group/item"
+                                    className="w-full text-left rtl:text-right group/item"
                                     whileHover={{ y: -1 }}
                                     transition={{ duration: 0.2 }}
                                   >
-                                    <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-surface-alt border border-border-subtle hover:bg-orange/5 hover:border-orange/30 transition-all duration-200">
+                                    <div className="flex items-center gap-3 rtl:flex-row-reverse px-4 py-3 rounded-xl bg-surface-alt border border-border-subtle hover:bg-orange/5 hover:border-orange/30 transition-all duration-200">
                                       {/* Visual Marker */}
                                       <div className="flex-shrink-0 w-2 h-2 rounded-full bg-orange opacity-60 group-hover/item:opacity-100 group-hover/item:scale-125 transition-all" />
                                       
@@ -397,7 +375,7 @@ export default function Header() {
                       />
                     </button>
                     {mobileServicesOpen && megaMenuContent['Services'] && (
-                      <div className="mt-4 ml-4 space-y-6">
+                      <div className="mt-4 ml-4 rtl:ml-0 rtl:mr-4 space-y-6">
                         {megaMenuContent['Services'].columns.map((column) => (
                           <div key={column.title}>
                             <h4 className="text-body font-semibold text-text-primary mb-2">
@@ -415,7 +393,7 @@ export default function Header() {
                                     setMobileServicesOpen(false)
                                     handleMegaMenuItemClick(item.href)
                                   }}
-                                  className="w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg bg-surface-alt border border-border-subtle hover:bg-orange/5 hover:border-orange/30 transition-all"
+                                  className="w-full text-left rtl:text-right flex items-center gap-3 rtl:flex-row-reverse px-4 py-2.5 rounded-lg bg-surface-alt border border-border-subtle hover:bg-orange/5 hover:border-orange/30 transition-all"
                                 >
                                   <div className="flex-shrink-0 w-2 h-2 rounded-full bg-orange opacity-60" />
                                   <span className="text-body-sm font-medium text-text-primary">

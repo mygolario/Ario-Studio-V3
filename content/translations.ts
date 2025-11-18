@@ -207,6 +207,39 @@ export const translations = {
     common: {
       allRightsReserved: 'تمام حقوق محفوظ است',
     },
+    megaMenu: {
+      header: 'آنچه می‌توانیم برای شما بسازیم',
+      aiNative: 'مبتنی بر هوش مصنوعی',
+      columns: [
+        {
+          title: 'وب‌سایت‌های محصول مبتنی بر هوش مصنوعی',
+          description: 'تجربیات فول‌استک با هوش مصنوعی در هسته',
+          items: [
+            'سایت‌های بازاریابی سینمایی',
+            'صفحات محصول یکپارچه با عامل هوشمند',
+            'فرانت‌اندهای آماده راه‌اندازی',
+          ],
+        },
+        {
+          title: 'MVPها و داشبوردها',
+          description: 'اعتبارسنجی سریع و ابزارهای داخلی',
+          items: [
+            'MVP و صفحات فرود در مراحل اولیه',
+            'داشبوردهای داخلی آماده عامل هوشمند',
+            'ساخت‌های اعتبارسنجی سریع',
+          ],
+        },
+        {
+          title: 'سیستم‌های طراحی بلندمدت',
+          description: 'همکاری‌های طراحی مداوم',
+          items: [
+            'سیستم‌های UI/UX و جهت‌دهی انیمیشن',
+            'همکاری‌های طراحی مداوم',
+            'پشتیبانی طراحی استراتژیک',
+          ],
+        },
+      ],
+    },
   },
   en: {
     hero: {
@@ -408,6 +441,39 @@ export const translations = {
     ],
     common: {
       allRightsReserved: 'All rights reserved',
+    },
+    megaMenu: {
+      header: 'What we can build for you',
+      aiNative: 'AI-native',
+      columns: [
+        {
+          title: 'AI-Native Product Websites',
+          description: 'Full-stack experiences with AI at the core',
+          items: [
+            'Cinematic marketing sites',
+            'Agent-integrated product pages',
+            'Launch-ready frontends',
+          ],
+        },
+        {
+          title: 'MVPs & Dashboards',
+          description: 'Fast validation and internal tools',
+          items: [
+            'Early-stage MVP & landing pages',
+            'Agent-ready internal dashboards',
+            'Fast validation builds',
+          ],
+        },
+        {
+          title: 'Long-term Design Systems',
+          description: 'Ongoing design partnerships',
+          items: [
+            'UI/UX systems & motion direction',
+            'Ongoing design partnerships',
+            'Strategic design support',
+          ],
+        },
+      ],
     },
   },
 }
