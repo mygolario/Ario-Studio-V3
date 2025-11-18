@@ -2,22 +2,29 @@ import { Lead } from '@prisma/client'
 import { Resend } from 'resend'
 
 /**
- * Send a lead notification email
+ * Get the fixed verified sender email address
+ */
+function getVerifiedSenderEmail(): string {
+  return process.env.ARIO_STUDIO_FROM_EMAIL || 
+         process.env.EMAIL_FROM || 
+         'Ario Studio <noreply@ariostudio.com>'
+}
+
+/**
+ * Send admin notification email when a new lead is submitted
  * 
- * This function only sends an email if RESEND_API_KEY is configured.
- * If not configured, it logs a warning and returns without error.
+ * This email is sent to the admin to notify them of a new lead.
  * 
  * @param lead - The lead record to send notification about
  */
 export async function sendLeadNotificationEmail(lead: Lead): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY
-  // Send notification to the lead's email (the person who submitted the form)
-  const toEmail = lead.email
+  const adminEmail = process.env.ADMIN_EMAIL
 
   // Skip if email is not configured
-  if (!apiKey || !toEmail) {
+  if (!apiKey || !adminEmail) {
     console.warn(
-      `Email notification skipped: RESEND_API_KEY=${!!apiKey}, toEmail=${!!toEmail}, lead.email=${lead.email}`
+      `Admin notification email skipped: RESEND_API_KEY=${!!apiKey}, ADMIN_EMAIL=${!!adminEmail}`
     )
     return
   }
@@ -25,16 +32,12 @@ export async function sendLeadNotificationEmail(lead: Lead): Promise<void> {
   try {
     const resend = new Resend(apiKey)
     
-    console.log(`Attempting to send lead notification email to: ${toEmail}`)
+    console.log(`Attempting to send admin notification email to: ${adminEmail}`)
 
-    const subject = `Thank you for contacting Ario Studio - We've received your inquiry`
+    const subject = `New Lead: ${lead.name}${lead.companyName ? ` from ${lead.companyName}` : ''}`
     
-    // Build email body - confirmation email to the lead
-    const body = `Hi ${lead.name},
-
-Thank you for reaching out to Ario Studio! We've successfully received your project inquiry.
-
-Here's a summary of what you submitted:
+    // Build email body - notification for admin
+    const body = `New lead submitted from ${lead.source}
 
 Contact Information:
 - Name: ${lead.name}
@@ -48,37 +51,34 @@ ${lead.servicesNeeded && lead.servicesNeeded.length > 0
   ? `- Services Needed: ${lead.servicesNeeded.join(', ')}`
   : ''}
 
-Your Message:
+Message:
 ${lead.message}
 
+${lead.aiSummary ? `\nAI Summary:\n${lead.aiSummary}\n` : ''}
+${lead.aiPriorityScore ? `Priority Score: ${lead.aiPriorityScore}/5\n` : ''}
+${lead.aiTags && lead.aiTags.length > 0 ? `Tags: ${lead.aiTags.join(', ')}\n` : ''}
+
 ---
-Next Steps:
-Our team will review your project details and get back to you within 24-48 hours. In the meantime, feel free to explore our work at https://ario-studio-v3.vercel.app/work.
-
-If you have any urgent questions, don't hesitate to reach out directly.
-
-Best regards,
-Ario Studio Team
-
 Submitted: ${lead.createdAt.toLocaleString()}
-Reference ID: ${lead.id}
+Lead ID: ${lead.id}
     `.trim()
 
-    const fromEmail = process.env.ARIO_STUDIO_FROM_EMAIL || process.env.EMAIL_FROM || 'Ario Studio <onboarding@resend.dev>'
+    const fromEmail = getVerifiedSenderEmail()
     
-    console.log(`Sending email from: ${fromEmail}, to: ${toEmail}, subject: ${subject}`)
+    console.log(`Sending admin notification from: ${fromEmail}, to: ${adminEmail}, replyTo: ${lead.email}`)
     
     const result = await resend.emails.send({
       from: fromEmail,
-      to: toEmail,
+      to: adminEmail,
+      replyTo: lead.email, // Admin can reply directly to the lead
       subject,
       html: `<pre style="font-family: sans-serif; white-space: pre-wrap;">${body}</pre>`,
     })
 
-    console.log(`Lead notification email sent successfully for lead: ${lead.id}`, result)
+    console.log(`Admin notification email sent successfully for lead: ${lead.id}`, result)
   } catch (error: any) {
     // Log detailed error but don't throw - email failure shouldn't break form submission
-    console.error('Failed to send lead notification email:', {
+    console.error('Failed to send admin notification email:', {
       error: error?.message || error,
       stack: error?.stack,
       response: error?.response,
@@ -90,34 +90,34 @@ Reference ID: ${lead.id}
 }
 
 /**
- * Send an auto-reply email to the lead
+ * Send user confirmation email to the lead
  * 
- * This function sends a professional thank-you email to the lead.
+ * This function sends a professional thank-you confirmation email to the person who submitted the form.
  * If email env vars / API keys are missing, it logs a warning and returns without throwing.
  * 
- * @param lead - The lead record to send auto-reply to
+ * @param lead - The lead record to send confirmation email to
  */
 export async function sendLeadAutoReplyEmail(lead: Lead): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY
-  const fromEmail = process.env.ARIO_STUDIO_FROM_EMAIL || process.env.EMAIL_FROM || 'Ario Studio <onboarding@resend.dev>'
+  const userEmail = lead.email
 
   // Skip if email is not configured
-  if (!apiKey) {
-    console.warn(`Auto-reply email skipped: RESEND_API_KEY=${!!apiKey}`)
+  if (!apiKey || !userEmail) {
+    console.warn(`User confirmation email skipped: RESEND_API_KEY=${!!apiKey}, userEmail=${!!userEmail}`)
     return
   }
 
   try {
     const resend = new Resend(apiKey)
     
-    console.log(`Attempting to send auto-reply email to lead: ${lead.email}`)
+    console.log(`Attempting to send user confirmation email to: ${userEmail}`)
 
-    const subject = 'Thanks for reaching out to Ario Studio'
+    const subject = 'Thank you for contacting Ario Studio - We\'ve received your inquiry'
 
-    // Build email body
+    // Build email body - confirmation email to the user
     let body = `Hi ${lead.name},
 
-Thank you for reaching out to Ario Studio! We've received your inquiry and are excited about the possibility of working together.
+Thank you for reaching out to Ario Studio! We've successfully received your project inquiry and are excited about the possibility of working together.
 
 Here's a summary of what you submitted:
 ${lead.budgetRange ? `- Budget: ${lead.budgetRange}` : ''}
@@ -138,21 +138,27 @@ Ario Studio Team
 
 ---
 Ario Studio
-Cinematic, AI-driven web experiences`
+Cinematic, AI-driven web experiences
 
-    console.log(`Sending auto-reply from: ${fromEmail}, to: ${lead.email}, subject: ${subject}`)
+Reference ID: ${lead.id}
+Submitted: ${lead.createdAt.toLocaleString()}`
+
+    const fromEmail = getVerifiedSenderEmail()
+    
+    console.log(`Sending user confirmation from: ${fromEmail}, to: ${userEmail}, replyTo: ${userEmail}`)
     
     const result = await resend.emails.send({
       from: fromEmail,
-      to: lead.email,
+      to: userEmail,
+      replyTo: userEmail, // User can reply to their own email (which will go to admin)
       subject,
       html: `<pre style="font-family: sans-serif; white-space: pre-wrap;">${body}</pre>`,
     })
 
-    console.log(`Auto-reply email sent successfully to lead: ${lead.id}`, result)
+    console.log(`User confirmation email sent successfully to lead: ${lead.id}`, result)
   } catch (error: any) {
     // Log detailed error but don't throw - email failure shouldn't break form submission
-    console.error('Failed to send lead auto-reply email:', {
+    console.error('Failed to send user confirmation email:', {
       error: error?.message || error,
       stack: error?.stack,
       response: error?.response,
