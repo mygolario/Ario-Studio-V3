@@ -48,8 +48,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     }
   }
 
-  const baseUrl = 'https://ario-studio-v3.vercel.app'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'
   const ogImage = `${baseUrl}/og/og-main.png`
+  
+  // URLs for hreflang (same URL, language detected from context)
+  const urlFa = `${baseUrl}/work/${item.slug}`
+  const urlEn = `${baseUrl}/work/${item.slug}`
 
   return {
     title: item.metaTitle || item.title,
@@ -57,7 +61,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     openGraph: {
       title: item.metaTitle || item.title,
       description: item.metaDescription || item.excerpt || item.subtitle || '',
-      url: `${baseUrl}/work/${item.slug}`,
+      url: lang === 'fa' ? urlFa : urlEn,
       siteName: 'Ario Studio',
       images: [
         {
@@ -77,7 +81,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       images: [ogImage],
     },
     alternates: {
-      canonical: `${baseUrl}/work/${item.slug}`,
+      canonical: lang === 'fa' ? urlFa : urlEn,
+      languages: {
+        'fa-IR': urlFa,
+        'en-US': urlEn,
+      },
     },
   }
 }
