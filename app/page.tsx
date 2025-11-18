@@ -6,6 +6,7 @@ import DesignEthos from '@/components/DesignEthos'
 import About from '@/components/About'
 import StartProjectSection from '@/components/StartProjectSection'
 import Footer from '@/components/Footer'
+import BetaNotice from '@/components/BetaNotice'
 import { getServices, getFeaturedProjects, getProcessSteps, getHighlights } from '@/lib/db'
 
 // Revalidate homepage every 60 seconds
@@ -30,6 +31,8 @@ export default async function Home() {
       <Header />
       {/* Scene 1: HERO */}
       <Hero />
+      {/* Beta Notice (Farsi only) */}
+      <BetaNotice />
       {/* Scene 2: WHAT WE DO */}
       <Services services={services} />
       {/* Scene 3: OUR WORK */}

@@ -134,7 +134,7 @@ export default function Portfolio({ projects: dbProjects = [] }: PortfolioProps)
                   
                   {/* Default content - hidden on hover */}
                   <div className="absolute inset-0 flex items-center justify-center group-hover:opacity-0 transition-opacity duration-200">
-                    <p className="text-text-muted text-sm">View case study</p>
+                    <p className="text-text-muted text-sm">{t.common.viewCaseStudy}</p>
                   </div>
                 </div>
 
