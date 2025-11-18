@@ -16,7 +16,7 @@ model Service {
   slug      String   @unique
   subtitle  String?  @map("subtitle")
   pillLabel String?  @map("pill_label")
-  items     Json     // Array of bullet points
+  items     Json // Array of bullet points
   order     Int      @default(0)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -25,23 +25,23 @@ model Service {
 }
 
 model Project {
-  id             String   @id @default(cuid())
-  title          String
-  slug           String   @unique
-  shortDescription String @map("short_description")
-  longDescription  String? @map("long_description")
-  tags           String[] // Array of tags
-  thumbnailUrl   String?  @map("thumbnail_url")
-  heroImageUrl   String?  @map("hero_image_url")
-  year           Int?
-  clientName     String?  @map("client_name")
-  role           String?
-  liveUrl        String?  @map("live_url")
-  isFeatured     Boolean  @default(false) @map("is_featured")
-  order          Int      @default(0)
-  createdAt      DateTime @default(now()) @map("created_at")
-  updatedAt      DateTime @updatedAt @map("updated_at")
-  caseStudies    CaseStudy[]
+  id               String      @id @default(cuid())
+  title            String
+  slug             String      @unique
+  shortDescription String      @map("short_description")
+  longDescription  String?     @map("long_description")
+  tags             String[] // Array of tags
+  thumbnailUrl     String?     @map("thumbnail_url")
+  heroImageUrl     String?     @map("hero_image_url")
+  year             Int?
+  clientName       String?     @map("client_name")
+  role             String?
+  liveUrl          String?     @map("live_url")
+  isFeatured       Boolean     @default(false) @map("is_featured")
+  order            Int         @default(0)
+  createdAt        DateTime    @default(now()) @map("created_at")
+  updatedAt        DateTime    @updatedAt @map("updated_at")
+  caseStudies      CaseStudy[]
 
   @@map("projects")
 }
@@ -61,7 +61,7 @@ model Highlight {
   id          String   @id @default(cuid())
   title       String
   description String?
-  type        String   // e.g. "about", "philosophy", "metric"
+  type        String // e.g. "about", "philosophy", "metric"
   order       Int      @default(0)
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
@@ -70,23 +70,23 @@ model Highlight {
 }
 
 model Lead {
-  id            String   @id @default(cuid())
-  name          String
-  email         String
-  companyName   String?  @map("company_name")
-  budgetRange   String?  @map("budget_range")
-  timeline      String?
-  servicesNeeded String[] @map("services_needed")
-  message       String
-  source        String   // e.g. "hero_form", "contact", "direct"
-  status        String   @default("new") // "new", "reviewing", "contacted", "in_progress", "won", "lost"
-  aiSummary     String?  @map("ai_summary")
-  aiTags        String[] @default([]) @map("ai_tags")
-  aiPriorityScore Int?   @map("ai_priority_score")
-  aiNotes       String?  @map("ai_notes")
-  internalNotes String?  @map("internal_notes")
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  id              String   @id @default(cuid())
+  name            String
+  email           String
+  companyName     String?  @map("company_name")
+  budgetRange     String?  @map("budget_range")
+  timeline        String?
+  servicesNeeded  String[] @map("services_needed")
+  message         String
+  source          String // e.g. "hero_form", "contact", "direct"
+  status          String   @default("new") // "new", "reviewing", "contacted", "in_progress", "won", "lost"
+  aiSummary       String?  @map("ai_summary")
+  aiTags          String[] @default([]) @map("ai_tags")
+  aiPriorityScore Int?     @map("ai_priority_score")
+  aiNotes         String?  @map("ai_notes")
+  internalNotes   String?  @map("internal_notes")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
 
   @@map("leads")
 }
@@ -108,22 +108,74 @@ model BlogPost {
 }
 
 model CaseStudy {
-  id            String    @id @default(cuid())
-  projectId     String    @map("project_id")
-  slug          String    @unique
-  title          String
-  heroImageUrl  String?   @map("hero_image_url")
-  summary        String
-  challenge      String
-  solution       String
-  results        String
-  metrics        Json?     // Optional structured data
-  content        String?   // Optional long-form content
-  status         String    @default("draft") // "draft" | "published"
-  publishedAt    DateTime? @map("published_at")
-  createdAt      DateTime  @default(now()) @map("created_at")
-  updatedAt      DateTime  @updatedAt @map("updated_at")
-  project        Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  id           String    @id @default(cuid())
+  projectId    String    @map("project_id")
+  slug         String    @unique
+  title        String
+  heroImageUrl String?   @map("hero_image_url")
+  summary      String
+  challenge    String
+  solution     String
+  results      String
+  metrics      Json? // Optional structured data
+  content      String? // Optional long-form content
+  status       String    @default("draft") // "draft" | "published"
+  publishedAt  DateTime? @map("published_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  project      Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@map("case_studies")
+}
+
+// ============================================
+// Multilingual Content System
+// ============================================
+// This system provides a normalized, scalable approach to managing
+// multilingual content (Portfolio, Services, Blog) with separate
+// translation records for each language.
+
+enum ContentType {
+  portfolio
+  service
+  blog
+}
+
+enum ContentLang {
+  fa
+  en
+}
+
+model Content {
+  id           String               @id @default(cuid())
+  type         ContentType
+  slug         String               @unique // Language-agnostic slug
+  isPublished  Boolean              @default(false)
+  order        Int?
+  featured     Boolean              @default(false)
+  archived     Boolean              @default(false)
+  createdAt    DateTime             @default(now()) @map("created_at")
+  updatedAt    DateTime             @updatedAt @map("updated_at")
+  translations ContentTranslation[]
+
+  @@map("contents")
+}
+
+model ContentTranslation {
+  id              String      @id @default(cuid())
+  content         Content     @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  contentId       String      @map("content_id")
+  lang            ContentLang
+  title           String
+  excerpt         String?
+  body            String? // Full content (for blog/case study)
+  metaTitle       String?     @map("meta_title")
+  metaDescription String?     @map("meta_description")
+  subtitle        String?
+  tags            String[]    @default([])
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+
+  @@unique([contentId, lang]) // Each content can have only one translation per language
+  @@map("content_translations")
 }
