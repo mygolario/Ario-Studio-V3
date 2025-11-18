@@ -36,19 +36,21 @@ export default function Portfolio({ projects: dbProjects = [] }: PortfolioProps)
   const projects = rawProjects.map((project) => {
     // Always check for Farsi translations (default language is 'fa')
     // Only skip if language is explicitly 'en'
-    if (language !== 'en') {
+    const shouldUseFarsi = language === 'fa' || (language !== 'en' && typeof language === 'string')
+    
+    if (shouldUseFarsi) {
       const workTranslations = t.work as any
       if (workTranslations?.projects && project.slug) {
         const projectTranslation = workTranslations.projects[project.slug as keyof typeof workTranslations.projects]
         
         if (projectTranslation) {
-          // Use Farsi translations - replace all fields
+          // Use Farsi translations - replace all fields completely
           return {
             ...project,
-            title: projectTranslation.title,
-            subtitle: projectTranslation.subtitle,
-            status: projectTranslation.status as typeof project.status,
-            tags: projectTranslation.tags,
+            title: projectTranslation.title || project.title,
+            subtitle: projectTranslation.subtitle || project.subtitle,
+            status: (projectTranslation.status || project.status) as typeof project.status,
+            tags: projectTranslation.tags || project.tags,
           }
         }
       }
@@ -138,7 +140,7 @@ export default function Portfolio({ projects: dbProjects = [] }: PortfolioProps)
                   
                   {/* Overlay - appears on hover */}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-200 flex items-center justify-center">
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-center px-6">
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-center px-6 rtl:text-right">
                       <p className="text-pure-white text-body font-medium mb-2">{project.title}</p>
                       <p className="text-pure-white/80 text-body-sm">{project.subtitle}</p>
                     </div>
@@ -146,7 +148,7 @@ export default function Portfolio({ projects: dbProjects = [] }: PortfolioProps)
                   
                   {/* Default content - hidden on hover */}
                   <div className="absolute inset-0 flex items-center justify-center group-hover:opacity-0 transition-opacity duration-200">
-                    <p className="text-text-muted text-sm">{t.common.viewCaseStudy}</p>
+                    <p className="text-text-muted text-sm rtl:text-right">{t.common.viewCaseStudy}</p>
                   </div>
                 </div>
 
