@@ -158,13 +158,27 @@ a, button {
 [dir="rtl"] {
   direction: rtl;
   text-align: right;
-  font-family: var(--font-vazir), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-vazir), 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+[dir="rtl"] body,
+[dir="rtl"] body *,
+[dir="rtl"] html,
+[dir="rtl"] html * {
+  font-family: var(--font-vazir), 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 [dir="ltr"] {
   direction: ltr;
   text-align: left;
-  font-family: var(--font-inter), system-ui, sans-serif;
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
+}
+
+[dir="ltr"] body,
+[dir="ltr"] body *,
+[dir="ltr"] html,
+[dir="ltr"] html * {
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
 }
 
 /* RTL-specific adjustments */
