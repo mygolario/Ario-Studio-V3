@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { animateSectionReveal } from '@/lib/gsapClient'
 import { getAllProjects } from '@/data/projects'
 import { useTranslation } from '@/lib/useTranslation'
+import { useLanguage } from '@/contexts/LanguageContext'
 import { getFeaturedProjects } from '@/lib/db'
 
 // Type for database project
@@ -16,6 +17,7 @@ interface PortfolioProps {
 
 export default function Portfolio({ projects: dbProjects = [] }: PortfolioProps) {
   const t = useTranslation()
+  const { language } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
   
   // Use database projects if available, otherwise fallback to static data
@@ -32,24 +34,26 @@ export default function Portfolio({ projects: dbProjects = [] }: PortfolioProps)
   
   // Apply translations to projects if available (for Farsi version)
   const projects = rawProjects.map((project) => {
-    // Check if translations exist for this project
-    const workTranslations = t.work as any
-    if (workTranslations?.projects) {
-      const projectTranslation = workTranslations.projects[project.slug]
-      
-      if (projectTranslation) {
-        // Use Farsi translations
-        return {
-          ...project,
-          title: projectTranslation.title || project.title,
-          subtitle: projectTranslation.subtitle || project.subtitle,
-          status: (projectTranslation.status || project.status) as typeof project.status,
-          tags: projectTranslation.tags || project.tags,
+    // Only apply translations if language is Farsi
+    if (language === 'fa') {
+      const workTranslations = t.work as any
+      if (workTranslations?.projects) {
+        const projectTranslation = workTranslations.projects[project.slug]
+        
+        if (projectTranslation) {
+          // Use Farsi translations
+          return {
+            ...project,
+            title: projectTranslation.title || project.title,
+            subtitle: projectTranslation.subtitle || project.subtitle,
+            status: (projectTranslation.status || project.status) as typeof project.status,
+            tags: projectTranslation.tags || project.tags,
+          }
         }
       }
     }
     
-    // Fallback to original project data if no translation found
+    // Fallback to original project data if no translation found or language is EN
     return project
   })
 
