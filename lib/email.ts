@@ -16,9 +16,10 @@ import { Resend } from 'resend'
 function getVerifiedSenderEmail(): string {
   // Priority: ARIO_STUDIO_FROM_EMAIL > EMAIL_FROM > Resend default
   // If no custom sender is set, use Resend's default verified sender
+  // Format: 'Name <email>' (recommended by Resend)
   return process.env.ARIO_STUDIO_FROM_EMAIL || 
          process.env.EMAIL_FROM || 
-         'onboarding@resend.dev' // Resend's default verified sender (works without custom domain)
+         'Ario Studio <onboarding@resend.dev>' // Resend's default verified sender with name (works without custom domain)
 }
 
 /**

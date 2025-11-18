@@ -37,9 +37,10 @@ export async function GET(request: Request) {
     const resend = new Resend(apiKey)
     
     // Use Resend's default verified sender
+    // Format: 'Name <email>' (recommended by Resend)
     const fromEmail = process.env.ARIO_STUDIO_FROM_EMAIL || 
                      process.env.EMAIL_FROM || 
-                     'onboarding@resend.dev'
+                     'Ario Studio <onboarding@resend.dev>'
     
     console.log(`[TEST EMAIL] Attempting to send test email from: ${fromEmail}, to: ${testEmail}`)
     
@@ -83,7 +84,7 @@ export async function GET(request: Request) {
         },
         config: {
           hasApiKey: !!process.env.RESEND_API_KEY,
-          fromEmail: process.env.ARIO_STUDIO_FROM_EMAIL || process.env.EMAIL_FROM || 'onboarding@resend.dev',
+          fromEmail: process.env.ARIO_STUDIO_FROM_EMAIL || process.env.EMAIL_FROM || 'Ario Studio <onboarding@resend.dev>',
         }
       },
       { status: 500 }
