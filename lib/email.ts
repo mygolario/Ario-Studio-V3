@@ -39,26 +39,31 @@ function isValidEmail(email: string): boolean {
  */
 export async function sendLeadNotificationEmail(lead: Lead): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY
-  const adminEmail = process.env.ADMIN_EMAIL
+  const adminEmailRaw = process.env.ADMIN_EMAIL
 
   // Skip if email is not configured
-  if (!apiKey || !adminEmail) {
+  if (!apiKey || !adminEmailRaw) {
     console.warn(
-      `Admin notification email skipped: RESEND_API_KEY=${!!apiKey}, ADMIN_EMAIL=${!!adminEmail}`
+      `Admin notification email skipped: RESEND_API_KEY=${!!apiKey}, ADMIN_EMAIL=${!!adminEmailRaw}`
     )
     return
   }
 
-  // Validate admin email
-  if (!isValidEmail(adminEmail)) {
-    console.error(`Invalid admin email format: ${adminEmail}`)
+  // Support multiple admin emails (comma-separated)
+  const adminEmails = adminEmailRaw
+    .split(',')
+    .map(email => email.trim())
+    .filter(email => email && isValidEmail(email))
+
+  if (adminEmails.length === 0) {
+    console.error(`No valid admin email found in: ${adminEmailRaw}`)
     return
   }
 
   try {
     const resend = new Resend(apiKey)
     
-    console.log(`Attempting to send admin notification email to: ${adminEmail}`)
+    console.log(`Attempting to send admin notification email to: ${adminEmails.join(', ')}`)
 
     const subject = `New Lead: ${lead.name}${lead.companyName ? ` from ${lead.companyName}` : ''}`
     
@@ -90,17 +95,22 @@ Lead ID: ${lead.id}`.trim()
 
     const fromEmail = getVerifiedSenderEmail()
     
-    console.log(`Sending admin notification from: ${fromEmail}, to: ${adminEmail}, replyTo: ${lead.email}`)
+    console.log(`Sending admin notification from: ${fromEmail}, to: ${adminEmails.join(', ')}, replyTo: ${lead.email}`)
     
-    const result = await resend.emails.send({
-      from: fromEmail, // Fixed verified sender: Resend default (onboarding@resend.dev) or custom from env
-      to: adminEmail, // Admin email from env - can be any valid email
-      replyTo: lead.email, // Admin can reply directly to the lead
-      subject,
-      html: `<pre style="font-family: sans-serif; white-space: pre-wrap;">${body}</pre>`,
-    })
+    // Send to all admin emails
+    const sendPromises = adminEmails.map(adminEmail =>
+      resend.emails.send({
+        from: fromEmail, // Fixed verified sender: Resend default (onboarding@resend.dev) or custom from env
+        to: adminEmail, // Admin email from env - can be any valid email
+        replyTo: lead.email, // Admin can reply directly to the lead
+        subject,
+        html: `<pre style="font-family: sans-serif; white-space: pre-wrap;">${body}</pre>`,
+      })
+    )
 
-    console.log(`Admin notification email sent successfully for lead: ${lead.id}`, result)
+    const results = await Promise.all(sendPromises)
+
+    console.log(`Admin notification emails sent successfully for lead: ${lead.id}`, results)
   } catch (error: any) {
     // Log detailed error but don't throw - email failure shouldn't break form submission
     console.error('Failed to send admin notification email:', {
