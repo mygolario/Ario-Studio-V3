@@ -366,13 +366,13 @@ export const translations = {
         'ario-gold': {
           title: 'آریو گُلد',
           subtitle: 'نسخهٔ مفهومی برای خرید آنلاین طلا با تجربه کاربری ساده و رابط کاربری مدرن.',
-          status: 'مفهوم (Concept)',
+          status: 'کانسپت',
           tags: ['MVP', 'طراحی تجربه کاربری', 'تجارت الکترونیک', 'Next.js'],
         },
         'ario-studio': {
           title: 'آریو استودیو',
           subtitle: 'وب‌سایت نیتیو-هوش‌مصنوعی با تجربهٔ سینمایی و طراحی مبتنی بر موشن.',
-          status: 'منتشر شده',
+          status: 'فعال',
           tags: ['AI-native', 'GSAP', 'Next.js', 'طراحی موشن'],
         },
       },

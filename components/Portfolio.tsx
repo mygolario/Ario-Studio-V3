@@ -34,20 +34,21 @@ export default function Portfolio({ projects: dbProjects = [] }: PortfolioProps)
   
   // Apply translations to projects if available (for Farsi version)
   const projects = rawProjects.map((project) => {
-    // Only apply translations if language is Farsi
-    if (language === 'fa') {
+    // Always check for Farsi translations (default language is 'fa')
+    // Only skip if language is explicitly 'en'
+    if (language !== 'en') {
       const workTranslations = t.work as any
-      if (workTranslations?.projects) {
-        const projectTranslation = workTranslations.projects[project.slug]
+      if (workTranslations?.projects && project.slug) {
+        const projectTranslation = workTranslations.projects[project.slug as keyof typeof workTranslations.projects]
         
         if (projectTranslation) {
-          // Use Farsi translations
+          // Use Farsi translations - replace all fields
           return {
             ...project,
-            title: projectTranslation.title || project.title,
-            subtitle: projectTranslation.subtitle || project.subtitle,
-            status: (projectTranslation.status || project.status) as typeof project.status,
-            tags: projectTranslation.tags || project.tags,
+            title: projectTranslation.title,
+            subtitle: projectTranslation.subtitle,
+            status: projectTranslation.status as typeof project.status,
+            tags: projectTranslation.tags,
           }
         }
       }

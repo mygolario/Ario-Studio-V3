@@ -221,8 +221,12 @@ a, button {
 
 /* Farsi-specific typography fixes */
 [dir="rtl"] .text-hero {
-  line-height: 1.35 !important;
+  line-height: 1.4 !important;
   letter-spacing: -0.02em;
+}
+
+[dir="rtl"] .text-hero.md\:text-\[64px\] {
+  line-height: 1.4 !important;
 }
 
 @media (max-width: 768px) {
