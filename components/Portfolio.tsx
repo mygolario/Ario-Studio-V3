@@ -30,19 +30,26 @@ export default function Portfolio({ projects: dbProjects = [] }: PortfolioProps)
       }))
     : getAllProjects()
   
-  // Apply translations to projects if available
+  // Apply translations to projects if available (for Farsi version)
   const projects = rawProjects.map((project) => {
+    // Check if translations exist for this project
     const workTranslations = t.work as any
-    const projectTranslation = workTranslations.projects?.[project.slug]
-    if (projectTranslation) {
-      return {
-        ...project,
-        title: projectTranslation.title,
-        subtitle: projectTranslation.subtitle,
-        status: projectTranslation.status as typeof project.status,
-        tags: projectTranslation.tags,
+    if (workTranslations?.projects) {
+      const projectTranslation = workTranslations.projects[project.slug]
+      
+      if (projectTranslation) {
+        // Use Farsi translations
+        return {
+          ...project,
+          title: projectTranslation.title || project.title,
+          subtitle: projectTranslation.subtitle || project.subtitle,
+          status: (projectTranslation.status || project.status) as typeof project.status,
+          tags: projectTranslation.tags || project.tags,
+        }
       }
     }
+    
+    // Fallback to original project data if no translation found
     return project
   })
 
@@ -96,7 +103,7 @@ export default function Portfolio({ projects: dbProjects = [] }: PortfolioProps)
           {/* Projects Grid */}
           {projects.length === 0 ? (
             <div className="text-center py-16">
-              <p className="text-text-secondary">No projects available at the moment.</p>
+              <p className="text-text-secondary rtl:text-right">در حال حاضر پروژه‌ای در دسترس نیست.</p>
             </div>
           ) : (
             <div className="grid md:grid-cols-2 gap-8">
@@ -140,20 +147,20 @@ export default function Portfolio({ projects: dbProjects = [] }: PortfolioProps)
 
                 {/* Content */}
                 <div className="p-6">
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="text-h4 font-semibold text-text-primary group-hover:text-orange transition-colors duration-200">
+                  <div className="flex items-start justify-between mb-2 rtl:flex-row-reverse">
+                    <h3 className="text-h4 font-semibold text-text-primary group-hover:text-orange transition-colors duration-200 rtl:text-right">
                       {project.title}
                     </h3>
-                    <span className="text-label text-text-muted bg-surface-alt border border-border-subtle px-2 py-1 rounded text-xs">
+                    <span className="text-label text-text-muted bg-surface-alt border border-border-subtle px-2 py-1 rounded text-xs rtl:ml-2 rtl:mr-0">
                       {project.status}
                     </span>
                   </div>
-                  <p className="text-body text-text-secondary mb-4">
+                  <p className="text-body text-text-secondary mb-4 rtl:text-right">
                     {project.subtitle}
                   </p>
 
                   {/* Tags */}
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 rtl:flex-row-reverse">
                     {project.tags.map((tag: string) => (
                       <span
                         key={tag}

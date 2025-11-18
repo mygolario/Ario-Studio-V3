@@ -199,7 +199,7 @@ export default function Hero() {
             {/* Main Heading - Layer 1 (closest) */}
             <h1 
               ref={headingRef}
-              className="text-hero md:text-[64px] md:leading-[72px] font-semibold text-text-primary"
+              className="text-hero md:text-[64px] md:leading-[72px] font-semibold text-text-primary rtl:leading-[1.35] rtl:md:leading-[1.35]"
             >
               {t.hero.title}
             </h1>
