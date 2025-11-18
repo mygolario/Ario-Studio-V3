@@ -35,10 +35,14 @@ ADMIN_EMAIL="admin@example.com"
 ADMIN_PASSWORD="your-secure-password"
 NEXTAUTH_SECRET="your-nextauth-secret-key" # Generate with: openssl rand -base64 32
 
-# Optional: Email notifications (for lead form)
-RESEND_API_KEY="your-resend-api-key"
-LEAD_NOTIFICATION_EMAIL="notifications@example.com"
-EMAIL_FROM="onboarding@resend.dev"
+# Email Configuration (Brevo SMTP)
+BREVO_SMTP_HOST="smtp-relay.brevo.com"
+BREVO_SMTP_PORT="587"
+BREVO_SMTP_USER="your-brevo-smtp-login"
+BREVO_SMTP_PASS="your-brevo-smtp-password"
+BREVO_API_KEY="your-brevo-api-key" # Optional
+CONTACT_FROM_EMAIL="info@ariostudio.net" # From email address
+CONTACT_TO_EMAIL="info@ariostudio.net" # Admin inbox for contact messages
 ```
 
 3. Set up the database:
