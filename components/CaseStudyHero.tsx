@@ -54,28 +54,38 @@ export default function CaseStudyHero({ project }: { project: Project }) {
 
           {/* Meta Info */}
           <div className="flex flex-wrap items-center gap-6 mb-8">
-            <div>
-              <span className="text-body-sm text-text-muted">Role</span>
-              <p className="text-body font-medium text-text-primary">{project.role}</p>
-            </div>
-            <div className="w-px h-8 bg-border-subtle" />
-            <div>
-              <span className="text-body-sm text-text-muted">Stack</span>
-              <p className="text-body font-medium text-text-primary">{project.stack.join(', ')}</p>
-            </div>
+            {project.role && (
+              <>
+                <div>
+                  <span className="text-body-sm text-text-muted">Role</span>
+                  <p className="text-body font-medium text-text-primary">{project.role}</p>
+                </div>
+                {project.stack && project.stack.length > 0 && (
+                  <div className="w-px h-8 bg-border-subtle" />
+                )}
+              </>
+            )}
+            {project.stack && project.stack.length > 0 && (
+              <div>
+                <span className="text-body-sm text-text-muted">Stack</span>
+                <p className="text-body font-medium text-text-primary">{project.stack.join(', ')}</p>
+              </div>
+            )}
           </div>
 
           {/* Tags */}
-          <div className="flex flex-wrap gap-3">
-            {project.tags.map((tag) => (
-              <span
-                key={tag}
-                className="text-body-sm font-medium text-text-secondary bg-surface-alt border border-border-subtle px-4 py-1.5 rounded-full hover:border-orange hover:text-orange transition-all duration-200"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
+          {project.tags && project.tags.length > 0 && (
+            <div className="flex flex-wrap gap-3">
+              {project.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="text-body-sm font-medium text-text-secondary bg-surface-alt border border-border-subtle px-4 py-1.5 rounded-full hover:border-orange hover:text-orange transition-all duration-200"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>

@@ -10,12 +10,17 @@ import { getServices, getFeaturedProjects, getProcessSteps, getHighlights } from
 
 export default async function Home() {
   // Fetch all data from database
-  const [services, projects, processSteps, highlights] = await Promise.all([
+  const [services, featuredProjects, processSteps, highlights] = await Promise.all([
     getServices().catch(() => []),
     getFeaturedProjects().catch(() => []),
     getProcessSteps().catch(() => []),
     getHighlights('about').catch(() => []),
   ])
+
+  // Use featured projects, or fallback to first 3 projects if no featured
+  const projects = featuredProjects.length > 0 
+    ? featuredProjects.slice(0, 3)
+    : []
 
   return (
     <main className="relative">

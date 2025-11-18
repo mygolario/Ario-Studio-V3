@@ -18,7 +18,7 @@ export default function AdminNav() {
   const navItems = [
     { href: '/admin', label: 'Dashboard' },
     { href: '/admin/leads', label: 'Leads' },
-    // { href: '/admin/projects', label: 'Projects' }, // Placeholder for future
+    { href: '/admin/projects', label: 'Projects' },
   ]
 
   return (

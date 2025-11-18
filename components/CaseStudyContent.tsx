@@ -53,65 +53,71 @@ export default function CaseStudyContent({ project }: { project: Project }) {
         </div>
       </section>
 
-      {/* Problem Section */}
-      <section
-        ref={problemRef}
-        className="relative py-16 md:py-24 overflow-hidden bg-base"
-      >
-        <div className="container-custom">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-h2 font-semibold text-text-primary mb-6">
-              Problem
-            </h2>
-            <p className="text-body-lg text-text-secondary leading-relaxed">
-              {project.problem}
-            </p>
+      {/* Problem Section - Only show if problem exists */}
+      {project.problem && (
+        <section
+          ref={problemRef}
+          className="relative py-16 md:py-24 overflow-hidden bg-base"
+        >
+          <div className="container-custom">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-h2 font-semibold text-text-primary mb-6">
+                Problem
+              </h2>
+              <p className="text-body-lg text-text-secondary leading-relaxed">
+                {project.problem}
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Solution Section */}
-      <section
-        ref={solutionRef}
-        className="relative py-16 md:py-24 overflow-hidden bg-surface-alt"
-      >
-        <div className="container-custom">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-h2 font-semibold text-text-primary mb-6">
-              Solution
-            </h2>
-            <p className="text-body-lg text-text-secondary leading-relaxed">
-              {project.solution}
-            </p>
+      {/* Solution Section - Only show if solution exists */}
+      {project.solution && (
+        <section
+          ref={solutionRef}
+          className="relative py-16 md:py-24 overflow-hidden bg-surface-alt"
+        >
+          <div className="container-custom">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-h2 font-semibold text-text-primary mb-6">
+                Solution
+              </h2>
+              <p className="text-body-lg text-text-secondary leading-relaxed">
+                {project.solution}
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Highlights Section */}
-      <section
-        ref={highlightsRef}
-        className="relative py-16 md:py-24 overflow-hidden bg-base"
-      >
-        <div className="container-custom">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-h2 font-semibold text-text-primary mb-8">
-              Key Highlights
-            </h2>
-            <ul className="space-y-4">
-              {project.highlights.map((highlight, index) => (
-                <li key={index} className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-orange/10 border border-orange/20 flex items-center justify-center mt-1">
-                    <div className="w-2 h-2 rounded-full bg-orange" />
-                  </div>
-                  <p className="text-body-lg text-text-secondary leading-relaxed flex-1">
-                    {highlight}
-                  </p>
-                </li>
-              ))}
-            </ul>
+      {/* Highlights Section - Only show if highlights exist */}
+      {project.highlights && project.highlights.length > 0 && (
+        <section
+          ref={highlightsRef}
+          className="relative py-16 md:py-24 overflow-hidden bg-base"
+        >
+          <div className="container-custom">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-h2 font-semibold text-text-primary mb-8">
+                Key Highlights
+              </h2>
+              <ul className="space-y-4">
+                {project.highlights.map((highlight, index) => (
+                  <li key={index} className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-orange/10 border border-orange/20 flex items-center justify-center mt-1">
+                      <div className="w-2 h-2 rounded-full bg-orange" />
+                    </div>
+                    <p className="text-body-lg text-text-secondary leading-relaxed flex-1">
+                      {highlight}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Additional Sections */}
       {project.sections && project.sections.length > 0 && (

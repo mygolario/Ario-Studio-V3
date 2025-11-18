@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { getProjectBySlug as getDbProjectBySlug } from '@/lib/db'
 import { getProjectBySlug, getAllProjects } from '@/data/projects'
 import CaseStudyHero from '@/components/CaseStudyHero'
@@ -113,14 +114,17 @@ function adaptDbProjectToComponent(dbProject: DbProject) {
     role: dbProject.role || 'Design & Build',
     tags: dbProject.tags || [],
     thumbnail: dbProject.thumbnailUrl || undefined,
-    heroImage: dbProject.heroImageUrl || undefined,
+    heroImage: dbProject.heroImageUrl || dbProject.thumbnailUrl || undefined,
     overview: dbProject.longDescription || dbProject.shortDescription || '',
-    problem: 'TODO: Add problem description', // Database doesn't have this field yet
-    solution: 'TODO: Add solution description', // Database doesn't have this field yet
-    stack: [], // Database doesn't have this field yet
-    highlights: [], // Database doesn't have this field yet
+    problem: '', // Not in DB schema yet
+    solution: '', // Not in DB schema yet
+    stack: dbProject.tags || [], // Use tags as stack for now
+    highlights: [], // Not in DB schema yet
     status: dbProject.liveUrl ? ('Live' as const) : ('In development' as const),
     sections: [],
+    year: dbProject.year,
+    clientName: dbProject.clientName,
+    liveUrl: dbProject.liveUrl,
   }
 }
 
@@ -186,11 +190,42 @@ export default async function CaseStudyPage({ params }: { params: { slug: string
         </div>
       </div>
 
+      {/* Hero Image (if available) */}
+      {project.heroImage && (
+        <div className="relative w-full h-[60vh] min-h-[400px] bg-surface-alt overflow-hidden">
+          <Image
+            src={project.heroImage}
+            alt={project.title}
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+      )}
+
       {/* Hero Section */}
       <CaseStudyHero project={project} />
 
       {/* Content Sections */}
       <CaseStudyContent project={project} />
+
+      {/* Live URL Link */}
+      {project.liveUrl && (
+        <section className="relative py-16 md:py-24 overflow-hidden bg-surface-alt">
+          <div className="container-custom">
+            <div className="max-w-4xl mx-auto text-center">
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-8 py-4 rounded-full bg-orange text-pure-white font-medium hover:brightness-105 active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2"
+              >
+                Visit Live Site →
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* CTA Section */}
       <section className="relative py-32 overflow-hidden bg-surface-alt">

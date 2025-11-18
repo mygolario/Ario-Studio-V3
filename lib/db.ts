@@ -60,6 +60,91 @@ export async function getProjectBySlug(slug: string) {
   })
 }
 
+export async function getProjectById(id: string) {
+  return await prisma.project.findUnique({
+    where: { id },
+  })
+}
+
+export interface CreateProjectInput {
+  title: string
+  slug?: string
+  shortDescription: string
+  longDescription?: string
+  tags?: string[]
+  thumbnailUrl?: string
+  heroImageUrl?: string
+  year?: number
+  clientName?: string
+  role?: string
+  liveUrl?: string
+  isFeatured?: boolean
+  order?: number
+}
+
+export interface UpdateProjectInput {
+  title?: string
+  slug?: string
+  shortDescription?: string
+  longDescription?: string
+  tags?: string[]
+  thumbnailUrl?: string
+  heroImageUrl?: string
+  year?: number
+  clientName?: string
+  role?: string
+  liveUrl?: string
+  isFeatured?: boolean
+  order?: number
+}
+
+export async function createProject(data: CreateProjectInput) {
+  return await prisma.project.create({
+    data: {
+      title: data.title,
+      slug: data.slug || '',
+      shortDescription: data.shortDescription,
+      longDescription: data.longDescription,
+      tags: data.tags || [],
+      thumbnailUrl: data.thumbnailUrl,
+      heroImageUrl: data.heroImageUrl,
+      year: data.year,
+      clientName: data.clientName,
+      role: data.role,
+      liveUrl: data.liveUrl,
+      isFeatured: data.isFeatured || false,
+      order: data.order || 100,
+    },
+  })
+}
+
+export async function updateProject(id: string, data: UpdateProjectInput) {
+  return await prisma.project.update({
+    where: { id },
+    data: {
+      ...(data.title && { title: data.title }),
+      ...(data.slug !== undefined && { slug: data.slug }),
+      ...(data.shortDescription && { shortDescription: data.shortDescription }),
+      ...(data.longDescription !== undefined && { longDescription: data.longDescription }),
+      ...(data.tags !== undefined && { tags: data.tags }),
+      ...(data.thumbnailUrl !== undefined && { thumbnailUrl: data.thumbnailUrl }),
+      ...(data.heroImageUrl !== undefined && { heroImageUrl: data.heroImageUrl }),
+      ...(data.year !== undefined && { year: data.year }),
+      ...(data.clientName !== undefined && { clientName: data.clientName }),
+      ...(data.role !== undefined && { role: data.role }),
+      ...(data.liveUrl !== undefined && { liveUrl: data.liveUrl }),
+      ...(data.isFeatured !== undefined && { isFeatured: data.isFeatured }),
+      ...(data.order !== undefined && { order: data.order }),
+    },
+  })
+}
+
+export async function deleteProject(id: string) {
+  return await prisma.project.delete({
+    where: { id },
+  })
+}
+
 // ==================== Process Steps ====================
 
 export async function getProcessSteps() {

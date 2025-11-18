@@ -5,10 +5,13 @@ import Link from 'next/link'
 import { animateSectionReveal } from '@/lib/gsapClient'
 import { getAllProjects } from '@/data/projects'
 import { Copy } from '@/content/copy'
-import { Project } from '@prisma/client'
+import { getFeaturedProjects } from '@/lib/db'
+
+// Type for database project
+type DbProject = Awaited<ReturnType<typeof getFeaturedProjects>>[0]
 
 interface PortfolioProps {
-  projects?: Project[]
+  projects?: DbProject[]
 }
 
 export default function Portfolio({ projects: dbProjects = [] }: PortfolioProps) {
@@ -16,13 +19,13 @@ export default function Portfolio({ projects: dbProjects = [] }: PortfolioProps)
   
   // Use database projects if available, otherwise fallback to static data
   const projects = dbProjects.length > 0
-    ? dbProjects.map((project) => ({
+    ? dbProjects.map((project: DbProject) => ({
         slug: project.slug,
         title: project.title,
         subtitle: project.shortDescription || '',
         tags: project.tags || [],
         thumbnail: project.thumbnailUrl || undefined,
-        status: 'Live' as const, // Default status, can be enhanced later
+        status: project.liveUrl ? ('Live' as const) : ('In development' as const),
       }))
     : getAllProjects()
 
