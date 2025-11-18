@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/contexts/ThemeContext'
+import { LanguageProvider } from '@/contexts/LanguageContext'
 import PageTransition from '@/components/ui/PageTransition'
 import { Analytics } from '@vercel/analytics/react'
 
@@ -67,7 +68,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="fa" dir="rtl" className="scroll-smooth">
       <head>
         {/* Structured Data - Organization */}
         <script
@@ -84,7 +85,7 @@ export default function RootLayout({
               sameAs: [],
               contactPoint: {
                 '@type': 'ContactPoint',
-                email: 'hello@ariostudio.com',
+                email: 'info@ariostudio.net',
                 contactType: 'Customer Service',
               },
             }),
@@ -112,11 +113,13 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.variable} font-sans antialiased transition-colors duration-300`}>
-        <ThemeProvider>
-          <PageTransition>
-            {children}
-          </PageTransition>
-        </ThemeProvider>
+        <LanguageProvider>
+          <ThemeProvider>
+            <PageTransition>
+              {children}
+            </PageTransition>
+          </ThemeProvider>
+        </LanguageProvider>
         <Analytics />
       </body>
     </html>

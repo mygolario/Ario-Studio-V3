@@ -153,3 +153,61 @@ a, button {
   }
 }
 
+/* RTL Support */
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="ltr"] {
+  direction: ltr;
+  text-align: left;
+}
+
+/* RTL-specific adjustments */
+[dir="rtl"] .rtl\:left-auto {
+  left: auto;
+}
+
+[dir="rtl"] .rtl\:-right-4 {
+  right: -1rem;
+}
+
+/* RTL spacing adjustments for common patterns */
+[dir="rtl"] .ml-1 {
+  margin-left: 0;
+  margin-right: 0.25rem;
+}
+
+[dir="rtl"] .mr-1 {
+  margin-right: 0;
+  margin-left: 0.25rem;
+}
+
+/* Responsive typography improvements */
+@media (max-width: 640px) {
+  .text-hero {
+    font-size: 2.5rem;
+    line-height: 3rem;
+  }
+  
+  .text-h1 {
+    font-size: 2rem;
+    line-height: 2.5rem;
+  }
+  
+  .text-h2 {
+    font-size: 1.75rem;
+    line-height: 2.25rem;
+  }
+}
+
+/* Prevent horizontal scroll */
+body {
+  overflow-x: hidden;
+}
+
+* {
+  max-width: 100%;
+}
+

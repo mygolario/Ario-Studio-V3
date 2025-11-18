@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useTransition } from 'react'
 import { motion } from 'framer-motion'
 import Button from './Button'
 import { animateSectionReveal } from '@/lib/gsapClient'
-import { Copy } from '@/content/copy'
+import { useTranslation } from '@/lib/useTranslation'
 import { createLeadAction, type CreateLeadActionResult } from '@/app/actions/create-lead'
 
 /**
@@ -21,6 +21,7 @@ import { createLeadAction, type CreateLeadActionResult } from '@/app/actions/cre
  * - Handle success/error responses appropriately
  */
 export default function StartProjectSection() {
+  const t = useTranslation()
   const sectionRef = useRef<HTMLElement>(null)
   const [isPending, startTransition] = useTransition()
   const [result, setResult] = useState<CreateLeadActionResult | null>(null)
@@ -34,23 +35,9 @@ export default function StartProjectSection() {
     message: '',
   })
 
-  const services = Copy.startProject.services
-
-  const projectTypes = [
-    'Full website',
-    'Frontend only',
-    'AI automation',
-    'Consulting',
-    'Other',
-  ]
-
-  const budgetRanges = [
-    '< $2k',
-    '$2k–$5k',
-    '$5k–$10k',
-    '$10k+',
-    'Not sure yet',
-  ]
+  const services = t.startProject.services
+  const projectTypes = t.projectTypes
+  const budgetRanges = t.budgetRanges
 
   useEffect(() => {
     if (sectionRef.current) {
@@ -168,7 +155,7 @@ export default function StartProjectSection() {
               className="mb-4"
             >
               <span className="text-label text-orange uppercase tracking-wider font-medium">
-                {Copy.startProject.label}
+                {t.startProject.label}
               </span>
             </motion.div>
 
@@ -177,7 +164,7 @@ export default function StartProjectSection() {
               {/* Glow effect behind heading */}
               <div className="absolute inset-0 bg-gradient-to-r from-orange/20 via-orange/10 to-orange/20 blur-3xl opacity-50 -z-10" />
               <h2 className="text-h1 md:text-[56px] md:leading-[64px] font-semibold text-text-primary mb-4 relative z-10">
-                {Copy.startProject.title}
+                {t.startProject.title}
               </h2>
             </div>
             
@@ -192,7 +179,7 @@ export default function StartProjectSection() {
               transition={{ duration: 0.8, ease: 'power3.out', delay: 0.2 }}
               className="text-body-lg md:text-xl text-text-secondary max-w-2xl mx-auto leading-relaxed mb-12"
             >
-              {Copy.startProject.subtitle}
+              {t.startProject.subtitle}
             </motion.p>
 
             {/* CTA Buttons - Staggered */}
@@ -212,7 +199,7 @@ export default function StartProjectSection() {
                 whileTap={{ scale: 0.97 }}
               >
                 <Button href="#contact-form" variant="primary" className="!px-10 !py-5 !text-lg">
-                  {Copy.startProject.ctaPrimary}
+                  {t.startProject.ctaPrimary}
                 </Button>
               </motion.div>
               <motion.div
@@ -224,7 +211,7 @@ export default function StartProjectSection() {
                 whileTap={{ scale: 0.97 }}
               >
                 <Button href="#contact-form" variant="secondary" icon={false} className="!px-10 !py-5 !text-lg">
-                  {Copy.startProject.ctaSecondary}
+                  {t.startProject.ctaSecondary}
                 </Button>
               </motion.div>
             </motion.div>
@@ -244,7 +231,7 @@ export default function StartProjectSection() {
               <div className="space-y-8">
                 <div>
                   <h3 className="text-h4 font-semibold text-text-primary mb-6">
-                    What we can help with
+                    {t.form.whatWeCanHelp}
                   </h3>
                   <div className="flex flex-wrap gap-3">
                     {services.map((service, index) => (
@@ -273,13 +260,13 @@ export default function StartProjectSection() {
                 {/* Additional Info */}
                 <div className="pt-8 border-t border-border-subtle">
                   <p className="text-body-sm text-text-muted mb-4">
-                    We respond within 24 hours.
+                    {t.form.weRespond}
                   </p>
                   <a
-                    href="mailto:hello@ariostudio.com"
+                    href="mailto:info@ariostudio.net"
                     className="text-body-lg text-text-secondary hover:text-orange transition-colors"
                   >
-                    hello@ariostudio.com
+                    info@ariostudio.net
                   </a>
                 </div>
               </div>
@@ -316,10 +303,10 @@ export default function StartProjectSection() {
                       </svg>
                     </motion.div>
                     <h3 className="text-h4 font-semibold text-text-primary mb-2">
-                      Thanks for reaching out!
+                      {t.form.thanksForReachingOut}
                     </h3>
                     <p className="text-body text-text-secondary">
-                      We&apos;ll get back to you soon.
+                      {t.form.weWillGetBack}
                     </p>
                   </div>
                 ) : (
@@ -330,7 +317,7 @@ export default function StartProjectSection() {
                         htmlFor="name"
                         className="block text-body-sm font-medium text-text-primary mb-2"
                       >
-                        Name <span className="text-orange">*</span>
+                        {t.form.name} <span className="text-orange">*</span>
                       </label>
                       <input
                         type="text"
@@ -343,7 +330,7 @@ export default function StartProjectSection() {
                             ? 'border-red-500 focus:ring-red-500'
                             : 'border-border-subtle'
                         }`}
-                        placeholder="Your name"
+                        placeholder={t.form.yourName}
                       />
                       {errors.name && (
                         <p className="mt-1 text-body-sm text-red-500">{errors.name}</p>
@@ -356,7 +343,7 @@ export default function StartProjectSection() {
                         htmlFor="email"
                         className="block text-body-sm font-medium text-text-primary mb-2"
                       >
-                        Email <span className="text-orange">*</span>
+                        {t.form.email} <span className="text-orange">*</span>
                       </label>
                       <input
                         type="email"
@@ -369,7 +356,7 @@ export default function StartProjectSection() {
                             ? 'border-red-500 focus:ring-red-500'
                             : 'border-border-subtle'
                         }`}
-                        placeholder="your.email@example.com"
+                        placeholder={t.form.yourEmail}
                       />
                       {errors.email && (
                         <p className="mt-1 text-body-sm text-red-500">{errors.email}</p>
@@ -382,7 +369,7 @@ export default function StartProjectSection() {
                         htmlFor="projectType"
                         className="block text-body-sm font-medium text-text-primary mb-2"
                       >
-                        Project type
+                        {t.form.projectType}
                       </label>
                       <select
                         id="projectType"
@@ -391,7 +378,7 @@ export default function StartProjectSection() {
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 rounded-lg border border-border-subtle bg-base text-text-primary focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:border-orange transition-all duration-200"
                       >
-                        <option value="">Select a type</option>
+                        <option value="">{t.form.selectType}</option>
                         {projectTypes.map((type) => (
                           <option key={type} value={type}>
                             {type}
@@ -406,7 +393,7 @@ export default function StartProjectSection() {
                         htmlFor="budget"
                         className="block text-body-sm font-medium text-text-primary mb-2"
                       >
-                        Approximate budget
+                        {t.form.approximateBudget}
                       </label>
                       <select
                         id="budget"
@@ -415,7 +402,7 @@ export default function StartProjectSection() {
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 rounded-lg border border-border-subtle bg-base text-text-primary focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:border-orange transition-all duration-200"
                       >
-                        <option value="">Select a range</option>
+                        <option value="">{t.form.selectBudget}</option>
                         {budgetRanges.map((range) => (
                           <option key={range} value={range}>
                             {range}
@@ -430,7 +417,7 @@ export default function StartProjectSection() {
                         htmlFor="message"
                         className="block text-body-sm font-medium text-text-primary mb-2"
                       >
-                        Project details <span className="text-orange">*</span>
+                        {t.form.projectDetails} <span className="text-orange">*</span>
                       </label>
                       <textarea
                         id="message"
@@ -443,7 +430,7 @@ export default function StartProjectSection() {
                             ? 'border-red-500 focus:ring-red-500'
                             : 'border-border-subtle'
                         }`}
-                        placeholder="Tell us about your project..."
+                        placeholder={t.form.tellUsAbout}
                       />
                       {errors.message && (
                         <p className="mt-1 text-body-sm text-red-500">{errors.message}</p>
@@ -479,11 +466,11 @@ export default function StartProjectSection() {
                                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                               />
                             </svg>
-                            Sending...
+                            {t.form.submitting}
                           </span>
                         ) : (
                           <>
-                            <span>Start Your Project</span>
+                            <span>{t.form.startYourProject}</span>
                             <svg
                               className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
                               fill="none"

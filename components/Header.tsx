@@ -6,10 +6,13 @@ import { Menu, X, ChevronDown } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import Button from './Button'
 import ThemeToggle from './ThemeToggle'
+import LanguageToggle from './LanguageToggle'
 import { useActiveSection } from '@/lib/useActiveSection'
+import { useTranslation } from '@/lib/useTranslation'
 
 export default function Header() {
   const pathname = usePathname()
+  const t = useTranslation()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null)
@@ -93,11 +96,11 @@ export default function Header() {
   }
 
   const navItems = [
-    { label: 'Services', href: '#services', hasMegaMenu: true, id: 'services' },
-    { label: 'Work', href: '/#portfolio', id: 'portfolio' },
-    { label: 'Process', href: '#philosophy', id: 'philosophy' },
-    { label: 'About', href: '#about', id: 'about' },
-    { label: 'Contact', href: '#contact', id: 'contact' },
+    { label: t.nav.services, href: '#services', hasMegaMenu: true, id: 'services' },
+    { label: t.nav.work, href: '/#portfolio', id: 'portfolio' },
+    { label: t.nav.process, href: '#philosophy', id: 'philosophy' },
+    { label: t.nav.about, href: '#about', id: 'about' },
+    { label: t.nav.contact, href: '#contact', id: 'contact' },
   ]
 
   const handleMouseEnter = (label: string) => {
@@ -243,15 +246,16 @@ export default function Header() {
               })}
             </nav>
 
-            {/* Theme Toggle & CTA */}
-            <div className="hidden lg:flex items-center gap-6">
+            {/* Language Toggle, Theme Toggle & CTA */}
+            <div className="hidden lg:flex items-center gap-4">
+              <LanguageToggle />
               <ThemeToggle />
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
                 <Button href="#contact" variant="secondary" className="!px-6 !py-3 relative group/cta" icon={false}>
-                  <span className="relative z-10">Start a Project</span>
+                  <span className="relative z-10">{t.startProject.ctaPrimary}</span>
                   <motion.span
                     className="absolute inset-0 bg-orange/10 rounded-full opacity-0 group-hover/cta:opacity-100 transition-opacity duration-300"
                     style={{ transform: 'scale(1.1)' }}
@@ -456,12 +460,13 @@ export default function Header() {
               </div>
             ))}
             <div className="mt-4 space-y-3">
-              <div onClick={() => setIsMobileMenuOpen(false)}>
+              <div onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3">
+                <LanguageToggle />
                 <ThemeToggle />
               </div>
               <div onClick={() => setIsMobileMenuOpen(false)}>
                 <Button href="#contact" variant="primary" className="w-full" icon={false}>
-                  Start a Project
+                  {t.startProject.ctaPrimary}
                 </Button>
               </div>
             </div>

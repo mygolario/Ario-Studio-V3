@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react'
 import { CheckCircle2, Clock, Code2, Sparkles, Users } from 'lucide-react'
 import { animateSectionReveal } from '@/lib/gsapClient'
-import { Copy } from '@/content/copy'
+import { useTranslation } from '@/lib/useTranslation'
 
 /**
  * Trust & Guarantees Section
@@ -16,6 +16,7 @@ import { Copy } from '@/content/copy'
  * - Icons available from lucide-react
  */
 export default function TrustGuarantees() {
+  const t = useTranslation()
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -35,14 +36,14 @@ export default function TrustGuarantees() {
   }, [])
 
   const iconMap: Record<string, typeof Clock> = {
-    'Clear timelines & communication': Clock,
-    'Production-grade engineering': Code2,
-    'Cinematic UX & motion systems': Sparkles,
-    'AI-native architecture': CheckCircle2,
-    'Founder-friendly execution': Users,
+    [t.trust.items[0].title]: Clock,
+    [t.trust.items[1].title]: Code2,
+    [t.trust.items[2].title]: Sparkles,
+    [t.trust.items[3].title]: CheckCircle2,
+    [t.trust.items[4].title]: Users,
   }
 
-  const trustItems = Copy.trust.items.map((item) => ({
+  const trustItems = t.trust.items.map((item) => ({
     ...item,
     icon: iconMap[item.title] || CheckCircle2,
   }))
@@ -59,13 +60,13 @@ export default function TrustGuarantees() {
           <div className="text-center mb-16">
             <div className="mb-6">
               <h2 className="text-h1 font-semibold text-text-primary mb-4">
-                {Copy.trust.title}
+                {t.trust.title}
               </h2>
               {/* Section accent line */}
               <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full mx-auto" />
             </div>
             <p className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
-              {Copy.trust.subtitle}
+              {t.trust.subtitle}
             </p>
           </div>
 

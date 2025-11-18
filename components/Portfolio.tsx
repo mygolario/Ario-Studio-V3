@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { animateSectionReveal } from '@/lib/gsapClient'
 import { getAllProjects } from '@/data/projects'
-import { Copy } from '@/content/copy'
+import { useTranslation } from '@/lib/useTranslation'
 import { getFeaturedProjects } from '@/lib/db'
 
 // Type for database project
@@ -15,6 +15,7 @@ interface PortfolioProps {
 }
 
 export default function Portfolio({ projects: dbProjects = [] }: PortfolioProps) {
+  const t = useTranslation()
   const sectionRef = useRef<HTMLElement>(null)
   
   // Use database projects if available, otherwise fallback to static data
@@ -66,13 +67,13 @@ export default function Portfolio({ projects: dbProjects = [] }: PortfolioProps)
           <div className="text-center mb-16">
             <div className="mb-6">
               <h2 className="text-h1 font-semibold text-text-primary mb-4">
-                {Copy.work.title}
+                {t.work.title}
               </h2>
               {/* Section accent line */}
               <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full mx-auto" />
             </div>
             <p className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
-              {Copy.work.subtitle}
+              {t.work.subtitle}
             </p>
           </div>
 

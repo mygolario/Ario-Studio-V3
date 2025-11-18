@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Palette, Code, Zap } from 'lucide-react'
 import { animateSectionReveal } from '@/lib/gsapClient'
-import { Copy } from '@/content/copy'
+import { useTranslation } from '@/lib/useTranslation'
 import { Service } from '@prisma/client'
 
 interface ServicesProps {
@@ -12,6 +12,7 @@ interface ServicesProps {
 }
 
 export default function Services({ services = [] }: ServicesProps) {
+  const t = useTranslation()
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -32,7 +33,7 @@ export default function Services({ services = [] }: ServicesProps) {
   
   const serviceIcons = [Palette, Code, Zap]
   
-  // Use database services if available, otherwise fallback to copy
+  // Use database services if available, otherwise fallback to translations
   const serviceGroups = services.length > 0
     ? services.map((service, index) => {
         const items = Array.isArray(service.items) ? service.items : []
@@ -45,7 +46,7 @@ export default function Services({ services = [] }: ServicesProps) {
           pillLabel: service.pillLabel || service.title,
         }
       })
-    : Copy.services.items.map((item, index) => ({
+    : t.services.items.map((item, index) => ({
         id: item.title.toLowerCase().replace(/\s+/g, '-'),
         icon: serviceIcons[index] || Palette,
         title: item.title,
@@ -89,17 +90,17 @@ export default function Services({ services = [] }: ServicesProps) {
                 className="mb-4"
               >
                 <span className="text-label text-orange uppercase tracking-wider font-medium">
-                  {Copy.services.label}
+                  {t.services.label}
                 </span>
               </motion.div>
               <h2 className="text-h1 font-semibold text-text-primary mb-4">
-                {Copy.services.title}
+                {t.services.title}
               </h2>
               {/* Section accent line */}
               <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full mx-auto" />
             </div>
             <p className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
-              {Copy.services.subtitle}
+              {t.services.subtitle}
             </p>
           </div>
 

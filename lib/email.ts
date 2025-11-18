@@ -39,7 +39,7 @@ function getBrevoTransporter() {
  * Get the "From" email address from environment variables
  */
 function getFromEmail(): string {
-  return process.env.CONTACT_FROM_EMAIL || process.env.ADMIN_EMAIL || ''
+  return process.env.CONTACT_FROM_EMAIL || process.env.ADMIN_EMAIL || 'info@ariostudio.net'
 }
 
 /**
@@ -298,7 +298,7 @@ This is an automated confirmation email.
  * @param lead - The lead record to send notification about
  */
 export async function sendLeadNotificationEmail(lead: Lead): Promise<void> {
-  const adminEmailRaw = process.env.CONTACT_TO_EMAIL || process.env.ADMIN_EMAIL
+  const adminEmailRaw = process.env.CONTACT_TO_EMAIL || process.env.ADMIN_EMAIL || 'info@ariostudio.net'
 
   // CONTACT_TO_EMAIL/ADMIN_EMAIL is optional - if not set, skip admin notification
   // User auto-reply will still be sent via sendLeadAutoReplyEmail

@@ -2,9 +2,10 @@
 
 import { motion } from 'framer-motion'
 import { Linkedin, Twitter, Instagram, Github } from 'lucide-react'
-import { Copy } from '@/content/copy'
+import { useTranslation } from '@/lib/useTranslation'
 
 export default function Footer() {
+  const t = useTranslation()
   const currentYear = new Date().getFullYear()
 
   const socialLinks = [
@@ -15,31 +16,31 @@ export default function Footer() {
   ]
 
   const footerLinks = {
-    Company: [
-      { label: 'About', href: '#about' },
-      { label: 'Services', href: '#services' },
-      { label: 'Portfolio', href: '#portfolio' },
-      { label: 'Contact', href: '#contact' },
+    [t.footerLinks.company]: [
+      { label: t.footerLinks.about, href: '#about' },
+      { label: t.footerLinks.services, href: '#services' },
+      { label: t.footerLinks.portfolio, href: '#portfolio' },
+      { label: t.footerLinks.contact, href: '#contact' },
     ],
-    Resources: [
-      { label: 'Blog', href: '#' },
-      { label: 'Case Studies', href: '#portfolio' },
-      { label: 'Careers', href: '#' },
-      { label: 'Press Kit', href: '#' },
+    [t.footerLinks.resources]: [
+      { label: t.footerLinks.blog, href: '#' },
+      { label: t.footerLinks.caseStudies, href: '#portfolio' },
+      { label: t.footerLinks.careers, href: '#' },
+      { label: t.footerLinks.pressKit, href: '#' },
     ],
-    Legal: [
-      { label: 'Privacy Policy', href: '#' },
-      { label: 'Terms of Service', href: '#' },
-      { label: 'Cookie Policy', href: '#' },
+    [t.footerLinks.legal]: [
+      { label: t.footerLinks.privacyPolicy, href: '#' },
+      { label: t.footerLinks.termsOfService, href: '#' },
+      { label: t.footerLinks.cookiePolicy, href: '#' },
     ],
   }
 
   return (
     <footer className="relative border-t border-border-subtle bg-surface-alt">
-      <div className="container-custom py-16">
-        <div className="grid md:grid-cols-4 gap-12 mb-12">
+      <div className="container-custom py-12 md:py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-8 md:mb-12">
           {/* Brand Column */}
-          <div className="md:col-span-1">
+          <div className="sm:col-span-2 lg:col-span-1">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -48,11 +49,11 @@ export default function Footer() {
               className="relative"
             >
               <div className="relative">
-                <h3 className="text-2xl font-semibold text-text-primary mb-4 relative z-10">
+                <h3 className="text-xl md:text-2xl font-semibold text-text-primary mb-4 relative z-10">
                   Ario Studio
                 </h3>
                 <motion.div
-                  className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-orange/30 to-transparent opacity-50"
+                  className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-orange/30 to-transparent opacity-50 rtl:left-auto rtl:-right-4"
                   initial={{ scaleY: 0 }}
                   whileInView={{ scaleY: 1 }}
                   viewport={{ once: true }}
@@ -60,10 +61,10 @@ export default function Footer() {
                 />
               </div>
               <p className="text-body-sm text-text-secondary mb-6">
-                {Copy.footer.description}
+                {t.footer.description}
               </p>
               {/* Social Links */}
-              <div className="flex gap-4">
+              <div className="flex gap-3 md:gap-4 flex-wrap">
                 {socialLinks.map((social) => {
                   const Icon = social.icon
                   return (
@@ -97,7 +98,7 @@ export default function Footer() {
                   {category}
                 </h4>
                 <motion.div
-                  className="absolute -left-2 top-0 bottom-0 w-1 bg-gradient-to-b from-orange/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  className="absolute -left-2 top-0 bottom-0 w-1 bg-gradient-to-b from-orange/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rtl:left-auto rtl:-right-2"
                   initial={{ scaleY: 0 }}
                   whileInView={{ scaleY: 1 }}
                   viewport={{ once: true }}
@@ -118,7 +119,7 @@ export default function Footer() {
                         initial={{ scaleX: 0 }}
                         whileHover={{ scaleX: 1 }}
                         transition={{ duration: 0.2, ease: 'easeOut' }}
-                        style={{ transformOrigin: 'left' }}
+                        style={{ transformOrigin: 'var(--dir, left)' }}
                       />
                     </motion.a>
                   </li>
@@ -136,12 +137,12 @@ export default function Footer() {
           transition={{ duration: 0.6 }}
           className="pt-8 border-t border-border-subtle flex flex-col md:flex-row justify-between items-center gap-4"
         >
-                      <p className="text-body-sm text-text-muted">
-                        © {currentYear} Ario Studio. All rights reserved.
-                      </p>
-                      <p className="text-body-sm text-text-muted">
-                        {Copy.footer.tagline}
-                      </p>
+          <p className="text-body-sm text-text-muted text-center md:text-left">
+            © {currentYear} Ario Studio. {t.common.allRightsReserved}.
+          </p>
+          <p className="text-body-sm text-text-muted text-center md:text-right">
+            {t.footer.tagline}
+          </p>
         </motion.div>
       </div>
     </footer>

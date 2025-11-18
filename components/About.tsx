@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { CheckCircle2 } from 'lucide-react'
 import { animateSectionReveal } from '@/lib/gsapClient'
-import { Copy } from '@/content/copy'
+import { useTranslation } from '@/lib/useTranslation'
 import { Highlight } from '@prisma/client'
 
 interface AboutProps {
@@ -12,6 +12,7 @@ interface AboutProps {
 }
 
 export default function About({ highlights: dbHighlights = [] }: AboutProps) {
+  const t = useTranslation()
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -61,11 +62,11 @@ export default function About({ highlights: dbHighlights = [] }: AboutProps) {
                 className="mb-4"
               >
                 <span className="text-label text-orange uppercase tracking-wider font-medium">
-                  {Copy.about.label}
+                  {t.about.label}
                 </span>
               </motion.div>
               <h2 className="text-h1 font-semibold text-text-primary mb-4">
-                {Copy.about.title}
+                {t.about.title}
               </h2>
               {/* Section accent line */}
               <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full mx-auto" />
@@ -77,7 +78,7 @@ export default function About({ highlights: dbHighlights = [] }: AboutProps) {
               transition={{ duration: 0.8, ease: 'power3.out', delay: 0.2 }}
               className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed"
             >
-              {Copy.about.subtitle}
+              {t.about.subtitle}
             </motion.p>
           </div>
 
@@ -90,12 +91,12 @@ export default function About({ highlights: dbHighlights = [] }: AboutProps) {
             className="bg-surface border border-border-subtle rounded-xl p-8 md:p-12"
           >
             <h3 className="text-h4 font-semibold text-text-primary mb-6">
-              {Copy.about.subSectionTitle}
+              {t.about.subSectionTitle}
             </h3>
             <ul className="grid md:grid-cols-2 gap-4">
               {(dbHighlights.length > 0
                 ? dbHighlights.map((h) => h.title)
-                : Copy.about.principles
+                : t.about.principles
               ).map((principle, index) => (
                 <motion.li
                   key={principle}

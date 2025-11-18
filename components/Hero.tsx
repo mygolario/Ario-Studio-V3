@@ -6,7 +6,7 @@ import { ChevronDown } from 'lucide-react'
 import Button from './Button'
 import { animateHeroIntro, applyHeroParallax, prefersReducedMotion } from '@/lib/gsapClient'
 import HeroBackground from './HeroBackground'
-import { Copy } from '@/content/copy'
+import { useTranslation } from '@/lib/useTranslation'
 
 /**
  * Hero Section
@@ -14,6 +14,7 @@ import { Copy } from '@/content/copy'
  * Cinematic, AI-studio style hero with layered background, smooth motion, and clear CTAs.
  */
 export default function Hero() {
+  const t = useTranslation()
   const cardRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const cardWrapperRef = useRef<HTMLDivElement>(null)
@@ -191,7 +192,7 @@ export default function Hero() {
               className="inline-block"
             >
               <span className="text-label text-orange uppercase tracking-wider font-medium">
-                {Copy.hero.eyebrow}
+                {t.hero.eyebrow}
               </span>
             </motion.div>
 
@@ -200,7 +201,7 @@ export default function Hero() {
               ref={headingRef}
               className="text-hero md:text-[64px] md:leading-[72px] font-semibold text-text-primary"
             >
-              {Copy.hero.title}
+              {t.hero.title}
             </h1>
 
             {/* Subtext - Layer 2 */}
@@ -208,7 +209,7 @@ export default function Hero() {
               ref={subheadingRef}
               className="text-body-lg md:text-xl text-text-secondary max-w-xl leading-relaxed"
             >
-              {Copy.hero.subtitle}
+              {t.hero.subtitle}
             </p>
 
             {/* Supporting Line */}
@@ -219,12 +220,12 @@ export default function Hero() {
               transition={{ duration: 0.6, ease: 'easeOut', delay: 0.3 }}
               className="text-body text-text-secondary max-w-xl leading-relaxed"
             >
-              {Copy.hero.supportingLine}
+              {t.hero.supportingLine}
             </motion.p>
 
             {/* Visual Chips - Layer 2 */}
             <div ref={chipsRef} className="flex flex-wrap gap-3 pt-2">
-              {Copy.hero.chips.map((chip) => (
+              {t.hero.chips.map((chip) => (
                 <span
                   key={chip}
                   data-chip
@@ -239,12 +240,12 @@ export default function Hero() {
             <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 pt-4">
               <div data-button>
                 <Button href="#portfolio" variant="primary">
-                  {Copy.hero.ctaPrimary}
+                  {t.hero.ctaPrimary}
                 </Button>
               </div>
               <div data-button>
                 <Button href="#contact" variant="secondary" icon={false}>
-                  {Copy.hero.ctaSecondary}
+                  {t.hero.ctaSecondary}
                 </Button>
               </div>
             </div>
@@ -385,7 +386,7 @@ export default function Hero() {
           animate={{ opacity: hasScrolled ? 0 : [0.6, 1, 0.6] }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
         >
-          {Copy.hero.scrollIndicator}
+          {t.hero.scrollIndicator}
         </motion.span>
         <motion.div
           animate={{ y: [0, 8, 0] }}

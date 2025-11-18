@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { animateSectionReveal } from '@/lib/gsapClient'
-import { Copy } from '@/content/copy'
+import { useTranslation } from '@/lib/useTranslation'
 import { ProcessStep } from '@prisma/client'
 
 interface DesignEthosProps {
@@ -11,6 +11,7 @@ interface DesignEthosProps {
 }
 
 export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosProps) {
+  const t = useTranslation()
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -66,14 +67,14 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
     }
   }, [])
 
-  // Use database process steps if available, otherwise fallback to copy
+  // Use database process steps if available, otherwise fallback to translations
   const processSteps = dbSteps.length > 0
     ? dbSteps.map((step, index) => ({
         number: String(index + 1).padStart(2, '0'),
         title: step.title,
         description: step.description,
       }))
-    : Copy.process.steps
+    : t.process.steps
 
   return (
     <section
@@ -98,17 +99,17 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
                 className="mb-4"
               >
                 <span className="text-label text-orange uppercase tracking-wider font-medium">
-                  {Copy.process.label}
+                  {t.process.label}
                 </span>
               </motion.div>
               <h2 className="text-h1 font-semibold text-text-primary mb-4">
-                {Copy.process.title}
+                {t.process.title}
               </h2>
               {/* Section accent line */}
               <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full mx-auto" />
             </div>
             <p className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
-              {Copy.process.subtitle}
+              {t.process.subtitle}
             </p>
           </div>
 
