@@ -208,7 +208,7 @@ Return ONLY the case study content, no other text or formatting.`
 
     if (!response.ok) {
       const errorText = await response.text()
-      console.error('OpenAI API error:', response.status, errorText)
+      console.error(`${provider === 'liara' ? 'Liara' : 'OpenAI'} API error:`, response.status, errorText)
       return null
     }
 
@@ -216,7 +216,7 @@ Return ONLY the case study content, no other text or formatting.`
     const content = data.choices?.[0]?.message?.content
 
     if (!content) {
-      console.error('No content in OpenAI response')
+      console.error(`No content in ${provider === 'liara' ? 'Liara' : 'OpenAI'} response`)
       return null
     }
 
