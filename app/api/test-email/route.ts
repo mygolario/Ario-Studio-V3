@@ -7,7 +7,11 @@ import { Resend } from 'resend'
  * GET /api/test-email?to=test@example.com
  * 
  * This endpoint tests if Resend email sending is working correctly.
+ * 
+ * This route must be dynamic because it uses searchParams.
  */
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
