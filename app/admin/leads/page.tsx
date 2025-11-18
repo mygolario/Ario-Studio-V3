@@ -58,7 +58,7 @@ export default async function LeadsPage({
                 </tr>
               </thead>
               <tbody>
-                {leads.map((lead) => (
+                {leads.map((lead: Awaited<ReturnType<typeof getLeads>>[0]) => (
                   <tr
                     key={lead.id}
                     className="border-b border-border-subtle hover:bg-surface-alt transition-colors"
