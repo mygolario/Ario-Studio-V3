@@ -7,7 +7,9 @@
 
 **مثال:**
 ```bash
-ADMIN_EMAIL="kavehtkts@gmail.com,ariokaveh85@gmail.com"
+ADMIN_EMAIL="kavehtkts@gmail.com"
+# یا برای چند ایمیل:
+ADMIN_EMAIL="kavehtkts@gmail.com,email2@gmail.com"
 ```
 
 ### 2. استفاده از فرستنده پیش‌فرض Resend
