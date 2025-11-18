@@ -13,9 +13,24 @@ export const LeadEnrichmentSchema = z.object({
 export type LeadEnrichment = z.infer<typeof LeadEnrichmentSchema>
 
 /**
+ * Get AI configuration based on provider
+ */
+function getAIConfig() {
+  const provider = process.env.AI_PROVIDER || 'openai'
+  const apiKey = provider === 'liara' 
+    ? process.env.API_KEY 
+    : process.env.OPENAI_API_KEY
+  const baseUrl = provider === 'liara'
+    ? process.env.BASE_URL || 'https://ai.liara.ir/api/v1'
+    : 'https://api.openai.com/v1'
+  
+  return { provider, apiKey, baseUrl }
+}
+
+/**
  * AI Client for enriching leads with structured data
  * 
- * Uses OpenAI API (or compatible provider) to analyze lead information
+ * Uses OpenAI API or Liara AI (OpenAI-compatible) to analyze lead information
  * and return structured insights.
  */
 export async function enrichLeadWithAI(input: {
@@ -27,11 +42,11 @@ export async function enrichLeadWithAI(input: {
   servicesNeeded?: string[] | null
   message: string
 }): Promise<LeadEnrichment | null> {
-  const apiKey = process.env.OPENAI_API_KEY
+  const { apiKey, baseUrl, provider } = getAIConfig()
 
   // If no API key, return null early (graceful degradation)
   if (!apiKey) {
-    console.warn('OPENAI_API_KEY not configured. AI enrichment skipped.')
+    console.warn(`${provider === 'liara' ? 'API_KEY' : 'OPENAI_API_KEY'} not configured. AI enrichment skipped.`)
     return null
   }
 
@@ -60,8 +75,8 @@ Please provide a JSON response with the following structure:
 
 Return ONLY valid JSON, no other text.`
 
-    // Call OpenAI API
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    // Call AI API (OpenAI or Liara)
+    const response = await fetch(`${baseUrl}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -86,7 +101,7 @@ Return ONLY valid JSON, no other text.`
 
     if (!response.ok) {
       const errorText = await response.text()
-      console.error('OpenAI API error:', response.status, errorText)
+      console.error(`${provider === 'liara' ? 'Liara' : 'OpenAI'} API error:`, response.status, errorText)
       return null
     }
 
@@ -94,7 +109,7 @@ Return ONLY valid JSON, no other text.`
     const content = data.choices?.[0]?.message?.content
 
     if (!content) {
-      console.error('No content in OpenAI response')
+      console.error(`No content in ${provider === 'liara' ? 'Liara' : 'OpenAI'} response`)
       return null
     }
 
@@ -136,10 +151,10 @@ export async function generateCaseStudyDraft(input: {
   results: string
   projectTitle?: string
 }): Promise<string | null> {
-  const apiKey = process.env.OPENAI_API_KEY
+  const { apiKey, baseUrl, provider } = getAIConfig()
 
   if (!apiKey) {
-    console.warn('OPENAI_API_KEY not configured. AI draft generation skipped.')
+    console.warn(`${provider === 'liara' ? 'API_KEY' : 'OPENAI_API_KEY'} not configured. AI draft generation skipped.`)
     return null
   }
 
@@ -169,7 +184,7 @@ Write a compelling case study draft that:
 
 Return ONLY the case study content, no other text or formatting.`
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch(`${baseUrl}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
