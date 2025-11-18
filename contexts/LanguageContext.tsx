@@ -38,8 +38,10 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
         html.setAttribute('dir', 'ltr')
         html.setAttribute('lang', 'en')
       }
-      // Save preference
+      // Save preference to localStorage
       localStorage.setItem('language', language)
+      // Save preference to cookie for server-side access
+      document.cookie = `language=${language}; path=/; max-age=31536000; SameSite=Lax`
     }
   }, [language, mounted])
 

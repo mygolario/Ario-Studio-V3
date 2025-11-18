@@ -48,6 +48,9 @@ export {
   type SupportedLang,
 } from './get-request-lang'
 
+// Re-export server-side language detection
+export { getServerLang } from './get-server-lang'
+
 // Convenience alias for getTranslation
 export { getTranslation as t } from './server-i18n'
 

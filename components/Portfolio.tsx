@@ -3,64 +3,48 @@
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { animateSectionReveal } from '@/lib/gsapClient'
-import { getAllProjects } from '@/data/projects'
 import { useTranslation } from '@/lib/useTranslation'
-import { useLanguage } from '@/contexts/LanguageContext'
-import { getFeaturedProjects } from '@/lib/db'
-
-// Type for database project
-type DbProject = Awaited<ReturnType<typeof getFeaturedProjects>>[0]
+import { type LocalizedContent } from '@/lib/content/types'
 
 interface PortfolioProps {
-  projects?: DbProject[]
+  portfolioContent?: LocalizedContent[]
 }
 
-export default function Portfolio({ projects: dbProjects = [] }: PortfolioProps) {
+export default function Portfolio({ portfolioContent = [] }: PortfolioProps) {
   const t = useTranslation()
-  const { language } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
   
-  // Use database projects if available, otherwise fallback to static data
-  const rawProjects = dbProjects.length > 0
-    ? dbProjects.map((project: DbProject) => ({
-        slug: project.slug,
-        title: project.title,
-        subtitle: project.shortDescription || '',
-        tags: project.tags || [],
-        thumbnail: project.thumbnailUrl || undefined,
-        status: project.liveUrl ? ('Live' as const) : ('In development' as const),
-      }))
-    : getAllProjects()
-  
-  // Apply translations to projects if available (for Farsi version)
-  // Default language is 'fa', so always try to use Farsi unless explicitly 'en'
-  const projects = rawProjects.map((project) => {
-    // Check if we should use Farsi (default is 'fa')
-    const useFarsi = language !== 'en'
+  // Map LocalizedContent to project format for UI
+  const projects = portfolioContent.map((item) => {
+    // Determine status from content (you can add status field to Content model later)
+    // For now, we'll use a default status
+    let status: 'Live' | 'In development' | 'Concept' | 'Internal project' = 'In development'
     
-    if (useFarsi) {
-      // Get Farsi translations from the translation object
-      const workTranslations = (t.work as any)?.projects
-      
-      if (workTranslations && project.slug) {
-        // Look up translation by slug
-        const faTranslation = workTranslations[project.slug]
-        
-        if (faTranslation) {
-          // Replace all fields with Farsi translations
-          return {
-            ...project,
-            title: faTranslation.title,
-            subtitle: faTranslation.subtitle,
-            status: faTranslation.status as typeof project.status,
-            tags: faTranslation.tags,
-          }
+    // Try to extract status from tags or use default
+    if (item.tags && item.tags.length > 0) {
+      const statusTag = item.tags.find(tag => 
+        tag.toLowerCase().includes('live') || 
+        tag.toLowerCase().includes('فعال') ||
+        tag.toLowerCase().includes('concept') ||
+        tag.toLowerCase().includes('کانسپت')
+      )
+      if (statusTag) {
+        if (statusTag.toLowerCase().includes('live') || statusTag.includes('فعال')) {
+          status = 'Live'
+        } else if (statusTag.toLowerCase().includes('concept') || statusTag.includes('کانسپت')) {
+          status = 'Concept'
         }
       }
     }
     
-    // Return original English data if language is EN or translation not found
-    return project
+    return {
+      slug: item.slug,
+      title: item.title,
+      subtitle: item.excerpt || item.subtitle || item.body || '',
+      tags: item.tags || [],
+      thumbnail: undefined, // Can be extended later if needed
+      status: status,
+    }
   })
 
   useEffect(() => {

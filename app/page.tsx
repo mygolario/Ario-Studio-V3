@@ -7,24 +7,24 @@ import About from '@/components/About'
 import StartProjectSection from '@/components/StartProjectSection'
 import Footer from '@/components/Footer'
 import BetaNotice from '@/components/BetaNotice'
-import { getServices, getFeaturedProjects, getProcessSteps, getHighlights } from '@/lib/db'
+import { getProcessSteps, getHighlights } from '@/lib/db'
+import { getServerLang } from '@/lib/i18n'
+import { getLocalizedContentList } from '@/lib/content/queries'
 
 // Revalidate homepage every 60 seconds
 export const revalidate = 60
 
 export default async function Home() {
-  // Fetch all data from database
-  const [services, featuredProjects, processSteps, highlights] = await Promise.all([
-    getServices().catch(() => []),
-    getFeaturedProjects().catch(() => []),
+  // Detect language from server context
+  const lang = await getServerLang()
+
+  // Fetch multilingual content from new API
+  const [servicesContent, portfolioContent, processSteps, highlights] = await Promise.all([
+    getLocalizedContentList('service', lang).catch(() => []),
+    getLocalizedContentList('portfolio', lang).catch(() => []),
     getProcessSteps().catch(() => []),
     getHighlights('about').catch(() => []),
   ])
-
-  // Use featured projects, or fallback to first 3 projects if no featured
-  const projects = featuredProjects.length > 0 
-    ? featuredProjects.slice(0, 3)
-    : []
 
   return (
     <main className="relative">
@@ -34,9 +34,9 @@ export default async function Home() {
       {/* Beta Notice (Farsi only) */}
       <BetaNotice />
       {/* Scene 2: WHAT WE DO */}
-      <Services services={services} />
+      <Services servicesContent={servicesContent} />
       {/* Scene 3: OUR WORK */}
-      <Portfolio projects={projects} />
+      <Portfolio portfolioContent={portfolioContent} />
       {/* Scene 4: OUR PROCESS */}
       <DesignEthos processSteps={processSteps} />
       {/* Scene 5: ABOUT ARIO STUDIO */}

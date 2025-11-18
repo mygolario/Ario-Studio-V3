@@ -5,13 +5,13 @@ import { motion } from 'framer-motion'
 import { Palette, Code, Zap } from 'lucide-react'
 import { animateSectionReveal } from '@/lib/gsapClient'
 import { useTranslation } from '@/lib/useTranslation'
-import { Service } from '@prisma/client'
+import { type LocalizedContent } from '@/lib/content/types'
 
 interface ServicesProps {
-  services?: Service[]
+  servicesContent?: LocalizedContent[]
 }
 
-export default function Services({ services = [] }: ServicesProps) {
+export default function Services({ servicesContent = [] }: ServicesProps) {
   const t = useTranslation()
   const sectionRef = useRef<HTMLElement>(null)
 
@@ -33,17 +33,22 @@ export default function Services({ services = [] }: ServicesProps) {
   
   const serviceIcons = [Palette, Code, Zap]
   
-  // Use database services if available, otherwise fallback to translations
-  const serviceGroups = services.length > 0
-    ? services.map((service, index) => {
-        const items = Array.isArray(service.items) ? service.items : []
+  // Use multilingual content from API if available, otherwise fallback to translations
+  const serviceGroups = servicesContent.length > 0
+    ? servicesContent.map((service, index) => {
+        // For services, tags are used as bullet points (items)
+        // The seed data stores descriptive bullet points in the tags array
+        const items: string[] = service.tags && Array.isArray(service.tags) 
+          ? service.tags 
+          : []
+        
         return {
-          id: service.slug || service.title.toLowerCase().replace(/\s+/g, '-'),
+          id: service.slug || service.id,
           icon: serviceIcons[index] || Palette,
           title: service.title,
-          description: service.subtitle || '',
-          items: items as string[],
-          pillLabel: service.pillLabel || service.title,
+          description: service.excerpt || service.subtitle || service.body?.substring(0, 200) || '',
+          items: items,
+          pillLabel: service.subtitle || service.title,
         }
       })
     : t.services.items.map((item, index) => ({
