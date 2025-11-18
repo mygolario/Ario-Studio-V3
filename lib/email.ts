@@ -11,12 +11,13 @@ import { Resend } from 'resend'
  */
 export async function sendLeadNotificationEmail(lead: Lead): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY
-  const toEmail = process.env.LEAD_NOTIFICATION_EMAIL || process.env.ADMIN_EMAIL
+  // Send notification to the lead's email (the person who submitted the form)
+  const toEmail = lead.email
 
   // Skip if email is not configured
   if (!apiKey || !toEmail) {
     console.warn(
-      `Email notification skipped: RESEND_API_KEY=${!!apiKey}, toEmail=${!!toEmail}, LEAD_NOTIFICATION_EMAIL=${process.env.LEAD_NOTIFICATION_EMAIL}, ADMIN_EMAIL=${process.env.ADMIN_EMAIL}`
+      `Email notification skipped: RESEND_API_KEY=${!!apiKey}, toEmail=${!!toEmail}, lead.email=${lead.email}`
     )
     return
   }
@@ -26,11 +27,14 @@ export async function sendLeadNotificationEmail(lead: Lead): Promise<void> {
     
     console.log(`Attempting to send lead notification email to: ${toEmail}`)
 
-    const subject = `New Lead: ${lead.name}${lead.companyName ? ` from ${lead.companyName}` : ''}`
+    const subject = `Thank you for contacting Ario Studio - We've received your inquiry`
     
-    // Build email body
-    const body = `
-New lead submitted from ${lead.source}
+    // Build email body - confirmation email to the lead
+    const body = `Hi ${lead.name},
+
+Thank you for reaching out to Ario Studio! We've successfully received your project inquiry.
+
+Here's a summary of what you submitted:
 
 Contact Information:
 - Name: ${lead.name}
@@ -44,12 +48,20 @@ ${lead.servicesNeeded && lead.servicesNeeded.length > 0
   ? `- Services Needed: ${lead.servicesNeeded.join(', ')}`
   : ''}
 
-Message:
+Your Message:
 ${lead.message}
 
 ---
+Next Steps:
+Our team will review your project details and get back to you within 24-48 hours. In the meantime, feel free to explore our work at https://ario-studio-v3.vercel.app/work.
+
+If you have any urgent questions, don't hesitate to reach out directly.
+
+Best regards,
+Ario Studio Team
+
 Submitted: ${lead.createdAt.toLocaleString()}
-Lead ID: ${lead.id}
+Reference ID: ${lead.id}
     `.trim()
 
     const fromEmail = process.env.ARIO_STUDIO_FROM_EMAIL || process.env.EMAIL_FROM || 'Ario Studio <onboarding@resend.dev>'
