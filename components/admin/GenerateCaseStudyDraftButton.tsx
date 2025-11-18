@@ -54,7 +54,7 @@ export default function GenerateCaseStudyDraftButton({
           <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20">
             <p className="text-body-sm text-green-500 mb-2">Draft generated successfully!</p>
             <p className="text-body-sm text-text-secondary">
-              Review the draft below and copy it to the Content field if you'd like to use it.
+              Review the draft below and copy it to the Content field if you&apos;d like to use it.
             </p>
           </div>
           <div className="bg-base border border-border-subtle rounded-lg p-4">

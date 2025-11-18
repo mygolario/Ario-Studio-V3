@@ -162,7 +162,7 @@ export default async function LeadDetailPage({
               </div>
             ) : (
               <div className="text-body-sm text-text-muted italic">
-                No AI insights yet. Click "Re-run AI analysis" to generate insights.
+                No AI insights yet. Click &quot;Re-run AI analysis&quot; to generate insights.
               </div>
             )}
           </div>
