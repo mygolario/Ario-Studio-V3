@@ -4,15 +4,21 @@ import { Resend } from 'resend'
 /**
  * Get the fixed verified sender email address
  * 
- * This MUST be a verified domain/sender in Resend.
+ * IMPORTANT: We do NOT have a custom domain verified in Resend.
+ * Therefore, we MUST use Resend's default verified sender.
+ * 
+ * Resend provides a default verified sender for all accounts:
+ * - onboarding@resend.dev (default for new accounts)
+ * 
  * Never use the user's email as the "from" address.
+ * Never use a custom domain email unless it's verified in Resend.
  */
 function getVerifiedSenderEmail(): string {
-  // Priority: ARIO_STUDIO_FROM_EMAIL > EMAIL_FROM > fallback
-  // The fallback should be replaced with your actual verified domain
+  // Priority: ARIO_STUDIO_FROM_EMAIL > EMAIL_FROM > Resend default
+  // If no custom sender is set, use Resend's default verified sender
   return process.env.ARIO_STUDIO_FROM_EMAIL || 
          process.env.EMAIL_FROM || 
-         'Ario Studio <noreply@yourdomain.com>'
+         'onboarding@resend.dev' // Resend's default verified sender (works without custom domain)
 }
 
 /**
@@ -87,7 +93,7 @@ Lead ID: ${lead.id}`.trim()
     console.log(`Sending admin notification from: ${fromEmail}, to: ${adminEmail}, replyTo: ${lead.email}`)
     
     const result = await resend.emails.send({
-      from: fromEmail, // Fixed verified sender - MUST be verified in Resend
+      from: fromEmail, // Fixed verified sender: Resend default (onboarding@resend.dev) or custom from env
       to: adminEmail, // Admin email from env - can be any valid email
       replyTo: lead.email, // Admin can reply directly to the lead
       subject,
@@ -142,13 +148,13 @@ export async function sendLeadAutoReplyEmail(lead: Lead): Promise<void> {
 
     const subject = 'Thanks for contacting Ario Studio'
 
-    const fromEmail = getVerifiedSenderEmail() // Fixed verified sender - MUST be verified in Resend
+    const fromEmail = getVerifiedSenderEmail() // Fixed verified sender: Resend default (onboarding@resend.dev) or custom from env
     
     console.log(`Sending user confirmation from: ${fromEmail}, to: ${formEmail}`)
     
     const result = await resend.emails.send({
-      from: fromEmail, // Fixed verified sender: "Ario Studio <noreply@yourdomain.com>"
-      to: formEmail, // Form email - ANY valid email address entered by the user
+      from: fromEmail, // Fixed verified sender: Resend default (onboarding@resend.dev) - works without custom domain
+      to: formEmail, // Form email - ANY valid email address entered by the user (no restrictions)
       subject,
       html: `
         <p>Hi ${lead.name},</p>
