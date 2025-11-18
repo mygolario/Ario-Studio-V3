@@ -19,7 +19,7 @@ export default function Portfolio({ projects: dbProjects = [] }: PortfolioProps)
   const sectionRef = useRef<HTMLElement>(null)
   
   // Use database projects if available, otherwise fallback to static data
-  const projects = dbProjects.length > 0
+  const rawProjects = dbProjects.length > 0
     ? dbProjects.map((project: DbProject) => ({
         slug: project.slug,
         title: project.title,
@@ -29,6 +29,22 @@ export default function Portfolio({ projects: dbProjects = [] }: PortfolioProps)
         status: project.liveUrl ? ('Live' as const) : ('In development' as const),
       }))
     : getAllProjects()
+  
+  // Apply translations to projects if available
+  const projects = rawProjects.map((project) => {
+    const workTranslations = t.work as any
+    const projectTranslation = workTranslations.projects?.[project.slug]
+    if (projectTranslation) {
+      return {
+        ...project,
+        title: projectTranslation.title,
+        subtitle: projectTranslation.subtitle,
+        status: projectTranslation.status as typeof project.status,
+        tags: projectTranslation.tags,
+      }
+    }
+    return project
+  })
 
   useEffect(() => {
     if (sectionRef.current) {
@@ -138,7 +154,7 @@ export default function Portfolio({ projects: dbProjects = [] }: PortfolioProps)
 
                   {/* Tags */}
                   <div className="flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
+                    {project.tags.map((tag: string) => (
                       <span
                         key={tag}
                         className="text-label text-text-muted bg-surface-alt border border-border-subtle px-3 py-1 rounded-full hover:border-orange hover:text-orange hover:bg-orange/5 transition-all duration-200 cursor-default"

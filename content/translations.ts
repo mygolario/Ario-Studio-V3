@@ -7,9 +7,12 @@
 
 export const translations = {
   fa: {
+    brand: {
+      name: 'آریو استودیو',
+    },
     hero: {
       eyebrow: 'استودیو وب مبتنی بر هوش مصنوعی',
-      title: 'ما تجربیات وب سینمایی و مبتنی بر هوش مصنوعی طراحی و می‌سازیم.',
+      title: 'ما تجربه‌های وب سینمایی و هوش‌مصنوعی‌محور طراحی و خلق می‌کنیم.',
       subtitle: 'طراحی سطح بالا، انیمیشن‌های بیانگر و سیستم‌های هوشمند—ساخته شده برای برندهایی که بیشتر می‌خواهند.',
       supportingLine: 'از مفهوم تا راه‌اندازی، ما داستان‌سرایی بصری، مهندسی مدرن و اتوماسیون هوش مصنوعی را ترکیب می‌کنیم تا تجربیاتی بسازیم که زنده به نظر می‌رسند.',
       ctaPrimary: 'مشاهده کارها',
@@ -242,6 +245,9 @@ export const translations = {
     },
   },
   en: {
+    brand: {
+      name: 'Ario Studio',
+    },
     hero: {
       eyebrow: 'AI-driven web studio',
       title: 'We design and build cinematic, AI-powered web experiences.',
@@ -345,8 +351,28 @@ export const translations = {
       ],
     },
     work: {
-      title: 'Our Work',
-      subtitle: 'Selected work and ongoing projects.',
+      title: 'کارهای ما',
+      subtitle: 'نمونه‌ای از پروژه‌ها و سیستم‌هایی که برای برندها و کسب‌وکارها طراحی و ساخته‌ایم.',
+      projects: {
+        'ario-account': {
+          title: 'آریو اکانت',
+          subtitle: 'مارکت‌پلیس دیجیتال برای اکانت‌های گیمینگ و ابزارهای هوش مصنوعی با فرایند سفارش خودکار.',
+          status: 'در حال توسعه',
+          tags: ['Next.js', 'تجارت الکترونیک', 'اتوماسیون', 'هوش مصنوعی'],
+        },
+        'ario-gold': {
+          title: 'آریو گلد',
+          subtitle: 'MVP مفهومی برای تجربه خرید آنلاین طلا با رابط کاربری تمیز و تجربه کاربری مدرن.',
+          status: 'مفهوم (Concept)',
+          tags: ['Next.js', 'تجارت الکترونیک', 'UI/UX', 'MVP'],
+        },
+        'ario-studio': {
+          title: 'آریو استودیو',
+          subtitle: 'وب‌سایت استودیوی آریو با تجربه کاربری سینمایی و طراحی مبتنی بر موشن.',
+          status: 'منتشر شده',
+          tags: ['Next.js', 'GSAP', 'هوش مصنوعی', 'موشن دیزاین'],
+        },
+      },
     },
     about: {
       label: 'About',

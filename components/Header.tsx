@@ -134,7 +134,7 @@ export default function Header() {
               whileHover={{ opacity: 0.8 }}
               whileTap={{ scale: 0.98 }}
             >
-              <span className="relative z-10">Ario Studio</span>
+              <span className="relative z-10">{t.brand.name}</span>
               <motion.span
                 className="absolute inset-0 bg-orange/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 style={{ transform: 'scale(1.5)' }}
