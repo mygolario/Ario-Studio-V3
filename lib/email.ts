@@ -69,7 +69,7 @@ Lead ID: ${lead.id}
     `.trim()
 
     await resend.emails.send({
-      from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
+      from: process.env.ARION_STUDIO_FROM_EMAIL || process.env.EMAIL_FROM || 'onboarding@resend.dev',
       to: toEmail,
       subject,
       text: body,
