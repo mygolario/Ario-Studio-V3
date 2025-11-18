@@ -43,6 +43,13 @@ interface Translations {
     autoReplySubject: string
     autoReplyBody: string
   }
+  debug: {
+    langDetected: string
+    langFromQuery: string
+    langFromHeader: string
+    langFromAccept: string
+    langDefault: string
+  }
 }
 
 const translations: Record<Language, Translations> = {
@@ -64,6 +71,13 @@ const translations: Record<Language, Translations> = {
       autoReplySubject: 'Thank you for contacting Ario Studio',
       autoReplyBody: 'We have received your message and will get back to you within 24 hours.',
     },
+    debug: {
+      langDetected: 'Language detected successfully',
+      langFromQuery: 'Language detected from query parameter',
+      langFromHeader: 'Language detected from custom header',
+      langFromAccept: 'Language detected from Accept-Language header',
+      langDefault: 'Language set to default (English)',
+    },
   },
   fa: {
     contact: {
@@ -82,6 +96,13 @@ const translations: Record<Language, Translations> = {
       contactOutro: 'لطفاً در اسرع وقت به این درخواست پاسخ دهید.',
       autoReplySubject: 'با تشکر از تماس شما با آریو استودیو',
       autoReplyBody: 'پیام شما دریافت شد و در عرض ۲۴ ساعت با شما تماس خواهیم گرفت.',
+    },
+    debug: {
+      langDetected: 'زبان با موفقیت تشخیص داده شد',
+      langFromQuery: 'زبان از پارامتر query تشخیص داده شد',
+      langFromHeader: 'زبان از هدر سفارشی تشخیص داده شد',
+      langFromAccept: 'زبان از هدر Accept-Language تشخیص داده شد',
+      langDefault: 'زبان به پیش‌فرض (انگلیسی) تنظیم شد',
     },
   },
 }

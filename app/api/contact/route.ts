@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { sendContactEmail, sendAutoReplyEmail } from "@/lib/email/brevo";
-import { getRequestLang } from "@/lib/i18n/get-request-lang";
-import { getTranslation } from "@/lib/i18n/server-i18n";
+import { getRequestLang, getTranslation } from "@/lib/i18n";
+import { jsonSuccess, jsonError, jsonValidationError } from "@/lib/api/response";
 
 /**
  * Contact form API route
@@ -20,24 +20,21 @@ export async function POST(req: NextRequest) {
 
     // Validation with i18n messages
     if (!name || name.trim().length === 0) {
-      return NextResponse.json(
-        { success: false, error: t("contact.validation.nameRequired") },
-        { status: 400 }
-      );
+      return jsonValidationError(lang, "contact.validation.nameRequired", {
+        name: t("contact.validation.nameRequired"),
+      });
     }
 
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return NextResponse.json(
-        { success: false, error: t("contact.validation.emailInvalid") },
-        { status: 400 }
-      );
+      return jsonValidationError(lang, "contact.validation.emailInvalid", {
+        email: t("contact.validation.emailInvalid"),
+      });
     }
 
     if (!message || message.trim().length === 0) {
-      return NextResponse.json(
-        { success: false, error: t("contact.validation.messageRequired") },
-        { status: 400 }
-      );
+      return jsonValidationError(lang, "contact.validation.messageRequired", {
+        message: t("contact.validation.messageRequired"),
+      });
     }
 
     // Send contact email to admin
@@ -50,10 +47,7 @@ export async function POST(req: NextRequest) {
       }, lang);
     } catch (emailError: any) {
       console.error("Failed to send contact email:", emailError);
-      return NextResponse.json(
-        { success: false, error: t("contact.error") },
-        { status: 500 }
-      );
+      return jsonError(lang, "contact.error", 500);
     }
 
     // Send auto-reply to user (non-blocking, graceful degradation)
@@ -64,26 +58,16 @@ export async function POST(req: NextRequest) {
       console.warn("Failed to send auto-reply email:", autoReplyError);
     }
 
-    return NextResponse.json({
-      success: true,
-      message: t("contact.success")
-    });
+    return jsonSuccess(lang, "contact.success");
   } catch (error: any) {
     console.error("CONTACT_FORM_ERROR", error);
     // Try to get language for error message, but don't fail if it doesn't work
     try {
       const lang = getRequestLang(req);
-      const t = (key: string) => getTranslation(lang, key);
-      return NextResponse.json(
-        { success: false, error: t("contact.error") },
-        { status: 500 }
-      );
+      return jsonError(lang, "contact.error", 500);
     } catch {
       // Fallback to English if language detection fails
-      return NextResponse.json(
-        { success: false, error: "Internal server error" },
-        { status: 500 }
-      );
+      return jsonError('en', "contact.error", 500);
     }
   }
 }

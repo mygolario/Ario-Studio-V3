@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import Button from './Button'
 import { animateSectionReveal } from '@/lib/gsapClient'
 import { useTranslation } from '@/lib/useTranslation'
+import { useLanguage } from '@/contexts/LanguageContext'
 import { createLeadAction, type CreateLeadActionResult } from '@/app/actions/create-lead'
 
 /**
@@ -22,6 +23,7 @@ import { createLeadAction, type CreateLeadActionResult } from '@/app/actions/cre
  */
 export default function StartProjectSection() {
   const t = useTranslation()
+  const { language } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
   const [isPending, startTransition] = useTransition()
   const [result, setResult] = useState<CreateLeadActionResult | null>(null)
@@ -88,6 +90,9 @@ export default function StartProjectSection() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    // Get current language (default to 'en' if not available)
+    const lang = language === 'fa' ? 'fa' : 'en'
+
     // Build servicesNeeded array from selectedService
     const servicesNeeded = selectedService ? [selectedService] : []
 
@@ -106,6 +111,8 @@ export default function StartProjectSection() {
       formDataObj.append('servicesNeeded', servicesNeeded.join(','))
     }
     formDataObj.append('source', 'start_project_form')
+    // Add language to FormData for server action
+    formDataObj.append('lang', lang)
 
     startTransition(async () => {
       const actionResult = await createLeadAction(formDataObj)

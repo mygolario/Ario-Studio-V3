@@ -1,6 +1,5 @@
 import nodemailer from 'nodemailer'
-import { getTranslation } from '@/lib/i18n/server-i18n'
-import { type SupportedLang } from '@/lib/i18n/get-request-lang'
+import { getTranslation, type SupportedLang } from '@/lib/i18n'
 
 /**
  * Contact email payload type
