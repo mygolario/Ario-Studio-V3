@@ -56,26 +56,26 @@ export async function GET(
     const content = await getLocalizedContentBySlug(slug, lang)
 
     if (!content) {
-      // Content not found - return 404
-      return jsonError(lang, 'contact.error', 404, {
-        message: 'Content not found',
+      // Content not found - return 404 with appropriate message
+      return jsonError(lang, 'content.notFound', 404, {
         slug,
       })
     }
 
-    return jsonSuccess(lang, 'contact.success', {
+    return jsonSuccess(lang, 'content.success', {
       item: content,
       lang,
     })
   } catch (error: any) {
+    // Internal error - log for developer, return user-friendly message
     console.error(`Error fetching content by slug (slug: ${params.slug}):`, error)
     
     // Try to get language for error message
     try {
       const lang = getRequestLang(req)
-      return jsonError(lang, 'contact.error', 500)
+      return jsonError(lang, 'content.error', 500)
     } catch {
-      return jsonError('en', 'contact.error', 500)
+      return jsonError('en', 'content.error', 500)
     }
   }
 }

@@ -1,5 +1,6 @@
 import { Lead } from '@prisma/client'
 import nodemailer from 'nodemailer'
+import { getTranslation, type SupportedLang } from '@/lib/i18n'
 
 /**
  * Validate email address format
@@ -45,30 +46,38 @@ function getFromEmail(): string {
 /**
  * Generate HTML email template for lead notifications (admin)
  * Matches Ario Studio's dark, modern, AI/studio vibe
+ * Supports bilingual content (EN/FA)
  */
-function generateLeadNotificationHTML(lead: Lead): string {
-  const dateTime = lead.createdAt.toLocaleString('en-US', {
+function generateLeadNotificationHTML(lead: Lead, lang: SupportedLang = 'en'): string {
+  const t = (key: string) => getTranslation(lang, key)
+  const isRTL = lang === 'fa'
+  const dir = isRTL ? 'rtl' : 'ltr'
+  const textAlign = isRTL ? 'right' : 'left'
+  const fontFamily = isRTL 
+    ? "'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+    : "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+  const dateTime = lead.createdAt.toLocaleString(lang === 'fa' ? 'fa-IR' : 'en-US', {
     dateStyle: 'full',
     timeStyle: 'long',
   })
 
   return `
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${lang}" dir="${dir}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>New Contact from Ario Studio</title>
+  <title>${lang === 'fa' ? 'تماس جدید از آریو استودیو' : 'New Contact from Ario Studio'}</title>
 </head>
-<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #0a0a0a; color: #e5e5e5;">
+<body style="margin: 0; padding: 0; font-family: ${fontFamily}; background-color: #0a0a0a; color: #e5e5e5;">
   <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #0a0a0a;">
     <!-- Header with gradient accent -->
-    <div style="border-left: 4px solid #ff6b35; padding-left: 20px; margin-bottom: 32px;">
+    <div style="border-${isRTL ? 'right' : 'left'}: 4px solid #ff6b35; padding-${isRTL ? 'right' : 'left'}: 20px; margin-bottom: 32px;">
       <h1 style="margin: 0; font-size: 24px; font-weight: 600; color: #ffffff; letter-spacing: -0.5px;">
         Ario Studio
       </h1>
       <p style="margin: 8px 0 0 0; font-size: 14px; color: #a0a0a0; text-transform: uppercase; letter-spacing: 1px;">
-        New Contact
+        ${lang === 'fa' ? 'تماس جدید' : 'New Contact'}
       </p>
     </div>
 
@@ -76,34 +85,34 @@ function generateLeadNotificationHTML(lead: Lead): string {
     <div style="background-color: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; padding: 32px; margin-bottom: 24px;">
       <!-- Contact Information -->
       <div style="margin-bottom: 24px;">
-        <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #ff6b35; text-transform: uppercase; letter-spacing: 0.5px;">
-          Contact Information
+        <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #ff6b35; text-transform: uppercase; letter-spacing: 0.5px; text-align: ${textAlign};">
+          ${lang === 'fa' ? 'اطلاعات تماس' : 'Contact Information'}
         </h3>
         <div style="background-color: #0f0f0f; border-radius: 8px; padding: 16px;">
-          <p style="margin: 8px 0; font-size: 14px; color: #e5e5e5;">
-            <strong style="color: #ffffff;">Name:</strong> ${lead.name}
+          <p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};">
+            <strong style="color: #ffffff;">${lang === 'fa' ? 'نام:' : 'Name:'}</strong> ${lead.name}
           </p>
-          <p style="margin: 8px 0; font-size: 14px; color: #e5e5e5;">
-            <strong style="color: #ffffff;">Email:</strong> 
+          <p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};">
+            <strong style="color: #ffffff;">${lang === 'fa' ? 'ایمیل:' : 'Email:'}</strong> 
             <a href="mailto:${lead.email}" style="color: #ff6b35; text-decoration: none;">
               ${lead.email}
             </a>
           </p>
-          ${lead.companyName ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5;"><strong style="color: #ffffff;">Company:</strong> ${lead.companyName}</p>` : ''}
+          ${lead.companyName ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};"><strong style="color: #ffffff;">${lang === 'fa' ? 'شرکت:' : 'Company:'}</strong> ${lead.companyName}</p>` : ''}
         </div>
       </div>
 
       ${lead.budgetRange || lead.timeline || (lead.servicesNeeded && lead.servicesNeeded.length > 0) ? `
       <!-- Project Details -->
       <div style="margin-bottom: 24px;">
-        <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #ff6b35; text-transform: uppercase; letter-spacing: 0.5px;">
-          Project Details
+        <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #ff6b35; text-transform: uppercase; letter-spacing: 0.5px; text-align: ${textAlign};">
+          ${lang === 'fa' ? 'جزئیات پروژه' : 'Project Details'}
         </h3>
         <div style="background-color: #0f0f0f; border-radius: 8px; padding: 16px;">
-          ${lead.budgetRange ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5;"><strong style="color: #ffffff;">Budget:</strong> ${lead.budgetRange}</p>` : ''}
-          ${lead.timeline ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5;"><strong style="color: #ffffff;">Timeline:</strong> ${lead.timeline}</p>` : ''}
+          ${lead.budgetRange ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};"><strong style="color: #ffffff;">${lang === 'fa' ? 'بودجه:' : 'Budget:'}</strong> ${lead.budgetRange}</p>` : ''}
+          ${lead.timeline ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};"><strong style="color: #ffffff;">${lang === 'fa' ? 'زمان‌بندی:' : 'Timeline:'}</strong> ${lead.timeline}</p>` : ''}
           ${lead.servicesNeeded && lead.servicesNeeded.length > 0
-            ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5;"><strong style="color: #ffffff;">Services Needed:</strong> ${lead.servicesNeeded.join(', ')}</p>`
+            ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};"><strong style="color: #ffffff;">${lang === 'fa' ? 'سرویس‌های مورد نیاز:' : 'Services Needed:'}</strong> ${lead.servicesNeeded.join(', ')}</p>`
             : ''}
         </div>
       </div>
@@ -111,11 +120,11 @@ function generateLeadNotificationHTML(lead: Lead): string {
 
       <!-- Message -->
       <div style="margin-bottom: 24px;">
-        <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #ff6b35; text-transform: uppercase; letter-spacing: 0.5px;">
-          Message
+        <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #ff6b35; text-transform: uppercase; letter-spacing: 0.5px; text-align: ${textAlign};">
+          ${lang === 'fa' ? 'پیام' : 'Message'}
         </h3>
-        <div style="background-color: #0f0f0f; border-radius: 8px; padding: 16px; border-left: 3px solid #ff6b35;">
-          <p style="margin: 0; font-size: 14px; color: #e5e5e5; line-height: 1.6; white-space: pre-wrap;">
+        <div style="background-color: #0f0f0f; border-radius: 8px; padding: 16px; border-${isRTL ? 'right' : 'left'}: 3px solid #ff6b35;">
+          <p style="margin: 0; font-size: 14px; color: #e5e5e5; line-height: 1.6; white-space: pre-wrap; text-align: ${textAlign};">
             ${lead.message.replace(/\n/g, '<br>')}
           </p>
         </div>
@@ -123,28 +132,28 @@ function generateLeadNotificationHTML(lead: Lead): string {
 
       ${lead.aiSummary || lead.aiPriorityScore || (lead.aiTags && lead.aiTags.length > 0) ? `
       <!-- AI Analysis -->
-      <div style="margin-bottom: 24px; padding: 16px; background-color: #1a0f0a; border-radius: 8px; border-left: 3px solid #ff6b35;">
-        <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #ff6b35; text-transform: uppercase; letter-spacing: 0.5px;">
-          AI Analysis
+      <div style="margin-bottom: 24px; padding: 16px; background-color: #1a0f0a; border-radius: 8px; border-${isRTL ? 'right' : 'left'}: 3px solid #ff6b35;">
+        <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #ff6b35; text-transform: uppercase; letter-spacing: 0.5px; text-align: ${textAlign};">
+          ${lang === 'fa' ? 'تحلیل هوش مصنوعی' : 'AI Analysis'}
         </h3>
-        ${lead.aiSummary ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5;"><strong style="color: #ffffff;">Summary:</strong> ${lead.aiSummary}</p>` : ''}
-        ${lead.aiPriorityScore ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5;"><strong style="color: #ffffff;">Priority Score:</strong> ${lead.aiPriorityScore}/5</p>` : ''}
-        ${lead.aiTags && lead.aiTags.length > 0 ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5;"><strong style="color: #ffffff;">Tags:</strong> ${lead.aiTags.join(', ')}</p>` : ''}
+        ${lead.aiSummary ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};"><strong style="color: #ffffff;">${lang === 'fa' ? 'خلاصه:' : 'Summary:'}</strong> ${lead.aiSummary}</p>` : ''}
+        ${lead.aiPriorityScore ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};"><strong style="color: #ffffff;">${lang === 'fa' ? 'امتیاز اولویت:' : 'Priority Score:'}</strong> ${lead.aiPriorityScore}/5</p>` : ''}
+        ${lead.aiTags && lead.aiTags.length > 0 ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};"><strong style="color: #ffffff;">${lang === 'fa' ? 'برچسب‌ها:' : 'Tags:'}</strong> ${lead.aiTags.join(', ')}</p>` : ''}
       </div>
       ` : ''}
 
       <!-- Footer Info -->
-      <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #2a2a2a; font-size: 12px; color: #808080;">
-        <p style="margin: 4px 0;"><strong>Submitted:</strong> ${dateTime}</p>
-        <p style="margin: 4px 0;"><strong>Source:</strong> ${lead.source}</p>
-        <p style="margin: 4px 0;"><strong>Lead ID:</strong> ${lead.id}</p>
+      <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #2a2a2a; font-size: 12px; color: #808080; text-align: ${textAlign};">
+        <p style="margin: 4px 0;"><strong>${lang === 'fa' ? 'ارسال شده:' : 'Submitted:'}</strong> ${dateTime}</p>
+        <p style="margin: 4px 0;"><strong>${lang === 'fa' ? 'منبع:' : 'Source:'}</strong> ${lead.source}</p>
+        <p style="margin: 4px 0;"><strong>${lang === 'fa' ? 'شناسه لید:' : 'Lead ID:'}</strong> ${lead.id}</p>
       </div>
     </div>
 
     <!-- Footer -->
     <div style="text-align: center; padding-top: 24px; border-top: 1px solid #2a2a2a;">
       <p style="margin: 0; font-size: 12px; color: #808080;">
-        This message was sent from the Ario Studio contact form.
+        ${t('email.contactOutro')}
       </p>
     </div>
   </div>
@@ -155,55 +164,57 @@ function generateLeadNotificationHTML(lead: Lead): string {
 
 /**
  * Generate plain text email for lead notifications
+ * Supports bilingual content (EN/FA)
  */
-function generateLeadNotificationText(lead: Lead): string {
-  const dateTime = lead.createdAt.toLocaleString('en-US', {
+function generateLeadNotificationText(lead: Lead, lang: SupportedLang = 'en'): string {
+  const t = (key: string) => getTranslation(lang, key)
+  const dateTime = lead.createdAt.toLocaleString(lang === 'fa' ? 'fa-IR' : 'en-US', {
     dateStyle: 'full',
     timeStyle: 'long',
   })
 
   let text = `
-ARIO STUDIO - NEW CONTACT
+ARIO STUDIO - ${lang === 'fa' ? 'تماس جدید' : 'NEW CONTACT'}
 ${'='.repeat(50)}
 
-CONTACT INFORMATION
+${lang === 'fa' ? 'اطلاعات تماس' : 'CONTACT INFORMATION'}
 ${'-'.repeat(50)}
-Name: ${lead.name}
-Email: ${lead.email}
-${lead.companyName ? `Company: ${lead.companyName}\n` : ''}
+${lang === 'fa' ? 'نام:' : 'Name:'} ${lead.name}
+${lang === 'fa' ? 'ایمیل:' : 'Email:'} ${lead.email}
+${lead.companyName ? `${lang === 'fa' ? 'شرکت:' : 'Company:'} ${lead.companyName}\n` : ''}
 `
 
   if (lead.budgetRange || lead.timeline || (lead.servicesNeeded && lead.servicesNeeded.length > 0)) {
     text += `
-PROJECT DETAILS
+${lang === 'fa' ? 'جزئیات پروژه' : 'PROJECT DETAILS'}
 ${'-'.repeat(50)}
-${lead.budgetRange ? `Budget: ${lead.budgetRange}\n` : ''}
-${lead.timeline ? `Timeline: ${lead.timeline}\n` : ''}
-${lead.servicesNeeded && lead.servicesNeeded.length > 0 ? `Services Needed: ${lead.servicesNeeded.join(', ')}\n` : ''}
+${lead.budgetRange ? `${lang === 'fa' ? 'بودجه:' : 'Budget:'} ${lead.budgetRange}\n` : ''}
+${lead.timeline ? `${lang === 'fa' ? 'زمان‌بندی:' : 'Timeline:'} ${lead.timeline}\n` : ''}
+${lead.servicesNeeded && lead.servicesNeeded.length > 0 ? `${lang === 'fa' ? 'سرویس‌های مورد نیاز:' : 'Services Needed:'} ${lead.servicesNeeded.join(', ')}\n` : ''}
 `
   }
 
   text += `
-MESSAGE
+${lang === 'fa' ? 'پیام' : 'MESSAGE'}
 ${'-'.repeat(50)}
 ${lead.message}
 `
 
   if (lead.aiSummary || lead.aiPriorityScore || (lead.aiTags && lead.aiTags.length > 0)) {
     text += `
-AI ANALYSIS
+${lang === 'fa' ? 'تحلیل هوش مصنوعی' : 'AI ANALYSIS'}
 ${'-'.repeat(50)}
-${lead.aiSummary ? `Summary: ${lead.aiSummary}\n` : ''}
-${lead.aiPriorityScore ? `Priority Score: ${lead.aiPriorityScore}/5\n` : ''}
-${lead.aiTags && lead.aiTags.length > 0 ? `Tags: ${lead.aiTags.join(', ')}\n` : ''}
+${lead.aiSummary ? `${lang === 'fa' ? 'خلاصه:' : 'Summary:'} ${lead.aiSummary}\n` : ''}
+${lead.aiPriorityScore ? `${lang === 'fa' ? 'امتیاز اولویت:' : 'Priority Score:'} ${lead.aiPriorityScore}/5\n` : ''}
+${lead.aiTags && lead.aiTags.length > 0 ? `${lang === 'fa' ? 'برچسب‌ها:' : 'Tags:'} ${lead.aiTags.join(', ')}\n` : ''}
 `
   }
 
   text += `
 ${'-'.repeat(50)}
-Submitted: ${dateTime}
-Source: ${lead.source}
-Lead ID: ${lead.id}
+${lang === 'fa' ? 'ارسال شده:' : 'Submitted:'} ${dateTime}
+${lang === 'fa' ? 'منبع:' : 'Source:'} ${lead.source}
+${lang === 'fa' ? 'شناسه لید:' : 'Lead ID:'} ${lead.id}
 `
 
   return text.trim()
@@ -211,20 +222,29 @@ Lead ID: ${lead.id}
 
 /**
  * Generate auto-reply HTML email template
+ * Supports bilingual content (EN/FA)
  */
-function generateAutoReplyHTML(name: string): string {
+function generateAutoReplyHTML(name: string, lang: SupportedLang = 'en'): string {
+  const t = (key: string) => getTranslation(lang, key)
+  const isRTL = lang === 'fa'
+  const dir = isRTL ? 'rtl' : 'ltr'
+  const textAlign = isRTL ? 'right' : 'left'
+  const fontFamily = isRTL 
+    ? "'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+    : "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+
   return `
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${lang}" dir="${dir}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thanks for contacting Ario Studio</title>
+  <title>${t('email.autoReplySubject')}</title>
 </head>
-<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #0a0a0a; color: #e5e5e5;">
+<body style="margin: 0; padding: 0; font-family: ${fontFamily}; background-color: #0a0a0a; color: #e5e5e5;">
   <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #0a0a0a;">
     <!-- Header -->
-    <div style="border-left: 4px solid #ff6b35; padding-left: 20px; margin-bottom: 32px;">
+    <div style="border-${isRTL ? 'right' : 'left'}: 4px solid #ff6b35; padding-${isRTL ? 'right' : 'left'}: 20px; margin-bottom: 32px;">
       <h1 style="margin: 0; font-size: 24px; font-weight: 600; color: #ffffff; letter-spacing: -0.5px;">
         Ario Studio
       </h1>
@@ -232,32 +252,28 @@ function generateAutoReplyHTML(name: string): string {
 
     <!-- Main Content -->
     <div style="background-color: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; padding: 32px;">
-      <h2 style="margin: 0 0 20px 0; font-size: 20px; font-weight: 600; color: #ffffff;">
-        Thanks for reaching out!
+      <h2 style="margin: 0 0 20px 0; font-size: 20px; font-weight: 600; color: #ffffff; text-align: ${textAlign};">
+        ${lang === 'fa' ? 'با تشکر از تماس شما!' : 'Thanks for reaching out!'}
       </h2>
       
-      <p style="margin: 0 0 16px 0; font-size: 14px; color: #e5e5e5; line-height: 1.6;">
-        Hi ${name},
+      <p style="margin: 0 0 16px 0; font-size: 14px; color: #e5e5e5; line-height: 1.6; text-align: ${textAlign};">
+        ${t('email.greeting')} ${name}${lang === 'fa' ? '،' : ','}
       </p>
       
-      <p style="margin: 0 0 16px 0; font-size: 14px; color: #e5e5e5; line-height: 1.6;">
-        We've received your message and appreciate you taking the time to contact Ario Studio.
+      <p style="margin: 0 0 16px 0; font-size: 14px; color: #e5e5e5; line-height: 1.6; text-align: ${textAlign};">
+        ${t('email.autoReplyBody')}
       </p>
       
-      <p style="margin: 0 0 16px 0; font-size: 14px; color: #e5e5e5; line-height: 1.6;">
-        Our team will review your inquiry and get back to you within 24-48 hours.
-      </p>
-      
-      <p style="margin: 24px 0 0 0; font-size: 14px; color: #e5e5e5; line-height: 1.6;">
-        Best regards,<br>
-        <strong style="color: #ff6b35;">Ario Studio Team</strong>
+      <p style="margin: 24px 0 0 0; font-size: 14px; color: #e5e5e5; line-height: 1.6; text-align: ${textAlign};">
+        ${t('email.closing')}<br>
+        <strong style="color: #ff6b35;">${t('email.signature')}</strong>
       </p>
     </div>
 
     <!-- Footer -->
     <div style="text-align: center; padding-top: 24px; border-top: 1px solid #2a2a2a; margin-top: 32px;">
       <p style="margin: 0; font-size: 12px; color: #808080;">
-        This is an automated confirmation email.
+        ${t('email.footerNote')}
       </p>
     </div>
   </div>
@@ -268,24 +284,25 @@ function generateAutoReplyHTML(name: string): string {
 
 /**
  * Generate plain text auto-reply email
+ * Supports bilingual content (EN/FA)
  */
-function generateAutoReplyText(name: string): string {
+function generateAutoReplyText(name: string, lang: SupportedLang = 'en'): string {
+  const t = (key: string) => getTranslation(lang, key)
+  
   return `
 ARIO STUDIO
 
-Hi ${name},
+${t('email.greeting')} ${name}${lang === 'fa' ? '،' : ','}
 
-Thanks for reaching out!
+${lang === 'fa' ? 'با تشکر از تماس شما!' : 'Thanks for reaching out!'}
 
-We've received your message and appreciate you taking the time to contact Ario Studio.
+${t('email.autoReplyBody')}
 
-Our team will review your inquiry and get back to you within 24-48 hours.
-
-Best regards,
-Ario Studio Team
+${t('email.closing')}
+${t('email.signature')}
 
 ---
-This is an automated confirmation email.
+${t('email.footerNote')}
   `.trim()
 }
 
@@ -294,10 +311,12 @@ This is an automated confirmation email.
  * 
  * This email is sent to the admin to notify them of a new lead.
  * The admin can reply directly to the lead using replyTo.
+ * Supports bilingual content (EN/FA).
  * 
  * @param lead - The lead record to send notification about
+ * @param lang - Language code ('en' or 'fa') for email content
  */
-export async function sendLeadNotificationEmail(lead: Lead): Promise<void> {
+export async function sendLeadNotificationEmail(lead: Lead, lang: SupportedLang = 'en'): Promise<void> {
   const adminEmailRaw = process.env.CONTACT_TO_EMAIL || process.env.ADMIN_EMAIL || 'info@ariostudio.net'
 
   // CONTACT_TO_EMAIL/ADMIN_EMAIL is optional - if not set, skip admin notification
@@ -333,7 +352,8 @@ export async function sendLeadNotificationEmail(lead: Lead): Promise<void> {
   try {
     console.log(`Attempting to send admin notification email to: ${adminEmails.join(', ')}`)
 
-    const subject = 'New contact from Ario Studio'
+    const t = (key: string) => getTranslation(lang, key)
+    const subject = lang === 'fa' ? 'تماس جدید از آریو استودیو' : 'New contact from Ario Studio'
 
     // Send to all admin emails (send separately for each to ensure delivery)
     const sendPromises = adminEmails.map((toEmail) =>
@@ -342,8 +362,8 @@ export async function sendLeadNotificationEmail(lead: Lead): Promise<void> {
         to: toEmail,
         replyTo: lead.email, // Admin can reply directly to the lead
         subject,
-        html: generateLeadNotificationHTML(lead),
-        text: generateLeadNotificationText(lead),
+        html: generateLeadNotificationHTML(lead, lang),
+        text: generateLeadNotificationText(lead, lang),
       })
     )
 
@@ -367,12 +387,14 @@ export async function sendLeadNotificationEmail(lead: Lead): Promise<void> {
  * This function sends a professional thank-you confirmation email to the person who submitted the form.
  * The "to" field is dynamically set to the email address entered in the form (lead.email).
  * The "from" field is always the fixed verified sender address.
+ * Supports bilingual content (EN/FA).
  * 
  * This works with ANY valid email address - no hard-coded restrictions.
  * 
  * @param lead - The lead record to send confirmation email to
+ * @param lang - Language code ('en' or 'fa') for email content
  */
-export async function sendLeadAutoReplyEmail(lead: Lead): Promise<void> {
+export async function sendLeadAutoReplyEmail(lead: Lead, lang: SupportedLang = 'en'): Promise<void> {
   const formEmail = lead.email // Dynamic email from form - can be ANY valid email address
 
   // Validate form email
@@ -396,16 +418,17 @@ export async function sendLeadAutoReplyEmail(lead: Lead): Promise<void> {
   try {
     console.log(`Attempting to send user confirmation email to: ${formEmail}`)
 
-    const subject = 'Thanks for contacting Ario Studio'
+    const t = (key: string) => getTranslation(lang, key)
+    const subject = t('email.autoReplySubject')
 
-    console.log(`Sending user confirmation from: ${fromEmail}, to: ${formEmail}`)
+    console.log(`Sending user confirmation from: ${fromEmail}, to: ${formEmail}, lang: ${lang}`)
 
     const result = await transporter.sendMail({
       from: fromEmail,
       to: formEmail, // Form email - ANY valid email address entered by the user (no restrictions)
       subject,
-      html: generateAutoReplyHTML(lead.name),
-      text: generateAutoReplyText(lead.name),
+      html: generateAutoReplyHTML(lead.name, lang),
+      text: generateAutoReplyText(lead.name, lang),
     })
 
     console.log(`User confirmation email sent successfully to lead: ${lead.id}`, {

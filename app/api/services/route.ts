@@ -35,20 +35,22 @@ export async function GET(req: NextRequest) {
     // Fetch localized services
     const services = await getLocalizedContentList('service', lang)
 
-    return jsonSuccess(lang, 'contact.success', {
+    // Return success even if empty (frontend can handle empty state)
+    return jsonSuccess(lang, 'services.success', {
       items: services,
       count: services.length,
       lang,
     })
   } catch (error: any) {
+    // Internal error - log for developer, return user-friendly message
     console.error('Error fetching services:', error)
     
     // Try to get language for error message
     try {
       const lang = getRequestLang(req)
-      return jsonError(lang, 'contact.error', 500)
+      return jsonError(lang, 'services.error', 500)
     } catch {
-      return jsonError('en', 'contact.error', 500)
+      return jsonError('en', 'services.error', 500)
     }
   }
 }

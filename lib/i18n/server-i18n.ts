@@ -42,6 +42,30 @@ interface Translations {
     contactOutro: string
     autoReplySubject: string
     autoReplyBody: string
+    signature: string
+    footerNote: string
+    greeting: string
+    closing: string
+  }
+  common: {
+    internalError: string
+    notFound: string
+    invalidInput: string
+  }
+  services: {
+    success: string
+    notFound: string
+    error: string
+  }
+  portfolio: {
+    success: string
+    notFound: string
+    error: string
+  }
+  content: {
+    success: string
+    notFound: string
+    error: string
   }
   debug: {
     langDetected: string
@@ -70,6 +94,30 @@ const translations: Record<Language, Translations> = {
       contactOutro: 'Please respond to this inquiry as soon as possible.',
       autoReplySubject: 'Thank you for contacting Ario Studio',
       autoReplyBody: 'We have received your message and will get back to you within 24 hours.',
+      signature: 'Ario Studio Team',
+      footerNote: 'This is an automated confirmation email.',
+      greeting: 'Hi',
+      closing: 'Best regards,',
+    },
+    common: {
+      internalError: 'An internal error occurred. Please try again later.',
+      notFound: 'The requested resource was not found.',
+      invalidInput: 'Invalid input provided. Please check your request and try again.',
+    },
+    services: {
+      success: 'Services retrieved successfully.',
+      notFound: 'No services available at this time.',
+      error: 'Failed to retrieve services. Please try again later.',
+    },
+    portfolio: {
+      success: 'Portfolio items retrieved successfully.',
+      notFound: 'No portfolio items available at this time.',
+      error: 'Failed to retrieve portfolio items. Please try again later.',
+    },
+    content: {
+      success: 'Content retrieved successfully.',
+      notFound: 'The requested content was not found.',
+      error: 'Failed to retrieve content. Please try again later.',
     },
     debug: {
       langDetected: 'Language detected successfully',
@@ -96,6 +144,30 @@ const translations: Record<Language, Translations> = {
       contactOutro: 'لطفاً در اسرع وقت به این درخواست پاسخ دهید.',
       autoReplySubject: 'با تشکر از تماس شما با آریو استودیو',
       autoReplyBody: 'پیام شما دریافت شد و در عرض ۲۴ ساعت با شما تماس خواهیم گرفت.',
+      signature: 'تیم آریو استودیو',
+      footerNote: 'این یک ایمیل تأیید خودکار است.',
+      greeting: 'سلام',
+      closing: 'با احترام،',
+    },
+    common: {
+      internalError: 'خطای داخلی رخ داد. لطفاً دوباره تلاش کنید.',
+      notFound: 'منبع درخواستی یافت نشد.',
+      invalidInput: 'ورودی نامعتبر است. لطفاً درخواست خود را بررسی کنید و دوباره تلاش کنید.',
+    },
+    services: {
+      success: 'سرویس‌ها با موفقیت دریافت شدند.',
+      notFound: 'در حال حاضر سرویسی ثبت نشده است.',
+      error: 'دریافت سرویس‌ها با خطا مواجه شد. لطفاً دوباره تلاش کنید.',
+    },
+    portfolio: {
+      success: 'نمونه‌کارها با موفقیت دریافت شدند.',
+      notFound: 'در حال حاضر نمونه‌کاری ثبت نشده است.',
+      error: 'دریافت نمونه‌کارها با خطا مواجه شد. لطفاً دوباره تلاش کنید.',
+    },
+    content: {
+      success: 'محتوا با موفقیت دریافت شد.',
+      notFound: 'محتوا مورد نظر یافت نشد.',
+      error: 'دریافت محتوا با خطا مواجه شد. لطفاً دوباره تلاش کنید.',
     },
     debug: {
       langDetected: 'زبان با موفقیت تشخیص داده شد',

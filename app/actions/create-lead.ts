@@ -4,6 +4,7 @@ import { LeadFormSchema, type LeadFormValues } from '@/lib/validation/lead'
 import { createLead } from '@/lib/db'
 import { sendLeadNotificationEmail, sendLeadAutoReplyEmail } from '@/lib/email'
 import { enrichLeadWithAI } from '@/lib/ai'
+import { normalizeLanguage, type SupportedLang } from '@/lib/i18n'
 
 /**
  * Server action result type
@@ -40,6 +41,10 @@ export async function createLeadAction(
 ): Promise<CreateLeadActionResult> {
   try {
     // Parse form data into plain object
+    // Extract language from formData for i18n
+    const langParam = formData.get('lang')?.toString()
+    const lang: SupportedLang = normalizeLanguage(langParam)
+    
     const rawData = {
       name: formData.get('name')?.toString() || '',
       email: formData.get('email')?.toString() || '',
@@ -68,10 +73,14 @@ export async function createLeadAction(
         }
       })
 
+      // Import getTranslation for validation error message
+      const { getTranslation } = await import('@/lib/i18n')
+      const validationMessage = getTranslation(lang, 'common.invalidInput')
+
       return {
         success: false,
         errors,
-        message: 'Please fix the errors below and try again.',
+        message: validationMessage,
       }
     }
 
@@ -122,7 +131,7 @@ export async function createLeadAction(
 
     // Send emails (non-blocking, graceful degradation)
     try {
-      await sendLeadNotificationEmail(lead)
+      await sendLeadNotificationEmail(lead, lang)
     } catch (emailError) {
       // Log email error but don't fail the form submission
       console.warn('Failed to send lead notification email:', emailError)
@@ -130,26 +139,36 @@ export async function createLeadAction(
 
     // Send auto-reply to lead
     try {
-      await sendLeadAutoReplyEmail(lead)
+      await sendLeadAutoReplyEmail(lead, lang)
     } catch (emailError) {
       // Log email error but don't fail the form submission
       console.warn('Failed to send lead auto-reply email:', emailError)
     }
 
+    // Import getTranslation for success message
+    const { getTranslation } = await import('@/lib/i18n')
+    const successMessage = getTranslation(lang, 'contact.success')
+
     return {
       success: true,
-      message: 'Thank you! We\'ll get back to you soon.',
+      message: successMessage,
     }
   } catch (error) {
-    // Log unexpected errors
+    // Log unexpected errors (internal - English for developer)
     console.error('Error creating lead:', error)
 
-    // Return generic error message
+    // Import getTranslation for error message
+    const { getTranslation, normalizeLanguage } = await import('@/lib/i18n')
+    const errorLang = normalizeLanguage(formData.get('lang')?.toString())
+    const errorMessage = getTranslation(errorLang, 'contact.error')
+    const formErrorMessage = getTranslation(errorLang, 'common.internalError')
+
+    // Return generic error message (bilingual)
     return {
       success: false,
-      message: 'Something went wrong. Please try again later.',
+      message: errorMessage,
       errors: {
-        _form: 'An unexpected error occurred. Please try again.',
+        _form: formErrorMessage,
       },
     }
   }

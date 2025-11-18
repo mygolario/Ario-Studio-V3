@@ -35,20 +35,22 @@ export async function GET(req: NextRequest) {
     // Fetch localized portfolio items
     const portfolioItems = await getLocalizedContentList('portfolio', lang)
 
-    return jsonSuccess(lang, 'contact.success', {
+    // Return success even if empty (frontend can handle empty state)
+    return jsonSuccess(lang, 'portfolio.success', {
       items: portfolioItems,
       count: portfolioItems.length,
       lang,
     })
   } catch (error: any) {
+    // Internal error - log for developer, return user-friendly message
     console.error('Error fetching portfolio:', error)
     
     // Try to get language for error message
     try {
       const lang = getRequestLang(req)
-      return jsonError(lang, 'contact.error', 500)
+      return jsonError(lang, 'portfolio.error', 500)
     } catch {
-      return jsonError('en', 'contact.error', 500)
+      return jsonError('en', 'portfolio.error', 500)
     }
   }
 }
