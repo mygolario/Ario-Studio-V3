@@ -1,168 +1,162 @@
 import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
-import { getProjectBySlug as getDbProjectBySlug, getCaseStudyByProjectId } from '@/lib/db'
-import { getProjectBySlug, getAllProjects } from '@/data/projects'
+import { getLocalizedContentBySlug, getLocalizedContentList } from '@/lib/content/queries'
+import { getServerLang } from '@/lib/i18n'
+import { type SupportedLang } from '@/lib/i18n'
 import CaseStudyHero from '@/components/CaseStudyHero'
 import CaseStudyContent from '@/components/CaseStudyContent'
 import Button from '@/components/Button'
 import Footer from '@/components/Footer'
 
-// Type for database project (inferred from Prisma)
-type DbProject = NonNullable<Awaited<ReturnType<typeof getDbProjectBySlug>>>
-
 // Revalidate project pages every 3600 seconds (1 hour)
 export const revalidate = 3600
 
 /**
- * Generate static params for all projects
+ * Generate static params for all portfolio items
  */
 export async function generateStaticParams() {
   try {
-    // Try database first
-    const { getProjects } = await import('@/lib/db')
-    const dbProjects = await getProjects().catch(() => [])
+    // Get all portfolio items (we'll generate for both languages)
+    const portfolioItems = await getLocalizedContentList('portfolio', 'en').catch(() => [])
     
-    if (dbProjects.length > 0) {
-      return dbProjects.map((project) => ({
-        slug: project.slug,
-      }))
-    }
+    return portfolioItems.map((item) => ({
+      slug: item.slug,
+    }))
   } catch (error) {
-    // Fallback to static data
+    console.error('Error generating static params:', error)
+    return []
   }
-  
-  // Fallback to static data
-  const projects = getAllProjects()
-  return projects.map((project) => ({
-    slug: project.slug,
-  }))
 }
 
 /**
- * Generate metadata for each project page
+ * Generate metadata for each portfolio page (bilingual)
  */
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  // Try database first
-  let project: any = null
-  try {
-    const dbProject = await getDbProjectBySlug(params.slug).catch(() => null)
-    if (dbProject) {
-      project = {
-        title: dbProject.title,
-        subtitle: dbProject.shortDescription || '',
-        overview: dbProject.longDescription || dbProject.shortDescription || '',
-        heroImage: dbProject.heroImageUrl || undefined,
-        slug: dbProject.slug,
-      }
-    }
-  } catch (error) {
-    // Fallback to static data
-  }
-  
-  // Fallback to static data
-  if (!project) {
-    project = getProjectBySlug(params.slug)
-  }
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  // Detect language from server context
+  const lang = await getServerLang()
+  const slug = params.slug
 
-  if (!project) {
+  // Fetch localized content
+  const item = await getLocalizedContentBySlug(slug, lang).catch(() => null)
+
+  if (!item) {
     return {
-      title: 'Project Not Found',
+      title: lang === 'fa' ? 'نمونه کار پیدا نشد' : 'Case Study Not Found',
+      description: lang === 'fa' ? 'صفحه مورد نظر یافت نشد.' : 'The requested page was not found.',
     }
   }
 
   const baseUrl = 'https://ario-studio-v3.vercel.app'
-  const ogImage = project.heroImage 
-    ? `${baseUrl}${project.heroImage}` 
-    : `${baseUrl}/og/og-main.png`
+  const ogImage = `${baseUrl}/og/og-main.png`
 
   return {
-    title: `${project.title} – Case Study`,
-    description: project.overview || project.subtitle || 'Project case study.',
+    title: item.metaTitle || item.title,
+    description: item.metaDescription || item.excerpt || item.subtitle || '',
     openGraph: {
-      title: project.title,
-      description: project.overview || project.subtitle,
-      url: `${baseUrl}/work/${project.slug}`,
+      title: item.metaTitle || item.title,
+      description: item.metaDescription || item.excerpt || item.subtitle || '',
+      url: `${baseUrl}/work/${item.slug}`,
       siteName: 'Ario Studio',
       images: [
         {
           url: ogImage,
           width: 1200,
           height: 630,
-          alt: `${project.title} – Case Study`,
+          alt: item.title,
         },
       ],
       type: 'article',
+      locale: lang === 'fa' ? 'fa_IR' : 'en_US',
     },
     twitter: {
       card: 'summary_large_image',
-      title: project.title,
-      description: project.overview || project.subtitle,
+      title: item.metaTitle || item.title,
+      description: item.metaDescription || item.excerpt || item.subtitle || '',
       images: [ogImage],
     },
     alternates: {
-      canonical: `${baseUrl}/work/${project.slug}`,
+      canonical: `${baseUrl}/work/${item.slug}`,
     },
   }
 }
 
 /**
- * Convert database project to component format
+ * Convert LocalizedContent to component format
  */
-function adaptDbProjectToComponent(dbProject: DbProject) {
+function adaptLocalizedContentToComponent(item: any) {
+  // Determine status from tags or use default
+  let status: 'Live' | 'In development' | 'Concept' | 'Internal project' = 'In development'
+  
+  if (item.tags && Array.isArray(item.tags)) {
+    const statusTag = item.tags.find((tag: string) => 
+      tag.toLowerCase().includes('live') || 
+      tag.toLowerCase().includes('فعال') ||
+      tag.toLowerCase().includes('concept') ||
+      tag.toLowerCase().includes('کانسپت')
+    )
+    if (statusTag) {
+      if (statusTag.toLowerCase().includes('live') || statusTag.includes('فعال')) {
+        status = 'Live'
+      } else if (statusTag.toLowerCase().includes('concept') || statusTag.includes('کانسپت')) {
+        status = 'Concept'
+      }
+    }
+  }
+
   return {
-    slug: dbProject.slug,
-    title: dbProject.title,
-    subtitle: dbProject.shortDescription || '',
-    role: dbProject.role || 'Design & Build',
-    tags: dbProject.tags || [],
-    thumbnail: dbProject.thumbnailUrl || undefined,
-    heroImage: dbProject.heroImageUrl || dbProject.thumbnailUrl || undefined,
-    overview: dbProject.longDescription || dbProject.shortDescription || '',
-    problem: '', // Not in DB schema yet
-    solution: '', // Not in DB schema yet
-    stack: dbProject.tags || [], // Use tags as stack for now
-    highlights: [], // Not in DB schema yet
-    status: dbProject.liveUrl ? ('Live' as const) : ('In development' as const),
+    slug: item.slug,
+    title: item.title,
+    subtitle: item.subtitle || item.excerpt || '',
+    role: 'Design & Build',
+    tags: item.tags || [],
+    thumbnail: undefined, // Can be extended later
+    heroImage: undefined, // Can be extended later
+    overview: item.body || item.excerpt || item.subtitle || '',
+    problem: '', // Can be extended in Content model later
+    solution: '', // Can be extended in Content model later
+    stack: item.tags || [],
+    highlights: [],
+    status: status,
     sections: [],
-    year: dbProject.year,
-    clientName: dbProject.clientName,
-    liveUrl: dbProject.liveUrl,
+    year: undefined,
+    clientName: undefined,
+    liveUrl: undefined,
   }
 }
 
 /**
- * Case Study Page
+ * Case Study Page (Bilingual)
  * 
- * Dynamic route for individual project case studies.
- * Uses database if available, falls back to static data.
+ * Dynamic route for individual portfolio case studies.
+ * Uses multilingual content system with fallback logic.
  */
 export default async function CaseStudyPage({ params }: { params: { slug: string } }) {
-  // Try database first
-  let project: any = null
-  let dbProject: any = null
-  try {
-    dbProject = await getDbProjectBySlug(params.slug).catch(() => null)
-    if (dbProject) {
-      project = adaptDbProjectToComponent(dbProject)
-    }
-  } catch (error) {
-    // Fallback to static data
-  }
+  // Detect language from server context
+  const lang = await getServerLang()
   
-  // Fallback to static data
-  if (!project) {
-    project = getProjectBySlug(params.slug)
+  // Fetch localized content
+  let item = await getLocalizedContentBySlug(params.slug, lang).catch(() => null)
+  
+  // Fallback to English if requested language not available
+  if (!item && lang !== 'en') {
+    item = await getLocalizedContentBySlug(params.slug, 'en').catch(() => null)
   }
 
-  if (!project) {
+  if (!item) {
     notFound()
   }
 
-  // Check for case study
-  const caseStudy = dbProject
-    ? await getCaseStudyByProjectId(dbProject.id).catch(() => null)
-    : null
+  // Convert to component format
+  const project = adaptLocalizedContentToComponent(item)
+
+  // Get translations for UI strings
+  const backToWorkText = lang === 'fa' ? 'بازگشت به کارها' : 'Back to work'
+  const startProjectText = lang === 'fa' ? 'شروع پروژه' : 'Start a project'
+  const readyToStartText = lang === 'fa' ? 'آماده شروع پروژه خود هستید؟' : 'Ready to start your project?'
+  const letsBuildText = lang === 'fa' ? 'بیایید چیزی با ارزش بلندمدت بسازیم.' : "Let's build something with long-term value."
+  const startYourProjectText = lang === 'fa' ? 'شروع پروژه شما' : 'Start Your Project'
 
   return (
     <main className="relative min-h-screen bg-base">
@@ -218,58 +212,18 @@ export default async function CaseStudyPage({ params }: { params: { slug: string
       {/* Content Sections */}
       <CaseStudyContent project={project} />
 
-      {/* Case Study CTA */}
-      {caseStudy && caseStudy.status === 'published' && (
-        <section className="relative py-16 md:py-24 overflow-hidden bg-surface-alt">
-          <div className="container-custom">
-            <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-h2 font-semibold text-text-primary mb-4">
-                Read the full case study
-              </h2>
-              <p className="text-body-lg text-text-secondary mb-8 leading-relaxed">
-                Learn more about the process, challenges, and results of this project.
-              </p>
-              <Link
-                href={`/work/${params.slug}/case-study`}
-                className="inline-block px-8 py-4 rounded-full bg-orange text-pure-white font-medium hover:brightness-105 active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2"
-              >
-                Read Case Study →
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Live URL Link */}
-      {project.liveUrl && (
-        <section className="relative py-16 md:py-24 overflow-hidden bg-base">
-          <div className="container-custom">
-            <div className="max-w-4xl mx-auto text-center">
-              <a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block px-8 py-4 rounded-full bg-orange text-pure-white font-medium hover:brightness-105 active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2"
-              >
-                Visit Live Site →
-              </a>
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* CTA Section */}
       <section className="relative py-32 overflow-hidden bg-surface-alt">
         <div className="container-custom">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-h1 font-semibold text-text-primary mb-4">
-              Ready to start your project?
+            <h2 className="text-h1 font-semibold text-text-primary mb-4 rtl:text-right">
+              {readyToStartText}
             </h2>
-            <p className="text-body-lg text-text-secondary mb-8 leading-relaxed">
-              Let&apos;s build something with long-term value.
+            <p className="text-body-lg text-text-secondary mb-8 leading-relaxed rtl:text-right">
+              {letsBuildText}
             </p>
             <Button href="/#contact" variant="primary" className="!px-12 !py-5">
-              Start Your Project
+              {startYourProjectText}
             </Button>
           </div>
         </div>
