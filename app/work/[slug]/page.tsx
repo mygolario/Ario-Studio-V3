@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { getProjectBySlug as getDbProjectBySlug } from '@/lib/db'
+import { getProjectBySlug as getDbProjectBySlug, getCaseStudyByProjectId } from '@/lib/db'
 import { getProjectBySlug, getAllProjects } from '@/data/projects'
 import CaseStudyHero from '@/components/CaseStudyHero'
 import CaseStudyContent from '@/components/CaseStudyContent'
@@ -137,8 +137,9 @@ function adaptDbProjectToComponent(dbProject: DbProject) {
 export default async function CaseStudyPage({ params }: { params: { slug: string } }) {
   // Try database first
   let project: any = null
+  let dbProject: any = null
   try {
-    const dbProject = await getDbProjectBySlug(params.slug).catch(() => null)
+    dbProject = await getDbProjectBySlug(params.slug).catch(() => null)
     if (dbProject) {
       project = adaptDbProjectToComponent(dbProject)
     }
@@ -154,6 +155,11 @@ export default async function CaseStudyPage({ params }: { params: { slug: string
   if (!project) {
     notFound()
   }
+
+  // Check for case study
+  const caseStudy = dbProject
+    ? await getCaseStudyByProjectId(dbProject.id).catch(() => null)
+    : null
 
   return (
     <main className="relative min-h-screen bg-base">
@@ -209,9 +215,31 @@ export default async function CaseStudyPage({ params }: { params: { slug: string
       {/* Content Sections */}
       <CaseStudyContent project={project} />
 
+      {/* Case Study CTA */}
+      {caseStudy && caseStudy.status === 'published' && (
+        <section className="relative py-16 md:py-24 overflow-hidden bg-surface-alt">
+          <div className="container-custom">
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-h2 font-semibold text-text-primary mb-4">
+                Read the full case study
+              </h2>
+              <p className="text-body-lg text-text-secondary mb-8 leading-relaxed">
+                Learn more about the process, challenges, and results of this project.
+              </p>
+              <Link
+                href={`/work/${params.slug}/case-study`}
+                className="inline-block px-8 py-4 rounded-full bg-orange text-pure-white font-medium hover:brightness-105 active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2"
+              >
+                Read Case Study →
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Live URL Link */}
       {project.liveUrl && (
-        <section className="relative py-16 md:py-24 overflow-hidden bg-surface-alt">
+        <section className="relative py-16 md:py-24 overflow-hidden bg-base">
           <div className="container-custom">
             <div className="max-w-4xl mx-auto text-center">
               <a

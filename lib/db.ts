@@ -145,6 +145,208 @@ export async function deleteProject(id: string) {
   })
 }
 
+// ==================== Blog Posts ====================
+
+export async function getPublishedBlogPosts() {
+  return await prisma.blogPost.findMany({
+    where: { status: 'published' },
+    orderBy: { publishedAt: 'desc' },
+  })
+}
+
+export async function getBlogPostBySlug(slug: string) {
+  return await prisma.blogPost.findUnique({
+    where: { slug },
+  })
+}
+
+export async function getAllBlogPosts() {
+  return await prisma.blogPost.findMany({
+    orderBy: { createdAt: 'desc' },
+  })
+}
+
+export async function getBlogPostById(id: string) {
+  return await prisma.blogPost.findUnique({
+    where: { id },
+  })
+}
+
+export interface CreateBlogPostInput {
+  title: string
+  slug?: string
+  excerpt: string
+  content: string
+  coverImageUrl?: string
+  tags?: string[]
+  status?: string
+  publishedAt?: Date
+}
+
+export interface UpdateBlogPostInput {
+  title?: string
+  slug?: string
+  excerpt?: string
+  content?: string
+  coverImageUrl?: string
+  tags?: string[]
+  status?: string
+  publishedAt?: Date
+}
+
+export async function createBlogPost(data: CreateBlogPostInput) {
+  return await prisma.blogPost.create({
+    data: {
+      title: data.title,
+      slug: data.slug || '',
+      excerpt: data.excerpt,
+      content: data.content,
+      coverImageUrl: data.coverImageUrl,
+      tags: data.tags || [],
+      status: data.status || 'draft',
+      publishedAt: data.publishedAt,
+    },
+  })
+}
+
+export async function updateBlogPost(id: string, data: UpdateBlogPostInput) {
+  return await prisma.blogPost.update({
+    where: { id },
+    data: {
+      ...(data.title && { title: data.title }),
+      ...(data.slug !== undefined && { slug: data.slug }),
+      ...(data.excerpt && { excerpt: data.excerpt }),
+      ...(data.content && { content: data.content }),
+      ...(data.coverImageUrl !== undefined && { coverImageUrl: data.coverImageUrl }),
+      ...(data.tags !== undefined && { tags: data.tags }),
+      ...(data.status !== undefined && { status: data.status }),
+      ...(data.publishedAt !== undefined && { publishedAt: data.publishedAt }),
+    },
+  })
+}
+
+export async function deleteBlogPost(id: string) {
+  return await prisma.blogPost.delete({
+    where: { id },
+  })
+}
+
+// ==================== Case Studies ====================
+
+export async function getPublishedCaseStudies() {
+  return await prisma.caseStudy.findMany({
+    where: { status: 'published' },
+    include: { project: true },
+    orderBy: { publishedAt: 'desc' },
+  })
+}
+
+export async function getCaseStudyBySlug(slug: string) {
+  return await prisma.caseStudy.findUnique({
+    where: { slug },
+    include: { project: true },
+  })
+}
+
+export async function getCaseStudyByProjectId(projectId: string) {
+  return await prisma.caseStudy.findFirst({
+    where: { 
+      projectId,
+      status: 'published',
+    },
+    include: { project: true },
+  })
+}
+
+export async function getAllCaseStudies() {
+  return await prisma.caseStudy.findMany({
+    include: { project: true },
+    orderBy: { createdAt: 'desc' },
+  })
+}
+
+export async function getCaseStudyById(id: string) {
+  return await prisma.caseStudy.findUnique({
+    where: { id },
+    include: { project: true },
+  })
+}
+
+export interface CreateCaseStudyInput {
+  projectId: string
+  slug?: string
+  title: string
+  heroImageUrl?: string
+  summary: string
+  challenge: string
+  solution: string
+  results: string
+  metrics?: any
+  content?: string
+  status?: string
+  publishedAt?: Date
+}
+
+export interface UpdateCaseStudyInput {
+  projectId?: string
+  slug?: string
+  title?: string
+  heroImageUrl?: string
+  summary?: string
+  challenge?: string
+  solution?: string
+  results?: string
+  metrics?: any
+  content?: string
+  status?: string
+  publishedAt?: Date
+}
+
+export async function createCaseStudy(data: CreateCaseStudyInput) {
+  return await prisma.caseStudy.create({
+    data: {
+      projectId: data.projectId,
+      slug: data.slug || '',
+      title: data.title,
+      heroImageUrl: data.heroImageUrl,
+      summary: data.summary,
+      challenge: data.challenge,
+      solution: data.solution,
+      results: data.results,
+      metrics: data.metrics,
+      content: data.content,
+      status: data.status || 'draft',
+      publishedAt: data.publishedAt,
+    },
+  })
+}
+
+export async function updateCaseStudy(id: string, data: UpdateCaseStudyInput) {
+  return await prisma.caseStudy.update({
+    where: { id },
+    data: {
+      ...(data.projectId && { projectId: data.projectId }),
+      ...(data.slug !== undefined && { slug: data.slug }),
+      ...(data.title && { title: data.title }),
+      ...(data.heroImageUrl !== undefined && { heroImageUrl: data.heroImageUrl }),
+      ...(data.summary && { summary: data.summary }),
+      ...(data.challenge && { challenge: data.challenge }),
+      ...(data.solution && { solution: data.solution }),
+      ...(data.results && { results: data.results }),
+      ...(data.metrics !== undefined && { metrics: data.metrics }),
+      ...(data.content !== undefined && { content: data.content }),
+      ...(data.status !== undefined && { status: data.status }),
+      ...(data.publishedAt !== undefined && { publishedAt: data.publishedAt }),
+    },
+  })
+}
+
+export async function deleteCaseStudy(id: string) {
+  return await prisma.caseStudy.delete({
+    where: { id },
+  })
+}
+
 // ==================== Process Steps ====================
 
 export async function getProcessSteps() {

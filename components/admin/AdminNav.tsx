@@ -19,6 +19,8 @@ export default function AdminNav() {
     { href: '/admin', label: 'Dashboard' },
     { href: '/admin/leads', label: 'Leads' },
     { href: '/admin/projects', label: 'Projects' },
+    { href: '/admin/blog', label: 'Blog' },
+    { href: '/admin/case-studies', label: 'Case Studies' },
   ]
 
   return (
