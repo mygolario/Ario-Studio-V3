@@ -103,20 +103,19 @@ Lead ID: ${lead.id}`.trim()
     
     console.log(`Sending admin notification from: ${fromEmail}, to: ${adminEmails.join(', ')}, replyTo: ${lead.email}`)
     
-    // Send to all admin emails
-    const sendPromises = adminEmails.map(adminEmail =>
-      resend.emails.send({
-        from: fromEmail, // Fixed verified sender: Resend default (onboarding@resend.dev) or custom from env
-        to: adminEmail, // Admin email from env - can be any valid email
-        replyTo: lead.email, // Admin can reply directly to the lead
-        subject,
-        html: `<pre style="font-family: sans-serif; white-space: pre-wrap;">${body}</pre>`,
-      })
-    )
+    // Send to all admin emails using array (more efficient - single API call)
+    // Resend supports array for 'to' field - sends to all recipients
+    const result = await resend.emails.send({
+      from: fromEmail, // Fixed verified sender: Resend default (onboarding@resend.dev) or custom from env
+      to: adminEmails, // Array of admin emails - sends to all
+      replyTo: lead.email, // Admin can reply directly to the lead
+      subject,
+      html: `<pre style="font-family: sans-serif; white-space: pre-wrap;">${body}</pre>`,
+    })
 
-    const results = await Promise.all(sendPromises)
+    const results = result
 
-    console.log(`Admin notification emails sent successfully for lead: ${lead.id}`, results)
+    console.log(`Admin notification email sent successfully to ${adminEmails.length} recipient(s) for lead: ${lead.id}`, results)
   } catch (error: any) {
     // Log detailed error but don't throw - email failure shouldn't break form submission
     console.error('Failed to send admin notification email:', {
