@@ -12,3 +12,9 @@ export {
   normalizeLanguage,
 } from './server-i18n'
 
+export {
+  getRequestLang,
+  getRequestLangFromStandardRequest,
+  type SupportedLang,
+} from './get-request-lang'
+
