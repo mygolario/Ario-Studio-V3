@@ -24,7 +24,7 @@ RESEND_API_KEY=re_H4wtiCcr_EmE5Xparq1nrS2LFU7HZThwK
 
 ### 4. AI (OpenAI)
 ```bash
-OPENAI_API_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiI2OTFiYzU1YzVlOTNkM2FiOTFmMTYxYzQiLCJ0eXBlIjoiYWlfa2V5IiwiaWF0IjoxNzYzNDI3Njc2fQ.Ixu_IjDkZsUlCOxHVAu-0rvIggzTtel8nqhXMXqzty4
+OPENAI_API_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiI2OTFiY2NmNTY5MjdkMjAxMDBiZWU0MjgiLCJ0eXBlIjoiYWlfa2V5IiwiaWF0IjoxNzYzNDI5NjIxfQ.Bsbq45mwzKEw5dErH5VUokSk43QT7uH7h0C446ai4Fc
 ```
 
 ## روش 1: استفاده از Vercel CLI
@@ -101,7 +101,7 @@ vercel env add DATABASE_URL development
 | `NEXTAUTH_SECRET` | `R6npFUqmpQfnVSm8Km581hmTLm7hnb0dZPfNxVe+6g8=` | All |
 | `NEXTAUTH_URL` | `https://ario-studio-v3.vercel.app` | Production |
 | `RESEND_API_KEY` | `re_H4wtiCcr_EmE5Xparq1nrS2LFU7HZThwK` | All |
-| `OPENAI_API_KEY` | `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiI2OTFiYzU1YzVlOTNkM2FiOTFmMTYxYzQiLCJ0eXBlIjoiYWlfa2V5IiwiaWF0IjoxNzYzNDI3Njc2fQ.Ixu_IjDkZsUlCOxHVAu-0rvIggzTtel8nqhXMXqzty4` | All |
+| `OPENAI_API_KEY` | `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiI2OTFiY2NmNTY5MjdkMjAxMDBiZWU0MjgiLCJ0eXBlIjoiYWlfa2V5IiwiaWF0IjoxNzYzNDI5NjIxfQ.Bsbq45mwzKEw5dErH5VUokSk43QT7uH7h0C446ai4Fc` | All |
 
 ## روش 3: استفاده از Vercel CLI با فایل .env
 
