@@ -1,48 +1,68 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
+import { sendContactEmail, sendAutoReplyEmail } from "@/lib/email/brevo";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
+/**
+ * Contact form API route
+ * 
+ * Accepts POST requests with contact form data and sends emails via Brevo SMTP
+ */
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, email, message } = body;
+    const { name, email, subject, message } = body;
 
-    if (!email) {
-      return NextResponse.json({ error: "Email is required" }, { status: 400 });
+    // Validation
+    if (!name || name.trim().length === 0) {
+      return NextResponse.json(
+        { success: false, error: "Name is required" },
+        { status: 400 }
+      );
     }
 
-    const FROM = process.env.RESEND_FROM || "onboarding@resend.dev";
-    const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "kavehtkts@gmail.com";
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return NextResponse.json(
+        { success: false, error: "Valid email is required" },
+        { status: 400 }
+      );
+    }
 
-    // 1) Admin notification
-    await resend.emails.send({
-      from: FROM,
-      to: ADMIN_EMAIL,
-      subject: "New contact form submission",
-      html: `
-        <p><strong>Name:</strong> ${name || "Unknown"}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message || "-"}</p>
-      `,
-    });
+    if (!message || message.trim().length === 0) {
+      return NextResponse.json(
+        { success: false, error: "Message is required" },
+        { status: 400 }
+      );
+    }
 
-    // 2) User confirmation
-    await resend.emails.send({
-      from: FROM,
-      to: email, // IMPORTANT: dynamic user email from the form
-      subject: "Thanks for contacting Ario Studio",
-      html: `
-        <p>Hi ${name || ""},</p>
-        <p>Thanks for reaching out to Ario Studio. We received your message and will get back to you soon.</p>
-      `,
-    });
+    // Send contact email to admin
+    try {
+      await sendContactEmail({
+        name: name.trim(),
+        email: email.trim(),
+        subject: subject?.trim(),
+        message: message.trim(),
+      });
+    } catch (emailError: any) {
+      console.error("Failed to send contact email:", emailError);
+      return NextResponse.json(
+        { success: false, error: "Failed to send email. Please try again later." },
+        { status: 500 }
+      );
+    }
+
+    // Send auto-reply to user (non-blocking, graceful degradation)
+    try {
+      await sendAutoReplyEmail(name.trim(), email.trim());
+    } catch (autoReplyError) {
+      // Log but don't fail - auto-reply failure shouldn't break the main flow
+      console.warn("Failed to send auto-reply email:", autoReplyError);
+    }
 
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (error: any) {
     console.error("CONTACT_FORM_ERROR", error);
-    return NextResponse.json({ error: "Failed to send email" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
-
