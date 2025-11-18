@@ -3,17 +3,31 @@ import { Resend } from 'resend'
 
 /**
  * Get the fixed verified sender email address
+ * 
+ * This MUST be a verified domain/sender in Resend.
+ * Never use the user's email as the "from" address.
  */
 function getVerifiedSenderEmail(): string {
+  // Priority: ARIO_STUDIO_FROM_EMAIL > EMAIL_FROM > fallback
+  // The fallback should be replaced with your actual verified domain
   return process.env.ARIO_STUDIO_FROM_EMAIL || 
          process.env.EMAIL_FROM || 
          'Ario Studio <noreply@yourdomain.com>'
 }
 
 /**
+ * Validate email address format
+ */
+function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailRegex.test(email)
+}
+
+/**
  * Send admin notification email when a new lead is submitted
  * 
  * This email is sent to the admin to notify them of a new lead.
+ * The admin can reply directly to the lead using replyTo.
  * 
  * @param lead - The lead record to send notification about
  */
@@ -26,6 +40,12 @@ export async function sendLeadNotificationEmail(lead: Lead): Promise<void> {
     console.warn(
       `Admin notification email skipped: RESEND_API_KEY=${!!apiKey}, ADMIN_EMAIL=${!!adminEmail}`
     )
+    return
+  }
+
+  // Validate admin email
+  if (!isValidEmail(adminEmail)) {
+    console.error(`Invalid admin email format: ${adminEmail}`)
     return
   }
 
@@ -60,16 +80,15 @@ ${lead.aiTags && lead.aiTags.length > 0 ? `Tags: ${lead.aiTags.join(', ')}\n` : 
 
 ---
 Submitted: ${lead.createdAt.toLocaleString()}
-Lead ID: ${lead.id}
-    `.trim()
+Lead ID: ${lead.id}`.trim()
 
     const fromEmail = getVerifiedSenderEmail()
     
     console.log(`Sending admin notification from: ${fromEmail}, to: ${adminEmail}, replyTo: ${lead.email}`)
     
     const result = await resend.emails.send({
-      from: fromEmail, // Fixed verified sender
-      to: adminEmail, // Admin email from env
+      from: fromEmail, // Fixed verified sender - MUST be verified in Resend
+      to: adminEmail, // Admin email from env - can be any valid email
       replyTo: lead.email, // Admin can reply directly to the lead
       subject,
       html: `<pre style="font-family: sans-serif; white-space: pre-wrap;">${body}</pre>`,
@@ -93,63 +112,43 @@ Lead ID: ${lead.id}
  * Send user confirmation email to the lead
  * 
  * This function sends a professional thank-you confirmation email to the person who submitted the form.
- * If email env vars / API keys are missing, it logs a warning and returns without throwing.
+ * The "to" field is dynamically set to the email address entered in the form (lead.email).
+ * The "from" field is always the fixed verified sender address.
+ * 
+ * This works with ANY valid email address - no hard-coded restrictions.
  * 
  * @param lead - The lead record to send confirmation email to
  */
 export async function sendLeadAutoReplyEmail(lead: Lead): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY
-  const userEmail = lead.email
+  const formEmail = lead.email // Dynamic email from form - can be ANY valid email address
 
   // Skip if email is not configured
-  if (!apiKey || !userEmail) {
-    console.warn(`User confirmation email skipped: RESEND_API_KEY=${!!apiKey}, userEmail=${!!userEmail}`)
+  if (!apiKey) {
+    console.warn(`User confirmation email skipped: RESEND_API_KEY=${!!apiKey}`)
+    return
+  }
+
+  // Validate form email
+  if (!formEmail || !isValidEmail(formEmail)) {
+    console.error(`Invalid form email format: ${formEmail}`)
     return
   }
 
   try {
     const resend = new Resend(apiKey)
     
-    console.log(`Attempting to send user confirmation email to: ${userEmail}`)
+    console.log(`Attempting to send user confirmation email to: ${formEmail}`)
 
     const subject = 'Thanks for contacting Ario Studio'
 
-    // Build email body - confirmation email to the user
-    let body = `Hi ${lead.name},
-
-Thank you for reaching out to Ario Studio! We've successfully received your project inquiry and are excited about the possibility of working together.
-
-Here's a summary of what you submitted:
-${lead.budgetRange ? `- Budget: ${lead.budgetRange}` : ''}
-${lead.timeline ? `- Timeline: ${lead.timeline}` : ''}
-${lead.servicesNeeded && lead.servicesNeeded.length > 0
-  ? `- Services: ${lead.servicesNeeded.join(', ')}`
-  : ''}
-
-${lead.aiSummary
-  ? `Here's how we understood your project:\n${lead.aiSummary}\n\n`
-  : ''}Next Steps:
-We'll review your project details and get back to you within 24-48 hours. In the meantime, feel free to explore our work at https://ario-studio-v3.vercel.app/work.
-
-If you have any urgent questions, don't hesitate to reach out directly.
-
-Best regards,
-Ario Studio Team
-
----
-Ario Studio
-Cinematic, AI-driven web experiences
-
-Reference ID: ${lead.id}
-Submitted: ${lead.createdAt.toLocaleString()}`
-
-    const fromEmail = getVerifiedSenderEmail()
+    const fromEmail = getVerifiedSenderEmail() // Fixed verified sender - MUST be verified in Resend
     
-    console.log(`Sending user confirmation from: ${fromEmail}, to: ${userEmail}`)
+    console.log(`Sending user confirmation from: ${fromEmail}, to: ${formEmail}`)
     
     const result = await resend.emails.send({
       from: fromEmail, // Fixed verified sender: "Ario Studio <noreply@yourdomain.com>"
-      to: userEmail, // Form email - any valid email address
+      to: formEmail, // Form email - ANY valid email address entered by the user
       subject,
       html: `
         <p>Hi ${lead.name},</p>
@@ -168,9 +167,8 @@ Submitted: ${lead.createdAt.toLocaleString()}`
       response: error?.response,
       status: error?.status,
       leadId: lead.id,
-      leadEmail: lead.email,
+      formEmail: formEmail,
     })
     // Don't re-throw - let caller handle gracefully
   }
 }
-
