@@ -7,7 +7,7 @@ import { Resend } from 'resend'
 function getVerifiedSenderEmail(): string {
   return process.env.ARIO_STUDIO_FROM_EMAIL || 
          process.env.EMAIL_FROM || 
-         'Ario Studio <noreply@ariostudio.com>'
+         'Ario Studio <noreply@yourdomain.com>'
 }
 
 /**
@@ -68,8 +68,8 @@ Lead ID: ${lead.id}
     console.log(`Sending admin notification from: ${fromEmail}, to: ${adminEmail}, replyTo: ${lead.email}`)
     
     const result = await resend.emails.send({
-      from: fromEmail,
-      to: adminEmail,
+      from: fromEmail, // Fixed verified sender
+      to: adminEmail, // Admin email from env
       replyTo: lead.email, // Admin can reply directly to the lead
       subject,
       html: `<pre style="font-family: sans-serif; white-space: pre-wrap;">${body}</pre>`,
@@ -112,7 +112,7 @@ export async function sendLeadAutoReplyEmail(lead: Lead): Promise<void> {
     
     console.log(`Attempting to send user confirmation email to: ${userEmail}`)
 
-    const subject = 'Thank you for contacting Ario Studio - We\'ve received your inquiry'
+    const subject = 'Thanks for contacting Ario Studio'
 
     // Build email body - confirmation email to the user
     let body = `Hi ${lead.name},
@@ -145,14 +145,18 @@ Submitted: ${lead.createdAt.toLocaleString()}`
 
     const fromEmail = getVerifiedSenderEmail()
     
-    console.log(`Sending user confirmation from: ${fromEmail}, to: ${userEmail}, replyTo: ${userEmail}`)
+    console.log(`Sending user confirmation from: ${fromEmail}, to: ${userEmail}`)
     
     const result = await resend.emails.send({
-      from: fromEmail,
-      to: userEmail,
-      replyTo: userEmail, // User can reply to their own email (which will go to admin)
+      from: fromEmail, // Fixed verified sender: "Ario Studio <noreply@yourdomain.com>"
+      to: userEmail, // Form email - any valid email address
       subject,
-      html: `<pre style="font-family: sans-serif; white-space: pre-wrap;">${body}</pre>`,
+      html: `
+        <p>Hi ${lead.name},</p>
+        <p>We received your message.</p>
+        <p>Thank you for contacting Ario Studio! We've successfully received your project inquiry and will get back to you within 24-48 hours.</p>
+        <p>Best regards,<br>Ario Studio Team</p>
+      `,
     })
 
     console.log(`User confirmation email sent successfully to lead: ${lead.id}`, result)
