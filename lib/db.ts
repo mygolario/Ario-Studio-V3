@@ -377,6 +377,10 @@ export interface CreateLeadInput {
   message: string
   source: string
   status?: string
+  aiSummary?: string
+  aiTags?: string[]
+  aiPriorityScore?: number
+  aiNotes?: string
 }
 
 export async function createLead(data: CreateLeadInput) {
@@ -391,6 +395,10 @@ export async function createLead(data: CreateLeadInput) {
       message: data.message,
       source: data.source,
       status: data.status || 'new',
+      aiSummary: data.aiSummary,
+      aiTags: data.aiTags || [],
+      aiPriorityScore: data.aiPriorityScore,
+      aiNotes: data.aiNotes,
     },
   })
 }
@@ -419,12 +427,26 @@ export async function updateLeadStatus(id: string, status: string, internalNotes
   })
 }
 
-export async function updateLead(id: string, data: { status?: string; internalNotes?: string }) {
+export async function updateLead(
+  id: string,
+  data: {
+    status?: string
+    internalNotes?: string
+    aiSummary?: string
+    aiTags?: string[]
+    aiPriorityScore?: number
+    aiNotes?: string
+  }
+) {
   return await prisma.lead.update({
     where: { id },
     data: {
       ...(data.status && { status: data.status }),
       ...(data.internalNotes !== undefined && { internalNotes: data.internalNotes }),
+      ...(data.aiSummary !== undefined && { aiSummary: data.aiSummary }),
+      ...(data.aiTags !== undefined && { aiTags: data.aiTags }),
+      ...(data.aiPriorityScore !== undefined && { aiPriorityScore: data.aiPriorityScore }),
+      ...(data.aiNotes !== undefined && { aiNotes: data.aiNotes }),
     },
   })
 }

@@ -63,3 +63,72 @@ export async function updateLeadAction(
   }
 }
 
+/**
+ * Server action to re-analyze a lead with AI
+ * 
+ * Requires admin authentication
+ */
+export async function reanalyzeLeadWithAIAction(
+  id: string
+): Promise<UpdateLeadActionResult> {
+  try {
+    // Check authentication
+    const session = await getServerSession(authOptions)
+    if (!session) {
+      return {
+        success: false,
+        error: 'Unauthorized. Please sign in.',
+      }
+    }
+
+    // Fetch the lead
+    const { getLeadById } = await import('@/lib/db')
+    const lead = await getLeadById(id)
+
+    if (!lead) {
+      return {
+        success: false,
+        error: 'Lead not found.',
+      }
+    }
+
+    // Enrich with AI
+    const { enrichLeadWithAI } = await import('@/lib/ai')
+    const aiEnrichment = await enrichLeadWithAI({
+      name: lead.name,
+      email: lead.email,
+      companyName: lead.companyName || undefined,
+      budgetRange: lead.budgetRange || undefined,
+      timeline: lead.timeline || undefined,
+      servicesNeeded: lead.servicesNeeded || [],
+      message: lead.message,
+    })
+
+    if (!aiEnrichment) {
+      return {
+        success: false,
+        error: 'AI enrichment failed. Please check OPENAI_API_KEY configuration.',
+      }
+    }
+
+    // Update lead with AI data
+    await updateLead(id, {
+      aiSummary: aiEnrichment.summary,
+      aiTags: aiEnrichment.tags,
+      aiPriorityScore: aiEnrichment.priorityScore,
+      aiNotes: aiEnrichment.notes,
+    })
+
+    return {
+      success: true,
+      message: 'Lead re-analyzed successfully',
+    }
+  } catch (error) {
+    console.error('Error re-analyzing lead:', error)
+    return {
+      success: false,
+      error: 'Failed to re-analyze lead. Please try again.',
+    }
+  }
+}
+

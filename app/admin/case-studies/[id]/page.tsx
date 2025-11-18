@@ -3,6 +3,7 @@ import { getCaseStudyById, getProjects } from '@/lib/db'
 import { updateCaseStudyAction, deleteCaseStudyAction } from '@/app/admin/case-studies/actions'
 import CaseStudyForm from '@/components/admin/CaseStudyForm'
 import DeleteCaseStudyButton from '@/components/admin/DeleteCaseStudyButton'
+import GenerateCaseStudyDraftButton from '@/components/admin/GenerateCaseStudyDraftButton'
 
 export default async function EditCaseStudyPage({
   params,
@@ -45,6 +46,15 @@ export default async function EditCaseStudyPage({
       </div>
 
       <div className="space-y-6">
+        {/* AI Helper */}
+        <div className="bg-surface border border-border-subtle rounded-xl p-8">
+          <h2 className="text-h4 font-semibold text-text-primary mb-4">AI Helper</h2>
+          <p className="text-body-sm text-text-secondary mb-4">
+            Generate a polished draft of your case study content using AI. Review and edit the generated content before publishing.
+          </p>
+          <GenerateCaseStudyDraftButton caseStudyId={caseStudy.id} />
+        </div>
+
         <CaseStudyForm caseStudy={caseStudy} projects={projects} action={handleSubmit} />
         
         <div className="bg-surface border border-border-subtle rounded-xl p-8">

@@ -2,7 +2,8 @@
 
 import { LeadFormSchema, type LeadFormValues } from '@/lib/validation/lead'
 import { createLead } from '@/lib/db'
-import { sendLeadNotificationEmail } from '@/lib/email'
+import { sendLeadNotificationEmail, sendLeadAutoReplyEmail } from '@/lib/email'
+import { enrichLeadWithAI } from '@/lib/ai'
 
 /**
  * Server action result type
@@ -82,6 +83,23 @@ export async function createLeadAction(
       ? `Project Type: ${validatedData.projectType}\n\n${validatedData.message}`
       : validatedData.message
 
+    // Attempt AI enrichment (non-blocking, graceful degradation)
+    let aiEnrichment = null
+    try {
+      aiEnrichment = await enrichLeadWithAI({
+        name: validatedData.name,
+        email: validatedData.email,
+        companyName: validatedData.companyName || undefined,
+        budgetRange: validatedData.budgetRange || undefined,
+        timeline: validatedData.timeline || undefined,
+        servicesNeeded: validatedData.servicesNeeded || [],
+        message: messageWithProjectType,
+      })
+    } catch (aiError) {
+      // Log AI error but don't fail the form submission
+      console.warn('AI enrichment failed (continuing without AI data):', aiError)
+    }
+
     const leadData = {
       name: validatedData.name,
       email: validatedData.email,
@@ -92,17 +110,30 @@ export async function createLeadAction(
       servicesNeeded: validatedData.servicesNeeded || [],
       source: validatedData.source,
       status: 'new' as const,
+      // Include AI enrichment if available
+      aiSummary: aiEnrichment?.summary,
+      aiTags: aiEnrichment?.tags,
+      aiPriorityScore: aiEnrichment?.priorityScore,
+      aiNotes: aiEnrichment?.notes,
     }
 
     // Create lead in database
     const lead = await createLead(leadData)
 
-    // Optionally send email notification (non-blocking)
+    // Send emails (non-blocking, graceful degradation)
     try {
       await sendLeadNotificationEmail(lead)
     } catch (emailError) {
       // Log email error but don't fail the form submission
       console.warn('Failed to send lead notification email:', emailError)
+    }
+
+    // Send auto-reply to lead
+    try {
+      await sendLeadAutoReplyEmail(lead)
+    } catch (emailError) {
+      // Log email error but don't fail the form submission
+      console.warn('Failed to send lead auto-reply email:', emailError)
     }
 
     return {

@@ -51,6 +51,7 @@ export default async function LeadsPage({
                 <tr>
                   <th className="text-left text-body-sm font-medium text-text-primary p-4">Name</th>
                   <th className="text-left text-body-sm font-medium text-text-primary p-4">Email</th>
+                  <th className="text-left text-body-sm font-medium text-text-primary p-4">Priority</th>
                   <th className="text-left text-body-sm font-medium text-text-primary p-4">Source</th>
                   <th className="text-left text-body-sm font-medium text-text-primary p-4">Budget</th>
                   <th className="text-left text-body-sm font-medium text-text-primary p-4">Status</th>
@@ -78,6 +79,23 @@ export default async function LeadsPage({
                       >
                         {lead.email}
                       </a>
+                    </td>
+                    <td className="p-4">
+                      {lead.aiPriorityScore ? (
+                        <span
+                          className={`inline-block px-2 py-1 rounded text-body-sm font-medium ${
+                            lead.aiPriorityScore >= 4
+                              ? 'bg-orange/20 text-orange border border-orange/40 font-semibold'
+                              : lead.aiPriorityScore >= 3
+                              ? 'bg-orange/10 text-orange border border-orange/20'
+                              : 'bg-surface-alt text-text-muted border border-border-subtle'
+                          }`}
+                        >
+                          {lead.aiPriorityScore}/5
+                        </span>
+                      ) : (
+                        <span className="text-body-sm text-text-muted">—</span>
+                      )}
                     </td>
                     <td className="p-4 text-body text-text-secondary">
                       {lead.source || '—'}

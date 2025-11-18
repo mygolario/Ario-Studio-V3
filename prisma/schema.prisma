@@ -81,6 +81,9 @@ model Lead {
   source        String   // e.g. "hero_form", "contact", "direct"
   status        String   @default("new") // "new", "reviewing", "contacted", "in_progress", "won", "lost"
   aiSummary     String?  @map("ai_summary")
+  aiTags        String[] @default([]) @map("ai_tags")
+  aiPriorityScore Int?   @map("ai_priority_score")
+  aiNotes       String?  @map("ai_notes")
   internalNotes String?  @map("internal_notes")
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")

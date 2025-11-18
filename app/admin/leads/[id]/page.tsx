@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getLeadById } from '@/lib/db'
 import LeadDetailForm from '@/components/admin/LeadDetailForm'
+import ReanalyzeLeadButton from '@/components/admin/ReanalyzeLeadButton'
 
 export default async function LeadDetailPage({
   params,
@@ -105,6 +106,65 @@ export default async function LeadDetailPage({
                 {lead.message}
               </div>
             </div>
+          </div>
+
+          {/* AI Insights */}
+          <div className="bg-surface border border-border-subtle rounded-xl p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-h4 font-semibold text-text-primary">AI Insights</h2>
+              <ReanalyzeLeadButton leadId={lead.id} />
+            </div>
+            {lead.aiSummary || lead.aiTags?.length > 0 || lead.aiPriorityScore || lead.aiNotes ? (
+              <div className="space-y-4">
+                {lead.aiSummary && (
+                  <div>
+                    <div className="text-body-sm text-text-muted mb-2">Summary</div>
+                    <p className="text-body text-text-secondary leading-relaxed">{lead.aiSummary}</p>
+                  </div>
+                )}
+                {lead.aiTags && lead.aiTags.length > 0 && (
+                  <div>
+                    <div className="text-body-sm text-text-muted mb-2">Tags</div>
+                    <div className="flex flex-wrap gap-2">
+                      {lead.aiTags.map((tag: string, idx: number) => (
+                        <span
+                          key={idx}
+                          className="text-body-sm text-text-secondary bg-orange/10 border border-orange/20 px-3 py-1 rounded-full"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {lead.aiPriorityScore && (
+                  <div>
+                    <div className="text-body-sm text-text-muted mb-2">Priority Score</div>
+                    <span
+                      className={`inline-block px-3 py-1.5 rounded text-body font-medium ${
+                        lead.aiPriorityScore >= 4
+                          ? 'bg-orange/20 text-orange border border-orange/40 font-semibold'
+                          : lead.aiPriorityScore >= 3
+                          ? 'bg-orange/10 text-orange border border-orange/20'
+                          : 'bg-surface-alt text-text-muted border border-border-subtle'
+                      }`}
+                    >
+                      {lead.aiPriorityScore}/5
+                    </span>
+                  </div>
+                )}
+                {lead.aiNotes && (
+                  <div>
+                    <div className="text-body-sm text-text-muted mb-2">Suggested Next Steps</div>
+                    <p className="text-body-sm text-text-secondary leading-relaxed italic">{lead.aiNotes}</p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="text-body-sm text-text-muted italic">
+                No AI insights yet. Click "Re-run AI analysis" to generate insights.
+              </div>
+            )}
           </div>
 
           {/* Metadata */}
