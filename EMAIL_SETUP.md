@@ -22,10 +22,11 @@ ADMIN_EMAIL="kavehtkts@gmail.com,ariokaveh85@gmail.com"
 در فایل `.env.local` یا `.env` این متغیرها را تنظیم کنید:
 
 ```bash
-# الزامی
+# الزامی - API Key از Resend Dashboard
 RESEND_API_KEY="re_xxxxxxxxxxxxx"
 
-# الزامی - می‌توانید چند ایمیل را با کاما جدا کنید
+# اختیاری - اگر می‌خواهید notification به ادمین ارسال شود
+# می‌توانید چند ایمیل را با کاما جدا کنید
 ADMIN_EMAIL="kavehtkts@gmail.com,ariokaveh85@gmail.com"
 
 # اختیاری - اگر می‌خواهید فرستنده را تغییر دهید
@@ -33,6 +34,11 @@ ARIO_STUDIO_FROM_EMAIL="Ario Studio <onboarding@resend.dev>"
 # یا
 EMAIL_FROM="onboarding@resend.dev"
 ```
+
+**نکته مهم:** 
+- `RESEND_API_KEY` **الزامی** است
+- `ADMIN_EMAIL` **اختیاری** است - اگر تنظیم نشود، فقط auto-reply به کاربر ارسال می‌شود
+- اگر `ADMIN_EMAIL` تنظیم نشود، notification به ادمین ارسال نمی‌شود (اما فرم submission موفق می‌شود)
 
 ## تست ارسال ایمیل
 
@@ -87,9 +93,9 @@ curl "http://localhost:3000/api/test-email?to=kavehtkts@gmail.com"
 ### 1. ایمیل ارسال نمی‌شود
 
 **بررسی کنید:**
-- ✅ `RESEND_API_KEY` در `.env.local` تنظیم شده است
+- ✅ `RESEND_API_KEY` در `.env.local` تنظیم شده است (الزامی)
 - ✅ API Key معتبر است (از dashboard Resend کپی شده)
-- ✅ `ADMIN_EMAIL` تنظیم شده است
+- ✅ `ADMIN_EMAIL` تنظیم شده است (اختیاری - فقط برای notification به ادمین)
 - ✅ سرور در حال اجرا است (`npm run dev`)
 
 **لاگ‌های کنسول را بررسی کنید:**
@@ -100,8 +106,10 @@ curl "http://localhost:3000/api/test-email?to=kavehtkts@gmail.com"
 
 **راه حل:**
 1. فایل `.env.local` را در root پروژه ایجاد کنید
-2. `RESEND_API_KEY` را اضافه کنید
+2. `RESEND_API_KEY` را اضافه کنید (الزامی)
 3. سرور را restart کنید
+
+**نکته:** `ADMIN_EMAIL` اختیاری است - اگر تنظیم نشود، فقط auto-reply به کاربر ارسال می‌شود
 
 ### 3. خطای "Invalid sender"
 
@@ -119,8 +127,8 @@ curl "http://localhost:3000/api/test-email?to=kavehtkts@gmail.com"
 ## نحوه کار
 
 ### هنگام ارسال فرم:
-1. **ایمیل به کاربر** (Auto-reply): به آدرس ایمیل وارد شده در فرم ارسال می‌شود
-2. **ایمیل به ادمین**: به تمام ایمیل‌های موجود در `ADMIN_EMAIL` ارسال می‌شود
+1. **ایمیل به کاربر** (Auto-reply): همیشه به آدرس ایمیل وارد شده در فرم ارسال می‌شود (اگر `RESEND_API_KEY` تنظیم شده باشد)
+2. **ایمیل به ادمین**: فقط اگر `ADMIN_EMAIL` تنظیم شده باشد، به تمام ایمیل‌های موجود در `ADMIN_EMAIL` ارسال می‌شود
 
 ### مثال:
 اگر `ADMIN_EMAIL="kavehtkts@gmail.com,ariokaveh85@gmail.com"` باشد:
@@ -129,10 +137,13 @@ curl "http://localhost:3000/api/test-email?to=kavehtkts@gmail.com"
 
 ## نکات مهم
 
-1. **فرستنده (from)**: همیشه `onboarding@resend.dev` است (یا از env)
-2. **گیرنده (to)**: برای کاربر = ایمیل وارد شده در فرم، برای ادمین = `ADMIN_EMAIL`
+1. **فرستنده (from)**: همیشه `onboarding@resend.dev` است (یا از env) - از Resend default استفاده می‌شود
+2. **گیرنده (to)**: 
+   - برای کاربر = ایمیل وارد شده در فرم (همیشه ارسال می‌شود اگر `RESEND_API_KEY` تنظیم شده باشد)
+   - برای ادمین = `ADMIN_EMAIL` (فقط اگر تنظیم شده باشد)
 3. **replyTo**: برای ادمین = ایمیل کاربر (می‌توانند مستقیماً پاسخ دهند)
 4. **خطاها**: اگر ارسال ایمیل fail شود، فرم submission موفق می‌شود (graceful degradation)
+5. **ADMIN_EMAIL اختیاری است**: اگر تنظیم نشود، فقط auto-reply به کاربر ارسال می‌شود
 
 ## تست نهایی
 

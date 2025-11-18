@@ -41,11 +41,16 @@ export async function sendLeadNotificationEmail(lead: Lead): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY
   const adminEmailRaw = process.env.ADMIN_EMAIL
 
-  // Skip if email is not configured
-  if (!apiKey || !adminEmailRaw) {
-    console.warn(
-      `Admin notification email skipped: RESEND_API_KEY=${!!apiKey}, ADMIN_EMAIL=${!!adminEmailRaw}`
-    )
+  // Skip if API key is not configured
+  if (!apiKey) {
+    console.warn(`Admin notification email skipped: RESEND_API_KEY is not configured`)
+    return
+  }
+
+  // ADMIN_EMAIL is optional - if not set, skip admin notification
+  // User auto-reply will still be sent via sendLeadAutoReplyEmail
+  if (!adminEmailRaw) {
+    console.log(`Admin notification skipped: ADMIN_EMAIL is not configured (this is optional)`)
     return
   }
 
@@ -56,7 +61,7 @@ export async function sendLeadNotificationEmail(lead: Lead): Promise<void> {
     .filter(email => email && isValidEmail(email))
 
   if (adminEmails.length === 0) {
-    console.error(`No valid admin email found in: ${adminEmailRaw}`)
+    console.warn(`No valid admin email found in: ${adminEmailRaw}`)
     return
   }
 
