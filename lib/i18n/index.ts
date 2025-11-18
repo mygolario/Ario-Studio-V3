@@ -30,6 +30,14 @@
  * Supported Languages:
  *   - 'fa' (Farsi/Persian)
  *   - 'en' (English) - default
+ * 
+ * TODO: Future Improvements
+ *   - [ ] Add translation fallback UI (show banner when translation missing)
+ *   - [ ] Implement translation completion status tracking
+ *   - [ ] Add support for more languages (e.g., 'ar', 'tr')
+ *   - [ ] Create admin panel for managing translations
+ *   - [ ] Add translation versioning/history
+ *   See docs/todo-i18n.md for full list of improvements
  */
 
 // Re-export all translation functions

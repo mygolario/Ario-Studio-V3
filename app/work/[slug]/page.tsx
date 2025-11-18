@@ -15,6 +15,9 @@ export const revalidate = 3600
 
 /**
  * Generate static params for all portfolio items
+ * 
+ * TODO: Consider generating params for both languages if using [lang] segments
+ * TODO: Add support for draft/unpublished items (exclude from static generation)
  */
 export async function generateStaticParams() {
   try {

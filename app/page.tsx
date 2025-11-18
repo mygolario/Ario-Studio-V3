@@ -105,10 +105,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  // Detect language from server context
+  // Detect language from server context (cookie -> Accept-Language -> default 'fa')
   const lang = await getServerLang()
 
-  // Fetch multilingual content from new API
+  // Fetch multilingual content from database
+  // TODO: Add error handling UI for when content fails to load
+  // TODO: Consider adding loading skeletons for better UX
   const [servicesContent, portfolioContent, processSteps, highlights] = await Promise.all([
     getLocalizedContentList('service', lang).catch(() => []),
     getLocalizedContentList('portfolio', lang).catch(() => []),

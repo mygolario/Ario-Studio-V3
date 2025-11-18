@@ -12,14 +12,14 @@ import { createLeadAction, type CreateLeadActionResult } from '@/app/actions/cre
  * Start Project Section
  * 
  * A high-quality contact/project initiation form with validation and user feedback.
+ * Supports bilingual (FA/EN) form submission and error messages.
  * 
- * To adjust form fields:
- * - Edit the formFields state and validation logic
- * - Update the handleSubmit function to process new fields
- * 
- * To hook up to a real API:
- * - Replace the setTimeout in handleSubmit with an actual API call
- * - Handle success/error responses appropriately
+ * TODO: Future improvements
+ *   - [ ] Add CAPTCHA for spam prevention
+ *   - [ ] Add rate limiting UI feedback
+ *   - [ ] Add file upload support for project briefs
+ *   - [ ] Add form field validation on blur (not just submit)
+ *   - [ ] Add auto-save draft functionality
  */
 export default function StartProjectSection() {
   const t = useTranslation()
