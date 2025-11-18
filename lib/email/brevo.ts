@@ -1,4 +1,6 @@
 import nodemailer from 'nodemailer'
+import { getTranslation } from '@/lib/i18n/server-i18n'
+import { type SupportedLang } from '@/lib/i18n/get-request-lang'
 
 /**
  * Contact email payload type
@@ -68,31 +70,40 @@ function getToEmail(): string {
 /**
  * Generate HTML email template for contact form submissions
  * Matches Ario Studio's dark, modern, AI/studio vibe
+ * Supports bilingual content (EN/FA)
  */
-function generateContactEmailHTML(payload: ContactEmailPayload): string {
-  const subject = payload.subject || 'New contact message from Ario Studio website'
-  const dateTime = new Date().toLocaleString('en-US', {
+function generateContactEmailHTML(payload: ContactEmailPayload, lang: SupportedLang = 'en'): string {
+  const t = (key: string) => getTranslation(lang, key)
+  const subject = payload.subject || t('email.contactSubject')
+  const dateTime = new Date().toLocaleString(lang === 'fa' ? 'fa-IR' : 'en-US', {
     dateStyle: 'full',
     timeStyle: 'long',
   })
+  
+  const isRTL = lang === 'fa'
+  const dir = isRTL ? 'rtl' : 'ltr'
+  const textAlign = isRTL ? 'right' : 'left'
+  const fontFamily = isRTL 
+    ? "'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+    : "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
 
   return `
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${lang}" dir="${dir}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${subject}</title>
 </head>
-<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #0a0a0a; color: #e5e5e5;">
+<body style="margin: 0; padding: 0; font-family: ${fontFamily}; background-color: #0a0a0a; color: #e5e5e5;">
   <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #0a0a0a;">
     <!-- Header with gradient accent -->
-    <div style="border-left: 4px solid #ff6b35; padding-left: 20px; margin-bottom: 32px;">
+    <div style="border-${isRTL ? 'right' : 'left'}: 4px solid #ff6b35; padding-${isRTL ? 'right' : 'left'}: 20px; margin-bottom: 32px;">
       <h1 style="margin: 0; font-size: 24px; font-weight: 600; color: #ffffff; letter-spacing: -0.5px;">
         Ario Studio
       </h1>
       <p style="margin: 8px 0 0 0; font-size: 14px; color: #a0a0a0; text-transform: uppercase; letter-spacing: 1px;">
-        New Contact Message
+        ${t('email.contactIntro')}
       </p>
     </div>
 
@@ -100,22 +111,22 @@ function generateContactEmailHTML(payload: ContactEmailPayload): string {
     <div style="background-color: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; padding: 32px; margin-bottom: 24px;">
       <!-- Subject -->
       <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a;">
-        <h2 style="margin: 0; font-size: 18px; font-weight: 600; color: #ffffff;">
+        <h2 style="margin: 0; font-size: 18px; font-weight: 600; color: #ffffff; text-align: ${textAlign};">
           ${subject}
         </h2>
       </div>
 
       <!-- Contact Information -->
       <div style="margin-bottom: 24px;">
-        <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #ff6b35; text-transform: uppercase; letter-spacing: 0.5px;">
-          Contact Information
+        <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #ff6b35; text-transform: uppercase; letter-spacing: 0.5px; text-align: ${textAlign};">
+          ${lang === 'fa' ? 'اطلاعات تماس' : 'Contact Information'}
         </h3>
         <div style="background-color: #0f0f0f; border-radius: 8px; padding: 16px;">
-          <p style="margin: 8px 0; font-size: 14px; color: #e5e5e5;">
-            <strong style="color: #ffffff;">Name:</strong> ${payload.name}
+          <p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};">
+            <strong style="color: #ffffff;">${lang === 'fa' ? 'نام:' : 'Name:'}</strong> ${payload.name}
           </p>
-          <p style="margin: 8px 0; font-size: 14px; color: #e5e5e5;">
-            <strong style="color: #ffffff;">Email:</strong> 
+          <p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};">
+            <strong style="color: #ffffff;">${lang === 'fa' ? 'ایمیل:' : 'Email:'}</strong> 
             <a href="mailto:${payload.email}" style="color: #ff6b35; text-decoration: none;">
               ${payload.email}
             </a>
@@ -125,20 +136,20 @@ function generateContactEmailHTML(payload: ContactEmailPayload): string {
 
       <!-- Message -->
       <div style="margin-bottom: 24px;">
-        <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #ff6b35; text-transform: uppercase; letter-spacing: 0.5px;">
-          Message
+        <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #ff6b35; text-transform: uppercase; letter-spacing: 0.5px; text-align: ${textAlign};">
+          ${lang === 'fa' ? 'پیام' : 'Message'}
         </h3>
-        <div style="background-color: #0f0f0f; border-radius: 8px; padding: 16px; border-left: 3px solid #ff6b35;">
-          <p style="margin: 0; font-size: 14px; color: #e5e5e5; line-height: 1.6; white-space: pre-wrap;">
+        <div style="background-color: #0f0f0f; border-radius: 8px; padding: 16px; border-${isRTL ? 'right' : 'left'}: 3px solid #ff6b35;">
+          <p style="margin: 0; font-size: 14px; color: #e5e5e5; line-height: 1.6; white-space: pre-wrap; text-align: ${textAlign};">
             ${payload.message.replace(/\n/g, '<br>')}
           </p>
         </div>
       </div>
 
       <!-- Footer Info -->
-      <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #2a2a2a; font-size: 12px; color: #808080;">
+      <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #2a2a2a; font-size: 12px; color: #808080; text-align: ${textAlign};">
         <p style="margin: 4px 0;">
-          <strong>Received:</strong> ${dateTime}
+          <strong>${lang === 'fa' ? 'دریافت شده:' : 'Received:'}</strong> ${dateTime}
         </p>
       </div>
     </div>
@@ -146,7 +157,7 @@ function generateContactEmailHTML(payload: ContactEmailPayload): string {
     <!-- Footer -->
     <div style="text-align: center; padding-top: 24px; border-top: 1px solid #2a2a2a;">
       <p style="margin: 0; font-size: 12px; color: #808080;">
-        This message was sent from the Ario Studio contact form.
+        ${t('email.contactOutro')}
       </p>
     </div>
   </div>
@@ -157,52 +168,63 @@ function generateContactEmailHTML(payload: ContactEmailPayload): string {
 
 /**
  * Generate plain text email for contact form submissions
+ * Supports bilingual content (EN/FA)
  */
-function generateContactEmailText(payload: ContactEmailPayload): string {
-  const subject = payload.subject || 'New contact message from Ario Studio website'
-  const dateTime = new Date().toLocaleString('en-US', {
+function generateContactEmailText(payload: ContactEmailPayload, lang: SupportedLang = 'en'): string {
+  const t = (key: string) => getTranslation(lang, key)
+  const subject = payload.subject || t('email.contactSubject')
+  const dateTime = new Date().toLocaleString(lang === 'fa' ? 'fa-IR' : 'en-US', {
     dateStyle: 'full',
     timeStyle: 'long',
   })
 
   return `
-ARIO STUDIO - NEW CONTACT MESSAGE
+ARIO STUDIO - ${lang === 'fa' ? 'پیام تماس جدید' : 'NEW CONTACT MESSAGE'}
 ${'='.repeat(50)}
 
-Subject: ${subject}
+${lang === 'fa' ? 'موضوع:' : 'Subject:'} ${subject}
 
-CONTACT INFORMATION
+${lang === 'fa' ? 'اطلاعات تماس' : 'CONTACT INFORMATION'}
 ${'-'.repeat(50)}
-Name: ${payload.name}
-Email: ${payload.email}
+${lang === 'fa' ? 'نام:' : 'Name:'} ${payload.name}
+${lang === 'fa' ? 'ایمیل:' : 'Email:'} ${payload.email}
 
-MESSAGE
+${lang === 'fa' ? 'پیام' : 'MESSAGE'}
 ${'-'.repeat(50)}
 ${payload.message}
 
 ${'-'.repeat(50)}
-Received: ${dateTime}
+${lang === 'fa' ? 'دریافت شده:' : 'Received:'} ${dateTime}
 
-This message was sent from the Ario Studio contact form.
+${t('email.contactOutro')}
   `.trim()
 }
 
 /**
  * Generate auto-reply HTML email template
+ * Supports bilingual content (EN/FA)
  */
-function generateAutoReplyHTML(name: string): string {
+function generateAutoReplyHTML(name: string, lang: SupportedLang = 'en'): string {
+  const t = (key: string) => getTranslation(lang, key)
+  const isRTL = lang === 'fa'
+  const dir = isRTL ? 'rtl' : 'ltr'
+  const textAlign = isRTL ? 'right' : 'left'
+  const fontFamily = isRTL 
+    ? "'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+    : "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+
   return `
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${lang}" dir="${dir}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thanks for contacting Ario Studio</title>
+  <title>${t('email.autoReplySubject')}</title>
 </head>
-<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #0a0a0a; color: #e5e5e5;">
+<body style="margin: 0; padding: 0; font-family: ${fontFamily}; background-color: #0a0a0a; color: #e5e5e5;">
   <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #0a0a0a;">
     <!-- Header -->
-    <div style="border-left: 4px solid #ff6b35; padding-left: 20px; margin-bottom: 32px;">
+    <div style="border-${isRTL ? 'right' : 'left'}: 4px solid #ff6b35; padding-${isRTL ? 'right' : 'left'}: 20px; margin-bottom: 32px;">
       <h1 style="margin: 0; font-size: 24px; font-weight: 600; color: #ffffff; letter-spacing: -0.5px;">
         Ario Studio
       </h1>
@@ -210,32 +232,28 @@ function generateAutoReplyHTML(name: string): string {
 
     <!-- Main Content -->
     <div style="background-color: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; padding: 32px;">
-      <h2 style="margin: 0 0 20px 0; font-size: 20px; font-weight: 600; color: #ffffff;">
-        Thanks for reaching out!
+      <h2 style="margin: 0 0 20px 0; font-size: 20px; font-weight: 600; color: #ffffff; text-align: ${textAlign};">
+        ${lang === 'fa' ? 'با تشکر از تماس شما!' : 'Thanks for reaching out!'}
       </h2>
       
-      <p style="margin: 0 0 16px 0; font-size: 14px; color: #e5e5e5; line-height: 1.6;">
-        Hi ${name},
+      <p style="margin: 0 0 16px 0; font-size: 14px; color: #e5e5e5; line-height: 1.6; text-align: ${textAlign};">
+        ${lang === 'fa' ? 'سلام' : 'Hi'} ${name}،
       </p>
       
-      <p style="margin: 0 0 16px 0; font-size: 14px; color: #e5e5e5; line-height: 1.6;">
-        We've received your message and appreciate you taking the time to contact Ario Studio.
+      <p style="margin: 0 0 16px 0; font-size: 14px; color: #e5e5e5; line-height: 1.6; text-align: ${textAlign};">
+        ${t('email.autoReplyBody')}
       </p>
       
-      <p style="margin: 0 0 16px 0; font-size: 14px; color: #e5e5e5; line-height: 1.6;">
-        Our team will review your inquiry and get back to you within 24-48 hours.
-      </p>
-      
-      <p style="margin: 24px 0 0 0; font-size: 14px; color: #e5e5e5; line-height: 1.6;">
-        Best regards,<br>
-        <strong style="color: #ff6b35;">Ario Studio Team</strong>
+      <p style="margin: 24px 0 0 0; font-size: 14px; color: #e5e5e5; line-height: 1.6; text-align: ${textAlign};">
+        ${lang === 'fa' ? 'با احترام،' : 'Best regards,'}<br>
+        <strong style="color: #ff6b35;">${lang === 'fa' ? 'تیم آریو استودیو' : 'Ario Studio Team'}</strong>
       </p>
     </div>
 
     <!-- Footer -->
     <div style="text-align: center; padding-top: 24px; border-top: 1px solid #2a2a2a; margin-top: 32px;">
       <p style="margin: 0; font-size: 12px; color: #808080;">
-        This is an automated confirmation email.
+        ${lang === 'fa' ? 'این یک ایمیل تأیید خودکار است.' : 'This is an automated confirmation email.'}
       </p>
     </div>
   </div>
@@ -246,24 +264,25 @@ function generateAutoReplyHTML(name: string): string {
 
 /**
  * Generate plain text auto-reply email
+ * Supports bilingual content (EN/FA)
  */
-function generateAutoReplyText(name: string): string {
+function generateAutoReplyText(name: string, lang: SupportedLang = 'en'): string {
+  const t = (key: string) => getTranslation(lang, key)
+  
   return `
 ARIO STUDIO
 
-Hi ${name},
+${lang === 'fa' ? 'سلام' : 'Hi'} ${name}،
 
-Thanks for reaching out!
+${lang === 'fa' ? 'با تشکر از تماس شما!' : 'Thanks for reaching out!'}
 
-We've received your message and appreciate you taking the time to contact Ario Studio.
+${t('email.autoReplyBody')}
 
-Our team will review your inquiry and get back to you within 24-48 hours.
-
-Best regards,
-Ario Studio Team
+${lang === 'fa' ? 'با احترام،' : 'Best regards,'}
+${lang === 'fa' ? 'تیم آریو استودیو' : 'Ario Studio Team'}
 
 ---
-This is an automated confirmation email.
+${lang === 'fa' ? 'این یک ایمیل تأیید خودکار است.' : 'This is an automated confirmation email.'}
   `.trim()
 }
 
@@ -271,9 +290,13 @@ This is an automated confirmation email.
  * Send contact form email to admin
  * 
  * @param payload - Contact form data
+ * @param lang - Language code ('en' or 'fa') for email content
  * @throws Error if validation fails or email sending fails
  */
-export async function sendContactEmail(payload: ContactEmailPayload): Promise<void> {
+export async function sendContactEmail(
+  payload: ContactEmailPayload,
+  lang: SupportedLang = 'en'
+): Promise<void> {
   // Validate input
   if (!payload.name || payload.name.trim().length === 0) {
     throw new Error('Name is required')
@@ -290,7 +313,8 @@ export async function sendContactEmail(payload: ContactEmailPayload): Promise<vo
   // Get configuration
   const fromEmail = getFromEmail()
   const toEmail = getToEmail()
-  const subject = payload.subject || 'New contact message from Ario Studio website'
+  const t = (key: string) => getTranslation(lang, key)
+  const subject = payload.subject || t('email.contactSubject')
 
   // Create transporter
   const transporter = getBrevoTransporter()
@@ -302,8 +326,8 @@ export async function sendContactEmail(payload: ContactEmailPayload): Promise<vo
       to: toEmail,
       replyTo: payload.email, // Allow admin to reply directly to the sender
       subject,
-      html: generateContactEmailHTML(payload),
-      text: generateContactEmailText(payload),
+      html: generateContactEmailHTML(payload, lang),
+      text: generateContactEmailText(payload, lang),
     })
 
     console.log('Contact email sent successfully:', {
@@ -311,6 +335,7 @@ export async function sendContactEmail(payload: ContactEmailPayload): Promise<vo
       to: toEmail,
       from: fromEmail,
       replyTo: payload.email,
+      lang,
     })
   } catch (error: any) {
     console.error('Failed to send contact email:', {
@@ -318,6 +343,7 @@ export async function sendContactEmail(payload: ContactEmailPayload): Promise<vo
       stack: error?.stack,
       to: toEmail,
       from: fromEmail,
+      lang,
     })
     throw new Error(`Failed to send email: ${error?.message || 'Unknown error'}`)
   }
@@ -328,9 +354,14 @@ export async function sendContactEmail(payload: ContactEmailPayload): Promise<vo
  * 
  * @param name - User's name
  * @param email - User's email address
+ * @param lang - Language code ('en' or 'fa') for email content
  * @throws Error if email sending fails
  */
-export async function sendAutoReplyEmail(name: string, email: string): Promise<void> {
+export async function sendAutoReplyEmail(
+  name: string,
+  email: string,
+  lang: SupportedLang = 'en'
+): Promise<void> {
   // Validate input
   if (!name || name.trim().length === 0) {
     throw new Error('Name is required for auto-reply')
@@ -342,6 +373,7 @@ export async function sendAutoReplyEmail(name: string, email: string): Promise<v
 
   // Get configuration
   const fromEmail = getFromEmail()
+  const t = (key: string) => getTranslation(lang, key)
 
   // Create transporter
   const transporter = getBrevoTransporter()
@@ -351,15 +383,16 @@ export async function sendAutoReplyEmail(name: string, email: string): Promise<v
     const info = await transporter.sendMail({
       from: fromEmail,
       to: email,
-      subject: 'Thanks for contacting Ario Studio',
-      html: generateAutoReplyHTML(name),
-      text: generateAutoReplyText(name),
+      subject: t('email.autoReplySubject'),
+      html: generateAutoReplyHTML(name, lang),
+      text: generateAutoReplyText(name, lang),
     })
 
     console.log('Auto-reply email sent successfully:', {
       messageId: info.messageId,
       to: email,
       from: fromEmail,
+      lang,
     })
   } catch (error: any) {
     // Log error but don't throw - auto-reply failure shouldn't break the main flow
@@ -368,6 +401,7 @@ export async function sendAutoReplyEmail(name: string, email: string): Promise<v
       stack: error?.stack,
       to: email,
       from: fromEmail,
+      lang,
     })
     // Don't re-throw - let caller handle gracefully
   }
