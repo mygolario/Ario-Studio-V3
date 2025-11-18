@@ -3,6 +3,9 @@ import { getAllCaseStudies } from '@/lib/db'
 
 export default async function AdminCaseStudiesPage() {
   const caseStudies = await getAllCaseStudies().catch(() => [])
+  
+  // Type for case study
+  type CaseStudy = Awaited<ReturnType<typeof getAllCaseStudies>>[0]
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -42,7 +45,7 @@ export default async function AdminCaseStudiesPage() {
                 </tr>
               </thead>
               <tbody>
-                {caseStudies.map((caseStudy) => (
+                {caseStudies.map((caseStudy: CaseStudy) => (
                   <tr
                     key={caseStudy.id}
                     className="border-b border-border-subtle hover:bg-surface-alt transition-colors"

@@ -3,6 +3,9 @@ import { getAllBlogPosts } from '@/lib/db'
 
 export default async function AdminBlogPage() {
   const posts = await getAllBlogPosts().catch(() => [])
+  
+  // Type for blog post
+  type BlogPost = Awaited<ReturnType<typeof getAllBlogPosts>>[0]
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -42,7 +45,7 @@ export default async function AdminBlogPage() {
                 </tr>
               </thead>
               <tbody>
-                {posts.map((post) => (
+                {posts.map((post: BlogPost) => (
                   <tr
                     key={post.id}
                     className="border-b border-border-subtle hover:bg-surface-alt transition-colors"

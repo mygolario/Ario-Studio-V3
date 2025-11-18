@@ -33,7 +33,7 @@ export default async function BlogPage() {
             </div>
           ) : (
             <div className="grid md:grid-cols-2 gap-8">
-              {posts.map((post) => (
+              {posts.map((post: Awaited<ReturnType<typeof getPublishedBlogPosts>>[0]) => (
                 <Link
                   key={post.id}
                   href={`/blog/${post.slug}`}
