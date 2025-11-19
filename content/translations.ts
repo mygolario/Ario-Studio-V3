@@ -19,6 +19,8 @@ export const translations = {
       ctaSecondary: 'بیایید صحبت کنیم',
       scrollIndicator: 'اسکرول کنید تا کاوش کنید',
       chips: ['مبتنی بر هوش مصنوعی', 'تجربه کاربری سینمایی', 'آماده برای عامل هوشمند'],
+      cardTitle: 'استودیو هوش مصنوعی',
+      cardDescription: 'داشبورد آماده برای عامل هوشمند',
     },
     services: {
       label: 'آنچه انجام می‌دهیم',
@@ -260,6 +262,8 @@ export const translations = {
       ctaSecondary: "Let's talk",
       scrollIndicator: 'Scroll to explore',
       chips: ['AI-native', 'Cinematic UX', 'Agent-ready'],
+      cardTitle: 'AI Studio',
+      cardDescription: 'Agent-ready dashboard',
     },
     services: {
       label: 'What we do',
