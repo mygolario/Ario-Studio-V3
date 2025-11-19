@@ -154,6 +154,7 @@ model Content {
   order        Int?
   featured     Boolean              @default(false)
   archived     Boolean              @default(false)
+  layoutType   String?              @map("layout_type") // Case study layout type: "basic" | "cinematic" | "split" | "story"
   createdAt    DateTime             @default(now()) @map("created_at")
   updatedAt    DateTime             @updatedAt @map("updated_at")
   translations ContentTranslation[]

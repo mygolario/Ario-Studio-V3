@@ -229,6 +229,7 @@ async function main() {
       isPublished: true,
       featured: true,
       order: 1,
+      layoutType: 'cinematic',
       translations: {
         create: [
           {
@@ -293,6 +294,7 @@ async function main() {
       isPublished: true,
       featured: true,
       order: 2,
+      layoutType: 'split',
       translations: {
         create: [
           {

@@ -22,6 +22,12 @@ import { type SupportedLang } from '@/lib/i18n'
 export type ContentType = 'portfolio' | 'service' | 'blog'
 
 /**
+ * Case Study Layout Type
+ * Defines different layout styles for case study pages
+ */
+export type CaseStudyLayoutType = 'basic' | 'cinematic' | 'split' | 'story'
+
+/**
  * Core content entity (language-agnostic)
  * Contains metadata and structure shared across all languages
  */
@@ -37,6 +43,7 @@ export interface Content {
   // Optional metadata fields
   featured?: boolean
   archived?: boolean
+  layoutType?: CaseStudyLayoutType | null // Case study layout type
   
   // Relations (when loaded with Prisma)
   translations?: ContentTranslation[]
@@ -87,6 +94,7 @@ export interface LocalizedContent {
   order?: number | null
   featured?: boolean
   archived?: boolean
+  layoutType?: CaseStudyLayoutType | null // Case study layout type
   
   // Language-specific fields
   lang: SupportedLang
@@ -121,6 +129,7 @@ export interface CreateContentInput {
   isPublished?: boolean
   order?: number | null
   featured?: boolean
+  layoutType?: CaseStudyLayoutType | null
   translations: Array<{
     lang: SupportedLang
     title: string
@@ -149,6 +158,7 @@ export interface UpdateContentInput {
   order?: number | null
   featured?: boolean
   archived?: boolean
+  layoutType?: CaseStudyLayoutType | null
 }
 
 /**

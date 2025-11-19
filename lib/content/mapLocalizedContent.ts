@@ -16,7 +16,12 @@
  */
 
 import { type SupportedLang } from '@/lib/i18n'
-import type { Content, ContentTranslation, LocalizedContent } from './types'
+import type {
+  CaseStudyLayoutType,
+  Content,
+  ContentTranslation,
+  LocalizedContent,
+} from './types'
 
 /**
  * Type for Content with translations loaded (Prisma include)
@@ -101,6 +106,11 @@ export function mapToLocalizedContent(
   // Parse galleryImages (handle JSON from Prisma)
   const galleryImages = parseGalleryImages(translation.galleryImages)
 
+  const resolvedLayoutType: CaseStudyLayoutType | null =
+    content.type === 'portfolio'
+      ? ((content.layoutType as CaseStudyLayoutType | null) ?? 'basic')
+      : ((content.layoutType as CaseStudyLayoutType | null) ?? null)
+
   // Build LocalizedContent object
   return {
     // Core content fields
@@ -111,6 +121,7 @@ export function mapToLocalizedContent(
     order: content.order ?? null,
     featured: content.featured ?? false,
     archived: content.archived ?? false,
+    layoutType: resolvedLayoutType,
     
     // Language-specific fields from translation
     lang: translation.lang,
