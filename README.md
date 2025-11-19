@@ -43,6 +43,9 @@ BREVO_SMTP_PASS="your-brevo-smtp-password"
 BREVO_API_KEY="your-brevo-api-key" # Optional
 CONTACT_FROM_EMAIL="info@ariostudio.net" # From email address
 CONTACT_TO_EMAIL="info@ariostudio.net" # Admin inbox for contact messages
+
+# Prisma (Optional)
+OPTIMIZE_API_KEY="your-prisma-optimize-api-key" # For Prisma Optimize query analysis
 ```
 
 3. Set up the database:
