@@ -1,14 +1,18 @@
 import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
+import { withOptimize } from '@prisma/extension-optimize'
 
 /**
- * Prisma Client Singleton with Accelerate (Edge)
+ * Prisma Client Singleton with Accelerate and Optimize (Edge)
  * 
  * Prevents multiple instances of PrismaClient in development
  * due to hot-reloading creating new instances.
  * 
  * Uses Prisma Accelerate for connection pooling and caching
  * when DATABASE_URL uses prisma:// or prisma+postgres:// protocol.
+ * 
+ * Uses Prisma Optimize for query analysis and optimization
+ * when OPTIMIZE_API_KEY is available.
  */
 const globalForPrisma = globalThis as unknown as {
   prisma: ReturnType<typeof createPrismaClient> | undefined
@@ -21,12 +25,26 @@ function createPrismaClient() {
 
   // Use Accelerate extension if DATABASE_URL uses Prisma Accelerate protocol
   const dbUrl = process.env.DATABASE_URL || ''
-  if (dbUrl.startsWith('prisma://') || dbUrl.startsWith('prisma+postgres://')) {
-    return baseClient.$extends(withAccelerate()) as unknown as PrismaClient
+  const useAccelerate = dbUrl.startsWith('prisma://') || dbUrl.startsWith('prisma+postgres://')
+  const useOptimize = !!process.env.OPTIMIZE_API_KEY
+
+  let client = baseClient
+
+  // Apply Accelerate extension if available
+  if (useAccelerate) {
+    client = client.$extends(withAccelerate()) as any
   }
 
-  // Fallback to regular client for direct database connections
-  return baseClient
+  // Apply Optimize extension if API key is available
+  if (useOptimize) {
+    client = client.$extends(
+      withOptimize({
+        apiKey: process.env.OPTIMIZE_API_KEY!,
+      })
+    ) as any
+  }
+
+  return client as unknown as PrismaClient
 }
 
 export const prisma = (globalForPrisma.prisma ?? createPrismaClient()) as PrismaClient
