@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
       count: portfolioItems.length,
       lang,
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Internal error - log for developer, return user-friendly message
     console.error('Error fetching portfolio:', error)
     
