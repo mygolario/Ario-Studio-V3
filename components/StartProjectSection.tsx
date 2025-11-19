@@ -10,6 +10,7 @@ import { useLanguage } from '@/contexts/LanguageContext'
 import { createLeadAction, type CreateLeadActionResult } from '@/app/actions/create-lead'
 import { type SupportedLang } from '@/lib/i18n'
 import { type LocalizedContent } from '@/lib/content/types'
+import { trackEvent } from '@/lib/analytics/trackEvent'
 
 /**
  * Start Project Section
@@ -206,6 +207,15 @@ export default function StartProjectSection() {
       setResult(actionResult)
 
       if (actionResult.success) {
+        // Track successful submission
+        trackEvent('contact_submit_success', {
+          lang,
+          serviceSlug: formData.serviceSlug || '',
+          budgetRange: formData.budgetRange || formData.budget || '',
+          timeline: formData.timeline || '',
+          businessType: formData.businessType || '',
+        })
+
         // Clear form on success (keep serviceSlug if it came from URL)
         const serviceSlugFromUrl = searchParams.get('service')
         setFormData({ 
@@ -227,6 +237,12 @@ export default function StartProjectSection() {
         setTimeout(() => {
           setResult(null)
         }, 5000)
+      } else {
+        // Track error
+        trackEvent('contact_submit_error', {
+          lang,
+          errorType: actionResult.errors ? 'validation' : 'server',
+        })
       }
     })
   }

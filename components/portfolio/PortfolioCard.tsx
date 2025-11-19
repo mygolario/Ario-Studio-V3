@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { type LocalizedContent } from '@/lib/content/types'
 import { mapCategoryToLabel } from '@/lib/content/mapLocalizedContent'
 import { type SupportedLang } from '@/lib/i18n'
+import { trackEvent } from '@/lib/analytics/trackEvent'
 
 interface PortfolioCardProps {
   lang: SupportedLang
@@ -49,9 +50,18 @@ export default function PortfolioCard({ lang, item }: PortfolioCardProps) {
 
   const statusLabel = statusLabels[status]?.[lang] || status
 
+  const handleClick = () => {
+    trackEvent('portfolio_card_click', {
+      lang,
+      slug: item.slug,
+      category: item.category ?? '',
+    })
+  }
+
   return (
     <Link
       href={`/${lang}/work/${item.slug}`}
+      onClick={handleClick}
       className="group bg-surface rounded-xl overflow-hidden border border-border-subtle hover:shadow-card-hover hover:-translate-y-2 hover:border-orange/50 transition-all duration-300 cursor-pointer block relative"
     >
       {/* Subtle inner glow on hover */}

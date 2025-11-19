@@ -1,8 +1,10 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { type LocalizedContent, type ServiceLevel } from '@/lib/content/types'
 import { type SupportedLang } from '@/lib/i18n'
+import { trackEvent } from '@/lib/analytics/trackEvent'
 
 interface ServiceCardProps {
   lang: SupportedLang
@@ -17,6 +19,7 @@ interface ServiceCardProps {
  */
 export default function ServiceCard({ lang, item }: ServiceCardProps) {
   const isRTL = lang === 'fa'
+  const router = useRouter()
   
   // Service level labels (bilingual)
   const levelLabels: Record<ServiceLevel, { fa: string; en: string }> = {
@@ -55,6 +58,25 @@ export default function ServiceCard({ lang, item }: ServiceCardProps) {
   // CTA link - link to homepage contact section with service query param
   const ctaLink = `/#contact?service=${item.slug}`
   const ctaText = lang === 'fa' ? 'شروع این نوع پروژه' : 'Start this project'
+
+  const handleCTAClick = () => {
+    trackEvent('service_card_click', {
+      lang,
+      serviceSlug: item.slug,
+      serviceLevel: item.serviceLevel ?? '',
+    })
+    // Scroll to contact form
+    const element = document.querySelector('#contact')
+    if (element) {
+      const headerHeight = 80
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+      const offsetPosition = elementPosition - headerHeight
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      })
+    }
+  }
 
   return (
     <div className="group relative bg-surface border border-border-subtle rounded-xl p-8 hover:shadow-card-hover hover:border-orange/50 transition-all duration-300 overflow-hidden">
@@ -116,6 +138,7 @@ export default function ServiceCard({ lang, item }: ServiceCardProps) {
         {/* CTA Button */}
         <Link
           href={ctaLink}
+          onClick={handleCTAClick}
           className={`block w-full text-center py-3 px-6 rounded-lg bg-orange/10 border border-orange/30 text-orange font-medium hover:bg-orange hover:text-white transition-all duration-200 ${isRTL ? 'text-right' : 'text-left'}`}
         >
           {ctaText}

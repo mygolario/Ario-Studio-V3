@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useEffect, useState } from 'react'
+import { trackEvent } from '@/lib/analytics/trackEvent'
 
 export default function LanguageToggle() {
   const { language, toggleLanguage } = useLanguage()
@@ -15,9 +16,21 @@ export default function LanguageToggle() {
   // Use default language during SSR
   const currentLanguage = mounted ? language : 'fa'
 
+  const handleLanguageSwitch = () => {
+    const fromLang = currentLanguage
+    const toLang = currentLanguage === 'fa' ? 'en' : 'fa'
+    
+    trackEvent('language_switch', {
+      fromLang,
+      toLang,
+    })
+    
+    toggleLanguage()
+  }
+
   return (
     <motion.button
-      onClick={toggleLanguage}
+      onClick={handleLanguageSwitch}
       className="relative flex items-center gap-2 px-4 py-2 rounded-full border border-border-subtle bg-surface hover:border-orange transition-all duration-250 cursor-pointer group"
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
