@@ -33,7 +33,9 @@ export async function getLocalizedContentList(
 ): Promise<LocalizedContent[]> {
   try {
     // Fetch content with translations from database
-    // Using cacheStrategy when Accelerate is enabled (prisma:// URL)
+    const dbUrl = process.env.DATABASE_URL || ''
+    const useAccelerate = dbUrl.startsWith('prisma://') || dbUrl.startsWith('prisma+postgres://')
+    
     const contents = await prisma.content.findMany({
       where: {
         type: type,
@@ -47,8 +49,8 @@ export async function getLocalizedContentList(
         { order: 'asc' },
         { createdAt: 'desc' },
       ],
-      cacheStrategy: { ttl: 60 }, // Cache for 60 seconds
-    })
+      ...(useAccelerate && { cacheStrategy: { ttl: 60 } }), // Cache for 60 seconds when using Accelerate
+    } as any)
 
     // Map each content to LocalizedContent using the helper
     const localizedContents = contents
@@ -82,6 +84,9 @@ export async function getLocalizedContentBySlug(
 ): Promise<LocalizedContent | null> {
   try {
     // Fetch content with translations from database
+    const dbUrl = process.env.DATABASE_URL || ''
+    const useAccelerate = dbUrl.startsWith('prisma://') || dbUrl.startsWith('prisma+postgres://')
+    
     const content = await prisma.content.findUnique({
       where: {
         slug: slug,
@@ -89,8 +94,8 @@ export async function getLocalizedContentBySlug(
       include: {
         translations: true,
       },
-      cacheStrategy: { ttl: 60 }, // Cache for 60 seconds
-    })
+      ...(useAccelerate && { cacheStrategy: { ttl: 60 } }), // Cache for 60 seconds when using Accelerate
+    } as any)
 
     if (!content) {
       return null
@@ -123,6 +128,9 @@ export async function getFeaturedContent(
   limit: number = 3
 ): Promise<LocalizedContent[]> {
   try {
+    const dbUrl = process.env.DATABASE_URL || ''
+    const useAccelerate = dbUrl.startsWith('prisma://') || dbUrl.startsWith('prisma+postgres://')
+    
     const contents = await prisma.content.findMany({
       where: {
         type: type,
@@ -138,8 +146,8 @@ export async function getFeaturedContent(
         { createdAt: 'desc' },
       ],
       take: limit,
-      cacheStrategy: { ttl: 60 }, // Cache for 60 seconds
-    })
+      ...(useAccelerate && { cacheStrategy: { ttl: 60 } }), // Cache for 60 seconds when using Accelerate
+    } as any)
 
     const localizedContents = contents
       .map((content) => mapToLocalizedContent(content as ContentWithTranslations, lang))
