@@ -374,7 +374,7 @@ export default function Header() {
             opacity: isMobileMenuOpen ? 1 : 0,
           }}
           transition={{ duration: 0.3 }}
-          className="lg:hidden overflow-hidden bg-base border-t border-border-subtle"
+          className="lg:hidden overflow-hidden bg-base border-t border-border-subtle max-h-[calc(100vh-80px)] overflow-y-auto"
         >
           <div className="container-custom py-6 space-y-4">
             {navItems.map((item) => (
@@ -383,20 +383,7 @@ export default function Header() {
                   <div>
                     <button
                       onClick={() => {
-                        // Scroll to section when clicked
-                        if (item.href.startsWith('#')) {
-                          const element = document.querySelector(item.href)
-                          if (element) {
-                            const headerHeight = 80
-                            const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
-                            const offsetPosition = elementPosition - headerHeight
-                            window.scrollTo({
-                              top: offsetPosition,
-                              behavior: 'smooth',
-                            })
-                          }
-                        }
-                        // Also toggle mobile services menu
+                        // Toggle mobile services mega menu
                         setMobileServicesOpen(!mobileServicesOpen)
                       }}
                       className="flex items-center justify-between w-full text-body text-text-secondary hover:text-text-primary transition-colors"

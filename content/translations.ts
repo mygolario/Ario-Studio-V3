@@ -26,6 +26,7 @@ export const translations = {
       label: 'آنچه انجام می‌دهیم',
       title: 'طراحی، ساخت و اتوماسیون تجربه بعدی شما.',
       subtitle: 'استودیو آریو طراحی سینمایی، مهندسی مدرن و اتوماسیون مبتنی بر هوش مصنوعی را ترکیب می‌کند تا تجربیات وبی که زنده به نظر می‌رسند و در دنیای واقعی عملکرد دارند را ارائه دهد.',
+      cardCta: 'شروع این نوع پروژه',
       items: [
         {
           title: 'طراحی',
@@ -194,6 +195,18 @@ export const translations = {
       yourEmail: 'your.email@example.com',
       tellUsAbout: 'درباره پروژه خود به ما بگویید...',
       selectType: 'یک نوع را انتخاب کنید',
+      companyBrandName: 'نام برند/بیزنس',
+      companyPlaceholder: 'نام برند یا شرکت شما',
+      currentWebsite: 'لینک سایت فعلی',
+      service: 'سرویس مورد نظر',
+      selectServicePlaceholder: 'انتخاب سرویس',
+      notSure: 'هنوز مطمئن نیستم',
+      budgetRange: 'رنج بودجه',
+      selectBudgetRange: 'انتخاب بودجه',
+      timeline: 'بازه زمانی',
+      selectTimeline: 'انتخاب بازه زمانی',
+      businessType: 'نوع بیزنس',
+      selectBusinessType: 'انتخاب نوع بیزنس',
     },
     projectTypes: [
       'وب‌سایت کامل',
@@ -269,6 +282,7 @@ export const translations = {
       label: 'What we do',
       title: 'Design, build, and automate your next experience.',
       subtitle: 'Ario Studio combines cinematic design, modern engineering, and AI-driven automation to ship web experiences that feel alive and perform in the real world.',
+      cardCta: 'Start this project',
       items: [
         {
           title: 'Design',
@@ -457,6 +471,18 @@ export const translations = {
       yourEmail: 'your.email@example.com',
       tellUsAbout: 'Tell us about your project...',
       selectType: 'Select a type',
+      companyBrandName: 'Company/Brand Name',
+      companyPlaceholder: 'Your company or brand name',
+      currentWebsite: 'Current Website',
+      service: 'Service',
+      selectServicePlaceholder: 'Select a service',
+      notSure: "I'm not sure",
+      budgetRange: 'Budget Range',
+      selectBudgetRange: 'Select budget range',
+      timeline: 'Timeline',
+      selectTimeline: 'Select timeline',
+      businessType: 'Business Type',
+      selectBusinessType: 'Select business type',
     },
     projectTypes: [
       'Full website',

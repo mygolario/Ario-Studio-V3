@@ -67,20 +67,15 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
     }
   }, [])
 
-  // Use database process steps if available, otherwise fallback to translations
-  const processSteps = dbSteps.length > 0
-    ? dbSteps.map((step, index) => ({
-        number: String(index + 1).padStart(2, '0'),
-        title: step.title,
-        description: step.description,
-      }))
-    : t.process.steps
+  // Always use translations for proper localization (FA/EN)
+  // Database steps may not be localized, so we use translation system
+  const processSteps = t.process.steps
 
   return (
     <section
       ref={sectionRef}
       id="philosophy"
-      className="relative py-32 overflow-hidden bg-base"
+      className="relative py-16 sm:py-24 lg:py-32 overflow-hidden bg-base"
     >
       {/* Subtle background enhancement */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-orange/5 opacity-20 pointer-events-none" />
@@ -117,7 +112,7 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
           <div>
                 
             {/* Desktop: Horizontal Stepper */}
-            <div className="hidden lg:block">
+            <div className="hidden xl:block">
               <div className="relative">
                 {/* Connector Line */}
                 <div className="absolute top-12 left-0 right-0 h-0.5 bg-border-subtle" />
@@ -140,7 +135,7 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
                 />
                 
                 {/* Steps */}
-                <div className="grid grid-cols-5 gap-4 relative">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 relative">
                   {processSteps.map((step, index) => (
                     <motion.div
                       key={step.number}
@@ -183,8 +178,8 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
               </div>
             </div>
 
-            {/* Mobile: Vertical Timeline */}
-            <div className="lg:hidden space-y-6">
+            {/* Mobile/Tablet: Vertical Timeline */}
+            <div className="xl:hidden space-y-6">
               {processSteps.map((step, index) => (
                 <motion.div
                   key={step.number}
@@ -197,18 +192,18 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
                     ease: 'power3.out',
                     delay: index * 0.1,
                   }}
-                  className="group relative pl-8"
+                  className="group relative pl-6 sm:pl-8"
                 >
                   {/* Timeline Line */}
                   {index < processSteps.length - 1 && (
-                    <div className="absolute left-3 top-12 bottom-0 w-0.5 bg-border-subtle" />
+                    <div className="absolute left-2 sm:left-3 top-12 bottom-0 w-0.5 bg-border-subtle" />
                   )}
                   {/* Timeline Dot */}
                   <div className="absolute left-0 top-3 w-6 h-6 rounded-full bg-orange/10 border-2 border-orange/30 flex items-center justify-center group-hover:bg-orange/20 group-hover:border-orange group-hover:scale-110 transition-all duration-300">
                     <span className="text-orange text-xs font-semibold">{step.number}</span>
                   </div>
                   
-                  <div className="bg-surface border border-border-subtle rounded-xl p-6 hover:shadow-card hover:-translate-y-1 hover:border-orange/50 transition-all duration-300">
+                  <div className="bg-surface border border-border-subtle rounded-xl p-4 sm:p-6 hover:shadow-card hover:-translate-y-1 hover:border-orange/50 transition-all duration-300">
                     <h4 className="text-h5 font-semibold text-text-primary mb-2 group-hover:text-orange transition-colors duration-300">
                       {step.title}
                     </h4>

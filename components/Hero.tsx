@@ -202,7 +202,9 @@ export default function Hero() {
             {/* Main Heading - Layer 1 (closest) */}
             <h1 
               ref={headingRef}
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-hero lg:text-[64px] lg:leading-[72px] font-semibold text-text-primary rtl:!leading-[1.5] rtl:md:!leading-[1.5] rtl:!tracking-wide"
+              className={`text-3xl sm:text-4xl md:text-5xl lg:text-hero lg:text-[64px] lg:leading-[72px] font-semibold text-text-primary ${
+                language === 'fa' ? 'rtl:!leading-[1.5] rtl:md:!leading-[1.5] rtl:!tracking-wide' : ''
+              }`}
             >
               {t.hero.title}
             </h1>

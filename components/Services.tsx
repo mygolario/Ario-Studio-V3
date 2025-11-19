@@ -53,7 +53,7 @@ export default function Services({ servicesContent = [], lang }: ServicesProps) 
     <section
       ref={sectionRef}
       id="services"
-      className="relative py-32 overflow-hidden bg-base"
+      className="relative py-16 sm:py-24 lg:py-32 overflow-hidden bg-base"
     >
       {/* Enhanced background with subtle neon accents */}
       <div 

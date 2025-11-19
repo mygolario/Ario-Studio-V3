@@ -140,7 +140,7 @@ export default function Footer() {
           <p className="text-body-sm text-text-muted text-center md:text-left">
             © {currentYear} {t.brand.name}. {t.common.allRightsReserved}.
           </p>
-          <p className="text-body-sm text-text-muted text-center md:text-right">
+          <p className="text-body-sm text-text-muted text-center md:text-left">
             {t.footer.tagline}
           </p>
         </motion.div>

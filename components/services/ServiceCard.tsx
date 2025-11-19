@@ -5,6 +5,7 @@ import { type LocalizedContent, type ServiceLevel } from '@/lib/content/types'
 import { type SupportedLang } from '@/lib/i18n'
 import { trackEvent } from '@/lib/analytics/trackEvent'
 import { formatPrice as formatPriceHelper } from '@/lib/utils/pricing'
+import { useTranslation } from '@/lib/useTranslation'
 
 interface ServiceCardProps {
   lang: SupportedLang
@@ -18,6 +19,7 @@ interface ServiceCardProps {
  * Supports pricing, duration, level, and CTA with bilingual support.
  */
 export default function ServiceCard({ lang, item }: ServiceCardProps) {
+  const t = useTranslation()
   const isRTL = lang === 'fa'
   
   // Service level labels (bilingual)
@@ -49,7 +51,7 @@ export default function ServiceCard({ lang, item }: ServiceCardProps) {
 
   // CTA link - link to homepage contact section with service query param
   const ctaLink = `/#contact?service=${item.slug}`
-  const ctaText = lang === 'fa' ? 'شروع این نوع پروژه' : 'Start this project'
+  const ctaText = t.services.cardCta
 
   const handleCTAClick = () => {
     trackEvent('service_card_click', {
@@ -71,7 +73,7 @@ export default function ServiceCard({ lang, item }: ServiceCardProps) {
   }
 
   return (
-    <div className="group relative bg-surface border border-border-subtle rounded-xl p-8 hover:shadow-card-hover hover:border-orange/50 transition-all duration-300 overflow-hidden">
+    <div className="group relative bg-surface border border-border-subtle rounded-xl p-6 sm:p-8 hover:shadow-card-hover hover:border-orange/50 transition-all duration-300 overflow-hidden">
       {/* Subtle inner glow on hover */}
       <div className="absolute inset-0 bg-gradient-to-br from-orange/0 via-orange/0 to-orange/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl" />
       

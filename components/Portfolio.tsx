@@ -59,7 +59,7 @@ export default function Portfolio({ portfolioContent = [], lang }: PortfolioProp
     <section
       ref={sectionRef}
       id="portfolio"
-      className="relative py-32 overflow-hidden bg-surface-alt"
+      className="relative py-16 sm:py-24 lg:py-32 overflow-hidden bg-surface-alt"
     >
       {/* Subtle background pattern */}
       <div 
