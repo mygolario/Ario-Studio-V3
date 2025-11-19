@@ -67,9 +67,16 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
     }
   }, [])
 
-  // Always use translations for proper localization (FA/EN)
-  // Database steps may not be localized, so we use translation system
-  const processSteps = t.process.steps
+  // Use database process steps if available, otherwise fallback to translations
+  // Database steps allow admins to customize the process, while translations provide
+  // localized fallback when no database steps are configured
+  const processSteps = dbSteps.length > 0
+    ? dbSteps.map((step, index) => ({
+        number: String(index + 1).padStart(2, '0'),
+        title: step.title,
+        description: step.description,
+      }))
+    : t.process.steps
 
   return (
     <section
