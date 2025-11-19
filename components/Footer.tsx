@@ -50,7 +50,7 @@ export default function Footer() {
             >
               <div className="relative">
                 <h3 className="text-xl md:text-2xl font-semibold text-text-primary mb-4 relative z-10">
-                  Ario Studio
+                  {t.brand.name}
                 </h3>
                 <motion.div
                   className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-orange/30 to-transparent opacity-50 rtl:left-auto rtl:-right-4"
@@ -138,7 +138,7 @@ export default function Footer() {
           className="pt-8 border-t border-border-subtle flex flex-col md:flex-row justify-between items-center gap-4"
         >
           <p className="text-body-sm text-text-muted text-center md:text-left">
-            © {currentYear} Ario Studio. {t.common.allRightsReserved}.
+            © {currentYear} {t.brand.name}. {t.common.allRightsReserved}.
           </p>
           <p className="text-body-sm text-text-muted text-center md:text-right">
             {t.footer.tagline}
