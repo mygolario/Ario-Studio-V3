@@ -192,13 +192,13 @@ export default async function CaseStudyPage({ params }: { params: { slug: string
                   d="M15 19l-7-7 7-7"
                 />
               </svg>
-              Back to work
+              {backToWorkText}
             </Link>
             <Link
               href="/#contact"
               className="text-body-sm text-text-secondary hover:text-orange transition-colors"
             >
-              Start a project
+              {startProjectText}
             </Link>
           </div>
         </div>

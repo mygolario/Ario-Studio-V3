@@ -85,7 +85,7 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
       })
     : t.process.steps.map((step, index) => ({
         id: `step-${index}`, // Stable ID for React key (fallback to index-based)
-        number: formatLocalizedNumber(step.number, language),
+        number: step.number, // Translations already contain localized numbers (e.g., "۰۱" for Farsi, "01" for English)
         title: step.title,
         description: step.description,
       }))
