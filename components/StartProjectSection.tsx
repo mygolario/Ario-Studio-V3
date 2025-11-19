@@ -56,14 +56,27 @@ export default function StartProjectSection() {
   const lang: SupportedLang = language === 'fa' ? 'fa' : 'en'
 
   // Helper functions for option labels (bilingual)
+  // For FA locale, use Toman ranges from translations; for EN, use USD
   const getBudgetRangeLabel = (value: string): string => {
-    const labels: Record<string, { fa: string; en: string }> = {
-      'under-1000': { fa: 'زیر ۱۰۰۰ دلار', en: 'Under $1,000' },
-      '1000-3000': { fa: '۱۰۰۰ تا ۳۰۰۰ دلار', en: '$1,000 - $3,000' },
-      '3000-6000': { fa: '۳۰۰۰ تا ۶۰۰۰ دلار', en: '$3,000 - $6,000' },
-      'above-6000': { fa: 'بالای ۶۰۰۰ دلار', en: 'Above $6,000' },
+    if (lang === 'fa') {
+      // Map USD keys to Toman ranges from translations
+      const tomanMapping: Record<string, string> = {
+        'under-1000': 'کمتر از ۵ میلیون تومان',
+        '1000-3000': '۵ تا ۱۵ میلیون تومان',
+        '3000-6000': '۱۵ تا ۳۰ میلیون تومان',
+        'above-6000': '۳۰ تا ۸۰ میلیون تومان',
+      }
+      return tomanMapping[value] || value
+    } else {
+      // English: USD format
+      const labels: Record<string, string> = {
+        'under-1000': 'Under $1,000',
+        '1000-3000': '$1,000 - $3,000',
+        '3000-6000': '$3,000 - $6,000',
+        'above-6000': 'Above $6,000',
+      }
+      return labels[value] || value
     }
-    return labels[value]?.[lang] || value
   }
 
   const getTimelineLabel = (value: string): string => {
