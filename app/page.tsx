@@ -128,7 +128,7 @@ export default async function Home() {
       {/* Scene 2: WHAT WE DO */}
       <Services servicesContent={servicesContent} />
       {/* Scene 3: OUR WORK */}
-      <Portfolio portfolioContent={portfolioContent} />
+      <Portfolio portfolioContent={portfolioContent} lang={lang} />
       {/* Scene 4: OUR PROCESS */}
       <DesignEthos processSteps={processSteps} />
       {/* Scene 5: ABOUT ARIO STUDIO */}
