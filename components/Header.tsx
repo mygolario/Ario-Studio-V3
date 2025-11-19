@@ -383,20 +383,7 @@ export default function Header() {
                   <div>
                     <button
                       onClick={() => {
-                        // Scroll to section when clicked
-                        if (item.href.startsWith('#')) {
-                          const element = document.querySelector(item.href)
-                          if (element) {
-                            const headerHeight = 80
-                            const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
-                            const offsetPosition = elementPosition - headerHeight
-                            window.scrollTo({
-                              top: offsetPosition,
-                              behavior: 'smooth',
-                            })
-                          }
-                        }
-                        // Also toggle mobile services menu
+                        // Toggle mobile services mega menu
                         setMobileServicesOpen(!mobileServicesOpen)
                       }}
                       className="flex items-center justify-between w-full text-body text-text-secondary hover:text-text-primary transition-colors"
