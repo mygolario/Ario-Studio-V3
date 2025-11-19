@@ -52,8 +52,8 @@ export default function ServiceCard({ lang, item }: ServiceCardProps) {
   const durationText = formatDuration(item.serviceDuration)
   const levelLabel = item.serviceLevel ? levelLabels[item.serviceLevel]?.[lang] : null
 
-  // CTA link - link to contact page with service query param, or homepage contact section
-  const ctaLink = `/${lang}/contact?service=${item.slug}`
+  // CTA link - link to homepage contact section with service query param
+  const ctaLink = `/#contact?service=${item.slug}`
   const ctaText = lang === 'fa' ? 'شروع این نوع پروژه' : 'Start this project'
 
   return (

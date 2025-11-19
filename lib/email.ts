@@ -61,6 +61,40 @@ function generateLeadNotificationHTML(lead: Lead, lang: SupportedLang = 'en'): s
     timeStyle: 'long',
   })
 
+  // Helper functions to format values
+  const formatBudgetRange = (value: string | null | undefined): string => {
+    if (!value) return ''
+    const labels: Record<string, { fa: string; en: string }> = {
+      'under-1000': { fa: 'زیر ۱۰۰۰ دلار', en: 'Under $1,000' },
+      '1000-3000': { fa: '۱۰۰۰ تا ۳۰۰۰ دلار', en: '$1,000 - $3,000' },
+      '3000-6000': { fa: '۳۰۰۰ تا ۶۰۰۰ دلار', en: '$3,000 - $6,000' },
+      'above-6000': { fa: 'بالای ۶۰۰۰ دلار', en: 'Above $6,000' },
+    }
+    return labels[value]?.[lang] || value
+  }
+
+  const formatTimeline = (value: string | null | undefined): string => {
+    if (!value) return ''
+    const labels: Record<string, { fa: string; en: string }> = {
+      'asap': { fa: 'هرچه سریع‌تر', en: 'ASAP' },
+      '1-3-months': { fa: '۱ تا ۳ ماه', en: '1-3 months' },
+      'flexible': { fa: 'انعطاف‌پذیر', en: 'Flexible' },
+    }
+    return labels[value]?.[lang] || value
+  }
+
+  const formatBusinessType = (value: string | null | undefined): string => {
+    if (!value) return ''
+    const labels: Record<string, { fa: string; en: string }> = {
+      'startup': { fa: 'استارتاپ', en: 'Startup' },
+      'personal-brand': { fa: 'برند شخصی', en: 'Personal Brand' },
+      'agency': { fa: 'آژانس', en: 'Agency' },
+      'local-business': { fa: 'بیزنس محلی', en: 'Local Business' },
+      'other': { fa: 'سایر', en: 'Other' },
+    }
+    return labels[value]?.[lang] || value
+  }
+
   return `
 <!DOCTYPE html>
 <html lang="${lang}" dir="${dir}">
@@ -99,21 +133,23 @@ function generateLeadNotificationHTML(lead: Lead, lang: SupportedLang = 'en'): s
             </a>
           </p>
           ${lead.companyName ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};"><strong style="color: #ffffff;">${lang === 'fa' ? 'شرکت:' : 'Company:'}</strong> ${lead.companyName}</p>` : ''}
+          ${lead.website ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};"><strong style="color: #ffffff;">${lang === 'fa' ? 'وب‌سایت:' : 'Website:'}</strong> <a href="${lead.website}" target="_blank" rel="noopener noreferrer" style="color: #ff6b35; text-decoration: none;">${lead.website}</a></p>` : ''}
         </div>
       </div>
 
-      ${lead.budgetRange || lead.timeline || (lead.servicesNeeded && lead.servicesNeeded.length > 0) ? `
+      ${lead.budgetRange || lead.timeline || lead.businessType || (lead.servicesNeeded && lead.servicesNeeded.length > 0) ? `
       <!-- Project Details -->
       <div style="margin-bottom: 24px;">
         <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #ff6b35; text-transform: uppercase; letter-spacing: 0.5px; text-align: ${textAlign};">
           ${lang === 'fa' ? 'جزئیات پروژه' : 'Project Details'}
         </h3>
         <div style="background-color: #0f0f0f; border-radius: 8px; padding: 16px;">
-          ${lead.budgetRange ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};"><strong style="color: #ffffff;">${lang === 'fa' ? 'بودجه:' : 'Budget:'}</strong> ${lead.budgetRange}</p>` : ''}
-          ${lead.timeline ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};"><strong style="color: #ffffff;">${lang === 'fa' ? 'زمان‌بندی:' : 'Timeline:'}</strong> ${lead.timeline}</p>` : ''}
           ${lead.servicesNeeded && lead.servicesNeeded.length > 0
-            ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};"><strong style="color: #ffffff;">${lang === 'fa' ? 'سرویس‌های مورد نیاز:' : 'Services Needed:'}</strong> ${lead.servicesNeeded.join(', ')}</p>`
+            ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};"><strong style="color: #ffffff;">${lang === 'fa' ? 'سرویس:' : 'Service:'}</strong> ${lead.servicesNeeded.join(', ')}</p>`
             : ''}
+          ${lead.budgetRange ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};"><strong style="color: #ffffff;">${lang === 'fa' ? 'بودجه:' : 'Budget Range:'}</strong> ${formatBudgetRange(lead.budgetRange)}</p>` : ''}
+          ${lead.timeline ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};"><strong style="color: #ffffff;">${lang === 'fa' ? 'زمان‌بندی:' : 'Timeline:'}</strong> ${formatTimeline(lead.timeline)}</p>` : ''}
+          ${lead.businessType ? `<p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};"><strong style="color: #ffffff;">${lang === 'fa' ? 'نوع بیزنس:' : 'Business Type:'}</strong> ${formatBusinessType(lead.businessType)}</p>` : ''}
         </div>
       </div>
       ` : ''}
@@ -173,8 +209,42 @@ function generateLeadNotificationText(lead: Lead, lang: SupportedLang = 'en'): s
     timeStyle: 'long',
   })
 
+  // Helper functions to format values
+  const formatBudgetRange = (value: string | null | undefined): string => {
+    if (!value) return ''
+    const labels: Record<string, { fa: string; en: string }> = {
+      'under-1000': { fa: 'زیر ۱۰۰۰ دلار', en: 'Under $1,000' },
+      '1000-3000': { fa: '۱۰۰۰ تا ۳۰۰۰ دلار', en: '$1,000 - $3,000' },
+      '3000-6000': { fa: '۳۰۰۰ تا ۶۰۰۰ دلار', en: '$3,000 - $6,000' },
+      'above-6000': { fa: 'بالای ۶۰۰۰ دلار', en: 'Above $6,000' },
+    }
+    return labels[value]?.[lang] || value
+  }
+
+  const formatTimeline = (value: string | null | undefined): string => {
+    if (!value) return ''
+    const labels: Record<string, { fa: string; en: string }> = {
+      'asap': { fa: 'هرچه سریع‌تر', en: 'ASAP' },
+      '1-3-months': { fa: '۱ تا ۳ ماه', en: '1-3 months' },
+      'flexible': { fa: 'انعطاف‌پذیر', en: 'Flexible' },
+    }
+    return labels[value]?.[lang] || value
+  }
+
+  const formatBusinessType = (value: string | null | undefined): string => {
+    if (!value) return ''
+    const labels: Record<string, { fa: string; en: string }> = {
+      'startup': { fa: 'استارتاپ', en: 'Startup' },
+      'personal-brand': { fa: 'برند شخصی', en: 'Personal Brand' },
+      'agency': { fa: 'آژانس', en: 'Agency' },
+      'local-business': { fa: 'بیزنس محلی', en: 'Local Business' },
+      'other': { fa: 'سایر', en: 'Other' },
+    }
+    return labels[value]?.[lang] || value
+  }
+
   let text = `
-ARIO STUDIO - ${lang === 'fa' ? 'تماس جدید' : 'NEW CONTACT'}
+ARIO STUDIO - ${lang === 'fa' ? 'درخواست پروژه جدید' : 'NEW PROJECT INQUIRY'}
 ${'='.repeat(50)}
 
 ${lang === 'fa' ? 'اطلاعات تماس' : 'CONTACT INFORMATION'}
@@ -182,15 +252,17 @@ ${'-'.repeat(50)}
 ${lang === 'fa' ? 'نام:' : 'Name:'} ${lead.name}
 ${lang === 'fa' ? 'ایمیل:' : 'Email:'} ${lead.email}
 ${lead.companyName ? `${lang === 'fa' ? 'شرکت:' : 'Company:'} ${lead.companyName}\n` : ''}
+${lead.website ? `${lang === 'fa' ? 'وب‌سایت:' : 'Website:'} ${lead.website}\n` : ''}
 `
 
-  if (lead.budgetRange || lead.timeline || (lead.servicesNeeded && lead.servicesNeeded.length > 0)) {
+  if (lead.budgetRange || lead.timeline || lead.businessType || (lead.servicesNeeded && lead.servicesNeeded.length > 0)) {
     text += `
 ${lang === 'fa' ? 'جزئیات پروژه' : 'PROJECT DETAILS'}
 ${'-'.repeat(50)}
-${lead.budgetRange ? `${lang === 'fa' ? 'بودجه:' : 'Budget:'} ${lead.budgetRange}\n` : ''}
-${lead.timeline ? `${lang === 'fa' ? 'زمان‌بندی:' : 'Timeline:'} ${lead.timeline}\n` : ''}
-${lead.servicesNeeded && lead.servicesNeeded.length > 0 ? `${lang === 'fa' ? 'سرویس‌های مورد نیاز:' : 'Services Needed:'} ${lead.servicesNeeded.join(', ')}\n` : ''}
+${lead.servicesNeeded && lead.servicesNeeded.length > 0 ? `${lang === 'fa' ? 'سرویس:' : 'Service:'} ${lead.servicesNeeded.join(', ')}\n` : ''}
+${lead.budgetRange ? `${lang === 'fa' ? 'بودجه:' : 'Budget Range:'} ${formatBudgetRange(lead.budgetRange)}\n` : ''}
+${lead.timeline ? `${lang === 'fa' ? 'زمان‌بندی:' : 'Timeline:'} ${formatTimeline(lead.timeline)}\n` : ''}
+${lead.businessType ? `${lang === 'fa' ? 'نوع بیزنس:' : 'Business Type:'} ${formatBusinessType(lead.businessType)}\n` : ''}
 `
   }
 
@@ -353,7 +425,7 @@ export async function sendLeadNotificationEmail(lead: Lead, lang: SupportedLang 
     console.log(`Attempting to send admin notification email to: ${adminEmails.join(', ')}`)
 
     const t = (key: string) => getTranslation(lang, key)
-    const subject = lang === 'fa' ? 'تماس جدید از آریو استودیو' : 'New contact from Ario Studio'
+    const subject = lang === 'fa' ? `درخواست پروژه جدید — ${lead.name}` : `New project inquiry — ${lead.name}`
 
     // Send to all admin emails (send separately for each to ensure delivery)
     const sendPromises = adminEmails.map((toEmail) =>

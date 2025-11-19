@@ -1,12 +1,15 @@
 'use client'
 
 import { useState, useEffect, useRef, useTransition } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Button from './Button'
 import { animateSectionReveal } from '@/lib/gsapClient'
 import { useTranslation } from '@/lib/useTranslation'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { createLeadAction, type CreateLeadActionResult } from '@/app/actions/create-lead'
+import { type SupportedLang } from '@/lib/i18n'
+import { type LocalizedContent } from '@/lib/content/types'
 
 /**
  * Start Project Section
@@ -24,22 +27,94 @@ import { createLeadAction, type CreateLeadActionResult } from '@/app/actions/cre
 export default function StartProjectSection() {
   const t = useTranslation()
   const { language } = useLanguage()
+  const searchParams = useSearchParams()
   const sectionRef = useRef<HTMLElement>(null)
   const [isPending, startTransition] = useTransition()
   const [result, setResult] = useState<CreateLeadActionResult | null>(null)
   const [selectedService, setSelectedService] = useState<string | null>(null)
+  const [servicesList, setServicesList] = useState<LocalizedContent[]>([])
+  const [loadingServices, setLoadingServices] = useState(true)
 
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    company: '',
+    website: '',
+    serviceSlug: '',
     projectType: '',
     budget: '',
+    budgetRange: '',
+    timeline: '',
+    businessType: '',
     message: '',
   })
 
   const services = t.startProject.services
   const projectTypes = t.projectTypes
   const budgetRanges = t.budgetRanges
+  const lang: SupportedLang = language === 'fa' ? 'fa' : 'en'
+
+  // Helper functions for option labels (bilingual)
+  const getBudgetRangeLabel = (value: string): string => {
+    const labels: Record<string, { fa: string; en: string }> = {
+      'under-1000': { fa: 'زیر ۱۰۰۰ دلار', en: 'Under $1,000' },
+      '1000-3000': { fa: '۱۰۰۰ تا ۳۰۰۰ دلار', en: '$1,000 - $3,000' },
+      '3000-6000': { fa: '۳۰۰۰ تا ۶۰۰۰ دلار', en: '$3,000 - $6,000' },
+      'above-6000': { fa: 'بالای ۶۰۰۰ دلار', en: 'Above $6,000' },
+    }
+    return labels[value]?.[lang] || value
+  }
+
+  const getTimelineLabel = (value: string): string => {
+    const labels: Record<string, { fa: string; en: string }> = {
+      'asap': { fa: 'هرچه سریع‌تر', en: 'ASAP' },
+      '1-3-months': { fa: '۱ تا ۳ ماه', en: '1-3 months' },
+      'flexible': { fa: 'انعطاف‌پذیر', en: 'Flexible' },
+    }
+    return labels[value]?.[lang] || value
+  }
+
+  const getBusinessTypeLabel = (value: string): string => {
+    const labels: Record<string, { fa: string; en: string }> = {
+      'startup': { fa: 'استارتاپ', en: 'Startup' },
+      'personal-brand': { fa: 'برند شخصی', en: 'Personal Brand' },
+      'agency': { fa: 'آژانس', en: 'Agency' },
+      'local-business': { fa: 'بیزنس محلی', en: 'Local Business' },
+      'other': { fa: 'سایر', en: 'Other' },
+    }
+    return labels[value]?.[lang] || value
+  }
+
+  const budgetRangeOptions = ['under-1000', '1000-3000', '3000-6000', 'above-6000']
+  const timelineOptions = ['asap', '1-3-months', 'flexible']
+  const businessTypeOptions = ['startup', 'personal-brand', 'agency', 'local-business', 'other']
+
+  // Load services from API
+  useEffect(() => {
+    const loadServices = async () => {
+      try {
+        setLoadingServices(true)
+        const response = await fetch(`/api/services?lang=${lang}`)
+        const data = await response.json()
+        if (data.success && data.items) {
+          setServicesList(data.items)
+        }
+      } catch (error) {
+        console.error('Failed to load services:', error)
+      } finally {
+        setLoadingServices(false)
+      }
+    }
+    loadServices()
+  }, [lang])
+
+  // Read serviceSlug from URL query params
+  useEffect(() => {
+    const serviceSlug = searchParams.get('service')
+    if (serviceSlug) {
+      setFormData((prev) => ({ ...prev, serviceSlug }))
+    }
+  }, [searchParams])
 
   useEffect(() => {
     if (sectionRef.current) {
@@ -90,9 +165,6 @@ export default function StartProjectSection() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    // Get current language (default to 'en' if not available)
-    const lang = language === 'fa' ? 'fa' : 'en'
-
     // Build servicesNeeded array from selectedService
     const servicesNeeded = selectedService ? [selectedService] : []
 
@@ -101,11 +173,26 @@ export default function StartProjectSection() {
     formDataObj.append('name', formData.name)
     formDataObj.append('email', formData.email)
     formDataObj.append('message', formData.message)
+    if (formData.company) {
+      formDataObj.append('companyName', formData.company)
+    }
+    if (formData.website) {
+      formDataObj.append('website', formData.website)
+    }
+    if (formData.serviceSlug) {
+      formDataObj.append('serviceSlug', formData.serviceSlug)
+    }
     if (formData.projectType) {
       formDataObj.append('projectType', formData.projectType)
     }
-    if (formData.budget) {
-      formDataObj.append('budget', formData.budget)
+    if (formData.budget || formData.budgetRange) {
+      formDataObj.append('budgetRange', formData.budgetRange || formData.budget)
+    }
+    if (formData.timeline) {
+      formDataObj.append('timeline', formData.timeline)
+    }
+    if (formData.businessType) {
+      formDataObj.append('businessType', formData.businessType)
     }
     if (servicesNeeded.length > 0) {
       formDataObj.append('servicesNeeded', servicesNeeded.join(','))
@@ -119,8 +206,21 @@ export default function StartProjectSection() {
       setResult(actionResult)
 
       if (actionResult.success) {
-        // Clear form on success
-        setFormData({ name: '', email: '', projectType: '', budget: '', message: '' })
+        // Clear form on success (keep serviceSlug if it came from URL)
+        const serviceSlugFromUrl = searchParams.get('service')
+        setFormData({ 
+          name: '', 
+          email: '', 
+          company: '',
+          website: '',
+          serviceSlug: serviceSlugFromUrl || '',
+          projectType: '', 
+          budget: '',
+          budgetRange: '',
+          timeline: '',
+          businessType: '',
+          message: '' 
+        })
         setSelectedService(null)
         
         // Reset success message after 5 seconds
@@ -370,6 +470,78 @@ export default function StartProjectSection() {
                       )}
                     </div>
 
+                    {/* Company */}
+                    <div>
+                      <label
+                        htmlFor="company"
+                        className="block text-body-sm font-medium text-text-primary mb-2"
+                      >
+                        {lang === 'fa' ? 'نام برند/بیزنس' : 'Company/Brand Name'}
+                      </label>
+                      <input
+                        type="text"
+                        id="company"
+                        name="company"
+                        value={formData.company}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 rounded-lg border border-border-subtle bg-base text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:border-orange transition-all duration-200"
+                        placeholder={lang === 'fa' ? 'نام برند یا شرکت شما' : 'Your company or brand name'}
+                      />
+                    </div>
+
+                    {/* Website */}
+                    <div>
+                      <label
+                        htmlFor="website"
+                        className="block text-body-sm font-medium text-text-primary mb-2"
+                      >
+                        {lang === 'fa' ? 'لینک سایت فعلی' : 'Current Website'}
+                      </label>
+                      <input
+                        type="url"
+                        id="website"
+                        name="website"
+                        value={formData.website}
+                        onChange={handleInputChange}
+                        className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 bg-base text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:border-orange ${
+                          errors.website
+                            ? 'border-red-500 focus:ring-red-500'
+                            : 'border-border-subtle'
+                        }`}
+                        placeholder={lang === 'fa' ? 'https://example.com' : 'https://example.com'}
+                      />
+                      {errors.website && (
+                        <p className="mt-1 text-body-sm text-red-500">{errors.website}</p>
+                      )}
+                    </div>
+
+                    {/* Service Slug */}
+                    <div>
+                      <label
+                        htmlFor="serviceSlug"
+                        className="block text-body-sm font-medium text-text-primary mb-2"
+                      >
+                        {lang === 'fa' ? 'سرویس مورد نظر' : 'Service'}
+                      </label>
+                      <select
+                        id="serviceSlug"
+                        name="serviceSlug"
+                        value={formData.serviceSlug}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 rounded-lg border border-border-subtle bg-base text-text-primary focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:border-orange transition-all duration-200"
+                      >
+                        <option value="">{lang === 'fa' ? 'انتخاب سرویس' : loadingServices ? 'Loading...' : 'Select a service'}</option>
+                        {servicesList.map((service) => (
+                          <option key={service.slug} value={service.slug}>
+                            {service.title}
+                          </option>
+                        ))}
+                        {servicesList.length === 0 && !loadingServices && (
+                          <option value="">{lang === 'fa' ? 'هنوز مطمئن نیستم' : "I'm not sure"}</option>
+                        )}
+                      </select>
+                    </div>
+
                     {/* Project Type */}
                     <div>
                       <label
@@ -394,25 +566,73 @@ export default function StartProjectSection() {
                       </select>
                     </div>
 
-                    {/* Budget */}
+                    {/* Budget Range */}
                     <div>
                       <label
-                        htmlFor="budget"
+                        htmlFor="budgetRange"
                         className="block text-body-sm font-medium text-text-primary mb-2"
                       >
-                        {t.form.approximateBudget}
+                        {lang === 'fa' ? 'رنج بودجه' : 'Budget Range'}
                       </label>
                       <select
-                        id="budget"
-                        name="budget"
-                        value={formData.budget}
+                        id="budgetRange"
+                        name="budgetRange"
+                        value={formData.budgetRange}
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 rounded-lg border border-border-subtle bg-base text-text-primary focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:border-orange transition-all duration-200"
                       >
-                        <option value="">{t.form.selectBudget}</option>
-                        {budgetRanges.map((range) => (
-                          <option key={range} value={range}>
-                            {range}
+                        <option value="">{lang === 'fa' ? 'انتخاب بودجه' : 'Select budget range'}</option>
+                        {budgetRangeOptions.map((value) => (
+                          <option key={value} value={value}>
+                            {getBudgetRangeLabel(value)}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Timeline */}
+                    <div>
+                      <label
+                        htmlFor="timeline"
+                        className="block text-body-sm font-medium text-text-primary mb-2"
+                      >
+                        {lang === 'fa' ? 'بازه زمانی' : 'Timeline'}
+                      </label>
+                      <select
+                        id="timeline"
+                        name="timeline"
+                        value={formData.timeline}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 rounded-lg border border-border-subtle bg-base text-text-primary focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:border-orange transition-all duration-200"
+                      >
+                        <option value="">{lang === 'fa' ? 'انتخاب بازه زمانی' : 'Select timeline'}</option>
+                        {timelineOptions.map((value) => (
+                          <option key={value} value={value}>
+                            {getTimelineLabel(value)}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Business Type */}
+                    <div>
+                      <label
+                        htmlFor="businessType"
+                        className="block text-body-sm font-medium text-text-primary mb-2"
+                      >
+                        {lang === 'fa' ? 'نوع بیزنس' : 'Business Type'}
+                      </label>
+                      <select
+                        id="businessType"
+                        name="businessType"
+                        value={formData.businessType}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 rounded-lg border border-border-subtle bg-base text-text-primary focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:border-orange transition-all duration-200"
+                      >
+                        <option value="">{lang === 'fa' ? 'انتخاب نوع بیزنس' : 'Select business type'}</option>
+                        {businessTypeOptions.map((value) => (
+                          <option key={value} value={value}>
+                            {getBusinessTypeLabel(value)}
                           </option>
                         ))}
                       </select>
