@@ -30,17 +30,14 @@ function createPrismaClient() {
 
   let client = baseClient
 
-  // Apply Accelerate extension if available
+  // Apply extensions conditionally (can be chained)
   if (useAccelerate) {
     client = client.$extends(withAccelerate()) as any
   }
 
-  // Apply Optimize extension if API key is available
   if (useOptimize) {
     client = client.$extends(
-      withOptimize({
-        apiKey: process.env.OPTIMIZE_API_KEY!,
-      })
+      withOptimize({ apiKey: process.env.OPTIMIZE_API_KEY! })
     ) as any
   }
 
