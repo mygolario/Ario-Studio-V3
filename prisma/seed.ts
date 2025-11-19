@@ -230,6 +230,8 @@ async function main() {
       featured: true,
       order: 1,
       layoutType: 'cinematic',
+      category: 'full-site',
+      tags: 'Next.js,GSAP,AI-native,Motion Design,Portfolio,Live',
       translations: {
         create: [
           {
@@ -295,6 +297,8 @@ async function main() {
       featured: true,
       order: 2,
       layoutType: 'split',
+      category: 'landing-page',
+      tags: 'Next.js,Tailwind CSS,Motion Design,Landing Page,Concept',
       translations: {
         create: [
           {

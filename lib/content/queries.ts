@@ -11,8 +11,13 @@
 
 import { prisma } from '@/lib/db'
 import { type SupportedLang } from '@/lib/i18n'
-import { type ContentType, type LocalizedContent } from './types'
+import { type ContentType, type LocalizedContent, type PortfolioCategory } from './types'
 import { mapToLocalizedContent, type ContentWithTranslations } from './mapLocalizedContent'
+
+export interface ContentListFilters {
+  category?: PortfolioCategory
+  tag?: string
+}
 
 /**
  * Get list of localized content by type
@@ -29,18 +34,39 @@ import { mapToLocalizedContent, type ContentWithTranslations } from './mapLocali
  */
 export async function getLocalizedContentList(
   type: ContentType,
-  lang: SupportedLang
+  lang: SupportedLang,
+  filters: ContentListFilters = {}
 ): Promise<LocalizedContent[]> {
   try {
     // Fetch content with translations from database
     const dbUrl = process.env.DATABASE_URL || ''
     const useAccelerate = dbUrl.startsWith('prisma://') || dbUrl.startsWith('prisma+postgres://')
+    const { category, tag } = filters
+    const tagFilter =
+      tag && tag.trim().length > 0
+        ? {
+            OR: [
+              { tags: { contains: tag, mode: 'insensitive' } },
+              {
+                translations: {
+                  some: {
+                    tags: {
+                      has: tag,
+                    },
+                  },
+                },
+              },
+            ],
+          }
+        : undefined
     
     const contents = await prisma.content.findMany({
       where: {
         type: type,
         isPublished: true,
         archived: false,
+        ...(category && { category }),
+        ...(tagFilter ?? {}),
       },
       include: {
         translations: true,

@@ -28,6 +28,30 @@ export type ContentType = 'portfolio' | 'service' | 'blog'
 export type CaseStudyLayoutType = 'basic' | 'cinematic' | 'split' | 'story'
 
 /**
+ * Portfolio Category
+ * Defines the category of a portfolio item
+ */
+export const PORTFOLIO_CATEGORY_KEYS = [
+  'landing-page',
+  'full-site',
+  'automation',
+  'brand-experience',
+  'other',
+] as const
+
+export type PortfolioCategory = typeof PORTFOLIO_CATEGORY_KEYS[number]
+
+/**
+ * Type guard for portfolio categories
+ */
+export function isPortfolioCategory(
+  value: string | null | undefined
+): value is PortfolioCategory {
+  if (!value) return false
+  return (PORTFOLIO_CATEGORY_KEYS as readonly string[]).includes(value)
+}
+
+/**
  * Core content entity (language-agnostic)
  * Contains metadata and structure shared across all languages
  */
@@ -44,6 +68,8 @@ export interface Content {
   featured?: boolean
   archived?: boolean
   layoutType?: CaseStudyLayoutType | null // Case study layout type
+  category?: PortfolioCategory | null // Portfolio category
+  tags?: string | null // Comma-separated tags or JSON string
   
   // Relations (when loaded with Prisma)
   translations?: ContentTranslation[]
@@ -95,6 +121,7 @@ export interface LocalizedContent {
   featured?: boolean
   archived?: boolean
   layoutType?: CaseStudyLayoutType | null // Case study layout type
+  category?: PortfolioCategory | null
   
   // Language-specific fields
   lang: SupportedLang
@@ -130,6 +157,8 @@ export interface CreateContentInput {
   order?: number | null
   featured?: boolean
   layoutType?: CaseStudyLayoutType | null
+  category?: PortfolioCategory | null
+  tags?: string[] | null
   translations: Array<{
     lang: SupportedLang
     title: string
@@ -159,6 +188,8 @@ export interface UpdateContentInput {
   featured?: boolean
   archived?: boolean
   layoutType?: CaseStudyLayoutType | null
+  category?: PortfolioCategory | null
+  tags?: string[] | null
 }
 
 /**

@@ -21,7 +21,9 @@ import type {
   Content,
   ContentTranslation,
   LocalizedContent,
+  PortfolioCategory,
 } from './types'
+import { PORTFOLIO_CATEGORY_KEYS } from './types'
 
 /**
  * Type for Content with translations loaded (Prisma include)
@@ -61,6 +63,36 @@ function parseGalleryImages(galleryImages: unknown): string[] | null {
   }
 
   return null
+}
+
+/**
+ * Helper function to parse tags
+ * Handles comma-separated string or JSON string
+ */
+function parseTags(tags: string | string[] | null | undefined): string[] | null {
+  if (!tags) return null
+
+  if (Array.isArray(tags)) {
+    return tags.filter((tag): tag is string => typeof tag === 'string' && tag.trim().length > 0)
+  }
+  
+  // If it's a comma-separated string
+  if (tags.includes(',')) {
+    return tags.split(',').map(t => t.trim()).filter(Boolean)
+  }
+  
+  // Try parsing as JSON
+  try {
+    const parsed = JSON.parse(tags)
+    if (Array.isArray(parsed)) {
+      return parsed.filter((item): item is string => typeof item === 'string')
+    }
+  } catch {
+    // Treat as single tag if not JSON
+    return [tags]
+  }
+  
+  return [tags]
 }
 
 /**
@@ -111,6 +143,20 @@ export function mapToLocalizedContent(
       ? ((content.layoutType as CaseStudyLayoutType | null) ?? 'basic')
       : ((content.layoutType as CaseStudyLayoutType | null) ?? null)
 
+  // Parse tags from Content model (if stored there) or Translation
+  // Note: We prioritized tags in Translation in the original design, but now adding to Content too
+  // For now, let's merge or prefer Translation tags if available, otherwise Content tags
+  const contentTags = parseTags(content.tags)
+  const translationTags = translation.tags ?? null
+  
+  // Use translation tags if available (array), otherwise parsed content tags
+  const resolvedTags = (translationTags && translationTags.length > 0) 
+    ? translationTags 
+    : contentTags
+
+  // Resolve category
+  const category = normalizeCategory(content.category)
+
   // Build LocalizedContent object
   return {
     // Core content fields
@@ -122,6 +168,7 @@ export function mapToLocalizedContent(
     featured: content.featured ?? false,
     archived: content.archived ?? false,
     layoutType: resolvedLayoutType,
+    category,
     
     // Language-specific fields from translation
     lang: translation.lang,
@@ -131,7 +178,7 @@ export function mapToLocalizedContent(
     metaTitle: translation.metaTitle ?? null,
     metaDescription: translation.metaDescription ?? null,
     subtitle: translation.subtitle ?? null,
-    tags: translation.tags ?? null,
+    tags: resolvedTags ?? null,
     
     // Case Study specific fields
     bodyIntro: translation.bodyIntro ?? null,
@@ -198,5 +245,44 @@ export function getBestTranslation(
   }
   
   return translation ?? null
+}
+
+/**
+ * Map category to localized label
+ */
+export function mapCategoryToLabel(
+  category: PortfolioCategory | null | undefined,
+  lang: SupportedLang
+): string {
+  if (!category) return ''
+
+  const mapFa: Record<PortfolioCategory, string> = {
+    'landing-page': 'لندینگ پیج',
+    'full-site': 'وب‌سایت کامل',
+    'automation': 'اتوماسیون و هوش مصنوعی',
+    'brand-experience': 'تجربه برند',
+    'other': 'سایر',
+  }
+
+  const mapEn: Record<PortfolioCategory, string> = {
+    'landing-page': 'Landing Page',
+    'full-site': 'Full Website',
+    'automation': 'AI & Automation',
+    'brand-experience': 'Brand Experience',
+    'other': 'Other',
+  }
+
+  const label = lang === 'fa' ? mapFa[category] : mapEn[category]
+  return label || category // Fallback to category key if not found
+}
+
+/**
+ * Normalize category string into a PortfolioCategory union
+ */
+function normalizeCategory(value: string | null | undefined): PortfolioCategory | null {
+  if (!value) return null
+  const normalized = value.toLowerCase()
+  const match = PORTFOLIO_CATEGORY_KEYS.find((key) => key === normalized)
+  return (match as PortfolioCategory | undefined) ?? 'other'
 }
 

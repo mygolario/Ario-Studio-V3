@@ -150,11 +150,14 @@ model Content {
   id           String               @id @default(cuid())
   type         ContentType
   slug         String               @unique // Language-agnostic slug
+  // TODO: enforce slug normalization/validation (only lowercase letters, numbers, hyphen)
   isPublished  Boolean              @default(false)
   order        Int?
   featured     Boolean              @default(false)
   archived     Boolean              @default(false)
   layoutType   String?              @map("layout_type") // Case study layout type: "basic" | "cinematic" | "split" | "story"
+  category     String? // Portfolio category: "landing-page" | "full-site" | "automation" | "brand-experience"
+  tags         String? // Comma-separated tags or JSON string
   createdAt    DateTime             @default(now()) @map("created_at")
   updatedAt    DateTime             @updatedAt @map("updated_at")
   translations ContentTranslation[]

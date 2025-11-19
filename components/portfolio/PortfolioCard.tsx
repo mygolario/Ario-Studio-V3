@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { type LocalizedContent } from '@/lib/content/types'
+import { mapCategoryToLabel } from '@/lib/content/mapLocalizedContent'
 import { type SupportedLang } from '@/lib/i18n'
 
 interface PortfolioCardProps {
@@ -108,6 +109,15 @@ export default function PortfolioCard({ lang, item }: PortfolioCardProps) {
             {statusLabel}
           </span>
         </div>
+        
+        {/* Category Badge */}
+        {item.category && (
+          <div className={`mb-2 ${isRTL ? 'text-right' : 'text-left'}`}>
+            <span className="inline-flex rounded-full px-3 py-1 text-xs uppercase tracking-wide opacity-80 bg-surface-alt border border-border-subtle text-text-secondary">
+              {mapCategoryToLabel(item.category, lang)}
+            </span>
+          </div>
+        )}
         
         {(item.excerpt || item.subtitle) && (
           <p className={`text-body text-text-secondary mb-4 ${isRTL ? 'text-right' : 'text-left'}`}>
