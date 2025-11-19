@@ -221,7 +221,7 @@ async function main() {
   // Seed Multilingual Content
   console.log('🌍 Seeding Multilingual Content...')
   
-  // Portfolio Content: Ario Studio Case Study
+  // Portfolio Content: Ario Studio Case Study (with full Case Study fields)
   const portfolioContent = await prisma.content.create({
     data: {
       type: 'portfolio',
@@ -236,26 +236,110 @@ async function main() {
             title: 'Ario Studio — AI-Native Portfolio Website',
             subtitle: 'Cinematic UX meets modern engineering',
             excerpt: 'A comprehensive portfolio website featuring cinematic UX, GSAP-powered animations, and a polished Day/Night theme system.',
-            body: 'This portfolio website itself—an AI-native studio site featuring cinematic UX, GSAP-powered animations, and a polished Day/Night theme system. Built a comprehensive portfolio site with GSAP motion system, theme switching, structured case study pages, and a polished Start Project form.',
+            body: 'This portfolio website itself—an AI-native studio site featuring cinematic UX, GSAP-powered animations, and a polished Day/Night theme system.',
+            bodyIntro: 'This portfolio website itself—an AI-native studio site featuring cinematic UX, GSAP-powered animations, and a polished Day/Night theme system. Built a comprehensive portfolio site with GSAP motion system, theme switching, structured case study pages, and a polished Start Project form.',
+            bodyProblem: 'Creating a portfolio website that stands out in a crowded market while maintaining professional standards and showcasing our unique approach to design and development.',
+            bodySolution: 'We designed and built a cinematic, motion-first website using Next.js, GSAP animations, and a sophisticated theme system. The site features structured case study pages, multilingual support, and a polished contact form.',
+            bodyProcess: 'The development process involved: 1) Discovery and design system creation, 2) GSAP animation implementation, 3) Theme system development, 4) Case study template creation, 5) Multilingual content integration, 6) Performance optimization.',
+            bodyResult: 'The result is a stunning portfolio website that effectively showcases our work, attracts high-quality clients, and demonstrates our technical and creative capabilities. The site has received positive feedback and has become a key tool in our business development.',
             metaTitle: 'Ario Studio Portfolio — AI-Native Web Design & Development',
             metaDescription: 'Explore Ario Studio\'s portfolio website featuring cinematic UX, GSAP animations, and modern Next.js architecture.',
-            tags: ['Next.js', 'GSAP', 'AI-native', 'Motion Design', 'Portfolio'],
+            tags: ['Next.js', 'GSAP', 'AI-native', 'Motion Design', 'Portfolio', 'Live'],
+            featuredImage: '/images/case-studies/ario-studio-hero.jpg',
+            galleryImages: [
+              '/images/case-studies/ario-studio-1.jpg',
+              '/images/case-studies/ario-studio-2.jpg',
+              '/images/case-studies/ario-studio-3.jpg',
+              '/images/case-studies/ario-studio-4.jpg',
+              '/images/case-studies/ario-studio-5.jpg',
+              '/images/case-studies/ario-studio-6.jpg',
+            ],
           },
           {
             lang: 'fa',
             title: 'آریو استودیو — وب‌سایت پورتفولیو مبتنی بر هوش مصنوعی',
             subtitle: 'تجربه کاربری سینمایی و مهندسی مدرن',
             excerpt: 'وب‌سایت پورتفولیوی جامع با تجربه کاربری سینمایی، انیمیشن‌های GSAP و سیستم تم روز/شب.',
-            body: 'این وب‌سایت پورتفولیو خودش—یک سایت استودیوی مبتنی بر هوش مصنوعی با تجربه کاربری سینمایی، انیمیشن‌های GSAP و سیستم تم روز/شب. ساخت یک سایت پورتفولیوی جامع با سیستم موشن GSAP، تغییر تم، صفحات case study ساختاریافته و فرم Start Project.',
+            body: 'این وب‌سایت پورتفولیو خودش—یک سایت استودیوی مبتنی بر هوش مصنوعی با تجربه کاربری سینمایی، انیمیشن‌های GSAP و سیستم تم روز/شب.',
+            bodyIntro: 'این وب‌سایت پورتفولیو خودش—یک سایت استودیوی مبتنی بر هوش مصنوعی با تجربه کاربری سینمایی، انیمیشن‌های GSAP و سیستم تم روز/شب. ساخت یک سایت پورتفولیوی جامع با سیستم موشن GSAP، تغییر تم، صفحات case study ساختاریافته و فرم Start Project.',
+            bodyProblem: 'ایجاد یک وب‌سایت پورتفولیو که در بازار شلوغ متمایز باشد و در عین حال استانداردهای حرفه‌ای را حفظ کند و رویکرد منحصر به فرد ما به طراحی و توسعه را به نمایش بگذارد.',
+            bodySolution: 'ما یک وب‌سایت سینمایی و موشن-فرست با استفاده از Next.js، انیمیشن‌های GSAP و یک سیستم تم پیچیده طراحی و ساختیم. این سایت شامل صفحات case study ساختاریافته، پشتیبانی چندزبانه و یک فرم تماس پولیش شده است.',
+            bodyProcess: 'فرآیند توسعه شامل: 1) کشف و ایجاد سیستم طراحی، 2) پیاده‌سازی انیمیشن GSAP، 3) توسعه سیستم تم، 4) ایجاد قالب case study، 5) یکپارچه‌سازی محتوای چندزبانه، 6) بهینه‌سازی عملکرد.',
+            bodyResult: 'نتیجه یک وب‌سایت پورتفولیوی خیره‌کننده است که به طور مؤثر کار ما را به نمایش می‌گذارد، مشتریان با کیفیت بالا را جذب می‌کند و قابلیت‌های فنی و خلاقانه ما را نشان می‌دهد. این سایت بازخورد مثبت دریافت کرده و به یک ابزار کلیدی در توسعه کسب‌وکار ما تبدیل شده است.',
             metaTitle: 'پورتفولیو آریو استودیو — طراحی و توسعه وب مبتنی بر هوش مصنوعی',
             metaDescription: 'کاوش وب‌سایت پورتفولیو آریو استودیو با تجربه کاربری سینمایی، انیمیشن‌های GSAP و معماری مدرن Next.js.',
-            tags: ['Next.js', 'GSAP', 'AI-native', 'طراحی موشن', 'پورتفولیو'],
+            tags: ['Next.js', 'GSAP', 'AI-native', 'طراحی موشن', 'پورتفولیو', 'فعال'],
+            featuredImage: '/images/case-studies/ario-studio-hero.jpg',
+            galleryImages: [
+              '/images/case-studies/ario-studio-1.jpg',
+              '/images/case-studies/ario-studio-2.jpg',
+              '/images/case-studies/ario-studio-3.jpg',
+              '/images/case-studies/ario-studio-4.jpg',
+              '/images/case-studies/ario-studio-5.jpg',
+              '/images/case-studies/ario-studio-6.jpg',
+            ],
           },
         ],
       },
     },
   })
   console.log(`✅ Created portfolio content: ${portfolioContent.slug}`)
+
+  // Portfolio Content: Sample Cinematic Landing Page (Mock Case Study)
+  const portfolioContent2 = await prisma.content.create({
+    data: {
+      type: 'portfolio',
+      slug: 'sample-cinematic-landing',
+      isPublished: true,
+      featured: true,
+      order: 2,
+      translations: {
+        create: [
+          {
+            lang: 'en',
+            title: 'Sample Cinematic Landing Page',
+            subtitle: 'Premium design meets high-performance engineering',
+            excerpt: 'A stunning landing page showcasing cinematic design principles and modern web technologies.',
+            bodyIntro: 'This project demonstrates our approach to creating premium landing pages that combine cinematic visuals with high-performance engineering. The result is a fast, beautiful, and conversion-optimized experience.',
+            bodyProblem: 'The client needed a landing page that would stand out in a competitive market, load quickly, and convert visitors into customers effectively.',
+            bodySolution: 'We created a cinematic landing page using Next.js, Tailwind CSS, and custom animations. The design emphasizes visual storytelling while maintaining fast load times and excellent SEO.',
+            bodyProcess: 'Our process included: 1) Brand discovery and visual direction, 2) Wireframing and design system creation, 3) Animation planning, 4) Development with Next.js, 5) Performance optimization, 6) SEO implementation.',
+            bodyResult: 'The landing page achieved a 95+ Lighthouse score, reduced bounce rate by 40%, and increased conversion rate by 25%. The client was extremely satisfied with both the design and performance.',
+            metaTitle: 'Sample Cinematic Landing Page — Premium Web Design',
+            metaDescription: 'Explore this stunning cinematic landing page featuring premium design and high-performance engineering.',
+            tags: ['Next.js', 'Tailwind CSS', 'Motion Design', 'Landing Page', 'Concept'],
+            featuredImage: '/images/case-studies/sample-landing-hero.jpg',
+            galleryImages: [
+              '/images/case-studies/sample-landing-1.jpg',
+              '/images/case-studies/sample-landing-2.jpg',
+              '/images/case-studies/sample-landing-3.jpg',
+            ],
+          },
+          {
+            lang: 'fa',
+            title: 'صفحه فرود سینمایی نمونه',
+            subtitle: 'طراحی پریمیوم و مهندسی با عملکرد بالا',
+            excerpt: 'یک صفحه فرود خیره‌کننده که اصول طراحی سینمایی و فناوری‌های وب مدرن را به نمایش می‌گذارد.',
+            bodyIntro: 'این پروژه رویکرد ما را برای ایجاد صفحات فرود پریمیوم که تصاویر سینمایی را با مهندسی با عملکرد بالا ترکیب می‌کنند، نشان می‌دهد. نتیجه یک تجربه سریع، زیبا و بهینه‌شده برای تبدیل است.',
+            bodyProblem: 'مشتری به یک صفحه فرود نیاز داشت که در بازار رقابتی متمایز باشد، به سرعت بارگذاری شود و بازدیدکنندگان را به طور مؤثر به مشتری تبدیل کند.',
+            bodySolution: 'ما یک صفحه فرود سینمایی با استفاده از Next.js، Tailwind CSS و انیمیشن‌های سفارشی ایجاد کردیم. طراحی بر داستان‌سرایی بصری تأکید می‌کند در حالی که زمان بارگذاری سریع و SEO عالی را حفظ می‌کند.',
+            bodyProcess: 'فرآیند ما شامل: 1) کشف برند و جهت بصری، 2) وایرفریم و ایجاد سیستم طراحی، 3) برنامه‌ریزی انیمیشن، 4) توسعه با Next.js، 5) بهینه‌سازی عملکرد، 6) پیاده‌سازی SEO.',
+            bodyResult: 'صفحه فرود به نمره 95+ Lighthouse دست یافت، نرخ پرش را 40% کاهش داد و نرخ تبدیل را 25% افزایش داد. مشتری از هر دو طراحی و عملکرد بسیار راضی بود.',
+            metaTitle: 'صفحه فرود سینمایی نمونه — طراحی وب پریمیوم',
+            metaDescription: 'کاوش این صفحه فرود سینمایی خیره‌کننده با طراحی پریمیوم و مهندسی با عملکرد بالا.',
+            tags: ['Next.js', 'Tailwind CSS', 'طراحی موشن', 'صفحه فرود', 'کانسپت'],
+            featuredImage: '/images/case-studies/sample-landing-hero.jpg',
+            galleryImages: [
+              '/images/case-studies/sample-landing-1.jpg',
+              '/images/case-studies/sample-landing-2.jpg',
+              '/images/case-studies/sample-landing-3.jpg',
+            ],
+          },
+        ],
+      },
+    },
+  })
+  console.log(`✅ Created portfolio content: ${portfolioContent2.slug}`)
 
   // Service Content: Cinematic Web Experiences (Design)
   const serviceContent1 = await prisma.content.create({

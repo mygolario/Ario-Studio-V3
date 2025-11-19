@@ -26,6 +26,39 @@ export type ContentWithTranslations = Content & {
 }
 
 /**
+ * Helper function to parse galleryImages from JSON
+ * Handles both string (JSON) and array formats
+ * 
+ * @param galleryImages - JSON string or array of strings
+ * @returns Array of image URLs or null
+ */
+function parseGalleryImages(galleryImages: unknown): string[] | null {
+  if (!galleryImages) {
+    return null
+  }
+
+  // If already an array, return it
+  if (Array.isArray(galleryImages)) {
+    return galleryImages.filter((item): item is string => typeof item === 'string')
+  }
+
+  // If it's a string, try to parse as JSON
+  if (typeof galleryImages === 'string') {
+    try {
+      const parsed = JSON.parse(galleryImages)
+      if (Array.isArray(parsed)) {
+        return parsed.filter((item): item is string => typeof item === 'string')
+      }
+    } catch {
+      // If parsing fails, return null
+      return null
+    }
+  }
+
+  return null
+}
+
+/**
  * Map Content + ContentTranslation to LocalizedContent for a specific language
  * 
  * @param content - Content entity with translations loaded
@@ -65,6 +98,9 @@ export function mapToLocalizedContent(
     return null
   }
 
+  // Parse galleryImages (handle JSON from Prisma)
+  const galleryImages = parseGalleryImages(translation.galleryImages)
+
   // Build LocalizedContent object
   return {
     // Core content fields
@@ -85,6 +121,15 @@ export function mapToLocalizedContent(
     metaDescription: translation.metaDescription ?? null,
     subtitle: translation.subtitle ?? null,
     tags: translation.tags ?? null,
+    
+    // Case Study specific fields
+    bodyIntro: translation.bodyIntro ?? null,
+    bodyProblem: translation.bodyProblem ?? null,
+    bodySolution: translation.bodySolution ?? null,
+    bodyProcess: translation.bodyProcess ?? null,
+    bodyResult: translation.bodyResult ?? null,
+    featuredImage: translation.featuredImage ?? null,
+    galleryImages: galleryImages,
     
     // Timestamps
     createdAt: content.createdAt,

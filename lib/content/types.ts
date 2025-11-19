@@ -52,13 +52,22 @@ export interface ContentTranslation {
   lang: SupportedLang // "fa" | "en"
   title: string
   excerpt?: string | null // Short summary text
-  body?: string | null // Full content (for blog/case study)
+  body?: string | null // Full content (for blog/case study) - legacy field, prefer bodyIntro for new content
   metaTitle?: string | null // SEO meta title
   metaDescription?: string | null // SEO meta description
   
   // Optional additional fields
   subtitle?: string | null
   tags?: string[] | null
+  
+  // Case Study specific fields
+  bodyIntro?: string | null // Introduction/Overview text
+  bodyProblem?: string | null // Problem/Challenge section
+  bodySolution?: string | null // Solution section
+  bodyProcess?: string | null // Process section
+  bodyResult?: string | null // Result/Outcome section
+  featuredImage?: string | null // URL of main featured image
+  galleryImages?: string[] | null // Array of image URLs (parsed from JSON)
   
   // Relations (when loaded with Prisma)
   content?: Content
@@ -83,11 +92,20 @@ export interface LocalizedContent {
   lang: SupportedLang
   title: string
   excerpt?: string | null
-  body?: string | null
+  body?: string | null // Legacy field, prefer bodyIntro for new content
   metaTitle?: string | null
   metaDescription?: string | null
   subtitle?: string | null
   tags?: string[] | null
+  
+  // Case Study specific fields
+  bodyIntro?: string | null // Introduction/Overview text
+  bodyProblem?: string | null // Problem/Challenge section
+  bodySolution?: string | null // Solution section
+  bodyProcess?: string | null // Process section
+  bodyResult?: string | null // Result/Outcome section
+  featuredImage?: string | null // URL of main featured image
+  galleryImages?: string[] | null // Array of image URLs
   
   // Timestamps
   createdAt: Date
@@ -112,6 +130,13 @@ export interface CreateContentInput {
     metaDescription?: string | null
     subtitle?: string | null
     tags?: string[] | null
+    bodyIntro?: string | null
+    bodyProblem?: string | null
+    bodySolution?: string | null
+    bodyProcess?: string | null
+    bodyResult?: string | null
+    featuredImage?: string | null
+    galleryImages?: string[] | null
   }>
 }
 
@@ -138,5 +163,12 @@ export interface UpsertContentTranslationInput {
   metaDescription?: string | null
   subtitle?: string | null
   tags?: string[] | null
+  bodyIntro?: string | null
+  bodyProblem?: string | null
+  bodySolution?: string | null
+  bodyProcess?: string | null
+  bodyResult?: string | null
+  featuredImage?: string | null
+  galleryImages?: string[] | null
 }
 

@@ -168,13 +168,23 @@ model ContentTranslation {
   lang            ContentLang
   title           String
   excerpt         String?
-  body            String? // Full content (for blog/case study)
+  body            String? // Full content (for blog/case study) - legacy field, prefer bodyIntro for new content
   metaTitle       String?     @map("meta_title")
   metaDescription String?     @map("meta_description")
   subtitle        String?
   tags            String[]    @default([])
-  createdAt       DateTime    @default(now()) @map("created_at")
-  updatedAt       DateTime    @updatedAt @map("updated_at")
+
+  // Case Study specific fields
+  bodyIntro     String? @map("body_intro") // Introduction/Overview text
+  bodyProblem   String? @map("body_problem") // Problem/Challenge section
+  bodySolution  String? @map("body_solution") // Solution section
+  bodyProcess   String? @map("body_process") // Process section
+  bodyResult    String? @map("body_result") // Result/Outcome section
+  featuredImage String? @map("featured_image") // URL of main featured image
+  galleryImages Json?   @map("gallery_images") // Array of image URLs (stored as JSON)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@unique([contentId, lang]) // Each content can have only one translation per language
   @@map("content_translations")

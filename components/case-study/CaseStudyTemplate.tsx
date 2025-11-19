@@ -108,8 +108,20 @@ export default function CaseStudyTemplate({ item, lang }: CaseStudyTemplateProps
   const isRTL = lang === 'fa'
   const dir = isRTL ? 'rtl' : 'ltr'
   
-  // Parse body into sections
-  const sections = parseBodySections(item.body)
+  // Use new structured fields if available, otherwise fallback to parsing body
+  const sections = {
+    overview: item.bodyIntro ?? null,
+    problem: item.bodyProblem ?? null,
+    solution: item.bodySolution ?? null,
+    process: item.bodyProcess ?? null,
+    result: item.bodyResult ?? null,
+  }
+  
+  // If structured fields are not available, try parsing body as fallback
+  if (!sections.overview && !sections.problem && !sections.solution && !sections.process && !sections.result) {
+    const parsedSections = parseBodySections(item.body)
+    Object.assign(sections, parsedSections)
+  }
   
   // Determine status from tags
   let status: string = item.tags?.find(tag => 
@@ -235,14 +247,21 @@ export default function CaseStudyTemplate({ item, lang }: CaseStudyTemplateProps
         </div>
       </section>
 
-      {/* Hero Image - Always show, with placeholder if no image */}
-      {/* Note: Currently LocalizedContent doesn't have featuredImage field */}
-      {/* This is a placeholder for future enhancement */}
+      {/* Hero Image - Show featuredImage if available, otherwise placeholder */}
       <div className="relative w-full h-[60vh] min-h-[400px] bg-surface-alt overflow-hidden">
-        {/* Placeholder div - will be replaced with Image component when featuredImage is available */}
-        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-surface-alt to-surface border-b border-border-subtle">
-          <span className="text-body-lg text-text-muted">{ui.placeholderImage}</span>
-        </div>
+        {item.featuredImage ? (
+          <Image
+            src={item.featuredImage}
+            alt={item.title}
+            fill
+            className="object-cover"
+            priority
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-surface-alt to-surface border-b border-border-subtle">
+            <span className="text-body-lg text-text-muted">{ui.placeholderImage}</span>
+          </div>
+        )}
       </div>
 
       {/* Project Overview Section */}
@@ -349,25 +368,39 @@ export default function CaseStudyTemplate({ item, lang }: CaseStudyTemplateProps
         </div>
       </section>
 
-      {/* Gallery Section - Always show, with placeholder grid if no images */}
+      {/* Gallery Section - Show galleryImages if available, otherwise placeholder grid */}
       <section className="relative py-16 md:py-24 overflow-hidden bg-base">
         <div className="container-custom">
           <div className="max-w-6xl mx-auto">
             <h2 className={`text-h2 font-semibold text-text-primary mb-8 ${isRTL ? 'text-right' : 'text-left'}`}>
               {ui.gallery}
             </h2>
-            {/* Note: Currently LocalizedContent doesn't have galleryImages field */}
-            {/* This is a placeholder grid that will be populated when galleryImages field is added */}
-            {/* For now, always show placeholder grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div
-                  key={i}
-                  className="relative aspect-video bg-surface-alt border border-border-subtle rounded-lg flex items-center justify-center"
-                >
-                  <span className="text-body-sm text-text-muted">{ui.placeholderImage}</span>
-                </div>
-              ))}
+              {item.galleryImages && item.galleryImages.length > 0 ? (
+                item.galleryImages.map((imageUrl, index) => (
+                  <div
+                    key={index}
+                    className="relative aspect-video bg-surface-alt border border-border-subtle rounded-lg overflow-hidden"
+                  >
+                    <Image
+                      src={imageUrl}
+                      alt={`${item.title} - Gallery ${index + 1}`}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                ))
+              ) : (
+                // Placeholder grid if no images
+                [1, 2, 3, 4, 5, 6].map((i) => (
+                  <div
+                    key={i}
+                    className="relative aspect-video bg-surface-alt border border-border-subtle rounded-lg flex items-center justify-center"
+                  >
+                    <span className="text-body-sm text-text-muted">{ui.placeholderImage}</span>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
