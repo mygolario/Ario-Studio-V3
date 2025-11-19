@@ -33,6 +33,7 @@ export async function getLocalizedContentList(
 ): Promise<LocalizedContent[]> {
   try {
     // Fetch content with translations from database
+    // Using cacheStrategy when Accelerate is enabled (prisma:// URL)
     const contents = await prisma.content.findMany({
       where: {
         type: type,
@@ -46,6 +47,7 @@ export async function getLocalizedContentList(
         { order: 'asc' },
         { createdAt: 'desc' },
       ],
+      cacheStrategy: { ttl: 60 }, // Cache for 60 seconds
     })
 
     // Map each content to LocalizedContent using the helper
@@ -87,6 +89,7 @@ export async function getLocalizedContentBySlug(
       include: {
         translations: true,
       },
+      cacheStrategy: { ttl: 60 }, // Cache for 60 seconds
     })
 
     if (!content) {
@@ -135,6 +138,7 @@ export async function getFeaturedContent(
         { createdAt: 'desc' },
       ],
       take: limit,
+      cacheStrategy: { ttl: 60 }, // Cache for 60 seconds
     })
 
     const localizedContents = contents

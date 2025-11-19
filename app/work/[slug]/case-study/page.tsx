@@ -4,16 +4,17 @@ import Link from 'next/link'
 import { getProjectBySlug, getCaseStudyByProjectId, getProjects } from '@/lib/db'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import type { Project } from '@prisma/client'
 
 export async function generateStaticParams() {
-  const projects = await getProjects().catch(() => [])
+  const projects = await getProjects().catch(() => [] as Project[])
   const caseStudies = await Promise.all(
-    projects.map(async (project) => {
+    projects.map(async (project: Project) => {
       const caseStudy = await getCaseStudyByProjectId(project.id).catch(() => null)
       return caseStudy ? { slug: project.slug } : null
     })
   )
-  return caseStudies.filter((item): item is { slug: string } => item !== null)
+  return caseStudies.filter((item: { slug: string } | null): item is { slug: string } => item !== null)
 }
 
 export async function generateMetadata({

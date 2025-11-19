@@ -1,10 +1,11 @@
 import Link from 'next/link'
 import { getLeadStats, getLeads } from '@/lib/db'
+import type { Lead } from '@prisma/client'
 
 export default async function AdminDashboard() {
   const [stats, recentLeads] = await Promise.all([
     getLeadStats().catch(() => ({ total: 0, new: 0, last7Days: 0, byStatus: {} })),
-    getLeads().then((leads) => leads.slice(0, 5)).catch(() => []),
+    getLeads().then((leads) => leads.slice(0, 5)).catch(() => [] as Lead[]),
   ])
 
   const formatDate = (date: Date) => {
@@ -71,7 +72,7 @@ export default async function AdminDashboard() {
                 </tr>
               </thead>
               <tbody>
-                {recentLeads.map((lead) => (
+                {recentLeads.map((lead: Lead) => (
                   <tr
                     key={lead.id}
                     className="border-b border-border-subtle hover:bg-surface-alt transition-colors"
