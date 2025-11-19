@@ -35,7 +35,7 @@ export default function About({ highlights: dbHighlights = [] }: AboutProps) {
     <section
       ref={sectionRef}
       id="about"
-      className="relative py-32 overflow-hidden bg-surface-alt"
+      className="relative py-16 sm:py-24 lg:py-32 overflow-hidden bg-surface-alt"
     >
       {/* Enhanced background with soft neon gradients */}
       <div 

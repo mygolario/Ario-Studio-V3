@@ -264,7 +264,7 @@ export default function StartProjectSection() {
     <section
       ref={sectionRef}
       id="contact"
-      className="relative py-32 overflow-hidden bg-base"
+      className="relative py-16 sm:py-24 lg:py-32 overflow-hidden bg-base"
     >
       {/* Enhanced background with cinematic glow */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-orange/5 to-transparent opacity-30 pointer-events-none" />
@@ -362,7 +362,7 @@ export default function StartProjectSection() {
             transition={{ duration: 0.8, ease: 'power3.out', delay: 0.6 }}
             className="max-w-6xl mx-auto"
           >
-            <div className="grid lg:grid-cols-2 gap-12 items-start">
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
               {/* LEFT COLUMN - Services Pills */}
               <div className="space-y-8">
                 <div>
@@ -414,7 +414,7 @@ export default function StartProjectSection() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.8 }}
-                  className="bg-surface border border-border-subtle rounded-2xl p-8 shadow-soft hover:shadow-card transition-all duration-200"
+                  className="bg-surface border border-border-subtle rounded-2xl p-6 sm:p-8 shadow-soft hover:shadow-card transition-all duration-200"
                 >
                 {isSuccess ? (
                   <div className="text-center py-8">

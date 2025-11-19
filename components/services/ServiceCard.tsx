@@ -73,7 +73,7 @@ export default function ServiceCard({ lang, item }: ServiceCardProps) {
   }
 
   return (
-    <div className="group relative bg-surface border border-border-subtle rounded-xl p-8 hover:shadow-card-hover hover:border-orange/50 transition-all duration-300 overflow-hidden">
+    <div className="group relative bg-surface border border-border-subtle rounded-xl p-6 sm:p-8 hover:shadow-card-hover hover:border-orange/50 transition-all duration-300 overflow-hidden">
       {/* Subtle inner glow on hover */}
       <div className="absolute inset-0 bg-gradient-to-br from-orange/0 via-orange/0 to-orange/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl" />
       
