@@ -156,7 +156,24 @@ export default function Header() {
                   >
                     {item.hasMegaMenu ? (
                       <motion.button
-                        onClick={() => setActiveMegaMenu(activeMegaMenu === 'Services' ? null : 'Services')}
+                        onClick={(e) => {
+                          // Scroll to section when clicked
+                          if (item.href.startsWith('#')) {
+                            e.preventDefault()
+                            const element = document.querySelector(item.href)
+                            if (element) {
+                              const headerHeight = 80
+                              const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+                              const offsetPosition = elementPosition - headerHeight
+                              window.scrollTo({
+                                top: offsetPosition,
+                                behavior: 'smooth',
+                              })
+                            }
+                          }
+                          // Also toggle mega menu
+                          setActiveMegaMenu(activeMegaMenu === 'Services' ? null : 'Services')
+                        }}
                         className={`relative text-body font-medium transition-all duration-200 cursor-pointer group/nav ${
                           activeMegaMenu === 'Services' ? 'text-orange' : 'text-text-secondary hover:text-orange'
                         }`}
@@ -365,7 +382,23 @@ export default function Header() {
                 {item.hasMegaMenu ? (
                   <div>
                     <button
-                      onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+                      onClick={() => {
+                        // Scroll to section when clicked
+                        if (item.href.startsWith('#')) {
+                          const element = document.querySelector(item.href)
+                          if (element) {
+                            const headerHeight = 80
+                            const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+                            const offsetPosition = elementPosition - headerHeight
+                            window.scrollTo({
+                              top: offsetPosition,
+                              behavior: 'smooth',
+                            })
+                          }
+                        }
+                        // Also toggle mobile services menu
+                        setMobileServicesOpen(!mobileServicesOpen)
+                      }}
                       className="flex items-center justify-between w-full text-body text-text-secondary hover:text-text-primary transition-colors"
                     >
                       <span>{item.label}</span>

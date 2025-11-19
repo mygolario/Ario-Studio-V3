@@ -41,8 +41,8 @@ export function formatPrice(priceFromUsd: number | null | undefined, lang: 'fa' 
     return formatPriceInToman(priceFromUsd)
   }
   
-  // English: USD format
+  // English: USD format with + sign
   const symbol = currency === 'USD' ? '$' : currency || 'USD'
-  return `Starting from ${symbol}${priceFromUsd.toLocaleString('en-US')}`
+  return `From ${symbol}${priceFromUsd.toLocaleString('en-US')}+`
 }
 

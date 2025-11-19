@@ -374,8 +374,8 @@ export default function Hero() {
                       }}
                     />
                     
-                    <h3 className="text-2xl font-semibold mb-2">AI Studio</h3>
-                    <p className="text-base opacity-90">Agent-ready dashboard</p>
+                    <h3 className="text-2xl font-semibold mb-2">{t.hero.cardTitle}</h3>
+                    <p className="text-base opacity-90">{t.hero.cardDescription}</p>
                   </div>
                   
                   {/* Bottom decorative bar - simplified */}
