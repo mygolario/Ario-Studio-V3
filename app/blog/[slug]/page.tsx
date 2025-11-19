@@ -4,13 +4,14 @@ import Link from 'next/link'
 import { getBlogPostBySlug, getPublishedBlogPosts } from '@/lib/db'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import type { BlogPost } from '@prisma/client'
 
 // Revalidate blog posts every 3600 seconds (1 hour)
 export const revalidate = 3600
 
 export async function generateStaticParams() {
-  const posts = await getPublishedBlogPosts().catch(() => [])
-  return posts.map((post) => ({
+  const posts = await getPublishedBlogPosts().catch(() => [] as BlogPost[])
+  return posts.map((post: BlogPost) => ({
     slug: post.slug,
   }))
 }

@@ -1,20 +1,29 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client/edge'
+import { withAccelerate } from '@prisma/extension-accelerate'
 
 /**
- * Prisma Client Singleton
+ * Prisma Client Singleton with Accelerate
  * 
  * Prevents multiple instances of PrismaClient in development
  * due to hot-reloading creating new instances.
+ * 
+ * Uses Prisma Accelerate for connection pooling and caching
+ * when DATABASE_URL uses the prisma:// protocol.
  */
 const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined
+  prisma: ReturnType<typeof createPrismaClient> | undefined
 }
 
-export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
+function createPrismaClient() {
+  const baseClient = new PrismaClient({
     log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
   })
+
+  // Always use Accelerate extension for connection pooling and caching
+  return baseClient.$extends(withAccelerate())
+}
+
+export const prisma = globalForPrisma.prisma ?? createPrismaClient()
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
@@ -473,7 +482,7 @@ export async function getLeadStats() {
   })
 
   const statusMap: Record<string, number> = {}
-  statusCounts.forEach((item) => {
+  ;(statusCounts as Array<{ status: string; _count: { id: number } }>).forEach((item) => {
     statusMap[item.status] = item._count.id
   })
 

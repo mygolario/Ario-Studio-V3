@@ -3,6 +3,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { getProcessSteps, getHighlights } from '@/lib/db'
 import Link from 'next/link'
+import type { ProcessStep, Highlight } from '@prisma/client'
 
 export const metadata: Metadata = {
   title: 'About Ario Studio',
@@ -17,8 +18,8 @@ export const revalidate = 3600 // Revalidate every hour
 
 export default async function AboutPage() {
   const [processSteps, highlights] = await Promise.all([
-    getProcessSteps().catch(() => []),
-    getHighlights('about').catch(() => []),
+    getProcessSteps().catch(() => [] as ProcessStep[]),
+    getHighlights('about').catch(() => [] as Highlight[]),
   ])
 
   return (
@@ -62,7 +63,7 @@ export default async function AboutPage() {
           <div className="max-w-4xl mx-auto">
             <h2 className="text-h2 font-semibold text-text-primary mb-8">Our Process</h2>
             <div className="space-y-6">
-              {processSteps.map((step, idx) => (
+              {processSteps.map((step: ProcessStep, idx: number) => (
                 <div key={step.id} className="flex gap-6">
                   <div className="flex-shrink-0 w-12 h-12 rounded-full bg-orange/10 border border-orange/20 flex items-center justify-center text-h4 font-semibold text-orange">
                     {String(idx + 1).padStart(2, '0')}
@@ -84,7 +85,7 @@ export default async function AboutPage() {
           <div className="max-w-4xl mx-auto">
             <h2 className="text-h2 font-semibold text-text-primary mb-8">What Defines Our Work</h2>
             <div className="grid md:grid-cols-2 gap-6">
-              {highlights.map((highlight) => (
+              {highlights.map((highlight: Highlight) => (
                 <div key={highlight.id} className="p-6 bg-surface border border-border-subtle rounded-lg">
                   <h3 className="text-h4 font-semibold text-text-primary mb-2">{highlight.title}</h3>
                   {highlight.description && (
