@@ -170,6 +170,12 @@ export function mapToLocalizedContent(
     layoutType: resolvedLayoutType,
     category,
     
+    // Service-specific fields
+    servicePriceFrom: content.servicePriceFrom ?? null,
+    serviceCurrency: content.serviceCurrency ?? null,
+    serviceDuration: content.serviceDuration ?? null,
+    serviceLevel: (content.serviceLevel as any) ?? null,
+    
     // Language-specific fields from translation
     lang: translation.lang,
     title: translation.title,

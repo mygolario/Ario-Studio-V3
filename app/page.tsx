@@ -126,7 +126,7 @@ export default async function Home() {
       {/* Beta Notice (Farsi only) */}
       <BetaNotice />
       {/* Scene 2: WHAT WE DO */}
-      <Services servicesContent={servicesContent} />
+      <Services servicesContent={servicesContent} lang={lang} />
       {/* Scene 3: OUR WORK */}
       <Portfolio portfolioContent={portfolioContent} lang={lang} />
       {/* Scene 4: OUR PROCESS */}

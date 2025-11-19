@@ -52,6 +52,22 @@ export function isPortfolioCategory(
 }
 
 /**
+ * Service Level
+ * Defines the service tier/package level
+ */
+export type ServiceLevel = 'starter' | 'pro' | 'premium'
+
+/**
+ * Type guard for service levels
+ */
+export function isServiceLevel(
+  value: string | null | undefined
+): value is ServiceLevel {
+  if (!value) return false
+  return ['starter', 'pro', 'premium'].includes(value)
+}
+
+/**
  * Core content entity (language-agnostic)
  * Contains metadata and structure shared across all languages
  */
@@ -70,6 +86,12 @@ export interface Content {
   layoutType?: CaseStudyLayoutType | null // Case study layout type
   category?: PortfolioCategory | null // Portfolio category
   tags?: string | null // Comma-separated tags or JSON string
+  
+  // Service-specific fields
+  servicePriceFrom?: number | null // Starting price (e.g., in USD or equivalent)
+  serviceCurrency?: string | null // Currency code: "USD" | "IRR" | etc.
+  serviceDuration?: string | null // Free text: "2–4 weeks"
+  serviceLevel?: ServiceLevel | null // "starter" | "pro" | "premium"
   
   // Relations (when loaded with Prisma)
   translations?: ContentTranslation[]
@@ -123,6 +145,12 @@ export interface LocalizedContent {
   layoutType?: CaseStudyLayoutType | null // Case study layout type
   category?: PortfolioCategory | null
   
+  // Service-specific fields
+  servicePriceFrom?: number | null // Starting price (e.g., in USD or equivalent)
+  serviceCurrency?: string | null // Currency code: "USD" | "IRR" | etc.
+  serviceDuration?: string | null // Free text: "2–4 weeks"
+  serviceLevel?: ServiceLevel | null // "starter" | "pro" | "premium"
+  
   // Language-specific fields
   lang: SupportedLang
   title: string
@@ -159,6 +187,10 @@ export interface CreateContentInput {
   layoutType?: CaseStudyLayoutType | null
   category?: PortfolioCategory | null
   tags?: string[] | null
+  servicePriceFrom?: number | null
+  serviceCurrency?: string | null
+  serviceDuration?: string | null
+  serviceLevel?: ServiceLevel | null
   translations: Array<{
     lang: SupportedLang
     title: string
@@ -190,6 +222,10 @@ export interface UpdateContentInput {
   layoutType?: CaseStudyLayoutType | null
   category?: PortfolioCategory | null
   tags?: string[] | null
+  servicePriceFrom?: number | null
+  serviceCurrency?: string | null
+  serviceDuration?: string | null
+  serviceLevel?: ServiceLevel | null
 }
 
 /**

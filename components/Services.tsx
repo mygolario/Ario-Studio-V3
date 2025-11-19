@@ -1,19 +1,21 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
-import { Palette, Code, Zap } from 'lucide-react'
 import { animateSectionReveal } from '@/lib/gsapClient'
-import { useTranslation } from '@/lib/useTranslation'
 import { type LocalizedContent } from '@/lib/content/types'
+import { type SupportedLang } from '@/lib/i18n'
+import ServiceCard from './services/ServiceCard'
 
 interface ServicesProps {
   servicesContent?: LocalizedContent[]
+  lang?: SupportedLang
 }
 
-export default function Services({ servicesContent = [] }: ServicesProps) {
-  const t = useTranslation()
+export default function Services({ servicesContent = [], lang }: ServicesProps) {
   const sectionRef = useRef<HTMLElement>(null)
+  
+  // Use lang from props or default to 'fa'
+  const currentLang: SupportedLang = lang || 'fa'
 
   useEffect(() => {
     if (sectionRef.current) {
@@ -31,39 +33,21 @@ export default function Services({ servicesContent = [] }: ServicesProps) {
     }
   }, [])
   
-  const serviceIcons = [Palette, Code, Zap]
+  // UI texts (bilingual)
+  const uiTexts = currentLang === 'fa' 
+    ? {
+        title: 'سرویس‌ها',
+        subtitle: 'آنچه برای ساخت تجربه‌های وب سینمایی انجام می‌دهیم.',
+        emptyState: 'سرویس‌ها به‌زودی اینجا اضافه می‌شوند.',
+      }
+    : {
+        title: 'Services',
+        subtitle: 'What we do to craft cinematic, AI-powered web experiences.',
+        emptyState: 'Services will be added here soon.',
+      }
   
-  // Use multilingual content from API if available, otherwise fallback to translations
-  const serviceGroups = servicesContent.length > 0
-    ? servicesContent.map((service, index) => {
-        // For services, tags are used as bullet points (items)
-        // The seed data stores descriptive bullet points in the tags array
-        const items: string[] = service.tags && Array.isArray(service.tags) 
-          ? service.tags 
-          : []
-        
-        return {
-          id: service.slug || service.id,
-          icon: serviceIcons[index] || Palette,
-          title: service.title,
-          description: service.excerpt || service.subtitle || service.body?.substring(0, 200) || '',
-          items: items,
-          pillLabel: service.subtitle || service.title,
-        }
-      })
-    : t.services.items.map((item, index) => ({
-        id: item.title.toLowerCase().replace(/\s+/g, '-'),
-        icon: serviceIcons[index] || Palette,
-        title: item.title,
-        description: item.description,
-        items: item.bullets,
-        pillLabel: item.title,
-      }))
-  
-  // Don't render section if no services
-  if (serviceGroups.length === 0) {
-    return null
-  }
+  // Filter only service type content
+  const services = servicesContent.filter(item => item.type === 'service')
 
   return (
     <section
@@ -84,113 +68,33 @@ export default function Services({ servicesContent = [] }: ServicesProps) {
       <div className="container-custom">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-16" data-animate-child>
+          <div className={`text-center mb-16 ${currentLang === 'fa' ? 'rtl:text-right' : ''}`} data-animate-child>
             <div className="mb-6">
-              {/* Section Label */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, ease: 'power3.out' }}
-                className="mb-4"
-              >
-                <span className="text-label text-orange uppercase tracking-wider font-medium">
-                  {t.services.label}
-                </span>
-              </motion.div>
-              <h2 className="text-h1 font-semibold text-text-primary mb-4">
-                {t.services.title}
+              <h2 className={`text-h1 font-semibold text-text-primary mb-4 ${currentLang === 'fa' ? 'rtl:text-right' : ''}`}>
+                {uiTexts.title}
               </h2>
               {/* Section accent line */}
               <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full mx-auto" />
             </div>
-            <p className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
-              {t.services.subtitle}
+            <p className={`text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed ${currentLang === 'fa' ? 'rtl:text-right' : ''}`}>
+              {uiTexts.subtitle}
             </p>
           </div>
 
           {/* Services Grid */}
-          <div className="grid md:grid-cols-3 gap-8">
-            {serviceGroups.map((group, index) => {
-              const Icon = group.icon
-              return (
-                <motion.div
-                  key={group.title}
-                  id={group.id}
-                  data-animate-child
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                      transition={{
-                        duration: 0.8,
-                        ease: 'easeOut',
-                        delay: index * 0.1,
-                      }}
-                  whileHover={{
-                    scale: 1.02,
-                    y: -4,
-                  }}
-                  className="group relative bg-surface border border-border-subtle rounded-xl p-8 hover:shadow-card-hover hover:border-orange/50 transition-all duration-300 cursor-pointer scroll-mt-24 overflow-hidden"
-                >
-                  {/* Subtle inner glow on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-orange/0 via-orange/0 to-orange/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl" />
-                  
-                  {/* Subtle light streak effect on hover */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                    <div 
-                      className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-orange/30 to-transparent"
-                      style={{
-                        transform: 'translateY(-50%)',
-                      }}
-                    />
-                  </div>
-
-                  {/* Icon Container */}
-                  <div className="relative z-10 w-14 h-14 rounded-xl border border-border-subtle flex items-center justify-center mb-6 group-hover:border-orange group-hover:bg-orange/5 transition-all duration-300">
-                    <Icon size={28} className="text-text-secondary group-hover:text-orange transition-colors duration-300" />
-                  </div>
-
-                  {/* Content */}
-                  <div className="relative z-10">
-                    {/* Pill Label */}
-                    {group.pillLabel && (
-                      <div className="mb-3">
-                        <span className="inline-block text-label text-orange/80 uppercase tracking-wider font-medium text-xs mb-2">
-                          {group.pillLabel}
-                        </span>
-                      </div>
-                    )}
-                    
-                    <h3 className="text-h4 font-semibold text-text-primary mb-3">
-                      {group.title}
-                    </h3>
-                    <p className="text-body-sm text-text-secondary mb-6 leading-relaxed">
-                      {group.description}
-                    </p>
-                    <ul className="space-y-3">
-                      {group.items.map((item, itemIndex) => (
-                        <motion.li
-                          key={item}
-                          initial={{ opacity: 0, x: -10 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                      transition={{
-                        duration: 0.5,
-                        ease: 'easeOut',
-                        delay: (index * 0.1) + (itemIndex * 0.08) + 0.3,
-                      }}
-                          className="flex items-start gap-3 group/item"
-                        >
-                          <span className="text-orange mt-1.5 group-hover/item:scale-110 transition-transform duration-200 flex-shrink-0">•</span>
-                          <span className="text-body text-text-secondary group-hover/item:text-text-primary transition-colors duration-200">{item}</span>
-                        </motion.li>
-                      ))}
-                    </ul>
-                  </div>
-                </motion.div>
-              )
-            })}
-          </div>
+          {services.length === 0 ? (
+            <div className={`text-center py-16 ${currentLang === 'fa' ? 'rtl:text-right' : ''}`}>
+              <p className="text-text-secondary">{uiTexts.emptyState}</p>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-3 gap-8">
+              {services.map((service) => (
+                <div key={service.slug} data-animate-child>
+                  <ServiceCard lang={currentLang} item={service} />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>
