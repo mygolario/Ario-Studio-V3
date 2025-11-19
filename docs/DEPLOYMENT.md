@@ -22,6 +22,7 @@ Ensure all required environment variables are set in your hosting platform (Verc
 - `OPENAI_API_KEY` or `LIARA_API_KEY` - For AI lead enrichment
 - `ADMIN_EMAIL` - Admin panel email
 - `ADMIN_PASSWORD` - Admin panel password (hashed)
+- `OPTIMIZE_API_KEY` - Prisma Optimize API key for query analysis and optimization
 
 See `.env.example` for full list.
 
