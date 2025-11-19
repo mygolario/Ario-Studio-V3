@@ -176,8 +176,8 @@ export default function Hero() {
       {/* Cinematic Animated Background */}
       <HeroBackground />
 
-      <div className="container-custom relative z-10 py-32">
-        <div className="grid lg:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
+      <div className="container-custom relative z-10 py-16 sm:py-24 lg:py-32 px-4 sm:px-6">
+        <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center max-w-6xl mx-auto">
           {/* LEFT COLUMN - Text + CTAs */}
           <motion.div 
             className="space-y-6"
@@ -202,7 +202,7 @@ export default function Hero() {
             {/* Main Heading - Layer 1 (closest) */}
             <h1 
               ref={headingRef}
-              className="text-hero md:text-[64px] md:leading-[72px] font-semibold text-text-primary rtl:!leading-[1.5] rtl:md:!leading-[1.5] rtl:!tracking-wide"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-hero lg:text-[64px] lg:leading-[72px] font-semibold text-text-primary rtl:!leading-[1.5] rtl:md:!leading-[1.5] rtl:!tracking-wide"
             >
               {t.hero.title}
             </h1>
@@ -210,7 +210,7 @@ export default function Hero() {
             {/* Subtext - Layer 2 */}
             <p 
               ref={subheadingRef}
-              className="text-body-lg md:text-xl text-text-secondary max-w-xl leading-relaxed"
+              className="text-base sm:text-body-lg md:text-xl text-text-secondary max-w-xl leading-relaxed"
             >
               {t.hero.subtitle}
             </p>

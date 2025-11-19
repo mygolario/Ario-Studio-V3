@@ -46,13 +46,12 @@ export default function Header() {
   // Get mega menu content from translations
   const megaMenuContent = {
     'Services': {
-      columns: t.megaMenu.columns.map((column, index) => ({
+      columns: t.megaMenu.columns.map((column) => ({
         title: column.title,
         description: column.description,
-        sectionId: index === 0 ? 'ai-native-product-websites' : index === 1 ? 'mvps-dashboards' : 'long-term-design-systems',
         items: column.items.map((item) => ({
           text: item,
-          href: index === 0 ? '#ai-native-product-websites' : index === 1 ? '#mvps-dashboards' : '#long-term-design-systems',
+          href: '#services', // All mega menu items scroll to services section
         })),
       })),
     },
@@ -60,6 +59,7 @@ export default function Header() {
 
   const handleMegaMenuItemClick = (href: string) => {
     setActiveMegaMenu(null)
+    setIsMobileMenuOpen(false) // Close mobile menu if open
     const element = document.querySelector(href)
     if (element) {
       const headerHeight = 80
@@ -75,7 +75,7 @@ export default function Header() {
 
   const navItems = [
     { label: t.nav.services, href: '#services', hasMegaMenu: true, id: 'services' },
-    { label: t.nav.work, href: '/#portfolio', id: 'portfolio' },
+    { label: t.nav.work, href: '#portfolio', id: 'portfolio' },
     { label: t.nav.process, href: '#philosophy', id: 'philosophy' },
     { label: t.nav.about, href: '#about', id: 'about' },
     { label: t.nav.contact, href: '#contact', id: 'contact' },
