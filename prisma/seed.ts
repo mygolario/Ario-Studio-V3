@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import { services } from '../content/services'
 
 const prisma = new PrismaClient()
 
@@ -14,53 +15,7 @@ async function main() {
   await prisma.project.deleteMany()
   await prisma.service.deleteMany()
 
-  // Seed Services
-  console.log('📦 Seeding Services...')
-  const services = await Promise.all([
-    prisma.service.create({
-      data: {
-        title: 'Design',
-        slug: 'design',
-        subtitle: 'Cinematic interfaces, premium aesthetics, and brand-first visuals.',
-        pillLabel: 'Design',
-        items: [
-          'High-end landing pages and marketing sites',
-          'Portfolio and studio websites with expressive visuals',
-          'Brand-aligned UI systems with consistent components',
-        ],
-        order: 1,
-      },
-    }),
-    prisma.service.create({
-      data: {
-        title: 'Build',
-        slug: 'build',
-        subtitle: 'Next.js engineering, performance-first architecture, and clean systems built for scale.',
-        pillLabel: 'Build',
-        items: [
-          'Production-grade Next.js frontends',
-          'Fast, responsive layouts optimized for modern devices',
-          'Clean, maintainable codebases ready to grow',
-        ],
-        order: 2,
-      },
-    }),
-    prisma.service.create({
-      data: {
-        title: 'Automate',
-        slug: 'automate',
-        subtitle: 'AI integration, workflow automation, and custom intelligent agents.',
-        pillLabel: 'Automate',
-        items: [
-          'AI-powered chat and support experiences',
-          'Automated workflows connecting tools and services',
-          'Smart systems that reduce manual work',
-        ],
-        order: 3,
-      },
-    }),
-  ])
-  console.log(`✅ Created ${services.length} services`)
+  // Old Services model seeding removed - now using Content model with services from content/services.ts
 
   // Seed Process Steps
   console.log('🔄 Seeding Process Steps...')
@@ -347,125 +302,50 @@ async function main() {
   })
   console.log(`✅ Created portfolio content: ${portfolioContent2.slug}`)
 
-  // Service Content: Cinematic Web Experiences (Design)
-  const serviceContent1 = await prisma.content.create({
-    data: {
-      type: 'service',
-      slug: 'cinematic-landing-pages',
-      isPublished: true,
-      featured: true,
-      order: 1,
-      servicePriceFrom: 1000,
-      serviceCurrency: 'USD',
-      serviceDuration: '2–4 weeks',
-      serviceLevel: 'starter',
-      translations: {
-        create: [
-          {
-            lang: 'en',
-            title: 'Cinematic Landing Pages',
-            subtitle: 'Cinematic interfaces, premium aesthetics, and brand-first visuals',
-            excerpt: 'High-end landing pages with cinematic design principles, expressive motion, and brand-first visuals that captivate audiences and drive conversions.',
-            body: 'We design and build cinematic web experiences that captivate audiences and drive results. From concept to launch, we combine visual storytelling, modern engineering, and AI automation to build experiences that feel alive.',
-            metaTitle: 'Design — Ario Studio',
-            metaDescription: 'High-end web design and development with cinematic UX, expressive motion, and brand-first visuals.',
-            tags: ['High-end landing pages and marketing sites', 'Portfolio and studio websites with expressive visuals', 'Brand-aligned UI systems with consistent components'],
+  // Seed Services from content/services.ts
+  console.log('📦 Seeding Services from content/services.ts...')
+  const serviceContents = await Promise.all(
+    services.map((service, index) =>
+      prisma.content.create({
+        data: {
+          type: 'service',
+          slug: service.slug,
+          isPublished: true,
+          featured: true,
+          order: index + 1,
+          servicePriceFrom: service.priceFromUsd,
+          serviceCurrency: 'USD',
+          serviceDuration: service.durationEn, // Store English duration, translations will use appropriate one
+          serviceLevel: service.level,
+          translations: {
+            create: [
+              {
+                lang: 'en',
+                title: service.en.title,
+                subtitle: service.en.shortLabel || service.en.title,
+                excerpt: service.en.summary,
+                body: `${service.en.summary}\n\nSuitable for: ${service.en.suitableFor}`,
+                metaTitle: `${service.en.title} — Ario Studio`,
+                metaDescription: service.en.summary,
+                tags: service.en.suitableFor.split(',').map((s) => s.trim()),
+              },
+              {
+                lang: 'fa',
+                title: service.fa.title,
+                subtitle: service.fa.shortLabel || service.fa.title,
+                excerpt: service.fa.summary,
+                body: `${service.fa.summary}\n\nمناسب برای: ${service.fa.suitableFor}`,
+                metaTitle: `${service.fa.title} — آریو استودیو`,
+                metaDescription: service.fa.summary,
+                tags: service.fa.suitableFor.split('،').map((s) => s.trim()),
+              },
+            ],
           },
-          {
-            lang: 'fa',
-            title: 'لندینگ پیج‌های سینمایی',
-            subtitle: 'رابط‌های سینمایی، زیبایی‌شناسی پریمیوم و تصاویر اولویت‌دار برند',
-            excerpt: 'لندینگ پیج‌های سطح بالا با اصول طراحی سینمایی، موشن بیانگر و تصاویر مبتنی بر برند که مخاطبان را جذب می‌کند و تبدیل را افزایش می‌دهد.',
-            body: 'ما تجربه‌های وب سینمایی طراحی و می‌سازیم که مخاطبان را جذب می‌کند و نتایج را به ارمغان می‌آورد. از مفهوم تا راه‌اندازی، ما داستان‌سرایی بصری، مهندسی مدرن و اتوماسیون هوش مصنوعی را ترکیب می‌کنیم.',
-            metaTitle: 'طراحی — آریو استودیو',
-            metaDescription: 'طراحی و توسعه وب سطح بالا با تجربه کاربری سینمایی، موشن بیانگر و تصاویر مبتنی بر برند.',
-            tags: ['صفحات فرود و سایت‌های بازاریابی سطح بالا', 'پورتفولیو و وب‌سایت‌های استودیو با تصاویر بیانگر', 'سیستم‌های رابط کاربری هم‌راستا با برند با کامپوننت‌های سازگار'],
-          },
-        ],
-      },
-    },
-  })
-  console.log(`✅ Created service content: ${serviceContent1.slug}`)
-
-  // Service Content: Build (Next.js Engineering)
-  const serviceContent2 = await prisma.content.create({
-    data: {
-      type: 'service',
-      slug: 'full-web-systems',
-      isPublished: true,
-      featured: true,
-      order: 2,
-      servicePriceFrom: 2500,
-      serviceCurrency: 'USD',
-      serviceDuration: '4–8 weeks',
-      serviceLevel: 'pro',
-      translations: {
-        create: [
-          {
-            lang: 'en',
-            title: 'Full Web Systems',
-            subtitle: 'Next.js engineering, performance-first architecture, and clean systems built for scale',
-            excerpt: 'Complete web systems built with Next.js, featuring performance-first architecture, scalable infrastructure, and maintainable codebases ready for growth.',
-            body: 'We build production-grade Next.js frontends with fast, responsive layouts optimized for modern devices. Our clean, maintainable codebases are ready to grow with your business.',
-            metaTitle: 'Build — Ario Studio',
-            metaDescription: 'Production-grade Next.js frontends with performance-first architecture.',
-            tags: ['Production-grade Next.js frontends', 'Fast, responsive layouts optimized for modern devices', 'Clean, maintainable codebases ready to grow'],
-          },
-          {
-            lang: 'fa',
-            title: 'سیستم‌های وب کامل',
-            subtitle: 'مهندسی Next.js، معماری اولویت‌دار عملکرد و سیستم‌های تمیز ساخته شده برای مقیاس',
-            excerpt: 'سیستم‌های وب کامل ساخته شده با Next.js، با معماری اولویت‌دار عملکرد، زیرساخت مقیاس‌پذیر و کدبیس‌های قابل نگهداری آماده برای رشد.',
-            body: 'ما فرانت‌اندهای Next.js درجه تولید با چیدمان‌های سریع و واکنش‌گرا بهینه‌شده برای دستگاه‌های مدرن می‌سازیم. کدبیس‌های تمیز و قابل نگهداری ما آماده رشد با کسب‌وکار شما هستند.',
-            metaTitle: 'ساخت — آریو استودیو',
-            metaDescription: 'فرانت‌اندهای Next.js درجه تولید با معماری اولویت‌دار عملکرد.',
-            tags: ['فرانت‌اندهای Next.js درجه تولید', 'چیدمان‌های سریع و واکنش‌گرا بهینه‌شده برای دستگاه‌های مدرن', 'کدبیس‌های تمیز و قابل نگهداری آماده برای رشد'],
-          },
-        ],
-      },
-    },
-  })
-  console.log(`✅ Created service content: ${serviceContent2.slug}`)
-
-  // Service Content: Automate (AI-Powered Automation)
-  const serviceContent3 = await prisma.content.create({
-    data: {
-      type: 'service',
-      slug: 'ai-automation',
-      isPublished: true,
-      featured: true,
-      order: 3,
-      servicePriceFrom: 1500,
-      serviceCurrency: 'USD',
-      serviceDuration: '3–6 weeks',
-      serviceLevel: 'premium',
-      translations: {
-        create: [
-          {
-            lang: 'en',
-            title: 'AI Automation',
-            subtitle: 'AI integration, workflow automation, and custom intelligent agents',
-            excerpt: 'AI-powered automation systems that integrate intelligent workflows, connect tools and services, and reduce manual work while amplifying results.',
-            body: 'From AI-powered chat experiences to automated workflows connecting tools and services, we build smart systems that reduce manual work and amplify results.',
-            metaTitle: 'Automate — Ario Studio',
-            metaDescription: 'AI-powered automation systems that reduce manual work and amplify results.',
-            tags: ['AI-powered chat and support experiences', 'Automated workflows connecting tools and services', 'Smart systems that reduce manual work'],
-          },
-          {
-            lang: 'fa',
-            title: 'اتوماسیون هوش مصنوعی',
-            subtitle: 'ادغام هوش مصنوعی، اتوماسیون گردش کار و عامل‌های هوشمند سفارشی',
-            excerpt: 'سیستم‌های اتوماسیون مبتنی بر هوش مصنوعی که گردش کارهای هوشمند را یکپارچه می‌کنند، ابزارها و سرویس‌ها را به هم متصل می‌کنند و کار دستی را کاهش می‌دهند در حالی که نتایج را تقویت می‌کنند.',
-            body: 'از تجربیات چت مبتنی بر هوش مصنوعی تا گردش کارهای خودکار که ابزارها و سرویس‌ها را به هم متصل می‌کنند، ما سیستم‌های هوشمندی می‌سازیم که کار دستی را کاهش می‌دهند و نتایج را تقویت می‌کنند.',
-            metaTitle: 'اتوماسیون — آریو استودیو',
-            metaDescription: 'سیستم‌های اتوماسیون مبتنی بر هوش مصنوعی که کار دستی را کاهش می‌دهند و نتایج را تقویت می‌کنند.',
-            tags: ['تجربیات چت و پشتیبانی مبتنی بر هوش مصنوعی', 'گردش‌های کاری خودکار متصل به ابزارها و سرویس‌ها', 'سیستم‌های هوشمند که کار دستی را کاهش می‌دهند'],
-          },
-        ],
-      },
-    },
-  })
-  console.log(`✅ Created service content: ${serviceContent3.slug}`)
+        },
+      })
+    )
+  )
+  console.log(`✅ Created ${serviceContents.length} service contents`)
 
   // Blog Content: Example (placeholder)
   const blogContent = await prisma.content.create({
