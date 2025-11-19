@@ -4,6 +4,8 @@ import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { animateSectionReveal } from '@/lib/gsapClient'
 import { useTranslation } from '@/lib/useTranslation'
+import { useLanguage } from '@/contexts/LanguageContext'
+import { formatLocalizedNumber } from '@/lib/utils/pricing'
 import { ProcessStep } from '@prisma/client'
 
 interface DesignEthosProps {
@@ -12,6 +14,7 @@ interface DesignEthosProps {
 
 export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosProps) {
   const t = useTranslation()
+  const { language } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -71,11 +74,14 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
   // Database steps allow admins to customize the process, while translations provide
   // localized fallback when no database steps are configured
   const processSteps = dbSteps.length > 0
-    ? dbSteps.map((step, index) => ({
-        number: String(index + 1).padStart(2, '0'),
-        title: step.title,
-        description: step.description,
-      }))
+    ? dbSteps.map((step, index) => {
+        const englishNumber = String(index + 1).padStart(2, '0')
+        return {
+          number: formatLocalizedNumber(englishNumber, language),
+          title: step.title,
+          description: step.description,
+        }
+      })
     : t.process.steps
 
   return (
