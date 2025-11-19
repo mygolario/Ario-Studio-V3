@@ -21,8 +21,11 @@ export type CreateLeadActionResult =
         email?: string
         message?: string
         companyName?: string
+        website?: string
+        serviceSlug?: string
         budgetRange?: string
         timeline?: string
+        businessType?: string
         servicesNeeded?: string
         projectType?: string
         _form?: string
@@ -50,8 +53,11 @@ export async function createLeadAction(
       email: formData.get('email')?.toString() || '',
       message: formData.get('message')?.toString() || '',
       companyName: formData.get('companyName')?.toString() || '',
-      budgetRange: formData.get('budget')?.toString() || '',
+      website: formData.get('website')?.toString() || '',
+      serviceSlug: formData.get('serviceSlug')?.toString() || '',
+      budgetRange: formData.get('budget')?.toString() || formData.get('budgetRange')?.toString() || '',
       timeline: formData.get('timeline')?.toString() || '',
+      businessType: formData.get('businessType')?.toString() || '',
       projectType: formData.get('projectType')?.toString() || '',
       servicesNeeded: formData.get('servicesNeeded')
         ? (formData.get('servicesNeeded') as string).split(',').filter(Boolean)
@@ -109,14 +115,22 @@ export async function createLeadAction(
       console.warn('AI enrichment failed (continuing without AI data):', aiError)
     }
 
+    // Build servicesNeeded array - include serviceSlug if provided
+    const servicesNeeded = validatedData.servicesNeeded || []
+    if (validatedData.serviceSlug && !servicesNeeded.includes(validatedData.serviceSlug)) {
+      servicesNeeded.push(validatedData.serviceSlug)
+    }
+
     const leadData = {
       name: validatedData.name,
       email: validatedData.email,
       message: messageWithProjectType,
       companyName: validatedData.companyName || undefined,
+      website: validatedData.website || undefined,
       budgetRange: validatedData.budgetRange || undefined,
       timeline: validatedData.timeline || undefined,
-      servicesNeeded: validatedData.servicesNeeded || [],
+      businessType: validatedData.businessType || undefined,
+      servicesNeeded: servicesNeeded,
       source: validatedData.source,
       status: 'new' as const,
       // Include AI enrichment if available

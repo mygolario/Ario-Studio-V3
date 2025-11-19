@@ -11,8 +11,13 @@
 
 import { prisma } from '@/lib/db'
 import { type SupportedLang } from '@/lib/i18n'
-import { type ContentType, type LocalizedContent } from './types'
+import { type ContentType, type LocalizedContent, type PortfolioCategory } from './types'
 import { mapToLocalizedContent, type ContentWithTranslations } from './mapLocalizedContent'
+
+export interface ContentListFilters {
+  category?: PortfolioCategory
+  tag?: string
+}
 
 /**
  * Get list of localized content by type
@@ -29,16 +34,37 @@ import { mapToLocalizedContent, type ContentWithTranslations } from './mapLocali
  */
 export async function getLocalizedContentList(
   type: ContentType,
-  lang: SupportedLang
+  lang: SupportedLang,
+  filters: ContentListFilters = {}
 ): Promise<LocalizedContent[]> {
   try {
     // Fetch content with translations from database
-    // Using cacheStrategy when Accelerate is enabled (prisma:// URL)
+    const { category, tag } = filters
+    const tagFilter =
+      tag && tag.trim().length > 0
+        ? {
+            OR: [
+              { tags: { contains: tag, mode: 'insensitive' as const } },
+              {
+                translations: {
+                  some: {
+                    tags: {
+                      has: tag,
+                    },
+                  },
+                },
+              },
+            ],
+          }
+        : undefined
+    
     const contents = await prisma.content.findMany({
       where: {
         type: type,
         isPublished: true,
         archived: false,
+        ...(category && { category }),
+        ...(tagFilter ?? {}),
       },
       include: {
         translations: true,
@@ -47,7 +73,6 @@ export async function getLocalizedContentList(
         { order: 'asc' },
         { createdAt: 'desc' },
       ],
-      cacheStrategy: { ttl: 60 }, // Cache for 60 seconds
     })
 
     // Map each content to LocalizedContent using the helper
@@ -89,7 +114,6 @@ export async function getLocalizedContentBySlug(
       include: {
         translations: true,
       },
-      cacheStrategy: { ttl: 60 }, // Cache for 60 seconds
     })
 
     if (!content) {
@@ -138,7 +162,6 @@ export async function getFeaturedContent(
         { createdAt: 'desc' },
       ],
       take: limit,
-      cacheStrategy: { ttl: 60 }, // Cache for 60 seconds
     })
 
     const localizedContents = contents

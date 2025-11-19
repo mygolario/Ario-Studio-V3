@@ -7,6 +7,8 @@ import Button from './Button'
 import { animateHeroIntro, applyHeroParallax, prefersReducedMotion } from '@/lib/gsapClient'
 import HeroBackground from './HeroBackground'
 import { useTranslation } from '@/lib/useTranslation'
+import { useLanguage } from '@/contexts/LanguageContext'
+import { trackEvent } from '@/lib/analytics/trackEvent'
 
 /**
  * Hero Section
@@ -15,6 +17,7 @@ import { useTranslation } from '@/lib/useTranslation'
  */
 export default function Hero() {
   const t = useTranslation()
+  const { language } = useLanguage()
   const cardRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const cardWrapperRef = useRef<HTMLDivElement>(null)
@@ -239,12 +242,33 @@ export default function Hero() {
             {/* Buttons - Layer 1 (closest) */}
             <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 pt-4">
               <div data-button>
-                <Button href="#portfolio" variant="primary">
+                <Button 
+                  href="#portfolio" 
+                  variant="primary"
+                  onClick={() => {
+                    trackEvent('cta_click', {
+                      location: 'hero',
+                      lang: language,
+                      ctaType: 'primary',
+                    })
+                  }}
+                >
                   {t.hero.ctaPrimary}
                 </Button>
               </div>
               <div data-button>
-                <Button href="#contact" variant="secondary" icon={false}>
+                <Button 
+                  href="#contact" 
+                  variant="secondary" 
+                  icon={false}
+                  onClick={() => {
+                    trackEvent('cta_click', {
+                      location: 'hero',
+                      lang: language,
+                      ctaType: 'secondary',
+                    })
+                  }}
+                >
                   {t.hero.ctaSecondary}
                 </Button>
               </div>

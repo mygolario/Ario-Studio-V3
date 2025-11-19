@@ -1,26 +1,21 @@
-import { PrismaClient } from '@prisma/client/edge'
-import { withAccelerate } from '@prisma/extension-accelerate'
+import { PrismaClient } from '@prisma/client'
 
 /**
- * Prisma Client Singleton with Accelerate
+ * Prisma Client Singleton
  * 
  * Prevents multiple instances of PrismaClient in development
  * due to hot-reloading creating new instances.
  * 
- * Uses Prisma Accelerate for connection pooling and caching
- * when DATABASE_URL uses the prisma:// protocol.
+ * Uses direct Neon PostgreSQL connection (not Prisma Accelerate).
  */
 const globalForPrisma = globalThis as unknown as {
-  prisma: ReturnType<typeof createPrismaClient> | undefined
+  prisma: PrismaClient | undefined
 }
 
 function createPrismaClient() {
-  const baseClient = new PrismaClient({
+  return new PrismaClient({
     log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
   })
-
-  // Always use Accelerate extension for connection pooling and caching
-  return baseClient.$extends(withAccelerate())
 }
 
 export const prisma = globalForPrisma.prisma ?? createPrismaClient()

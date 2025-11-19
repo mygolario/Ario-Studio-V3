@@ -39,6 +39,7 @@
 | `BREVO_API_KEY` | API Key Brevo (اگر از API استفاده می‌کنید) | `...` |
 | `AI_PROVIDER` | Provider AI (openai یا liara) | `openai` |
 | `OPENAI_BASE_URL` | Base URL سفارشی برای OpenAI API | `https://api.openai.com/v1` |
+| `OPTIMIZE_API_KEY` | API Key برای Prisma Optimize (تحلیل و بهینه‌سازی queryها) | `eyJhbGci...` |
 
 ---
 
@@ -212,6 +213,20 @@ Name: AI_PROVIDER
 Value: liara
 Environment: Production, Preview
 ```
+
+#### OPTIMIZE_API_KEY (اختیاری - برای Prisma Optimize)
+
+```
+Name: OPTIMIZE_API_KEY
+Value: eyJhbGci...
+Environment: Production, Preview
+```
+
+**نکات:**
+- این API Key برای Prisma Optimize استفاده می‌شود
+- Prisma Optimize queryهای دیتابیس را تحلیل و بهینه می‌کند
+- معمولاً به صورت خودکار با Prisma Accelerate کار می‌کند
+- برای دسترسی به dashboard و API features استفاده می‌شود
 
 ### مرحله 5: Redeploy
 

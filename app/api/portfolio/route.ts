@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import { getRequestLang } from '@/lib/i18n'
 import { getLocalizedContentList } from '@/lib/content/queries'
+import { isPortfolioCategory } from '@/lib/content/types'
 import { jsonSuccess, jsonError } from '@/lib/api/response'
 
 // Force dynamic rendering (required for language detection from query params)
@@ -31,9 +32,20 @@ export async function GET(req: NextRequest) {
   try {
     // Detect language from request
     const lang = getRequestLang(req)
+    
+    // Get filter params
+    const { searchParams } = new URL(req.url)
+    const categoryParam = searchParams.get('category')
+    const tagParam = searchParams.get('tag')
+    const tag = tagParam && tagParam.trim().length > 0 ? tagParam.trim() : undefined
+
+    const category = isPortfolioCategory(categoryParam) ? categoryParam : undefined
 
     // Fetch localized portfolio items
-    const portfolioItems = await getLocalizedContentList('portfolio', lang)
+    const portfolioItems = await getLocalizedContentList('portfolio', lang, {
+      category,
+      tag,
+    })
 
     // Return success even if empty (frontend can handle empty state)
     return jsonSuccess(lang, 'portfolio.success', {

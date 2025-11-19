@@ -74,8 +74,10 @@ model Lead {
   name            String
   email           String
   companyName     String?  @map("company_name")
+  website         String?  @map("website")
   budgetRange     String?  @map("budget_range")
   timeline        String?
+  businessType    String?  @map("business_type")
   servicesNeeded  String[] @map("services_needed")
   message         String
   source          String // e.g. "hero_form", "contact", "direct"
@@ -147,13 +149,24 @@ enum ContentLang {
 }
 
 model Content {
-  id           String               @id @default(cuid())
-  type         ContentType
-  slug         String               @unique // Language-agnostic slug
-  isPublished  Boolean              @default(false)
-  order        Int?
-  featured     Boolean              @default(false)
-  archived     Boolean              @default(false)
+  id          String      @id @default(cuid())
+  type        ContentType
+  slug        String      @unique // Language-agnostic slug
+  // TODO: enforce slug normalization/validation (only lowercase letters, numbers, hyphen)
+  isPublished Boolean     @default(false)
+  order       Int?
+  featured    Boolean     @default(false)
+  archived    Boolean     @default(false)
+  layoutType  String?     @map("layout_type") // Case study layout type: "basic" | "cinematic" | "split" | "story"
+  category    String? // Portfolio category: "landing-page" | "full-site" | "automation" | "brand-experience"
+  tags        String? // Comma-separated tags or JSON string
+
+  // Service-specific fields
+  servicePriceFrom Int?    @map("service_price_from") // Starting price (e.g., in USD or equivalent)
+  serviceCurrency  String? @map("service_currency") // Currency code: "USD" | "IRR" | etc.
+  serviceDuration  String? @map("service_duration") // Free text: "2–4 weeks"
+  serviceLevel     String? @map("service_level") // "starter" | "pro" | "premium"
+
   createdAt    DateTime             @default(now()) @map("created_at")
   updatedAt    DateTime             @updatedAt @map("updated_at")
   translations ContentTranslation[]

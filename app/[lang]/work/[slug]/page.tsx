@@ -36,56 +36,53 @@ export async function generateStaticParams() {
 /**
  * Generate metadata for each case study page (bilingual)
  */
-export async function generateMetadata({ 
-  params 
-}: { 
-  params: { lang: string; slug: string } 
+export async function generateMetadata({
+  params,
+}: {
+  params: { lang: string; slug: string }
 }): Promise<Metadata> {
-  // Normalize language
   const lang: SupportedLang = params.lang === 'fa' ? 'fa' : 'en'
   const slug = params.slug
 
-  // Fetch localized content
   const item = await getLocalizedContentBySlug(slug, lang).catch(() => null)
 
   if (!item) {
     return {
-      title: lang === 'fa' ? 'نمونه کار پیدا نشد' : 'Case Study Not Found',
+      title: lang === 'fa' ? 'نمونه‌کار پیدا نشد' : 'Case study not found',
       description: lang === 'fa' ? 'صفحه مورد نظر یافت نشد.' : 'The requested page was not found.',
     }
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'
-  const ogImage = `${baseUrl}/og/og-main.png`
-  
-  // URLs for hreflang
-  const urlFa = `${baseUrl}/fa/work/${item.slug}`
-  const urlEn = `${baseUrl}/en/work/${item.slug}`
+  const baseUrlEnv = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.ariostudio.net'
+  const baseUrl = baseUrlEnv.endsWith('/') ? baseUrlEnv.slice(0, -1) : baseUrlEnv
+
+  const urlFa = `${baseUrl}/fa/work/${slug}`
+  const urlEn = `${baseUrl}/en/work/${slug}`
+
+  const title = item.metaTitle || item.title
+  const description = item.metaDescription || item.excerpt || undefined
+
+  const featuredImageAbsolute = item.featuredImage
+    ? item.featuredImage.startsWith('http')
+      ? item.featuredImage
+      : `${baseUrl}${item.featuredImage.startsWith('/') ? '' : '/'}${item.featuredImage}`
+    : undefined
 
   return {
-    title: item.metaTitle || item.title,
-    description: item.metaDescription || item.excerpt || item.subtitle || '',
+    title,
+    description,
     openGraph: {
-      title: item.metaTitle || item.title,
-      description: item.metaDescription || item.excerpt || item.subtitle || '',
+      title,
+      description: description ?? '',
       url: lang === 'fa' ? urlFa : urlEn,
-      siteName: 'Ario Studio',
-      images: [
-        {
-          url: ogImage,
-          width: 1200,
-          height: 630,
-          alt: item.title,
-        },
-      ],
       type: 'article',
-      locale: lang === 'fa' ? 'fa_IR' : 'en_US',
+      images: featuredImageAbsolute ? [{ url: featuredImageAbsolute }] : undefined,
     },
     twitter: {
       card: 'summary_large_image',
-      title: item.metaTitle || item.title,
-      description: item.metaDescription || item.excerpt || item.subtitle || '',
-      images: [ogImage],
+      title,
+      description: description ?? '',
+      images: featuredImageAbsolute ? [featuredImageAbsolute] : undefined,
     },
     alternates: {
       canonical: lang === 'fa' ? urlFa : urlEn,

@@ -17,8 +17,11 @@ export const LeadFormSchema = z.object({
     .min(10, 'Message must be at least 10 characters')
     .max(5000, 'Message must be less than 5000 characters'),
   companyName: z.string().max(200, 'Company name must be less than 200 characters').optional().or(z.literal('')),
+  website: z.string().url('Please enter a valid URL').optional().or(z.literal('')).or(z.literal('')),
+  serviceSlug: z.string().optional().or(z.literal('')),
   budgetRange: z.string().optional().or(z.literal('')),
   timeline: z.string().optional().or(z.literal('')),
+  businessType: z.string().optional().or(z.literal('')).or(z.literal('')),
   servicesNeeded: z.array(z.string()).optional().default([]),
   projectType: z.string().optional().or(z.literal('')),
   source: z.string().default('start_project_form'),
