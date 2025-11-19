@@ -315,7 +315,9 @@ async function main() {
           order: index + 1,
           servicePriceFrom: service.priceFromUsd,
           serviceCurrency: 'USD',
-          serviceDuration: service.durationEn, // Store English duration, translations will use appropriate one
+          // Store duration in a format that can be localized in UI
+          // Format: "2-4|۲ تا ۴" where first part is EN, second is FA
+          serviceDuration: `${service.durationEn}|${service.durationFa}`,
           serviceLevel: service.level,
           translations: {
             create: [

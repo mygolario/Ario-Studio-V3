@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { type LocalizedContent, type ServiceLevel } from '@/lib/content/types'
 import { type SupportedLang } from '@/lib/i18n'
 import { trackEvent } from '@/lib/analytics/trackEvent'
@@ -19,7 +18,6 @@ interface ServiceCardProps {
  */
 export default function ServiceCard({ lang, item }: ServiceCardProps) {
   const isRTL = lang === 'fa'
-  const router = useRouter()
   
   // Service level labels (bilingual)
   const levelLabels: Record<ServiceLevel, { fa: string; en: string }> = {
@@ -45,10 +43,20 @@ export default function ServiceCard({ lang, item }: ServiceCardProps) {
     return `Starting from ${symbol}${price.toLocaleString('en-US')}`
   }
 
-  // Format duration label
+  // Format duration label with proper localization
+  // Duration is stored as "EN|FA" format in database
   const formatDuration = (duration: string | null | undefined): string | null => {
     if (!duration) return null
-    return lang === 'fa' ? `مدت اجرا: ${duration}` : `Timeline: ${duration}`
+    
+    // Check if duration contains both EN and FA (separated by |)
+    const parts = duration.split('|')
+    const localizedDuration = lang === 'fa' && parts.length === 2 ? parts[1] : parts[0]
+    
+    if (lang === 'fa') {
+      return `مدت اجرا: ${localizedDuration}`
+    }
+    
+    return `Timeline: ${localizedDuration}`
   }
 
   const priceText = formatPrice(item.servicePriceFrom, item.serviceCurrency)

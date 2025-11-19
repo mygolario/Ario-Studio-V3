@@ -87,7 +87,7 @@ export default function Services({ servicesContent = [], lang }: ServicesProps) 
               <p className="text-text-secondary">{uiTexts.emptyState}</p>
             </div>
           ) : (
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {services.map((service) => (
                 <div key={service.slug} data-animate-child>
                   <ServiceCard lang={currentLang} item={service} />
