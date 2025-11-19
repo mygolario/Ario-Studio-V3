@@ -5,7 +5,7 @@ import './globals.css'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { LanguageProvider } from '@/contexts/LanguageContext'
 import PageTransition from '@/components/ui/PageTransition'
-import { Analytics } from '@vercel/analytics/react'
+import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { getServerLang } from '@/lib/i18n'
 
