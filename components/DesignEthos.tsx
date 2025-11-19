@@ -4,6 +4,8 @@ import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { animateSectionReveal } from '@/lib/gsapClient'
 import { useTranslation } from '@/lib/useTranslation'
+import { useLanguage } from '@/contexts/LanguageContext'
+import { formatLocalizedNumber } from '@/lib/utils/pricing'
 import { ProcessStep } from '@prisma/client'
 
 interface DesignEthosProps {
@@ -12,6 +14,7 @@ interface DesignEthosProps {
 
 export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosProps) {
   const t = useTranslation()
+  const { language } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -71,12 +74,21 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
   // Database steps allow admins to customize the process, while translations provide
   // localized fallback when no database steps are configured
   const processSteps = dbSteps.length > 0
-    ? dbSteps.map((step, index) => ({
-        number: String(index + 1).padStart(2, '0'),
+    ? dbSteps.map((step, index) => {
+        const englishNumber = String(index + 1).padStart(2, '0')
+        return {
+          id: step.id, // Stable ID for React key
+          number: formatLocalizedNumber(englishNumber, language),
+          title: step.title,
+          description: step.description,
+        }
+      })
+    : t.process.steps.map((step, index) => ({
+        id: `step-${index}`, // Stable ID for React key (fallback to index-based)
+        number: formatLocalizedNumber(step.number, language),
         title: step.title,
         description: step.description,
       }))
-    : t.process.steps
 
   return (
     <section
@@ -145,7 +157,7 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 relative">
                   {processSteps.map((step, index) => (
                     <motion.div
-                      key={step.number}
+                      key={step.id}
                       data-animate-child
                       data-step-index={index}
                       initial={{ opacity: 0, y: 30 }}
@@ -189,7 +201,7 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
             <div className="xl:hidden space-y-6">
               {processSteps.map((step, index) => (
                 <motion.div
-                  key={step.number}
+                  key={step.id}
                   data-animate-child
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}

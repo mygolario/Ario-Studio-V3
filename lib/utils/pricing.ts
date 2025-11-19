@@ -10,6 +10,25 @@
 export const EXCHANGE_RATE_TOMAN = 60000
 
 /**
+ * Format a number string with proper localization
+ * Converts English digits to Persian digits for Farsi locale
+ * 
+ * @param numStr - Number as string (e.g., "01", "02")
+ * @param lang - Language ('fa' | 'en')
+ * @returns Localized number string (e.g., "۰۱" for Farsi, "01" for English)
+ */
+export function formatLocalizedNumber(numStr: string, lang: 'fa' | 'en'): string {
+  if (lang === 'fa') {
+    const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹']
+    return numStr.split('').map(d => {
+      const digit = parseInt(d)
+      return isNaN(digit) ? d : persianDigits[digit]
+    }).join('')
+  }
+  return numStr
+}
+
+/**
  * Convert USD price to Toman and format for FA locale
  * 
  * @param priceFromUsd - Price in USD
