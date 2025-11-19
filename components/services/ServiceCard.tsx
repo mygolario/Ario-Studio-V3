@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { type LocalizedContent, type ServiceLevel } from '@/lib/content/types'
 import { type SupportedLang } from '@/lib/i18n'
 import { trackEvent } from '@/lib/analytics/trackEvent'
+import { formatPrice as formatPriceHelper } from '@/lib/utils/pricing'
 
 interface ServiceCardProps {
   lang: SupportedLang
@@ -26,23 +27,6 @@ export default function ServiceCard({ lang, item }: ServiceCardProps) {
     premium: { fa: 'پکیج پریمیوم', en: 'Premium Package' },
   }
 
-  // Format price with currency
-  const formatPrice = (price: number | null | undefined, currency: string | null | undefined): string | null => {
-    if (!price) return null
-    
-    const currencySymbol: Record<string, { fa: string; en: string }> = {
-      USD: { fa: '$', en: '$' },
-      IRR: { fa: 'تومان', en: 'IRR' },
-    }
-    
-    const symbol = currencySymbol[currency || 'USD']?.[lang] || (currency || 'USD')
-    
-    if (lang === 'fa') {
-      return `شروع از ${price.toLocaleString('fa-IR')} ${symbol}`
-    }
-    return `Starting from ${symbol}${price.toLocaleString('en-US')}`
-  }
-
   // Format duration label with proper localization
   // Duration is stored as "EN|FA" format in database
   const formatDuration = (duration: string | null | undefined): string | null => {
@@ -59,7 +43,7 @@ export default function ServiceCard({ lang, item }: ServiceCardProps) {
     return `Timeline: ${localizedDuration}`
   }
 
-  const priceText = formatPrice(item.servicePriceFrom, item.serviceCurrency)
+  const priceText = formatPriceHelper(item.servicePriceFrom, lang, item.serviceCurrency)
   const durationText = formatDuration(item.serviceDuration)
   const levelLabel = item.serviceLevel ? levelLabels[item.serviceLevel]?.[lang] : null
 
@@ -128,7 +112,7 @@ export default function ServiceCard({ lang, item }: ServiceCardProps) {
         <div className={`space-y-3 mb-6 ${isRTL ? 'text-right' : 'text-left'}`}>
           {/* Duration */}
           {durationText && (
-            <div className="flex items-center gap-2 text-body-sm text-text-secondary">
+            <div className={`flex items-center gap-2 text-body-sm text-text-secondary ${isRTL ? 'rtl:flex-row-reverse' : ''}`}>
               <span className="text-orange">•</span>
               <span>{durationText}</span>
             </div>
@@ -136,7 +120,7 @@ export default function ServiceCard({ lang, item }: ServiceCardProps) {
 
           {/* Price */}
           {priceText && (
-            <div className="flex items-center gap-2 text-body-sm text-text-secondary">
+            <div className={`flex items-center gap-2 text-body-sm text-text-secondary ${isRTL ? 'rtl:flex-row-reverse' : ''}`}>
               <span className="text-orange">•</span>
               <span>{priceText}</span>
             </div>
@@ -147,7 +131,7 @@ export default function ServiceCard({ lang, item }: ServiceCardProps) {
         <Link
           href={ctaLink}
           onClick={handleCTAClick}
-          className={`block w-full text-center py-3 px-6 rounded-lg bg-orange/10 border border-orange/30 text-orange font-medium hover:bg-orange hover:text-white transition-all duration-200 ${isRTL ? 'text-right' : 'text-left'}`}
+          className="block w-full text-center py-3 px-6 rounded-lg bg-orange/10 border border-orange/30 text-orange font-medium hover:bg-orange hover:text-white transition-all duration-200"
         >
           {ctaText}
         </Link>

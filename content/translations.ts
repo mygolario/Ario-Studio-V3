@@ -253,7 +253,7 @@ export const translations = {
     },
     hero: {
       eyebrow: 'AI-driven web studio',
-      title: 'We design and build cinematic, AI-powered web experiences.',
+      title: 'From every pixel, we craft an experience.',
       subtitle: 'High-end design, expressive motion, and intelligent systems—crafted for brands that demand more.',
       supportingLine: 'From concept to launch, we combine visual storytelling, modern engineering, and AI automation to build experiences that feel alive.',
       ctaPrimary: 'View work',
