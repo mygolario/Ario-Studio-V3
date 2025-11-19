@@ -5,6 +5,7 @@ import { type LocalizedContent, type ServiceLevel } from '@/lib/content/types'
 import { type SupportedLang } from '@/lib/i18n'
 import { trackEvent } from '@/lib/analytics/trackEvent'
 import { formatPrice as formatPriceHelper } from '@/lib/utils/pricing'
+import { useTranslation } from '@/lib/useTranslation'
 
 interface ServiceCardProps {
   lang: SupportedLang
@@ -18,6 +19,7 @@ interface ServiceCardProps {
  * Supports pricing, duration, level, and CTA with bilingual support.
  */
 export default function ServiceCard({ lang, item }: ServiceCardProps) {
+  const t = useTranslation()
   const isRTL = lang === 'fa'
   
   // Service level labels (bilingual)
@@ -49,7 +51,7 @@ export default function ServiceCard({ lang, item }: ServiceCardProps) {
 
   // CTA link - link to homepage contact section with service query param
   const ctaLink = `/#contact?service=${item.slug}`
-  const ctaText = lang === 'fa' ? 'شروع این نوع پروژه' : 'Start this project'
+  const ctaText = t.services.cardCta
 
   const handleCTAClick = () => {
     trackEvent('service_card_click', {

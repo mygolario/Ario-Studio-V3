@@ -505,7 +505,7 @@ export default function StartProjectSection() {
                         htmlFor="company"
                         className="block text-body-sm font-medium text-text-primary mb-2"
                       >
-                        {lang === 'fa' ? 'نام برند/بیزنس' : 'Company/Brand Name'}
+                        {t.form.companyBrandName}
                       </label>
                       <input
                         type="text"
@@ -514,7 +514,7 @@ export default function StartProjectSection() {
                         value={formData.company}
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 rounded-lg border border-border-subtle bg-base text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:border-orange transition-all duration-200"
-                        placeholder={lang === 'fa' ? 'نام برند یا شرکت شما' : 'Your company or brand name'}
+                        placeholder={t.form.companyPlaceholder}
                       />
                     </div>
 
@@ -524,7 +524,7 @@ export default function StartProjectSection() {
                         htmlFor="website"
                         className="block text-body-sm font-medium text-text-primary mb-2"
                       >
-                        {lang === 'fa' ? 'لینک سایت فعلی' : 'Current Website'}
+                        {t.form.currentWebsite}
                       </label>
                       <input
                         type="url"
@@ -550,7 +550,7 @@ export default function StartProjectSection() {
                         htmlFor="serviceSlug"
                         className="block text-body-sm font-medium text-text-primary mb-2"
                       >
-                        {lang === 'fa' ? 'سرویس مورد نظر' : 'Service'}
+                        {t.form.service}
                       </label>
                       <select
                         id="serviceSlug"
@@ -559,14 +559,14 @@ export default function StartProjectSection() {
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 rounded-lg border border-border-subtle bg-base text-text-primary focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:border-orange transition-all duration-200"
                       >
-                        <option value="">{lang === 'fa' ? 'انتخاب سرویس' : loadingServices ? 'Loading...' : 'Select a service'}</option>
+                        <option value="">{loadingServices ? 'Loading...' : t.form.selectServicePlaceholder}</option>
                         {servicesList.map((service) => (
                           <option key={service.slug} value={service.slug}>
                             {service.title}
                           </option>
                         ))}
                         {servicesList.length === 0 && !loadingServices && (
-                          <option value="">{lang === 'fa' ? 'هنوز مطمئن نیستم' : "I'm not sure"}</option>
+                          <option value="">{t.form.notSure}</option>
                         )}
                       </select>
                     </div>
@@ -601,7 +601,7 @@ export default function StartProjectSection() {
                         htmlFor="budgetRange"
                         className="block text-body-sm font-medium text-text-primary mb-2"
                       >
-                        {lang === 'fa' ? 'رنج بودجه' : 'Budget Range'}
+                        {t.form.budgetRange}
                       </label>
                       <select
                         id="budgetRange"
@@ -610,7 +610,7 @@ export default function StartProjectSection() {
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 rounded-lg border border-border-subtle bg-base text-text-primary focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:border-orange transition-all duration-200"
                       >
-                        <option value="">{lang === 'fa' ? 'انتخاب بودجه' : 'Select budget range'}</option>
+                        <option value="">{t.form.selectBudgetRange}</option>
                         {budgetRangeOptions.map((value) => (
                           <option key={value} value={value}>
                             {getBudgetRangeLabel(value)}
@@ -625,7 +625,7 @@ export default function StartProjectSection() {
                         htmlFor="timeline"
                         className="block text-body-sm font-medium text-text-primary mb-2"
                       >
-                        {lang === 'fa' ? 'بازه زمانی' : 'Timeline'}
+                        {t.form.timeline}
                       </label>
                       <select
                         id="timeline"
@@ -634,7 +634,7 @@ export default function StartProjectSection() {
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 rounded-lg border border-border-subtle bg-base text-text-primary focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:border-orange transition-all duration-200"
                       >
-                        <option value="">{lang === 'fa' ? 'انتخاب بازه زمانی' : 'Select timeline'}</option>
+                        <option value="">{t.form.selectTimeline}</option>
                         {timelineOptions.map((value) => (
                           <option key={value} value={value}>
                             {getTimelineLabel(value)}
@@ -649,7 +649,7 @@ export default function StartProjectSection() {
                         htmlFor="businessType"
                         className="block text-body-sm font-medium text-text-primary mb-2"
                       >
-                        {lang === 'fa' ? 'نوع بیزنس' : 'Business Type'}
+                        {t.form.businessType}
                       </label>
                       <select
                         id="businessType"
@@ -658,7 +658,7 @@ export default function StartProjectSection() {
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 rounded-lg border border-border-subtle bg-base text-text-primary focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:border-orange transition-all duration-200"
                       >
-                        <option value="">{lang === 'fa' ? 'انتخاب نوع بیزنس' : 'Select business type'}</option>
+                        <option value="">{t.form.selectBusinessType}</option>
                         {businessTypeOptions.map((value) => (
                           <option key={value} value={value}>
                             {getBusinessTypeLabel(value)}
