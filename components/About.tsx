@@ -30,7 +30,91 @@ export default function About({ highlights: dbHighlights = [] }: AboutProps) {
       id="about"
       className={`relative py-16 sm:py-24 lg:py-32 overflow-hidden bg-base ${isRTL ? 'rtl' : ''}`}
     >
-      <div className="container-custom">
+      {/* Background Visual Layers */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        {/* Very faint grid / mesh background */}
+        <div
+          className="absolute inset-0 opacity-[0.02]"
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, currentColor 1px, transparent 1px),
+              linear-gradient(to bottom, currentColor 1px, transparent 1px)
+            `,
+            backgroundSize: '60px 60px',
+            color: '#000',
+          }}
+        />
+
+        {/* Soft orange-peach gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#F87449]/8 via-transparent to-[#F7693A]/5 opacity-50" />
+        
+        {/* Additional subtle radial gradient blobs */}
+        <div 
+          className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full blur-[120px] opacity-20"
+          style={{
+            background: 'radial-gradient(circle, rgba(248, 116, 73, 0.15) 0%, rgba(247, 105, 58, 0.1) 50%, transparent 70%)',
+            transform: 'translate(30%, -30%)',
+          }}
+        />
+        <div 
+          className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full blur-[100px] opacity-15 hidden md:block"
+          style={{
+            background: 'radial-gradient(circle, rgba(247, 105, 58, 0.12) 0%, rgba(248, 116, 73, 0.08) 50%, transparent 70%)',
+            transform: 'translate(-30%, 30%)',
+          }}
+        />
+
+        {/* AI-coded geometric patterns - thin node-lines and dots */}
+        <svg
+          className="absolute inset-0 w-full h-full opacity-[0.04] hidden md:block"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {/* Horizontal lines */}
+          <line x1="0" y1="25%" x2="100%" y2="23%" stroke="#F87449" strokeWidth="0.5" />
+          <line x1="0" y1="55%" x2="100%" y2="57%" stroke="#F7693A" strokeWidth="0.5" />
+          <line x1="0" y1="85%" x2="100%" y2="83%" stroke="#F87449" strokeWidth="0.5" />
+          
+          {/* Vertical lines */}
+          <line x1="20%" y1="0" x2="22%" y2="100%" stroke="#F87449" strokeWidth="0.5" />
+          <line x1="50%" y1="0" x2="48%" y2="100%" stroke="#F7693A" strokeWidth="0.5" />
+          <line x1="80%" y1="0" x2="78%" y2="100%" stroke="#F87449" strokeWidth="0.5" />
+          
+          {/* Subtle diagonal curves */}
+          <path
+            d="M 15% 35% Q 35% 25%, 55% 35% T 95% 35%"
+            stroke="#F87449"
+            strokeWidth="0.5"
+            fill="none"
+            opacity="0.3"
+          />
+          <path
+            d="M 5% 75% Q 25% 85%, 45% 75% T 85% 75%"
+            stroke="#F7693A"
+            strokeWidth="0.5"
+            fill="none"
+            opacity="0.3"
+          />
+          
+          {/* Connection points / dots */}
+          <circle cx="20%" cy="25%" r="1.5" fill="#F87449" opacity="0.25" />
+          <circle cx="50%" cy="55%" r="1.5" fill="#F7693A" opacity="0.25" />
+          <circle cx="80%" cy="85%" r="1.5" fill="#F87449" opacity="0.25" />
+          <circle cx="35%" cy="65%" r="1" fill="#F7693A" opacity="0.2" />
+          <circle cx="65%" cy="45%" r="1" fill="#F87449" opacity="0.2" />
+        </svg>
+
+        {/* Simplified geometry for mobile */}
+        <svg
+          className="absolute inset-0 w-full h-full opacity-[0.03] md:hidden"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <line x1="0" y1="30%" x2="100%" y2="30%" stroke="#F87449" strokeWidth="0.5" />
+          <line x1="0" y1="70%" x2="100%" y2="70%" stroke="#F7693A" strokeWidth="0.5" />
+          <circle cx="50%" cy="50%" r="1" fill="#F87449" opacity="0.2" />
+        </svg>
+      </div>
+
+      <div className="container-custom relative z-10">
         <div className="max-w-6xl mx-auto">
           {/* Section Title */}
           <motion.div
