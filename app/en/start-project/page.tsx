@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import Contact from '@/components/Contact'
+import StartProjectForm from '@/components/StartProjectForm'
 
 export const revalidate = 3600
 
@@ -29,6 +29,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function StartProjectPageEN() {
+  const lang = 'en'
+
   return (
     <main className="relative min-h-screen bg-base">
       <Header />
@@ -43,7 +45,9 @@ export default async function StartProjectPageEN() {
             </p>
           </div>
 
-          <Contact />
+          <div className="bg-surface border border-border-subtle rounded-xl p-8">
+            <StartProjectForm lang={lang} />
+          </div>
         </div>
       </div>
       <Footer />

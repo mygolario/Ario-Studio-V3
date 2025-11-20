@@ -4,12 +4,13 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ArrowRight } from 'lucide-react'
+import { servicesConfig } from '@/config/services'
 
 /**
  * Services Overview Component
  * 
  * Displays 3-4 service cards on the Home page.
- * Content is organized for easy migration to CMS later.
+ * Uses centralized services config for consistency.
  * 
  * Navigation & i18n:
  * - Detects locale from pathname (/en = EN, / = FA)
@@ -22,93 +23,13 @@ export default function ServicesOverview() {
   
   const getRoute = (route: string) => `${localePrefix}${route}`
 
-  // Service definitions - organized for easy CMS migration
-  // TODO: Move to CMS/config file in future
-  const services = isEN
-    ? [
-        {
-          slug: 'full-website',
-          title: 'Full Website Design & Build',
-          description: 'Complete website solutions from design to deployment. Modern, fast, and scalable sites built with Next.js and best practices.',
-          bullets: [
-            'A cohesive, fast, modern site',
-            'Growing brands, SaaS, local businesses',
-            'Next.js, Vercel, AI tooling',
-          ],
-        },
-        {
-          slug: 'landing-page',
-          title: 'Cinematic Landing Page',
-          description: 'High-converting landing pages with cinematic design and smooth animations. Built for campaigns, product launches, and conversions.',
-          bullets: [
-            'High-converting, visually striking pages',
-            'Product launches, campaigns, lead generation',
-            'Next.js, GSAP, Tailwind CSS',
-          ],
-        },
-        {
-          slug: 'ai-automation',
-          title: 'AI Automation & Integration',
-          description: 'Intelligent automation systems and AI integrations that reduce manual work and enhance user experiences.',
-          bullets: [
-            'Automated workflows and AI-powered features',
-            'SaaS, e-commerce, service businesses',
-            'OpenAI, LangChain, custom integrations',
-          ],
-        },
-        {
-          slug: 'brand-refresh',
-          title: 'Brand & Visual Refresh',
-          description: 'Modernize your brand identity and visual system. Redesign websites with fresh aesthetics while maintaining brand essence.',
-          bullets: [
-            'Refreshed brand identity and visual system',
-            'Established brands, rebranding projects',
-            'Design systems, component libraries',
-          ],
-        },
-      ]
-    : [
-        {
-          slug: 'full-website',
-          title: 'طراحی و ساخت وب‌سایت کامل',
-          description: 'راه‌حل‌های کامل وب‌سایت از طراحی تا راه‌اندازی. سایت‌های مدرن، سریع و مقیاس‌پذیر ساخته شده با Next.js و بهترین روش‌ها.',
-          bullets: [
-            'سایت منسجم، سریع و مدرن',
-            'برندهای در حال رشد، SaaS، کسب‌وکارهای محلی',
-            'Next.js، Vercel، ابزارهای هوش مصنوعی',
-          ],
-        },
-        {
-          slug: 'landing-page',
-          title: 'صفحه فرود سینمایی',
-          description: 'صفحات فرود با نرخ تبدیل بالا با طراحی سینمایی و انیمیشن‌های روان. ساخته شده برای کمپین‌ها، راه‌اندازی محصول و تبدیل.',
-          bullets: [
-            'صفحات با نرخ تبدیل بالا و بصری چشمگیر',
-            'راه‌اندازی محصول، کمپین‌ها، تولید لید',
-            'Next.js، GSAP، Tailwind CSS',
-          ],
-        },
-        {
-          slug: 'ai-automation',
-          title: 'اتوماسیون و ادغام هوش مصنوعی',
-          description: 'سیستم‌های اتوماسیون هوشمند و ادغام‌های هوش مصنوعی که کار دستی را کاهش می‌دهند و تجربیات کاربری را بهبود می‌بخشند.',
-          bullets: [
-            'گردش‌های کاری خودکار و ویژگی‌های مبتنی بر هوش مصنوعی',
-            'SaaS، تجارت الکترونیک، کسب‌وکارهای خدماتی',
-            'OpenAI، LangChain، ادغام‌های سفارشی',
-          ],
-        },
-        {
-          slug: 'brand-refresh',
-          title: 'نوسازی برند و بصری',
-          description: 'هویت برند و سیستم بصری خود را مدرن کنید. بازطراحی وب‌سایت‌ها با زیبایی‌شناسی تازه در حالی که جوهره برند حفظ می‌شود.',
-          bullets: [
-            'هویت برند و سیستم بصری تازه',
-            'برندهای تثبیت شده، پروژه‌های بازطراحی برند',
-            'سیستم‌های طراحی، کتابخانه‌های کامپوننت',
-          ],
-        },
-      ]
+  // Use services from centralized config
+  const services = servicesConfig.map(service => ({
+    slug: service.slug,
+    title: isEN ? service.title.en : service.title.fa,
+    description: isEN ? service.shortDescription.en : service.shortDescription.fa,
+    bullets: isEN ? service.bullets.en.slice(0, 3) : service.bullets.fa.slice(0, 3),
+  }))
 
   const viewDetailsLabel = isEN ? 'View details' : 'مشاهده جزئیات'
 

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import Contact from '@/components/Contact'
+import StartProjectForm from '@/components/StartProjectForm'
 
 export const revalidate = 3600
 
@@ -40,18 +40,18 @@ export default async function StartProjectPage() {
       <Header />
       <div className="container-custom py-32">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 rtl">
             <h1 className="text-h1 font-semibold text-text-primary mb-4">
-              {lang === 'fa' ? 'شروع یک پروژه' : 'Start a Project'}
+              شروع یک پروژه
             </h1>
             <p className="text-body-lg text-text-secondary max-w-2xl mx-auto">
-              {lang === 'fa' 
-                ? 'بیایید تجربه دیجیتالی بعدی شما را بسازیم'
-                : "Let's build your next digital experience"}
+              بیایید تجربه دیجیتالی بعدی شما را بسازیم
             </p>
           </div>
 
-          <Contact />
+          <div className="bg-surface border border-border-subtle rounded-xl p-8">
+            <StartProjectForm lang={lang} />
+          </div>
         </div>
       </div>
       <Footer />

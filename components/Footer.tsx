@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { useTranslation } from '@/lib/useTranslation'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { useMemo, useCallback } from 'react'
 
 /**
  * Footer Component
@@ -26,9 +27,8 @@ export default function Footer() {
   const localePrefix = isEN ? '/en' : ''
 
   // Helper to get locale-aware route
-  const getRoute = (route: string) => {
-    return `${localePrefix}${route}`
-  }
+  // Memoized to prevent unnecessary recalculations and ensure stable reference
+  const getRoute = useCallback((route: string) => `${localePrefix}${route}`, [localePrefix])
 
   const socialLinks = [
     { icon: Linkedin, href: '#', label: 'LinkedIn' },
@@ -38,71 +38,89 @@ export default function Footer() {
   ]
 
   // Footer link groups according to requirements
-  const footerLinks = {
-    // Studio group
-    [language === 'fa' ? 'استودیو' : 'Studio']: [
-      { 
-        label: language === 'fa' ? 'درباره' : 'About', 
-        href: getRoute('/about') 
+  // Use stable keys to prevent React remounting on language change
+  // Structure: stable category keys with dynamic labels
+  // Keys are stable ('studio', 'services', 'resources', 'legal') to prevent remounting
+  const footerLinksStructure = useMemo(() => {
+    // Define stable category order and keys - these never change
+    return [
+      {
+        key: 'studio', // Stable key - never changes
+        label: language === 'fa' ? 'استودیو' : 'Studio',
+        links: [
+          { 
+            label: language === 'fa' ? 'درباره' : 'About', 
+            href: getRoute('/about') 
+          },
+          { 
+            label: language === 'fa' ? 'نمونه‌کارها' : 'Portfolio', 
+            href: getRoute('/portfolio') 
+          },
+          { 
+            label: language === 'fa' ? 'بلاگ' : 'Blog', 
+            href: getRoute('/blog') 
+          },
+        ],
       },
-      { 
-        label: language === 'fa' ? 'نمونه‌کارها' : 'Portfolio', 
-        href: getRoute('/portfolio') 
+      {
+        key: 'services', // Stable key - never changes
+        label: language === 'fa' ? 'خدمات' : 'Services',
+        links: [
+          { 
+            label: language === 'fa' ? 'خدمات' : 'Services', 
+            href: getRoute('/services') 
+          },
+          { 
+            label: language === 'fa' ? 'وب‌سایت کامل' : 'Full Website', 
+            href: getRoute('/services/full-website') 
+          },
+          { 
+            label: language === 'fa' ? 'صفحه فرود' : 'Landing Pages', 
+            href: getRoute('/services/landing-page') 
+          },
+          { 
+            label: language === 'fa' ? 'اتوماسیون هوش مصنوعی' : 'AI Automations', 
+            href: getRoute('/services/ai-automation') 
+          },
+          { 
+            label: language === 'fa' ? 'بازطراحی برند' : 'Brand Refresh', 
+            href: getRoute('/services/brand-refresh') 
+          },
+        ],
       },
-      { 
-        label: language === 'fa' ? 'بلاگ' : 'Blog', 
-        href: getRoute('/blog') 
+      {
+        key: 'resources', // Stable key - never changes
+        label: language === 'fa' ? 'منابع' : 'Resources',
+        links: [
+          { 
+            label: language === 'fa' ? 'سوالات متداول' : 'FAQ', 
+            href: getRoute('/faq') 
+          },
+          { 
+            label: language === 'fa' ? 'قیمت‌گذاری' : 'Pricing', 
+            href: getRoute('/pricing') 
+          },
+          // Future: Case Studies / Templates (commented for now)
+          // { label: language === 'fa' ? 'مطالعات موردی' : 'Case Studies', href: getRoute('/case-studies') },
+          // { label: language === 'fa' ? 'قالب‌ها' : 'Templates', href: getRoute('/templates') },
+        ],
       },
-    ],
-    // Services group
-    [language === 'fa' ? 'خدمات' : 'Services']: [
-      { 
-        label: language === 'fa' ? 'خدمات' : 'Services', 
-        href: getRoute('/services') 
+      {
+        key: 'legal', // Stable key - never changes
+        label: language === 'fa' ? 'قانونی و تماس' : 'Legal & Contact',
+        links: [
+          { 
+            label: language === 'fa' ? 'سیاست حریم خصوصی' : 'Privacy Policy', 
+            href: getRoute('/privacy') 
+          },
+          { 
+            label: language === 'fa' ? 'شرایط استفاده' : 'Terms of Service', 
+            href: getRoute('/terms') 
+          },
+        ],
       },
-      { 
-        label: language === 'fa' ? 'وب‌سایت کامل' : 'Full Website', 
-        href: getRoute('/services/full-website') 
-      },
-      { 
-        label: language === 'fa' ? 'صفحه فرود' : 'Landing Pages', 
-        href: getRoute('/services/landing-page') 
-      },
-      { 
-        label: language === 'fa' ? 'اتوماسیون هوش مصنوعی' : 'AI Automations', 
-        href: getRoute('/services/ai-automation') 
-      },
-      { 
-        label: language === 'fa' ? 'بازطراحی برند' : 'Brand Refresh', 
-        href: getRoute('/services/brand-refresh') 
-      },
-    ],
-    // Resources group
-    [language === 'fa' ? 'منابع' : 'Resources']: [
-      { 
-        label: language === 'fa' ? 'سوالات متداول' : 'FAQ', 
-        href: getRoute('/faq') 
-      },
-      { 
-        label: language === 'fa' ? 'قیمت‌گذاری' : 'Pricing', 
-        href: getRoute('/pricing') 
-      },
-      // Future: Case Studies / Templates (commented for now)
-      // { label: language === 'fa' ? 'مطالعات موردی' : 'Case Studies', href: getRoute('/case-studies') },
-      // { label: language === 'fa' ? 'قالب‌ها' : 'Templates', href: getRoute('/templates') },
-    ],
-    // Legal & Contact group
-    [language === 'fa' ? 'قانونی و تماس' : 'Legal & Contact']: [
-      { 
-        label: language === 'fa' ? 'سیاست حریم خصوصی' : 'Privacy Policy', 
-        href: getRoute('/privacy') 
-      },
-      { 
-        label: language === 'fa' ? 'شرایط استفاده' : 'Terms of Service', 
-        href: getRoute('/terms') 
-      },
-    ],
-  }
+    ]
+  }, [language, getRoute])
 
   // Contact email (use configured email or placeholder)
   const contactEmail = 'info@ariostudio.net'
@@ -157,9 +175,9 @@ export default function Footer() {
           </div>
 
           {/* Link Columns */}
-          {Object.entries(footerLinks).map(([category, links], categoryIndex) => (
+          {footerLinksStructure.map((categoryData, categoryIndex) => (
             <motion.div
-              key={category}
+              key={categoryData.key}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -167,7 +185,7 @@ export default function Footer() {
             >
               <div className="relative">
                 <h4 className="text-h6 font-semibold text-text-primary mb-4 relative z-10">
-                  {category}
+                  {categoryData.label}
                 </h4>
                 <motion.div
                   className="absolute -left-2 top-0 bottom-0 w-1 bg-gradient-to-b from-orange/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rtl:left-auto rtl:-right-2"
@@ -178,8 +196,8 @@ export default function Footer() {
                 />
               </div>
               <ul className="space-y-3">
-                {links.map((link) => (
-                  <li key={link.label}>
+                {categoryData.links.map((link) => (
+                  <li key={link.href}>
                     <Link
                       href={link.href}
                       className="text-body-sm text-text-secondary hover:text-orange transition-colors relative inline-block group/link"
@@ -201,7 +219,7 @@ export default function Footer() {
                   </li>
                 ))}
                 {/* Contact email for Legal & Contact group */}
-                {category === (language === 'fa' ? 'قانونی و تماس' : 'Legal & Contact') && (
+                {categoryData.key === 'legal' && (
                   <li>
                     <a
                       href={`mailto:${contactEmail}`}
