@@ -4,6 +4,7 @@ import Footer from '@/components/Footer'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getServiceBySlug, getAllServiceSlugs } from '@/config/services'
+import { generateSEOMetadata } from '@/lib/seo'
 
 export const revalidate = 3600
 
@@ -27,17 +28,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const title = service.title.fa
   const description = service.shortDescription.fa
   
-  return {
-    title: `${title} | آریو استودیو`,
+  return generateSEOMetadata('fa', {
+    title,
     description,
-    alternates: {
-      canonical: `${baseUrl}/services/${params.slug}`,
-      languages: {
-        'fa-IR': `${baseUrl}/services/${params.slug}`,
-        'en-US': `${baseUrl}/en/services/${params.slug}`,
-      },
-    },
-  }
+    url: `${baseUrl}/services/${params.slug}`,
+  })
 }
 
 export async function generateStaticParams() {

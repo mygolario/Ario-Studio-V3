@@ -3,6 +3,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
 import Button from '@/components/Button'
+import { generateSEOMetadata } from '@/lib/seo'
 
 export const revalidate = 3600
 
@@ -15,18 +16,11 @@ export const revalidate = 3600
  */
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'
-  
-  return {
-    title: 'Pricing | Ario Studio',
+  return generateSEOMetadata('en', {
+    title: 'Pricing',
     description: 'How Ario Studio scopes and prices projects. Custom-scoped projects, not cheap packages.',
-    alternates: {
-      canonical: `${baseUrl}/en/pricing`,
-      languages: {
-        'fa-IR': `${baseUrl}/pricing`,
-        'en-US': `${baseUrl}/en/pricing`,
-      },
-    },
-  }
+    url: `${baseUrl}/en/pricing`,
+  })
 }
 
 export default async function PricingPageEN() {

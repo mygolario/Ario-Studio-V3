@@ -8,6 +8,8 @@ import PageTransition from '@/components/ui/PageTransition'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { getServerLang } from '@/lib/i18n'
+import { getDefaultMetadata } from '@/lib/seo'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -30,121 +32,7 @@ const vazirmatn = Vazirmatn({
  */
 export async function generateMetadata(): Promise<Metadata> {
   const lang = await getServerLang()
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'
-  
-  // Since we don't use [lang] segments, we'll use the same URL for both languages
-  // The language is determined by cookie/context
-  const urlFa = baseUrl // Same URL, language detected from context
-  const urlEn = baseUrl
-
-  if (lang === 'fa') {
-    return {
-      metadataBase: new URL(baseUrl),
-      title: {
-        default: 'آریو استودیو — طراحی، ساخت و اتوماسیون',
-        template: '%s | آریو استودیو',
-      },
-      description:
-        'آریو استودیو تجربه‌های وب سینمایی، متحرک و مبتنی بر هوش مصنوعی طراحی و پیاده‌سازی می‌کند. از هر پیکسل، یک تجربه می‌سازیم.',
-      keywords: [
-        'طراحی وب',
-        'Next.js',
-        'اتوماسیون هوش مصنوعی',
-        'تجربه کاربری سینمایی',
-        'توسعه‌دهنده فول‌استک',
-        'آریو استودیو',
-        'توسعه وب',
-        'ادغام هوش مصنوعی',
-        'طراحی موشن',
-        'مهندسی تولید',
-      ],
-      openGraph: {
-        title: 'آریو استودیو — طراحی، ساخت و اتوماسیون',
-        description:
-          'تجربه‌های وبی که حس می‌شوند، نه فقط دیده. طراحی سینمایی، مهندسی مدرن و سیستم‌های هوشمند.',
-        url: urlFa,
-        siteName: 'آریو استودیو',
-        images: [
-          {
-            url: '/og/og-main.png',
-            width: 1200,
-            height: 630,
-            alt: 'آریو استودیو — طراحی، ساخت و اتوماسیون',
-          },
-        ],
-        locale: 'fa_IR',
-        type: 'website',
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: 'آریو استودیو — طراحی، ساخت و اتوماسیون',
-        description:
-          'تجربه‌های وبی که حس می‌شوند، نه فقط دیده.',
-        images: ['/og/og-main.png'],
-      },
-      alternates: {
-        canonical: urlFa,
-        languages: {
-          'fa-IR': urlFa,
-          'en-US': urlEn,
-        },
-      },
-    }
-  }
-
-  // English version
-  return {
-    metadataBase: new URL(baseUrl),
-    title: {
-      default: 'Ario Studio — Design • Build • Automate',
-      template: '%s | Ario Studio',
-    },
-    description:
-      'Cinematic UX, high-performance engineering, and AI-driven innovation. Ario Studio builds modern, expressive, and intelligent web experiences.',
-    keywords: [
-      'Web Design',
-      'Next.js',
-      'AI Automation',
-      'Cinematic UX',
-      'Full-stack Developer',
-      'Ario Studio',
-      'Web Development',
-      'AI Integration',
-      'Motion Design',
-      'Production Engineering',
-    ],
-    openGraph: {
-      title: 'Ario Studio — Design • Build • Automate',
-      description:
-        'Cinematic UX, high-performance engineering, and AI-driven innovation. Ario Studio builds modern, expressive, and intelligent web experiences.',
-      url: urlEn,
-      siteName: 'Ario Studio',
-      images: [
-        {
-          url: '/og/og-main.png',
-          width: 1200,
-          height: 630,
-          alt: 'Ario Studio — Design • Build • Automate',
-        },
-      ],
-      locale: 'en_US',
-      type: 'website',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: 'Ario Studio — Design • Build • Automate',
-      description:
-        'Cinematic UX, high-performance engineering, and AI-driven innovation.',
-      images: ['/og/og-main.png'],
-    },
-    alternates: {
-      canonical: urlEn,
-      languages: {
-        'fa-IR': urlFa,
-        'en-US': urlEn,
-      },
-    },
-  }
+  return getDefaultMetadata(lang)
 }
 
 export default async function RootLayout({
@@ -212,6 +100,7 @@ export default async function RootLayout({
         </LanguageProvider>
         <Analytics />
         <SpeedInsights />
+        <GoogleAnalytics />
       </body>
     </html>
   )

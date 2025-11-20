@@ -9,7 +9,7 @@ import type { Metadata } from 'next'
 export const revalidate = 3600
 
 export async function generateStaticParams() {
-  return getAllSlugs('fa').map((slug) => ({ slug }))
+  return getAllSlugs('en').map((slug) => ({ slug }))
 }
 
 export async function generateMetadata({
@@ -17,30 +17,30 @@ export async function generateMetadata({
 }: {
   params: { slug: string }
 }): Promise<Metadata> {
-  const post = getPostBySlug('fa', params.slug)
+  const post = getPostBySlug('en', params.slug)
 
   if (!post) {
     return {
-      title: 'مقاله پیدا نشد',
+      title: 'Blog Post Not Found',
     }
   }
 
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'
-  return generateSEOMetadata('fa', {
+  return generateSEOMetadata('en', {
     title: post.title,
     description: post.excerpt,
-    url: `${baseUrl}/blog/${post.slug}`,
+    url: `${baseUrl}/en/blog/${post.slug}`,
     type: 'article',
     image: post.coverImageUrl,
   })
 }
 
-export default async function BlogPostPage({
+export default async function BlogPostPageEN({
   params,
 }: {
   params: { slug: string }
 }) {
-  const post = getPostBySlug('fa', params.slug)
+  const post = getPostBySlug('en', params.slug)
 
   if (!post) {
     notFound()
@@ -81,10 +81,10 @@ export default async function BlogPostPage({
       
       {/* Article Content */}
       <article className="container-custom py-16 md:py-24">
-        <div className="max-w-4xl mx-auto rtl">
+        <div className="max-w-4xl mx-auto">
           {/* Back Link */}
           <Link
-            href="/blog"
+            href="/en/blog"
             className="inline-flex items-center gap-2 text-body-sm text-text-secondary hover:text-orange transition-colors mb-8"
           >
             <svg
@@ -97,10 +97,10 @@ export default async function BlogPostPage({
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M9 5l7 7-7 7"
+                d="M15 19l-7-7 7-7"
               />
             </svg>
-            بازگشت به بلاگ
+            Back to Blog
           </Link>
 
           {/* Header */}
@@ -110,7 +110,7 @@ export default async function BlogPostPage({
                 dateTime={post.date}
                 className="text-body-sm text-text-muted"
               >
-                {new Date(post.date).toLocaleDateString('fa-IR', {
+                {new Date(post.date).toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
@@ -147,3 +147,4 @@ export default async function BlogPostPage({
     </main>
   )
 }
+

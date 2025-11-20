@@ -4,6 +4,7 @@ import Footer from '@/components/Footer'
 import Link from 'next/link'
 import { servicesConfig } from '@/config/services'
 import { ArrowRight } from 'lucide-react'
+import { generateSEOMetadata } from '@/lib/seo'
 
 export const revalidate = 3600
 
@@ -17,19 +18,11 @@ export const revalidate = 3600
  */
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'
-  
-  // This is a FA route, always return Farsi metadata
-  return {
-    title: 'خدمات | آریو استودیو',
-    description: 'خدمات طراحی، ساخت و اتوماسیون آریو استودیو',
-    alternates: {
-      canonical: `${baseUrl}/services`,
-      languages: {
-        'fa-IR': `${baseUrl}/services`,
-        'en-US': `${baseUrl}/en/services`,
-      },
-    },
-  }
+  return generateSEOMetadata('fa', {
+    title: 'خدمات',
+    description: 'خدمات طراحی، ساخت و اتوماسیون آریو استودیو. طراحی وب‌سایت، لندینگ پیج، اتوماسیون‌های هوش مصنوعی و نوسازی برند.',
+    url: `${baseUrl}/services`,
+  })
 }
 
 export default async function ServicesPage() {

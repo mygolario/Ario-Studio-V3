@@ -3,6 +3,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
 import Button from '@/components/Button'
+import { generateSEOMetadata } from '@/lib/seo'
 
 export const revalidate = 3600
 
@@ -16,19 +17,11 @@ export const revalidate = 3600
  */
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'
-  
-  // This is a FA route, always return Farsi metadata
-  return {
-    title: 'قیمت‌گذاری | آریو استودیو',
+  return generateSEOMetadata('fa', {
+    title: 'قیمت‌گذاری',
     description: 'چطور آریو استودیو پروژه‌ها را قیمت‌گذاری می‌کند. پروژه‌های اختصاصی، نه پکیج ارزان.',
-    alternates: {
-      canonical: `${baseUrl}/pricing`,
-      languages: {
-        'fa-IR': `${baseUrl}/pricing`,
-        'en-US': `${baseUrl}/en/pricing`,
-      },
-    },
-  }
+    url: `${baseUrl}/pricing`,
+  })
 }
 
 export default async function PricingPage() {

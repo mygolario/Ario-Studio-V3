@@ -1,14 +1,27 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { getPublishedBlogPosts } from '@/lib/db'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import { getAllPosts } from '@/lib/blog'
+import { generateSEOMetadata } from '@/lib/seo'
+import type { Metadata } from 'next'
 
-// Revalidate blog listing every 3600 seconds (1 hour)
 export const revalidate = 3600
 
+/**
+ * Blog index page (EN)
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'
+  return generateSEOMetadata('en', {
+    title: 'Blog',
+    description: 'Insights, tutorials, and updates from Ario Studio about web design, AI, and cinematic experiences.',
+    url: `${baseUrl}/en/blog`,
+  })
+}
+
 export default async function BlogPageEN() {
-  const posts = await getPublishedBlogPosts().catch(() => [])
+  const posts = getAllPosts('en')
 
   return (
     <main className="relative min-h-screen bg-base">
@@ -36,7 +49,7 @@ export default async function BlogPageEN() {
             </div>
           ) : (
             <div className="grid md:grid-cols-2 gap-8">
-              {posts.map((post: Awaited<ReturnType<typeof getPublishedBlogPosts>>[0]) => (
+              {posts.map((post) => (
                 <Link
                   key={post.id}
                   href={`/en/blog/${post.slug}`}
@@ -64,19 +77,17 @@ export default async function BlogPageEN() {
                   {/* Content */}
                   <div className="p-6">
                     <div className="flex items-center gap-2 mb-3">
-                      {post.publishedAt && (
-                        <span className="text-body-sm text-text-muted">
-                          {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                          })}
-                        </span>
-                      )}
+                      <span className="text-body-sm text-text-muted">
+                        {new Date(post.date).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                        })}
+                      </span>
                     </div>
-                    <h3 className="text-h4 font-semibold text-text-primary mb-3 group-hover:text-orange transition-colors duration-200">
+                    <h2 className="text-h4 font-semibold text-text-primary mb-3 group-hover:text-orange transition-colors duration-200">
                       {post.title}
-                    </h3>
+                    </h2>
                     <p className="text-body text-text-secondary mb-4 line-clamp-3">
                       {post.excerpt}
                     </p>
@@ -84,7 +95,7 @@ export default async function BlogPageEN() {
                     {/* Tags */}
                     {post.tags && post.tags.length > 0 && (
                       <div className="flex flex-wrap gap-2">
-                        {post.tags.map((tag: string, idx: number) => (
+                        {post.tags.map((tag, idx) => (
                           <span
                             key={idx}
                             className="text-label text-text-muted bg-surface-alt border border-border-subtle px-3 py-1 rounded-full hover:border-orange hover:text-orange hover:bg-orange/5 transition-all duration-200 cursor-default"
@@ -105,4 +116,3 @@ export default async function BlogPageEN() {
     </main>
   )
 }
-

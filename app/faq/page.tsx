@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import FAQAccordion from '@/components/FAQAccordion'
+import { generateSEOMetadata } from '@/lib/seo'
 
 export const revalidate = 3600
 
@@ -15,19 +16,11 @@ export const revalidate = 3600
  */
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'
-  
-  // This is a FA route, always return Farsi metadata
-  return {
-    title: 'سوالات متداول | آریو استودیو',
-    description: 'سوالات متداول آریو استودیو',
-    alternates: {
-      canonical: `${baseUrl}/faq`,
-      languages: {
-        'fa-IR': `${baseUrl}/faq`,
-        'en-US': `${baseUrl}/en/faq`,
-      },
-    },
-  }
+  return generateSEOMetadata('fa', {
+    title: 'سوالات متداول',
+    description: 'سوالات متداول درباره آریو استودیو، خدمات، فرآیند کار و تکنولوژی‌های استفاده شده.',
+    url: `${baseUrl}/faq`,
+  })
 }
 
 export default async function FAQPage() {

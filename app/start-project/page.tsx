@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import StartProjectForm from '@/components/StartProjectForm'
+import { generateSEOMetadata } from '@/lib/seo'
 
 export const revalidate = 3600
 
@@ -16,19 +17,11 @@ export const revalidate = 3600
  */
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'
-  
-  // This is a FA route, always return Farsi metadata
-  return {
-    title: 'شروع پروژه | آریو استودیو',
-    description: 'بیایید تجربه دیجیتالی بعدی شما را بسازیم',
-    alternates: {
-      canonical: `${baseUrl}/start-project`,
-      languages: {
-        'fa-IR': `${baseUrl}/start-project`,
-        'en-US': `${baseUrl}/en/start-project`,
-      },
-    },
-  }
+  return generateSEOMetadata('fa', {
+    title: 'شروع پروژه',
+    description: 'بیایید تجربه دیجیتالی بعدی شما را بسازیم. درخواست پروژه خود را ارسال کنید و با ما تماس بگیرید.',
+    url: `${baseUrl}/start-project`,
+  })
 }
 
 export default async function StartProjectPage() {

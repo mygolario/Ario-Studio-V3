@@ -4,6 +4,7 @@ import Footer from '@/components/Footer'
 import Link from 'next/link'
 import { servicesConfig } from '@/config/services'
 import { ArrowRight } from 'lucide-react'
+import { generateSEOMetadata } from '@/lib/seo'
 
 export const revalidate = 3600
 
@@ -16,18 +17,11 @@ export const revalidate = 3600
  */
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'
-  
-  return {
-    title: 'Services | Ario Studio',
-    description: 'Ario Studio design, build, and automation services',
-    alternates: {
-      canonical: `${baseUrl}/en/services`,
-      languages: {
-        'fa-IR': `${baseUrl}/services`,
-        'en-US': `${baseUrl}/en/services`,
-      },
-    },
-  }
+  return generateSEOMetadata('en', {
+    title: 'Services',
+    description: 'Ario Studio design, build, and automation services. Full website design, landing pages, AI automations, and brand refresh.',
+    url: `${baseUrl}/en/services`,
+  })
 }
 
 export default async function ServicesPageEN() {

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import StartProjectForm from '@/components/StartProjectForm'
+import { generateSEOMetadata } from '@/lib/seo'
 
 export const revalidate = 3600
 
@@ -14,18 +15,11 @@ export const revalidate = 3600
  */
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'
-  
-  return {
-    title: 'Start a Project | Ario Studio',
-    description: "Let's build your next digital experience",
-    alternates: {
-      canonical: `${baseUrl}/en/start-project`,
-      languages: {
-        'fa-IR': `${baseUrl}/start-project`,
-        'en-US': `${baseUrl}/en/start-project`,
-      },
-    },
-  }
+  return generateSEOMetadata('en', {
+    title: 'Start a Project',
+    description: "Let's build your next digital experience. Submit your project request and get in touch with us.",
+    url: `${baseUrl}/en/start-project`,
+  })
 }
 
 export default async function StartProjectPageEN() {
