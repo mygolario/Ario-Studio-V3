@@ -147,7 +147,7 @@ export const translations = {
       label: 'بیایید همکاری کنیم',
       title: 'بیایید تجربه دیجیتالی بعدی شما را بسازیم.',
       subtitle: 'چه در حال راه‌اندازی یک برند باشید، چه در حال ارتقای وب‌سایت خود یا ادغام اتوماسیون هوش مصنوعی، استودیو آریو آماده است تا آن را با طراحی سینمایی و مهندسی مدرن به زندگی بیاورد.',
-      ctaPrimary: 'شروع یک پروژه',
+      ctaPrimary: 'درخواست پروژه',
       ctaSecondary: 'تماس',
       services: [
         'تجربیات وب سینمایی',
@@ -435,7 +435,7 @@ export const translations = {
       label: "Let's collaborate",
       title: "Let's build your next digital experience.",
       subtitle: "Whether you're launching a brand, upgrading your website, or integrating AI automation, Ario Studio is ready to bring it to life with cinematic design and modern engineering.",
-      ctaPrimary: 'Start a project',
+      ctaPrimary: 'Request a Project',
       ctaSecondary: 'Contact',
       services: [
         'Cinematic web experiences',
