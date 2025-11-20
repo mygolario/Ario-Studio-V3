@@ -33,12 +33,15 @@ export default function FAQAccordion({ items, lang }: FAQAccordionProps) {
             className="bg-surface border border-border-subtle rounded-xl overflow-hidden"
           >
             <button
+              type="button"
               onClick={() => toggleItem(index)}
               className={`w-full px-6 py-4 flex items-center justify-between text-left rtl:text-right transition-colors hover:bg-surface-alt ${
                 isOpen ? 'bg-surface-alt' : ''
               }`}
+              aria-expanded={isOpen}
+              aria-controls={`faq-answer-${index}`}
             >
-              <span className="text-h5 font-semibold text-text-primary pr-4 rtl:pr-0 rtl:pl-4">
+              <span id={`faq-question-${index}`} className="text-h5 font-semibold text-text-primary pr-4 rtl:pr-0 rtl:pl-4">
                 {item.question}
               </span>
               <ChevronDown
@@ -56,6 +59,9 @@ export default function FAQAccordion({ items, lang }: FAQAccordionProps) {
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.2 }}
                   className="overflow-hidden"
+                  id={`faq-answer-${index}`}
+                  role="region"
+                  aria-labelledby={`faq-question-${index}`}
                 >
                   <div className={`px-6 py-4 pt-0 ${isRTL ? 'rtl' : ''}`}>
                     <p className="text-body text-text-secondary leading-relaxed whitespace-pre-line">

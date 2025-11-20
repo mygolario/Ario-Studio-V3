@@ -60,24 +60,24 @@ export default async function PricingPageEN() {
   return (
     <main className="relative min-h-screen bg-base">
       <Header />
-      <div className="container-custom py-32">
+      <div className="container-custom py-16 sm:py-24 lg:py-32">
         <div className="max-w-6xl mx-auto">
           {/* Hero/Intro Section */}
-          <div className="text-center mb-16">
-            <h1 className="text-h1 font-semibold text-text-primary mb-6">
+          <div className="text-center mb-12 sm:mb-16">
+            <h1 className="text-h1 sm:text-h1 font-semibold text-text-primary mb-4 sm:mb-6">
               How we scope projects
             </h1>
-            <p className="text-body-lg text-text-secondary max-w-3xl mx-auto leading-relaxed">
+            <p className="text-body-lg text-text-secondary max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
               Every project is designed around your business, not a fixed template. We don&apos;t sell &quot;cheap website packages&quot; — we scope, design, and price based on your goals, complexity, and timeline.
             </p>
           </div>
 
           {/* Engagement Cards */}
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12">
             {engagementTypes.map((engagement, index) => (
               <div
                 key={engagement.name}
-                className="bg-surface border border-border-subtle rounded-xl p-6 hover:border-orange/50 hover:shadow-card-hover transition-all"
+                className="bg-surface border border-border-subtle rounded-xl p-6 sm:p-8 hover:border-orange/50 hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300"
               >
                 <h2 className="text-h4 font-semibold text-text-primary mb-3">
                   {engagement.name}
@@ -98,7 +98,7 @@ export default async function PricingPageEN() {
           </div>
 
           {/* Note */}
-          <div className="max-w-3xl mx-auto mb-12">
+          <div className="max-w-3xl mx-auto mb-8 sm:mb-12 px-4 sm:px-0">
             <p className="text-body text-text-secondary text-center leading-relaxed">
               Each project is scoped individually. We&apos;ll discuss your goals, budget, and timeline in a short call, then send a clear proposal before we start.
             </p>

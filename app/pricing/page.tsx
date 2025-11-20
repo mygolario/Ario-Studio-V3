@@ -64,24 +64,24 @@ export default async function PricingPage() {
   return (
     <main className="relative min-h-screen bg-base">
       <Header />
-      <div className="container-custom py-32">
+      <div className="container-custom py-16 sm:py-24 lg:py-32">
         <div className="max-w-6xl mx-auto">
           {/* Hero/Intro Section */}
-          <div className="text-center mb-16 rtl">
-            <h1 className="text-h1 font-semibold text-text-primary mb-6">
+          <div className="text-center mb-12 sm:mb-16 rtl">
+            <h1 className="text-h1 sm:text-h1 font-semibold text-text-primary mb-4 sm:mb-6">
               چطور پروژه‌ها را قیمت‌گذاری می‌کنیم؟
             </h1>
-            <p className="text-body-lg text-text-secondary max-w-3xl mx-auto leading-relaxed">
+            <p className="text-body-lg text-text-secondary max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
               پروژه‌ها بر اساس اهداف، پیچیدگی و زمان‌بندی شما قیمت‌گذاری می‌شوند. آریو استودیو پکیج ارزان و از پیش‌تعریف‌شده نمی‌فروشد — ما بر اساس کسب‌وکار شما طراحی و قیمت‌گذاری می‌کنیم.
             </p>
           </div>
 
           {/* Engagement Cards */}
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12">
             {engagementTypes.map((engagement, index) => (
               <div
                 key={engagement.name}
-                className="bg-surface border border-border-subtle rounded-xl p-6 hover:border-orange/50 hover:shadow-card-hover transition-all rtl"
+                className="bg-surface border border-border-subtle rounded-xl p-6 sm:p-8 hover:border-orange/50 hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300 rtl"
               >
                 <h2 className="text-h4 font-semibold text-text-primary mb-3">
                   {engagement.name}
@@ -102,7 +102,7 @@ export default async function PricingPage() {
           </div>
 
           {/* Note */}
-          <div className="max-w-3xl mx-auto mb-12 rtl">
+          <div className="max-w-3xl mx-auto mb-8 sm:mb-12 rtl px-4 sm:px-0">
             <p className="text-body text-text-secondary text-center leading-relaxed">
               هر پروژه بعد از صحبت کوتاه و شناخت بیزنس شما به‌صورت اختصاصی تعریف و قیمت‌گذاری می‌شود. قبل از شروع، یک پروپوزال شفاف برایتان ارسال می‌کنیم.
             </p>

@@ -52,19 +52,15 @@ export default function LanguageToggle() {
       }
     }
     
-    // Navigate first, then update language context after navigation completes
-    // This prevents race condition where language context updates before pathname changes
+    // Navigate to the new path
+    // Language context will be synced automatically by the useEffect below
+    // when the pathname changes after navigation completes
     router.push(newPath)
-    
-    // Update language context after navigation
-    // Use setTimeout to ensure navigation happens first
-    setTimeout(() => {
-      setLanguage(toLang)
-    }, 0)
   }
   
   // Sync language context with current pathname on mount and pathname changes
-  // This ensures language context always matches the route
+  // This ensures language context always matches the route and handles language
+  // switching automatically when navigation completes
   useEffect(() => {
     if (mounted) {
       const routeLang = pathname.startsWith('/en') ? 'en' : 'fa'

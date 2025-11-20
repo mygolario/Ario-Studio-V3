@@ -168,9 +168,11 @@ export default function Header() {
 
             {/* Mobile Menu Button */}
             <button
+              type="button"
               className="lg:hidden text-text-primary p-2"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle menu"
+              aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isMobileMenuOpen}
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -186,6 +188,7 @@ export default function Header() {
           }}
           transition={{ duration: 0.3 }}
           className="lg:hidden overflow-hidden bg-base border-t border-border-subtle max-h-[calc(100vh-80px)] overflow-y-auto"
+          aria-hidden={!isMobileMenuOpen}
         >
           <div className="container-custom py-6 space-y-4">
             {navItems.map((item) => (

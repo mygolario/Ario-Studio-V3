@@ -26,12 +26,12 @@ export default async function BlogPageEN() {
   return (
     <main className="relative min-h-screen bg-base">
       <Header />
-      <div className="container-custom py-32">
+      <div className="container-custom py-16 sm:py-24 lg:py-32">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-16">
-            <div className="mb-6">
-              <h1 className="text-h1 font-semibold text-text-primary mb-4">
+          <div className="text-center mb-12 sm:mb-16 px-4 sm:px-0">
+            <div className="mb-4 sm:mb-6">
+              <h1 className="text-h1 sm:text-h1 font-semibold text-text-primary mb-4 sm:mb-6">
                 Blog
               </h1>
               {/* Section accent line */}
@@ -44,16 +44,16 @@ export default async function BlogPageEN() {
 
           {/* Posts Grid */}
           {posts.length === 0 ? (
-            <div className="text-center py-16">
+            <div className="text-center py-12 sm:py-16">
               <p className="text-text-secondary">No blog posts available at the moment.</p>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
               {posts.map((post) => (
                 <Link
                   key={post.id}
                   href={`/en/blog/${post.slug}`}
-                  className="group bg-surface rounded-xl overflow-hidden border border-border-subtle hover:shadow-card-hover hover:-translate-y-2 hover:border-orange/50 transition-all duration-300 cursor-pointer block relative"
+                  className="group bg-surface rounded-xl overflow-hidden border border-border-subtle hover:shadow-card-hover hover:-translate-y-1 hover:border-orange/50 transition-all duration-300 cursor-pointer block relative"
                 >
                   {/* Subtle inner glow on hover */}
                   <div className="absolute inset-0 bg-gradient-to-br from-orange/0 via-orange/0 to-orange/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl z-0" />

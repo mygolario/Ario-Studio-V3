@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import Image from 'next/image'
 import { getAllProjects } from '@/lib/portfolio'
 import { generateSEOMetadata } from '@/lib/seo'
 
@@ -28,16 +29,16 @@ export default async function PortfolioPageEN() {
   return (
     <main className="relative min-h-screen bg-base">
       <Header />
-      <div className="container-custom py-32">
+      <div className="container-custom py-16 sm:py-24 lg:py-32">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h1 className="text-h1 font-semibold text-text-primary mb-4">
+          <div className="text-center mb-12 sm:mb-16">
+            <h1 className="text-h1 sm:text-h1 font-semibold text-text-primary mb-4 sm:mb-6">
               Portfolio
             </h1>
-            <p className="text-body-lg text-text-secondary max-w-2xl mx-auto mb-4">
+            <p className="text-body-lg text-text-secondary max-w-2xl mx-auto mb-4 leading-relaxed">
               Ario Studio portfolio and case studies
             </p>
-            <p className="text-body text-text-secondary max-w-2xl mx-auto mb-6">
+            <p className="text-body text-text-secondary max-w-2xl mx-auto mb-4 sm:mb-6 leading-relaxed">
               Our case studies and portfolio pieces will be published here soon. Ario Studio is currently focused on building the first set of live projects.
             </p>
             <p className="text-body-sm text-text-muted">
@@ -46,18 +47,19 @@ export default async function PortfolioPageEN() {
           </div>
 
           {projects.length > 0 ? (
-            <div className="grid md:grid-cols-2 gap-8 mb-12">
+            <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-12">
               {projects.map((project) => (
                 <div
                   key={project.id}
-                  className="group bg-surface rounded-xl overflow-hidden border border-border-subtle hover:shadow-card-hover hover:-translate-y-2 hover:border-orange/50 transition-all duration-300 relative"
+                  className="group bg-surface rounded-xl overflow-hidden border border-border-subtle hover:shadow-card-hover hover:-translate-y-1 hover:border-orange/50 transition-all duration-300 relative"
                 >
                   {project.thumbnailUrl && (
                     <div className="relative h-64 bg-surface-alt overflow-hidden rounded-t-xl">
-                      <img
+                      <Image
                         src={project.thumbnailUrl}
                         alt={project.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
                       />
                     </div>
                   )}
@@ -80,7 +82,7 @@ export default async function PortfolioPageEN() {
           ) : null}
           
           <div className="text-center">
-            <p className="text-body text-text-secondary max-w-2xl mx-auto mb-6">
+            <p className="text-body text-text-secondary max-w-2xl mx-auto mb-4 sm:mb-6 leading-relaxed">
               Full case studies and portfolio pieces will be published here soon.
             </p>
             <p className="text-body-sm text-text-muted">

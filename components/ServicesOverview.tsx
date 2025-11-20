@@ -38,11 +38,11 @@ export default function ServicesOverview() {
       <div className="container-custom">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <div className={`text-center mb-16 ${isEN ? '' : 'rtl'}`}>
-            <h2 className="text-h1 font-semibold text-text-primary mb-4">
+          <div className={`text-center mb-12 sm:mb-16 ${isEN ? '' : 'rtl'} px-4 sm:px-0`}>
+            <h2 className="text-h1 sm:text-h1 font-semibold text-text-primary mb-4 sm:mb-6">
               {isEN ? 'Services' : 'خدمات'}
             </h2>
-            <p className="text-body-lg text-text-secondary max-w-2xl mx-auto">
+            <p className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
               {isEN 
                 ? 'What we do to craft cinematic, AI-powered web experiences.'
                 : 'آنچه برای ساخت تجربه‌های وب سینمایی انجام می‌دهیم.'}
@@ -50,7 +50,7 @@ export default function ServicesOverview() {
           </div>
 
           {/* Services Grid */}
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             {services.map((service, index) => (
               <motion.div
                 key={service.slug}
@@ -58,7 +58,7 @@ export default function ServicesOverview() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group bg-surface border border-border-subtle rounded-xl p-6 hover:border-orange/50 hover:shadow-card-hover transition-all"
+                className="group bg-surface border border-border-subtle rounded-xl p-6 sm:p-8 hover:border-orange/50 hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300"
               >
                 <h3 className="text-h4 font-semibold text-text-primary mb-3">
                   {service.title}

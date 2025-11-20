@@ -53,13 +53,13 @@ export default async function FAQPageEN() {
   return (
     <main className="relative min-h-screen bg-base">
       <Header />
-      <div className="container-custom py-32">
+      <div className="container-custom py-16 sm:py-24 lg:py-32">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <h1 className="text-h1 font-semibold text-text-primary mb-4">
+          <div className="text-center mb-12 sm:mb-16 px-4 sm:px-0">
+            <h1 className="text-h1 sm:text-h1 font-semibold text-text-primary mb-4 sm:mb-6">
               FAQ
             </h1>
-            <p className="text-body-lg text-text-secondary max-w-2xl mx-auto">
+            <p className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
               Frequently asked questions about Ario Studio
             </p>
           </div>

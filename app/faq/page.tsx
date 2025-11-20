@@ -41,7 +41,7 @@ export default async function FAQPage() {
       answer: 'بله، آریو استودیو هم با کسب‌وکارهای ایرانی و هم بین‌المللی کار می‌کند. تا زمانی که همکاری از راه دور امکان‌پذیر است و می‌توانیم به طور مؤثر ارتباط برقرار کنیم (به انگلیسی یا فارسی)، خوشحال می‌شویم با کسب‌وکارهایی از هر جای دنیا کار کنیم.',
     },
     {
-      question: 'بعد از تحویل، یک دوره پشتیبانی کوتاه وجود دارد و امکان ادامه همکاری هست؟',
+      question: 'آیا پشتیبانی بعد از تحویل ارائه می‌شود؟',
       answer: 'بله. ما یک دوره پشتیبانی کوتاه بعد از تحویل ارائه می‌دهیم تا هرگونه مشکل فوری یا سوال را برطرف کنیم. علاوه بر آن، می‌توانیم درباره پشتیبانی مداوم، نگهداری یا بهبودهای آینده بر اساس نیازهای شما صحبت کنیم. شرایط پشتیبانی هر پروژه در توافق پروژه تعریف می‌شود.',
     },
     {
@@ -57,13 +57,13 @@ export default async function FAQPage() {
   return (
     <main className="relative min-h-screen bg-base">
       <Header />
-      <div className="container-custom py-32">
+      <div className="container-custom py-16 sm:py-24 lg:py-32">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16 rtl">
-            <h1 className="text-h1 font-semibold text-text-primary mb-4">
+          <div className="text-center mb-12 sm:mb-16 rtl px-4 sm:px-0">
+            <h1 className="text-h1 sm:text-h1 font-semibold text-text-primary mb-4 sm:mb-6">
               سوالات متداول
             </h1>
-            <p className="text-body-lg text-text-secondary max-w-2xl mx-auto">
+            <p className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
               سوالات متداول آریو استودیو
             </p>
           </div>

@@ -58,18 +58,19 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
   return (
     <main className="relative min-h-screen bg-base">
       <Header />
-      <div className="container-custom py-32">
-        <div className="max-w-4xl mx-auto">
+      <div className="container-custom py-16 sm:py-24 lg:py-32">
+        <div className="max-w-4xl mx-auto px-4 sm:px-0">
           <Link
             href="/services"
-            className="inline-flex items-center text-body text-text-secondary hover:text-orange mb-8 transition-colors rtl"
+            className="inline-flex items-center text-body text-text-secondary hover:text-orange mb-6 sm:mb-8 transition-colors rtl"
+            aria-label="بازگشت به صفحه خدمات"
           >
             ← بازگشت به خدمات
           </Link>
 
           {/* Hero Section */}
-          <div className="mb-12 rtl">
-            <h1 className="text-h1 font-semibold text-text-primary mb-6">
+          <div className="mb-8 sm:mb-12 rtl">
+            <h1 className="text-h1 sm:text-h1 font-semibold text-text-primary mb-4 sm:mb-6">
               {title}
             </h1>
             <p className="text-body-lg text-text-secondary leading-relaxed mb-4">
@@ -81,7 +82,7 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
           </div>
 
           {/* Content Sections */}
-          <div className="space-y-8 mb-12 rtl">
+          <div className="space-y-6 sm:space-y-8 mb-8 sm:mb-12 rtl">
             {/* Best For */}
             {bestFor && (
               <div>
@@ -142,10 +143,10 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
           </div>
 
           {/* CTA */}
-          <div className="mt-12 pt-8 border-t border-border-subtle">
+          <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border-subtle">
             <Link
               href={`/start-project?type=${service.slug}`}
-              className="inline-flex items-center px-8 py-4 bg-orange text-pure-white font-medium rounded-lg hover:bg-orange/90 transition-colors"
+              className="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-orange text-pure-white font-medium rounded-lg hover:bg-orange/90 transition-colors text-body sm:text-body-lg"
             >
               شروع این نوع پروژه
             </Link>

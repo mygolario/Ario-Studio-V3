@@ -332,7 +332,7 @@ export default function MultiStepProjectForm({ lang }: MultiStepProjectFormProps
             </div>
 
             {/* Step Title */}
-            <h2 className="text-h4 font-semibold text-text-primary mt-6 mb-6">
+            <h2 className="text-h4 font-semibold text-text-primary mt-6 mb-6" id="step-title">
               {currentStep === 1 && t.step1.title}
               {currentStep === 2 && t.step2.title}
               {currentStep === 3 && t.step3.title}
@@ -370,7 +370,7 @@ export default function MultiStepProjectForm({ lang }: MultiStepProjectFormProps
                       placeholder={t.step1.name.placeholder}
                     />
                     {errors.name && (
-                      <p className="mt-1 text-body-sm text-red-500">{errors.name}</p>
+                      <p className="mt-1 text-body-sm text-red-500" role="alert" aria-live="polite">{errors.name}</p>
                     )}
                   </div>
 
@@ -392,7 +392,7 @@ export default function MultiStepProjectForm({ lang }: MultiStepProjectFormProps
                       placeholder={t.step1.email.placeholder}
                     />
                     {errors.email && (
-                      <p className="mt-1 text-body-sm text-red-500">{errors.email}</p>
+                      <p className="mt-1 text-body-sm text-red-500" role="alert" aria-live="polite">{errors.email}</p>
                     )}
                   </div>
                 </div>
@@ -425,7 +425,7 @@ export default function MultiStepProjectForm({ lang }: MultiStepProjectFormProps
                       <option value="other">{isEN ? 'Other' : 'سایر'}</option>
                     </select>
                     {errors.projectType && (
-                      <p className="mt-1 text-body-sm text-red-500">{errors.projectType}</p>
+                      <p className="mt-1 text-body-sm text-red-500" role="alert" aria-live="polite">{errors.projectType}</p>
                     )}
 
                     {formData.projectType === 'other' && (
@@ -469,7 +469,7 @@ export default function MultiStepProjectForm({ lang }: MultiStepProjectFormProps
                       ))}
                     </select>
                     {errors.budgetRange && (
-                      <p className="mt-1 text-body-sm text-red-500">{errors.budgetRange}</p>
+                      <p className="mt-1 text-body-sm text-red-500" role="alert" aria-live="polite">{errors.budgetRange}</p>
                     )}
                   </div>
 
@@ -510,7 +510,7 @@ export default function MultiStepProjectForm({ lang }: MultiStepProjectFormProps
                     placeholder={t.step3.message.placeholder}
                   />
                   {errors.message && (
-                    <p className="mt-1 text-body-sm text-red-500">{errors.message}</p>
+                    <p className="mt-1 text-body-sm text-red-500" role="alert" aria-live="polite">{errors.message}</p>
                   )}
                   <p className="mt-2 text-body-sm text-text-muted">
                     {t.step3.message.helper}

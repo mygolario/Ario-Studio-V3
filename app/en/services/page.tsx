@@ -30,20 +30,20 @@ export default async function ServicesPageEN() {
   return (
     <main className="relative min-h-screen bg-base">
       <Header />
-      <div className="container-custom py-32">
+      <div className="container-custom py-16 sm:py-24 lg:py-32">
         <div className="max-w-6xl mx-auto">
           {/* Intro Section */}
-          <div className="text-center mb-16">
-            <h1 className="text-h1 font-semibold text-text-primary mb-4">
+          <div className="text-center mb-12 sm:mb-16">
+            <h1 className="text-h1 sm:text-h1 font-semibold text-text-primary mb-4 sm:mb-6">
               Services
             </h1>
-            <p className="text-body-lg text-text-secondary max-w-3xl mx-auto leading-relaxed">
+            <p className="text-body-lg text-text-secondary max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
               Ario Studio designs and builds cinematic, AI-assisted web experiences. Each project is scoped custom to fit your business, budget, and timeline — we don&apos;t offer cheap &quot;packages.&quot;
             </p>
           </div>
 
           {/* Service Cards Grid */}
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             {servicesConfig.map((service) => {
               const title = service.title.en
               const description = service.shortDescription.en
@@ -52,7 +52,7 @@ export default async function ServicesPageEN() {
               return (
                 <div
                   key={service.slug}
-                  className="group bg-surface border border-border-subtle rounded-xl p-6 hover:border-orange/50 hover:shadow-card-hover transition-all"
+                  className="group bg-surface border border-border-subtle rounded-xl p-6 sm:p-8 hover:border-orange/50 hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300"
                 >
                   <h2 className="text-h4 font-semibold text-text-primary mb-3">
                     {title}
@@ -88,8 +88,8 @@ export default async function ServicesPageEN() {
           </div>
 
           {/* Note about pricing */}
-          <div className="mt-12 pt-8 border-t border-border-subtle text-center">
-            <p className="text-body-sm text-text-muted">
+          <div className="mt-12 sm:mt-16 pt-8 border-t border-border-subtle text-center">
+            <p className="text-body-sm text-text-muted leading-relaxed px-4 sm:px-0">
               Pricing is defined per project. To get a quote, please reach out via the &quot;Start a Project&quot; form.
             </p>
           </div>
