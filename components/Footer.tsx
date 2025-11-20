@@ -2,11 +2,33 @@
 
 import { motion } from 'framer-motion'
 import { Linkedin, Twitter, Instagram, Github } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 import { useTranslation } from '@/lib/useTranslation'
+import { useLanguage } from '@/contexts/LanguageContext'
 
+/**
+ * Footer Component
+ * 
+ * Navigation & i18n:
+ * - Detects locale from pathname (/en = EN, / = FA)
+ * - All footer links are locale-aware
+ * - Link groups: Studio, Services, Resources, Legal & Contact
+ */
 export default function Footer() {
+  const pathname = usePathname()
   const t = useTranslation()
+  const { language } = useLanguage()
   const currentYear = new Date().getFullYear()
+
+  // Detect if we're on EN locale
+  const isEN = pathname.startsWith('/en')
+  const localePrefix = isEN ? '/en' : ''
+
+  // Helper to get locale-aware route
+  const getRoute = (route: string) => {
+    return `${localePrefix}${route}`
+  }
 
   const socialLinks = [
     { icon: Linkedin, href: '#', label: 'LinkedIn' },
@@ -15,25 +37,75 @@ export default function Footer() {
     { icon: Github, href: '#', label: 'GitHub' },
   ]
 
+  // Footer link groups according to requirements
   const footerLinks = {
-    [t.footerLinks.company]: [
-      { label: t.footerLinks.about, href: '#about' },
-      { label: t.footerLinks.services, href: '#services' },
-      { label: t.footerLinks.portfolio, href: '#portfolio' },
-      { label: t.footerLinks.contact, href: '#contact' },
+    // Studio group
+    [language === 'fa' ? 'استودیو' : 'Studio']: [
+      { 
+        label: language === 'fa' ? 'درباره' : 'About', 
+        href: getRoute('/about') 
+      },
+      { 
+        label: language === 'fa' ? 'نمونه‌کارها' : 'Portfolio', 
+        href: getRoute('/portfolio') 
+      },
+      { 
+        label: language === 'fa' ? 'بلاگ' : 'Blog', 
+        href: getRoute('/blog') 
+      },
     ],
-    [t.footerLinks.resources]: [
-      { label: t.footerLinks.blog, href: '#' },
-      { label: t.footerLinks.caseStudies, href: '#portfolio' },
-      { label: t.footerLinks.careers, href: '#' },
-      { label: t.footerLinks.pressKit, href: '#' },
+    // Services group
+    [language === 'fa' ? 'خدمات' : 'Services']: [
+      { 
+        label: language === 'fa' ? 'خدمات' : 'Services', 
+        href: getRoute('/services') 
+      },
+      { 
+        label: language === 'fa' ? 'وب‌سایت کامل' : 'Full Website', 
+        href: getRoute('/services/full-website') 
+      },
+      { 
+        label: language === 'fa' ? 'صفحه فرود' : 'Landing Pages', 
+        href: getRoute('/services/landing-page') 
+      },
+      { 
+        label: language === 'fa' ? 'اتوماسیون هوش مصنوعی' : 'AI Automations', 
+        href: getRoute('/services/ai-automation') 
+      },
+      { 
+        label: language === 'fa' ? 'بازطراحی برند' : 'Brand Refresh', 
+        href: getRoute('/services/brand-refresh') 
+      },
     ],
-    [t.footerLinks.legal]: [
-      { label: t.footerLinks.privacyPolicy, href: '#' },
-      { label: t.footerLinks.termsOfService, href: '#' },
-      { label: t.footerLinks.cookiePolicy, href: '#' },
+    // Resources group
+    [language === 'fa' ? 'منابع' : 'Resources']: [
+      { 
+        label: language === 'fa' ? 'سوالات متداول' : 'FAQ', 
+        href: getRoute('/faq') 
+      },
+      { 
+        label: language === 'fa' ? 'قیمت‌گذاری' : 'Pricing', 
+        href: getRoute('/pricing') 
+      },
+      // Future: Case Studies / Templates (commented for now)
+      // { label: language === 'fa' ? 'مطالعات موردی' : 'Case Studies', href: getRoute('/case-studies') },
+      // { label: language === 'fa' ? 'قالب‌ها' : 'Templates', href: getRoute('/templates') },
+    ],
+    // Legal & Contact group
+    [language === 'fa' ? 'قانونی و تماس' : 'Legal & Contact']: [
+      { 
+        label: language === 'fa' ? 'سیاست حریم خصوصی' : 'Privacy Policy', 
+        href: getRoute('/privacy') 
+      },
+      { 
+        label: language === 'fa' ? 'شرایط استفاده' : 'Terms of Service', 
+        href: getRoute('/terms') 
+      },
     ],
   }
+
+  // Contact email (use configured email or placeholder)
+  const contactEmail = 'info@ariostudio.net'
 
   return (
     <footer className="relative border-t border-border-subtle bg-surface-alt">
@@ -108,12 +180,16 @@ export default function Footer() {
               <ul className="space-y-3">
                 {links.map((link) => (
                   <li key={link.label}>
-                    <motion.a
+                    <Link
                       href={link.href}
                       className="text-body-sm text-text-secondary hover:text-orange transition-colors relative inline-block group/link"
-                      whileHover={{ x: 2 }}
                     >
-                      <span className="relative z-10">{link.label}</span>
+                      <motion.span
+                        className="relative z-10"
+                        whileHover={{ x: 2 }}
+                      >
+                        {link.label}
+                      </motion.span>
                       <motion.span
                         className="absolute bottom-0 left-0 right-0 h-0.5 bg-orange opacity-0 group-hover/link:opacity-100 transition-opacity duration-200"
                         initial={{ scaleX: 0 }}
@@ -121,9 +197,32 @@ export default function Footer() {
                         transition={{ duration: 0.2, ease: 'easeOut' }}
                         style={{ transformOrigin: 'var(--dir, left)' }}
                       />
-                    </motion.a>
+                    </Link>
                   </li>
                 ))}
+                {/* Contact email for Legal & Contact group */}
+                {category === (language === 'fa' ? 'قانونی و تماس' : 'Legal & Contact') && (
+                  <li>
+                    <a
+                      href={`mailto:${contactEmail}`}
+                      className="text-body-sm text-text-secondary hover:text-orange transition-colors relative inline-block group/link"
+                    >
+                      <motion.span
+                        className="relative z-10"
+                        whileHover={{ x: 2 }}
+                      >
+                        {contactEmail}
+                      </motion.span>
+                      <motion.span
+                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-orange opacity-0 group-hover/link:opacity-100 transition-opacity duration-200"
+                        initial={{ scaleX: 0 }}
+                        whileHover={{ scaleX: 1 }}
+                        transition={{ duration: 0.2, ease: 'easeOut' }}
+                        style={{ transformOrigin: 'var(--dir, left)' }}
+                      />
+                    </a>
+                  </li>
+                )}
               </ul>
             </motion.div>
           ))}

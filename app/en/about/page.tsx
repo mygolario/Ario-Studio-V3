@@ -5,29 +5,25 @@ import { getProcessSteps, getHighlights } from '@/lib/db'
 import Link from 'next/link'
 import type { ProcessStep, Highlight } from '@prisma/client'
 
-export async function generateMetadata(): Promise<Metadata> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'
-  
-  return {
+export const metadata: Metadata = {
+  title: 'About | Ario Studio',
+  description: 'Learn about Ario Studio—cinematic UX, high-performance engineering, and AI-driven innovation.',
+  openGraph: {
     title: 'About Ario Studio',
-    description: 'Learn about Ario Studio—cinematic UX, high-performance engineering, and AI-driven innovation.',
-    openGraph: {
-      title: 'About Ario Studio',
-      description: 'Cinematic UX, high-performance engineering, and AI-driven innovation.',
+    description: 'Cinematic UX, high-performance engineering, and AI-driven innovation.',
+  },
+  alternates: {
+    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'}/en/about`,
+    languages: {
+      'fa-IR': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'}/about`,
+      'en-US': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'}/en/about`,
     },
-    alternates: {
-      canonical: `${baseUrl}/about`,
-      languages: {
-        'fa-IR': `${baseUrl}/about`,
-        'en-US': `${baseUrl}/en/about`,
-      },
-    },
-  }
+  },
 }
 
-export const revalidate = 3600 // Revalidate every hour
+export const revalidate = 3600
 
-export default async function AboutPage() {
+export default async function AboutPageEN() {
   const [processSteps, highlights] = await Promise.all([
     getProcessSteps().catch(() => [] as ProcessStep[]),
     getHighlights('about').catch(() => [] as Highlight[]),
@@ -109,24 +105,6 @@ export default async function AboutPage() {
         </section>
       )}
 
-      {/* Tech & AI Capabilities */}
-      <section className="py-20 px-4 bg-surface-alt">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-h2 font-semibold text-text-primary mb-6">Tech & AI Capabilities</h2>
-          <div className="prose prose-lg max-w-none text-text-secondary space-y-4">
-            <p>
-              We specialize in modern web technologies and AI integration:
-            </p>
-            <ul className="list-disc pl-6 space-y-2">
-              <li><strong>Next.js Engineering:</strong> Production-grade React applications with server-side rendering, static generation, and optimal performance.</li>
-              <li><strong>AI Integration:</strong> Custom AI agents, workflow automation, and intelligent systems that reduce manual work.</li>
-              <li><strong>Motion Design:</strong> Expressive animations and transitions that enhance user experience without compromising performance.</li>
-              <li><strong>Modern Architecture:</strong> Scalable, maintainable codebases built for long-term growth.</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
       {/* CTA */}
       <section className="py-20 px-4">
         <div className="max-w-2xl mx-auto text-center">
@@ -137,7 +115,7 @@ export default async function AboutPage() {
             Ready to start your project? Get in touch and let&apos;s discuss how we can bring your vision to life.
           </p>
           <Link
-            href="/start-project"
+            href="/en/start-project"
             className="inline-flex items-center px-8 py-4 bg-orange text-pure-white font-medium rounded-lg hover:bg-orange/90 transition-colors"
           >
             Start a Project

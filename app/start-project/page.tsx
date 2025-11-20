@@ -1,0 +1,61 @@
+import type { Metadata } from 'next'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
+import Contact from '@/components/Contact'
+
+export const revalidate = 3600
+
+/**
+ * Start Project / Request a Project page (FA)
+ * 
+ * Navigation & i18n:
+ * - FA route: /start-project (always Farsi, route determines language)
+ * - EN route: /en/start-project
+ * - Route path determines language, not user preference cookie
+ * - This is the main CTA target
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'
+  
+  // This is a FA route, always return Farsi metadata
+  return {
+    title: 'شروع پروژه | آریو استودیو',
+    description: 'بیایید تجربه دیجیتالی بعدی شما را بسازیم',
+    alternates: {
+      canonical: `${baseUrl}/start-project`,
+      languages: {
+        'fa-IR': `${baseUrl}/start-project`,
+        'en-US': `${baseUrl}/en/start-project`,
+      },
+    },
+  }
+}
+
+export default async function StartProjectPage() {
+  // This is a FA route, always use Farsi language
+  const lang = 'fa'
+
+  return (
+    <main className="relative min-h-screen bg-base">
+      <Header />
+      <div className="container-custom py-32">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <h1 className="text-h1 font-semibold text-text-primary mb-4">
+              {lang === 'fa' ? 'شروع یک پروژه' : 'Start a Project'}
+            </h1>
+            <p className="text-body-lg text-text-secondary max-w-2xl mx-auto">
+              {lang === 'fa' 
+                ? 'بیایید تجربه دیجیتالی بعدی شما را بسازیم'
+                : "Let's build your next digital experience"}
+            </p>
+          </div>
+
+          <Contact />
+        </div>
+      </div>
+      <Footer />
+    </main>
+  )
+}
+

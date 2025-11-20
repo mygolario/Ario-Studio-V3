@@ -4,15 +4,28 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 import Button from './Button'
 import ThemeToggle from './ThemeToggle'
 import LanguageToggle from './LanguageToggle'
 import { useActiveSection } from '@/lib/useActiveSection'
 import { useTranslation } from '@/lib/useTranslation'
+import { useLanguage } from '@/contexts/LanguageContext'
 
+/**
+ * Header Component
+ * 
+ * Navigation & i18n:
+ * - Detects locale from pathname (/en = EN, / = FA)
+ * - All navigation links are locale-aware
+ * - Logo links to home (locale-aware)
+ * - CTA button links to /start-project or /en/start-project
+ * - Services mega menu links to service detail pages
+ */
 export default function Header() {
   const pathname = usePathname()
   const t = useTranslation()
+  const { language } = useLanguage()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null)
@@ -20,6 +33,15 @@ export default function Header() {
   const megaMenuRef = useRef<HTMLDivElement>(null)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const activeSection = useActiveSection()
+
+  // Detect if we're on EN locale (pathname starts with /en)
+  const isEN = pathname.startsWith('/en')
+  const localePrefix = isEN ? '/en' : ''
+
+  // Helper to get locale-aware route
+  const getRoute = (route: string) => {
+    return `${localePrefix}${route}`
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,6 +66,14 @@ export default function Header() {
   }, [activeMegaMenu])
 
   // Get mega menu content from translations
+  // Service detail pages for mega menu
+  const servicePages = [
+    { slug: 'full-website', fa: 'وب‌سایت کامل', en: 'Full Website' },
+    { slug: 'landing-page', fa: 'صفحه فرود', en: 'Landing Page' },
+    { slug: 'ai-automation', fa: 'اتوماسیون هوش مصنوعی', en: 'AI Automation' },
+    { slug: 'brand-refresh', fa: 'بازطراحی برند', en: 'Brand Refresh' },
+  ]
+
   const megaMenuContent = {
     'Services': {
       columns: t.megaMenu.columns.map((column) => ({
@@ -51,44 +81,53 @@ export default function Header() {
         description: column.description,
         items: column.items.map((item) => ({
           text: item,
-          href: '#services', // All mega menu items scroll to services section
+          href: getRoute('/services'), // Link to services index
         })),
+      })),
+      servicePages: servicePages.map((page) => ({
+        text: language === 'fa' ? page.fa : page.en,
+        href: getRoute(`/services/${page.slug}`),
       })),
     },
   }
 
-  const handleMegaMenuItemClick = (href: string) => {
-    setActiveMegaMenu(null)
-    setIsMobileMenuOpen(false) // Close mobile menu if open
-    const element = document.querySelector(href)
-    if (element) {
-      const headerHeight = 80
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
-      const offsetPosition = elementPosition - headerHeight
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      })
-    }
-  }
-
+  // Navigation items - locale-aware routes
   const navItems = [
-    { label: t.nav.services, href: '#services', hasMegaMenu: true, id: 'services' },
-    { label: t.nav.work, href: '#portfolio', id: 'portfolio' },
-    { label: t.nav.process, href: '#philosophy', id: 'philosophy' },
-    { label: t.nav.about, href: '#about', id: 'about' },
-    { label: t.nav.contact, href: '#contact', id: 'contact' },
+    { 
+      label: language === 'fa' ? 'خانه' : 'Home', 
+      href: getRoute('/'), 
+      id: 'home',
+      isHome: true 
+    },
+    { 
+      label: language === 'fa' ? 'خدمات' : 'Services', 
+      href: getRoute('/services'), 
+      hasMegaMenu: true, 
+      id: 'services' 
+    },
+    { 
+      label: language === 'fa' ? 'نمونه‌کارها' : 'Portfolio', 
+      href: getRoute('/portfolio'), 
+      id: 'portfolio' 
+    },
+    { 
+      label: language === 'fa' ? 'درباره استودیو' : 'About', 
+      href: getRoute('/about'), 
+      id: 'about' 
+    },
+    { 
+      label: language === 'fa' ? 'بلاگ' : 'Blog', 
+      href: getRoute('/blog'), 
+      id: 'blog' 
+    },
   ]
 
-  const handleMouseEnter = (label: string) => {
+  const handleMouseEnter = () => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)
       timeoutRef.current = null
     }
-    if (label === 'Services') {
-      setActiveMegaMenu('Services')
-    }
+    setActiveMegaMenu('Services')
   }
 
   const handleMouseLeave = () => {
@@ -128,54 +167,47 @@ export default function Header() {
         <div className="container-custom">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <motion.a
-              href="#"
+            <Link
+              href={getRoute('/')}
               className="text-xl font-semibold text-text-primary transition-colors duration-250 relative group"
-              whileHover={{ opacity: 0.8 }}
-              whileTap={{ scale: 0.98 }}
             >
-              <span className="relative z-10">{t.brand.name}</span>
+              <motion.span
+                className="relative z-10"
+                whileHover={{ opacity: 0.8 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                {t.brand.name}
+              </motion.span>
               <motion.span
                 className="absolute inset-0 bg-orange/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 style={{ transform: 'scale(1.5)' }}
               />
-            </motion.a>
+            </Link>
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-12">
               {navItems.map((item) => {
-                // For case study pages, highlight "Work" nav item
-                const isActive = pathname.startsWith('/work') 
-                  ? item.id === 'portfolio'
-                  : activeSection === item.id
+                // Check if current route is active
+                const isActive = pathname === item.href || 
+                  (item.id === 'portfolio' && (pathname.startsWith('/work') || pathname.startsWith('/en/work') || pathname.startsWith('/portfolio') || pathname.startsWith('/en/portfolio'))) ||
+                  (item.id === 'services' && (pathname.startsWith('/services') || pathname.startsWith('/en/services'))) ||
+                  (item.id === 'about' && (pathname.startsWith('/about') || pathname.startsWith('/en/about'))) ||
+                  (item.id === 'blog' && (pathname.startsWith('/blog') || pathname.startsWith('/en/blog'))) ||
+                  (item.isHome && (pathname === '/' || pathname === '/en'))
+                
                 return (
                   <div
                     key={item.href}
                     className="relative"
-                    onMouseEnter={() => item.hasMegaMenu && handleMouseEnter(item.label)}
+                    onMouseEnter={() => item.hasMegaMenu && handleMouseEnter('Services')}
                   >
                     {item.hasMegaMenu ? (
                       <motion.button
-                        onClick={(e) => {
-                          // Scroll to section when clicked
-                          if (item.href.startsWith('#')) {
-                            e.preventDefault()
-                            const element = document.querySelector(item.href)
-                            if (element) {
-                              const headerHeight = 80
-                              const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
-                              const offsetPosition = elementPosition - headerHeight
-                              window.scrollTo({
-                                top: offsetPosition,
-                                behavior: 'smooth',
-                              })
-                            }
-                          }
-                          // Also toggle mega menu
+                        onClick={() => {
                           setActiveMegaMenu(activeMegaMenu === 'Services' ? null : 'Services')
                         }}
                         className={`relative text-body font-medium transition-all duration-200 cursor-pointer group/nav ${
-                          activeMegaMenu === 'Services' ? 'text-orange' : 'text-text-secondary hover:text-orange'
+                          activeMegaMenu === 'Services' || isActive ? 'text-orange' : 'text-text-secondary hover:text-orange'
                         }`}
                         whileHover={{ y: -1 }}
                       >
@@ -189,7 +221,7 @@ export default function Header() {
                         <motion.span
                           className="absolute bottom-0 left-0 h-0.5 bg-orange"
                           initial={{ width: 0 }}
-                          animate={{ width: activeMegaMenu === 'Services' ? '100%' : 0 }}
+                          animate={{ width: (activeMegaMenu === 'Services' || isActive) ? '100%' : 0 }}
                           transition={{ duration: 0.2, ease: 'easeOut' }}
                         />
                         <motion.span
@@ -198,31 +230,18 @@ export default function Header() {
                         />
                       </motion.button>
                     ) : (
-                      <motion.a
+                      <Link
                         href={item.href}
-                        onClick={(e) => {
-                          // Handle internal links with hash
-                          if (item.href.startsWith('#')) {
-                            e.preventDefault()
-                            const element = document.querySelector(item.href)
-                            if (element) {
-                              const headerHeight = 80
-                              const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
-                              const offsetPosition = elementPosition - headerHeight
-                              window.scrollTo({
-                                top: offsetPosition,
-                                behavior: 'smooth',
-                              })
-                            }
-                          }
-                          // External links (like /#portfolio) will navigate normally
-                        }}
                         className={`relative text-body font-medium transition-all duration-200 group/nav ${
                           isActive ? 'text-text-primary' : 'text-text-secondary hover:text-orange'
                         }`}
-                        whileHover={{ y: -1 }}
                       >
-                        <span className="relative z-10">{item.label}</span>
+                        <motion.span
+                          className="relative z-10"
+                          whileHover={{ y: -1 }}
+                        >
+                          {item.label}
+                        </motion.span>
                         <motion.span
                           className="absolute bottom-0 left-0 h-0.5 bg-orange"
                           initial={{ width: 0 }}
@@ -234,7 +253,7 @@ export default function Header() {
                           className="absolute inset-0 bg-orange/5 rounded-md opacity-0 group-hover/nav:opacity-100 transition-opacity duration-200"
                           style={{ transform: 'scale(1.2)' }}
                         />
-                      </motion.a>
+                      </Link>
                     )}
                   </div>
                 )
@@ -249,8 +268,8 @@ export default function Header() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <Button href="#contact" variant="secondary" className="!px-6 !py-3 relative group/cta" icon={false}>
-                  <span className="relative z-10">{t.startProject.ctaPrimary}</span>
+                <Button href={getRoute('/start-project')} variant="secondary" className="!px-6 !py-3 relative group/cta" icon={false}>
+                  <span className="relative z-10">{language === 'fa' ? 'شروع پروژه' : 'Request a Project'}</span>
                   <motion.span
                     className="absolute inset-0 bg-orange/10 rounded-full opacity-0 group-hover/cta:opacity-100 transition-opacity duration-300"
                     style={{ transform: 'scale(1.1)' }}
@@ -335,14 +354,20 @@ export default function Header() {
                               {/* Service Button Cards */}
                               <div className="space-y-2.5">
                                 {column.items.map((item) => (
-                                  <motion.button
+                                  <Link
                                     key={item.text}
-                                    onClick={() => handleMegaMenuItemClick(item.href)}
-                                    className="w-full text-left rtl:text-right group/item"
-                                    whileHover={{ y: -1 }}
-                                    transition={{ duration: 0.2 }}
+                                    href={item.href}
+                                    onClick={() => {
+                                      setActiveMegaMenu(null)
+                                      setIsMobileMenuOpen(false)
+                                    }}
+                                    className="w-full text-left rtl:text-right group/item block"
                                   >
-                                    <div className="flex items-center gap-3 rtl:flex-row-reverse px-4 py-3 rounded-xl bg-surface-alt border border-border-subtle hover:bg-orange/5 hover:border-orange/30 transition-all duration-200">
+                                    <motion.div
+                                      className="flex items-center gap-3 rtl:flex-row-reverse px-4 py-3 rounded-xl bg-surface-alt border border-border-subtle hover:bg-orange/5 hover:border-orange/30 transition-all duration-200"
+                                      whileHover={{ y: -1 }}
+                                      transition={{ duration: 0.2 }}
+                                    >
                                       {/* Visual Marker */}
                                       <div className="flex-shrink-0 w-2 h-2 rounded-full bg-orange opacity-60 group-hover/item:opacity-100 group-hover/item:scale-125 transition-all" />
                                       
@@ -350,8 +375,34 @@ export default function Header() {
                                       <span className="text-body-sm font-medium text-text-primary group-hover/item:text-orange transition-colors">
                                         {item.text}
                                       </span>
-                                    </div>
-                                  </motion.button>
+                                    </motion.div>
+                                  </Link>
+                                ))}
+                                {/* Service Detail Pages */}
+                                {megaMenuContent['Services'].servicePages.map((page) => (
+                                  <Link
+                                    key={page.href}
+                                    href={page.href}
+                                    onClick={() => {
+                                      setActiveMegaMenu(null)
+                                      setIsMobileMenuOpen(false)
+                                    }}
+                                    className="w-full text-left rtl:text-right group/item block"
+                                  >
+                                    <motion.div
+                                      className="flex items-center gap-3 rtl:flex-row-reverse px-4 py-3 rounded-xl bg-surface-alt border border-border-subtle hover:bg-orange/5 hover:border-orange/30 transition-all duration-200"
+                                      whileHover={{ y: -1 }}
+                                      transition={{ duration: 0.2 }}
+                                    >
+                                      {/* Visual Marker */}
+                                      <div className="flex-shrink-0 w-2 h-2 rounded-full bg-orange opacity-60 group-hover/item:opacity-100 group-hover/item:scale-125 transition-all" />
+                                      
+                                      {/* Text */}
+                                      <span className="text-body-sm font-medium text-text-primary group-hover/item:text-orange transition-colors">
+                                        {page.text}
+                                      </span>
+                                    </motion.div>
+                                  </Link>
                                 ))}
                               </div>
                             </div>
@@ -406,12 +457,12 @@ export default function Header() {
                             </p>
                             <div className="space-y-2">
                               {column.items.map((item) => (
-                                <button
+                                <Link
                                   key={item.text}
+                                  href={item.href}
                                   onClick={() => {
                                     setIsMobileMenuOpen(false)
                                     setMobileServicesOpen(false)
-                                    handleMegaMenuItemClick(item.href)
                                   }}
                                   className="w-full text-left rtl:text-right flex items-center gap-3 rtl:flex-row-reverse px-4 py-2.5 rounded-lg bg-surface-alt border border-border-subtle hover:bg-orange/5 hover:border-orange/30 transition-all"
                                 >
@@ -419,7 +470,24 @@ export default function Header() {
                                   <span className="text-body-sm font-medium text-text-primary">
                                     {item.text}
                                   </span>
-                                </button>
+                                </Link>
+                              ))}
+                              {/* Service Detail Pages */}
+                              {megaMenuContent['Services'].servicePages.map((page) => (
+                                <Link
+                                  key={page.href}
+                                  href={page.href}
+                                  onClick={() => {
+                                    setIsMobileMenuOpen(false)
+                                    setMobileServicesOpen(false)
+                                  }}
+                                  className="w-full text-left rtl:text-right flex items-center gap-3 rtl:flex-row-reverse px-4 py-2.5 rounded-lg bg-surface-alt border border-border-subtle hover:bg-orange/5 hover:border-orange/30 transition-all"
+                                >
+                                  <div className="flex-shrink-0 w-2 h-2 rounded-full bg-orange opacity-60" />
+                                  <span className="text-body-sm font-medium text-text-primary">
+                                    {page.text}
+                                  </span>
+                                </Link>
                               ))}
                             </div>
                           </div>
@@ -428,32 +496,13 @@ export default function Header() {
                     )}
                   </div>
                 ) : (
-                  <a
+                  <Link
                     href={item.href}
                     className="block text-body text-text-secondary hover:text-text-primary transition-colors"
-                    onClick={(e) => {
-                      // Handle internal links with hash
-                      if (item.href.startsWith('#')) {
-                        e.preventDefault()
-                        setIsMobileMenuOpen(false)
-                        const element = document.querySelector(item.href)
-                        if (element) {
-                          const headerHeight = 80
-                          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
-                          const offsetPosition = elementPosition - headerHeight
-                          window.scrollTo({
-                            top: offsetPosition,
-                            behavior: 'smooth',
-                          })
-                        }
-                      } else {
-                        // External links (like /#portfolio) will navigate normally
-                        setIsMobileMenuOpen(false)
-                      }
-                    }}
+                    onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 )}
               </div>
             ))}
@@ -463,8 +512,8 @@ export default function Header() {
                 <ThemeToggle />
               </div>
               <div onClick={() => setIsMobileMenuOpen(false)}>
-                <Button href="#contact" variant="primary" className="w-full" icon={false}>
-                  {t.startProject.ctaPrimary}
+                <Button href={getRoute('/start-project')} variant="primary" className="w-full" icon={false}>
+                  {language === 'fa' ? 'شروع پروژه' : 'Request a Project'}
                 </Button>
               </div>
             </div>

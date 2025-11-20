@@ -3,23 +3,19 @@ import Link from 'next/link'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
-export async function generateMetadata(): Promise<Metadata> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'
-  
-  return {
-    title: 'Terms of Service',
-    description: 'Terms of Service for Ario Studio',
-    alternates: {
-      canonical: `${baseUrl}/terms`,
-      languages: {
-        'fa-IR': `${baseUrl}/terms`,
-        'en-US': `${baseUrl}/en/terms`,
-      },
+export const metadata: Metadata = {
+  title: 'Terms of Service | Ario Studio',
+  description: 'Terms of Service for Ario Studio',
+  alternates: {
+    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'}/en/terms`,
+    languages: {
+      'fa-IR': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'}/terms`,
+      'en-US': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'}/en/terms`,
     },
-  }
+  },
 }
 
-export default function TermsPage() {
+export default function TermsPageEN() {
   return (
     <main className="relative min-h-screen bg-base">
       <Header />
@@ -87,8 +83,8 @@ export default function TermsPage() {
             <h2 className="text-h3 font-semibold text-text-primary mb-3">Contact</h2>
             <p>
               For questions about these Terms of Service, please contact us at:{' '}
-              <a href="mailto:hello@ariostudio.com" className="text-orange hover:underline">
-                hello@ariostudio.com
+              <a href="mailto:info@ariostudio.net" className="text-orange hover:underline">
+                info@ariostudio.net
               </a>
             </p>
           </section>
@@ -96,7 +92,7 @@ export default function TermsPage() {
 
         <div className="mt-12 pt-8 border-t border-border-subtle">
           <Link
-            href="/"
+            href="/en"
             className="inline-flex items-center text-body text-orange hover:underline"
           >
             ← Back to Home
