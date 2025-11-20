@@ -63,7 +63,7 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
   return (
     <section
       id="process"
-      className={`relative py-20 sm:py-28 lg:py-36 overflow-hidden bg-base ${isRTL ? 'rtl' : ''}`}
+      className={`relative py-16 sm:py-24 lg:py-32 overflow-hidden bg-base ${isRTL ? 'rtl' : ''}`}
     >
       {/* Animated gradient background line behind cards */}
       <div className="absolute inset-0 pointer-events-none">

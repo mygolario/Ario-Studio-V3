@@ -160,11 +160,11 @@ export default function About({ highlights: dbHighlights = [] }: AboutProps) {
                   transition={{ duration: 0.5, ease: 'easeOut', delay: 0.3 + index * 0.1 }}
                   whileHover={{
                     y: -4,
-                    transition: { duration: 0.2 },
+                    transition: { duration: 0.3 },
                   }}
                   className="group h-full"
                 >
-                  <div className="bg-surface border border-gray-100 rounded-xl p-6 h-full flex flex-col shadow-sm hover:shadow-md transition-all duration-300">
+                  <div className="bg-surface border border-border-subtle rounded-xl p-6 h-full flex flex-col shadow-sm hover:shadow-md hover:border-orange/50 hover:-translate-y-1 transition-all duration-300">
                     <h3 className={`text-h5 font-semibold text-text-primary mb-3 ${isRTL ? 'text-right' : 'text-left'}`}>
                       {value.title}
                     </h3>
