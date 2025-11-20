@@ -199,7 +199,7 @@ export default function Header() {
                   <div
                     key={item.href}
                     className="relative"
-                    onMouseEnter={() => item.hasMegaMenu && handleMouseEnter('Services')}
+                    onMouseEnter={() => item.hasMegaMenu && handleMouseEnter()}
                   >
                     {item.hasMegaMenu ? (
                       <motion.button
