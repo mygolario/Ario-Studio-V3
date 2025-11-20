@@ -53,19 +53,18 @@ export default async function PortfolioPage() {
       <Header />
       <div className="container-custom py-32">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 rtl">
             <h1 className="text-h1 font-semibold text-text-primary mb-4">
-              {lang === 'fa' ? 'نمونه‌کارها' : 'Portfolio'}
+              نمونه‌کارها
             </h1>
             <p className="text-body-lg text-text-secondary max-w-2xl mx-auto mb-4">
-              {lang === 'fa' 
-                ? 'نمونه‌کارها و کیس استادی‌های آریو استودیو'
-                : 'Ario Studio portfolio and case studies'}
+              نمونه‌کارها و کیس استادی‌های آریو استودیو
             </p>
-            <p className="text-body-sm text-text-muted italic">
-              {lang === 'fa' 
-                ? 'نمونه‌کارها و کیس استادی‌های آریو استودیو به زودی در این بخش منتشر می‌شوند.'
-                : 'Our case studies and portfolio pieces will be published here soon.'}
+            <p className="text-body text-text-secondary max-w-2xl mx-auto mb-6">
+              نمونه‌کارها و کیس استادی‌های آریو استودیو به‌زودی در این بخش منتشر می‌شوند. در حال حاضر تمرکز ما روی ساخت اولین پروژه‌های زنده برای مشتریان است.
+            </p>
+            <p className="text-body-sm text-text-muted">
+              می‌توانید از طریق صفحه «شروع پروژه» با ما تماس بگیرید.
             </p>
           </div>
 

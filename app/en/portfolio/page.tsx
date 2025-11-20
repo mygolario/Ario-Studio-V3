@@ -55,8 +55,11 @@ export default async function PortfolioPageEN() {
             <p className="text-body-lg text-text-secondary max-w-2xl mx-auto mb-4">
               Ario Studio portfolio and case studies
             </p>
-            <p className="text-body-sm text-text-muted italic">
-              Our case studies and portfolio pieces will be published here soon.
+            <p className="text-body text-text-secondary max-w-2xl mx-auto mb-6">
+              Our case studies and portfolio pieces will be published here soon. Ario Studio is currently focused on building the first set of live projects.
+            </p>
+            <p className="text-body-sm text-text-muted">
+              You can still contact us via the &quot;Start a Project&quot; page.
             </p>
           </div>
 
