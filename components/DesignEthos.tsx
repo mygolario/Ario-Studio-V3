@@ -70,7 +70,7 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
         <motion.div
           className="absolute top-1/2 left-0 right-0 h-px opacity-20"
           style={{
-            background: 'linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.5) 20%, rgba(139, 92, 246, 0.5) 50%, rgba(59, 130, 246, 0.5) 80%, transparent 100%)',
+            background: 'linear-gradient(90deg, transparent 0%, rgba(247, 105, 58, 0.6) 20%, rgba(248, 116, 73, 0.6) 50%, rgba(247, 105, 58, 0.6) 80%, transparent 100%)',
             transform: 'translateY(-50%)',
           }}
           animate={{
@@ -97,7 +97,10 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
             <h2 className="text-h1 font-semibold text-text-primary mb-4">
               {sectionHeader.title}
             </h2>
-            <p className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
+            <p 
+              className="text-center max-w-3xl mx-auto mt-4 font-medium"
+              style={{ color: '#F87449' }}
+            >
               {sectionHeader.subtitle}
             </p>
           </motion.div>
@@ -130,8 +133,8 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
                   {/* Neon glow border on hover */}
                   <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                     style={{
-                      background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%)',
-                      boxShadow: '0 0 20px rgba(59, 130, 246, 0.2), 0 0 40px rgba(139, 92, 246, 0.15)',
+                      background: 'linear-gradient(135deg, rgba(247, 105, 58, 0.3) 0%, rgba(248, 116, 73, 0.3) 100%)',
+                      boxShadow: '0 0 20px rgba(248, 116, 73, 0.2), 0 0 40px rgba(247, 105, 58, 0.15)',
                     }}
                   />
 
@@ -143,7 +146,7 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
                         className="text-4xl font-black tracking-wider"
                         style={{
                           background: isRTL 
-                            ? 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)'
+                            ? 'linear-gradient(135deg, #F7693A 0%, #F87449 100%)'
                             : 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)',
                           WebkitBackgroundClip: 'text',
                           WebkitTextFillColor: 'transparent',
@@ -169,7 +172,7 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
                   {/* Depth shadow */}
                   <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                     style={{
-                      boxShadow: '0 20px 60px -15px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(59, 130, 246, 0.1)',
+                      boxShadow: '0 20px 60px -15px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(248, 116, 73, 0.1)',
                     }}
                   />
                 </div>
@@ -204,8 +207,8 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
                   {/* Neon glow border on hover */}
                   <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                     style={{
-                      background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(139, 92, 246, 0.25) 100%)',
-                      boxShadow: '0 0 15px rgba(59, 130, 246, 0.15), 0 0 30px rgba(139, 92, 246, 0.1)',
+                      background: 'linear-gradient(135deg, rgba(247, 105, 58, 0.25) 0%, rgba(248, 116, 73, 0.25) 100%)',
+                      boxShadow: '0 0 15px rgba(248, 116, 73, 0.15), 0 0 30px rgba(247, 105, 58, 0.1)',
                     }}
                   />
 
@@ -214,7 +217,9 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
                       <span 
                         className="text-3xl font-black tracking-wider"
                         style={{
-                          background: 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)',
+                          background: isRTL 
+                            ? 'linear-gradient(135deg, #F7693A 0%, #F87449 100%)'
+                            : 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)',
                           WebkitBackgroundClip: 'text',
                           WebkitTextFillColor: 'transparent',
                           backgroundClip: 'text',
@@ -262,8 +267,8 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
                   {/* Neon glow border on hover */}
                   <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
                     style={{
-                      background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%)',
-                      boxShadow: '0 0 10px rgba(59, 130, 246, 0.1)',
+                      background: 'linear-gradient(135deg, rgba(247, 105, 58, 0.2) 0%, rgba(248, 116, 73, 0.2) 100%)',
+                      boxShadow: '0 0 10px rgba(248, 116, 73, 0.1)',
                     }}
                   />
 
@@ -272,7 +277,9 @@ export default function DesignEthos({ processSteps: dbSteps = [] }: DesignEthosP
                       <span 
                         className="text-3xl font-black tracking-wider"
                         style={{
-                          background: 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)',
+                          background: isRTL 
+                            ? 'linear-gradient(135deg, #F7693A 0%, #F87449 100%)'
+                            : 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)',
                           WebkitBackgroundClip: 'text',
                           WebkitTextFillColor: 'transparent',
                           backgroundClip: 'text',
