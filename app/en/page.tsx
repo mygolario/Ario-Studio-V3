@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Header from '@/components/Header'
 import Hero from '@/components/Hero'
+import ServicesOverview from '@/components/ServicesOverview'
 import Services from '@/components/Services'
 import Portfolio from '@/components/Portfolio'
 import DesignEthos from '@/components/DesignEthos'
@@ -78,15 +79,17 @@ export default async function HomeEN() {
       <Hero />
       {/* Beta Notice (Farsi only) */}
       <BetaNotice />
-      {/* Scene 2: WHAT WE DO */}
+      {/* Scene 2: SERVICES OVERVIEW */}
+      <ServicesOverview />
+      {/* Scene 3: WHAT WE DO */}
       <Services servicesContent={servicesContent} lang={lang} />
-      {/* Scene 3: OUR WORK */}
+      {/* Scene 4: OUR WORK */}
       <Portfolio portfolioContent={portfolioContent} lang={lang} />
-      {/* Scene 4: OUR PROCESS */}
+      {/* Scene 5: OUR PROCESS */}
       <DesignEthos processSteps={processSteps} />
-      {/* Scene 5: ABOUT ARIO STUDIO */}
+      {/* Scene 6: ABOUT ARIO STUDIO */}
       <About highlights={highlights} />
-      {/* Scene 6: FINAL CTA */}
+      {/* Scene 7: FINAL CTA */}
       <StartProjectSection />
       <Footer />
     </main>

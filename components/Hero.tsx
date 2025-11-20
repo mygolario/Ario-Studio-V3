@@ -217,16 +217,6 @@ export default function Hero() {
               {t.hero.subtitle}
             </p>
 
-            {/* Supporting Line */}
-            <motion.p
-              ref={supportingLineRef}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: 'easeOut', delay: 0.3 }}
-              className="text-body text-text-secondary max-w-xl leading-relaxed"
-            >
-              {t.hero.supportingLine}
-            </motion.p>
 
             {/* Visual Chips - Layer 2 */}
             <div ref={chipsRef} className="flex flex-wrap gap-3 pt-2">
@@ -242,10 +232,10 @@ export default function Hero() {
             </div>
 
             {/* Buttons - Layer 1 (closest) */}
-            <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 pt-4">
+            <div ref={buttonsRef} className="flex flex-col gap-4 pt-4">
               <div data-button>
                 <Button 
-                  href="#portfolio" 
+                  href={t.hero.ctaPrimaryLink || (language === 'fa' ? '/start-project' : '/en/start-project')}
                   variant="primary"
                   onClick={() => {
                     trackEvent('cta_click', {
@@ -258,22 +248,17 @@ export default function Hero() {
                   {t.hero.ctaPrimary}
                 </Button>
               </div>
-              <div data-button>
-                <Button 
-                  href="#contact" 
-                  variant="secondary" 
-                  icon={false}
-                  onClick={() => {
-                    trackEvent('cta_click', {
-                      location: 'hero',
-                      lang: language,
-                      ctaType: 'secondary',
-                    })
-                  }}
+              {/* Services Line */}
+              {t.hero.servicesLine && (
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
+                  className="text-body-sm text-text-muted pt-2"
                 >
-                  {t.hero.ctaSecondary}
-                </Button>
-              </div>
+                  {t.hero.servicesLine}
+                </motion.p>
+              )}
             </div>
           </motion.div>
 
