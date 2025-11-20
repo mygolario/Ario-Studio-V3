@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getRequestLang, getTranslation } from '@/lib/i18n'
+import { getRequestLang } from '@/lib/i18n'
 import { servicesConfig, getServiceBySlug } from '@/config/services'
 import nodemailer from 'nodemailer'
+import type { ProjectRequestPayload } from '@/types/project-request'
 
 /**
  * Validate email address format
@@ -44,6 +45,24 @@ function getFromEmail(): string {
 }
 
 /**
+ * Get budget range label
+ */
+function getBudgetRangeLabel(budgetRange: string, lang: 'fa' | 'en'): string {
+  const labels: Record<string, { fa: string; en: string }> = {
+    'under-1000': { fa: 'زیر ۲۰ میلیون', en: 'Under $1,000' },
+    '1000-2000': { fa: '۲۰ تا ۴۰ میلیون', en: '$1,000 – $2,000' },
+    '2000-4000': { fa: '۴۰ تا ۸۰ میلیون', en: '$2,000 – $4,000' },
+    'above-4000': { fa: 'بیشتر از ۸۰ میلیون', en: 'Above $4,000' },
+    'under-20m': { fa: 'زیر ۲۰ میلیون', en: 'Under $1,000' },
+    '20-40m': { fa: '۲۰ تا ۴۰ میلیون', en: '$1,000 – $2,000' },
+    '40-80m': { fa: '۴۰ تا ۸۰ میلیون', en: '$2,000 – $4,000' },
+    'above-80m': { fa: 'بیشتر از ۸۰ میلیون', en: 'Above $4,000' },
+  }
+
+  return labels[budgetRange]?.[lang] || budgetRange
+}
+
+/**
  * Start Project / Request a Project API route
  * 
  * Handles form submissions from /start-project and /en/start-project pages.
@@ -51,11 +70,11 @@ function getFromEmail(): string {
  */
 export async function POST(req: NextRequest) {
   try {
-    const lang = getRequestLang(req)
-    const t = (key: string) => getTranslation(lang, key)
+    const body = await req.json() as ProjectRequestPayload
+    const { name, email, projectType, projectTypeOther, budgetRange, deadline, message, locale, url } = body
 
-    const body = await req.json()
-    const { name, email, projectType, projectTypeOther, budget, deadline, message, url } = body
+    // Use locale from payload, fallback to request detection
+    const lang = locale || getRequestLang(req)
 
     // Validation
     if (!name || name.trim().length === 0) {
@@ -79,6 +98,20 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    if (!budgetRange) {
+      return NextResponse.json(
+        { success: false, message: lang === 'fa' ? 'محدوده بودجه الزامی است' : 'Budget range is required' },
+        { status: 400 }
+      )
+    }
+
+    if (!message || message.trim().length === 0) {
+      return NextResponse.json(
+        { success: false, message: lang === 'fa' ? 'پیام الزامی است' : 'Message is required' },
+        { status: 400 }
+      )
+    }
+
     // Get project type label
     let projectTypeLabel = ''
     if (projectType === 'other') {
@@ -89,6 +122,9 @@ export async function POST(req: NextRequest) {
         ? (lang === 'fa' ? service.title.fa : service.title.en)
         : projectType
     }
+
+    // Get budget range label
+    const budgetRangeLabel = getBudgetRangeLabel(budgetRange, lang)
 
     // Prepare email content
     const transporter = getBrevoTransporter()
@@ -111,22 +147,22 @@ export async function POST(req: NextRequest) {
         const emailHTML = generateAdminEmailHTML({
           name: name.trim(),
           email: email.trim(),
+          locale: lang,
           projectType: projectTypeLabel,
-          budget: budget?.trim() || (lang === 'fa' ? 'مشخص نشده' : 'Not specified'),
+          budgetRange: budgetRangeLabel,
           deadline: deadline?.trim() || (lang === 'fa' ? 'مشخص نشده' : 'Not specified'),
-          message: message?.trim() || (lang === 'fa' ? 'پیامی ارسال نشده' : 'No message'),
-          lang,
+          message: message.trim(),
           url: url || '',
         })
 
         const emailText = generateAdminEmailText({
           name: name.trim(),
           email: email.trim(),
+          locale: lang,
           projectType: projectTypeLabel,
-          budget: budget?.trim() || (lang === 'fa' ? 'مشخص نشده' : 'Not specified'),
+          budgetRange: budgetRangeLabel,
           deadline: deadline?.trim() || (lang === 'fa' ? 'مشخص نشده' : 'Not specified'),
-          message: message?.trim() || (lang === 'fa' ? 'پیامی ارسال نشده' : 'No message'),
-          lang,
+          message: message.trim(),
           url: url || '',
         })
 
@@ -153,12 +189,12 @@ export async function POST(req: NextRequest) {
       console.log('Email not configured. Form submission data:', {
         name: name.trim(),
         email: email.trim(),
+        locale: lang,
         projectType: projectTypeLabel,
-        budget: budget?.trim(),
+        budgetRange: budgetRangeLabel,
         deadline: deadline?.trim(),
-        message: message?.trim(),
-        lang,
-        url,
+        message: message.trim(),
+        url: url || '',
       })
     }
 
@@ -166,8 +202,8 @@ export async function POST(req: NextRequest) {
     if (transporter && fromEmail) {
       try {
         const subject = lang === 'fa'
-          ? 'درخواست پروژه شما دریافت شد — آریو استودیو'
-          : 'We received your project request — Ario Studio'
+          ? 'دریافت درخواست پروژه شما – آریو استودیو'
+          : 'We received your project request – Ario Studio'
 
         const emailHTML = generateUserConfirmationHTML(name.trim(), lang)
         const emailText = generateUserConfirmationText(name.trim(), lang)
@@ -214,25 +250,25 @@ export async function POST(req: NextRequest) {
 function generateAdminEmailHTML(data: {
   name: string
   email: string
+  locale: string
   projectType: string
-  budget: string
+  budgetRange: string
   deadline: string
   message: string
-  lang: string
   url: string
 }): string {
-  const isRTL = data.lang === 'fa'
+  const isRTL = data.locale === 'fa'
   const fontFamily = isRTL ? 'Vazirmatn, sans-serif' : 'Inter, sans-serif'
   const textAlign = isRTL ? 'right' : 'left'
   const dir = isRTL ? 'rtl' : 'ltr'
 
   return `
 <!DOCTYPE html>
-<html dir="${dir}" lang="${data.lang}">
+<html dir="${dir}" lang="${data.locale}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${data.lang === 'fa' ? 'درخواست پروژه جدید' : 'New Project Request'}</title>
+  <title>${data.locale === 'fa' ? 'درخواست پروژه جدید' : 'New Project Request'}</title>
 </head>
 <body style="margin: 0; padding: 0; font-family: ${fontFamily}; background-color: #0a0a0a; color: #e5e5e5;">
   <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #0a0a0a;">
@@ -241,21 +277,21 @@ function generateAdminEmailHTML(data: {
         Ario Studio
       </h1>
       <p style="margin: 8px 0 0 0; font-size: 14px; color: #a0a0a0; text-transform: uppercase; letter-spacing: 1px;">
-        ${data.lang === 'fa' ? 'درخواست پروژه جدید' : 'New Project Request'}
+        ${data.locale === 'fa' ? 'درخواست پروژه جدید' : 'New Project Request'}
       </p>
     </div>
 
     <div style="background-color: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; padding: 32px; margin-bottom: 24px;">
       <div style="margin-bottom: 24px;">
         <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #ff6b35; text-transform: uppercase; letter-spacing: 0.5px; text-align: ${textAlign};">
-          ${data.lang === 'fa' ? 'اطلاعات تماس' : 'Contact Information'}
+          ${data.locale === 'fa' ? 'اطلاعات تماس' : 'Contact Information'}
         </h3>
         <div style="background-color: #0f0f0f; border-radius: 8px; padding: 16px;">
           <p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};">
-            <strong style="color: #ffffff;">${data.lang === 'fa' ? 'نام:' : 'Name:'}</strong> ${data.name}
+            <strong style="color: #ffffff;">${data.locale === 'fa' ? 'نام:' : 'Name:'}</strong> ${data.name}
           </p>
           <p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};">
-            <strong style="color: #ffffff;">${data.lang === 'fa' ? 'ایمیل:' : 'Email:'}</strong> 
+            <strong style="color: #ffffff;">${data.locale === 'fa' ? 'ایمیل:' : 'Email:'}</strong> 
             <a href="mailto:${data.email}" style="color: #ff6b35; text-decoration: none;">${data.email}</a>
           </p>
         </div>
@@ -263,36 +299,37 @@ function generateAdminEmailHTML(data: {
 
       <div style="margin-bottom: 24px;">
         <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #ff6b35; text-transform: uppercase; letter-spacing: 0.5px; text-align: ${textAlign};">
-          ${data.lang === 'fa' ? 'جزئیات پروژه' : 'Project Details'}
+          ${data.locale === 'fa' ? 'جزئیات پروژه' : 'Project Details'}
         </h3>
         <div style="background-color: #0f0f0f; border-radius: 8px; padding: 16px;">
           <p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};">
-            <strong style="color: #ffffff;">${data.lang === 'fa' ? 'نوع پروژه:' : 'Project Type:'}</strong> ${data.projectType}
+            <strong style="color: #ffffff;">${data.locale === 'fa' ? 'زبان:' : 'Locale:'}</strong> ${data.locale === 'fa' ? 'فارسی' : 'English'}
           </p>
           <p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};">
-            <strong style="color: #ffffff;">${data.lang === 'fa' ? 'بودجه:' : 'Budget:'}</strong> ${data.budget}
+            <strong style="color: #ffffff;">${data.locale === 'fa' ? 'نوع پروژه:' : 'Project Type:'}</strong> ${data.projectType}
           </p>
           <p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};">
-            <strong style="color: #ffffff;">${data.lang === 'fa' ? 'ددلاین:' : 'Deadline:'}</strong> ${data.deadline}
+            <strong style="color: #ffffff;">${data.locale === 'fa' ? 'بودجه:' : 'Budget Range:'}</strong> ${data.budgetRange}
+          </p>
+          <p style="margin: 8px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign};">
+            <strong style="color: #ffffff;">${data.locale === 'fa' ? 'ددلاین:' : 'Deadline:'}</strong> ${data.deadline}
           </p>
         </div>
       </div>
 
-      ${data.message ? `
       <div style="margin-bottom: 24px;">
         <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #ff6b35; text-transform: uppercase; letter-spacing: 0.5px; text-align: ${textAlign};">
-          ${data.lang === 'fa' ? 'پیام' : 'Message'}
+          ${data.locale === 'fa' ? 'پیام' : 'Message'}
         </h3>
         <div style="background-color: #0f0f0f; border-radius: 8px; padding: 16px;">
           <p style="margin: 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign}; white-space: pre-wrap;">${data.message}</p>
         </div>
       </div>
-      ` : ''}
 
       <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #2a2a2a; font-size: 12px; color: #808080; text-align: ${textAlign};">
-        <p style="margin: 4px 0;"><strong>${data.lang === 'fa' ? 'زبان:' : 'Language:'}</strong> ${data.lang === 'fa' ? 'فارسی' : 'English'}</p>
-        <p style="margin: 4px 0;"><strong>${data.lang === 'fa' ? 'URL:' : 'URL:'}</strong> ${data.url || 'N/A'}</p>
-        <p style="margin: 4px 0;"><strong>${data.lang === 'fa' ? 'زمان:' : 'Time:'}</strong> ${new Date().toLocaleString(data.lang === 'fa' ? 'fa-IR' : 'en-US')}</p>
+        <p style="margin: 4px 0;"><strong>${data.locale === 'fa' ? 'زبان:' : 'Language:'}</strong> ${data.locale === 'fa' ? 'فارسی' : 'English'}</p>
+        <p style="margin: 4px 0;"><strong>${data.locale === 'fa' ? 'URL:' : 'URL:'}</strong> ${data.url || 'N/A'}</p>
+        <p style="margin: 4px 0;"><strong>${data.locale === 'fa' ? 'زمان:' : 'Time:'}</strong> ${new Date().toLocaleString(data.locale === 'fa' ? 'fa-IR' : 'en-US')}</p>
       </div>
     </div>
   </div>
@@ -307,50 +344,63 @@ function generateAdminEmailHTML(data: {
 function generateAdminEmailText(data: {
   name: string
   email: string
+  locale: string
   projectType: string
-  budget: string
+  budgetRange: string
   deadline: string
   message: string
-  lang: string
   url: string
 }): string {
   return `
-${data.lang === 'fa' ? 'درخواست پروژه جدید' : 'New Project Request'}
+${data.locale === 'fa' ? 'درخواست پروژه جدید' : 'New Project Request'}
 ${'='.repeat(50)}
 
-${data.lang === 'fa' ? 'اطلاعات تماس' : 'Contact Information'}:
-${data.lang === 'fa' ? 'نام:' : 'Name:'} ${data.name}
-${data.lang === 'fa' ? 'ایمیل:' : 'Email:'} ${data.email}
+${data.locale === 'fa' ? 'اطلاعات تماس' : 'Contact Information'}:
+${data.locale === 'fa' ? 'نام:' : 'Name:'} ${data.name}
+${data.locale === 'fa' ? 'ایمیل:' : 'Email:'} ${data.email}
 
-${data.lang === 'fa' ? 'جزئیات پروژه' : 'Project Details'}:
-${data.lang === 'fa' ? 'نوع پروژه:' : 'Project Type:'} ${data.projectType}
-${data.lang === 'fa' ? 'بودجه:' : 'Budget:'} ${data.budget}
-${data.lang === 'fa' ? 'ددلاین:' : 'Deadline:'} ${data.deadline}
+${data.locale === 'fa' ? 'جزئیات پروژه' : 'Project Details'}:
+${data.locale === 'fa' ? 'زبان:' : 'Locale:'} ${data.locale === 'fa' ? 'فارسی' : 'English'}
+${data.locale === 'fa' ? 'نوع پروژه:' : 'Project Type:'} ${data.projectType}
+${data.locale === 'fa' ? 'بودجه:' : 'Budget Range:'} ${data.budgetRange}
+${data.locale === 'fa' ? 'ددلاین:' : 'Deadline:'} ${data.deadline}
 
-${data.message ? `${data.lang === 'fa' ? 'پیام:' : 'Message:'}\n${data.message}\n` : ''}
+${data.locale === 'fa' ? 'پیام:' : 'Message:'}
+${data.message}
 
-${data.lang === 'fa' ? 'زبان:' : 'Language:'} ${data.lang === 'fa' ? 'فارسی' : 'English'}
-${data.lang === 'fa' ? 'URL:' : 'URL:'} ${data.url || 'N/A'}
-${data.lang === 'fa' ? 'زمان:' : 'Time:'} ${new Date().toLocaleString(data.lang === 'fa' ? 'fa-IR' : 'en-US')}
+${data.locale === 'fa' ? 'زبان:' : 'Language:'} ${data.locale === 'fa' ? 'فارسی' : 'English'}
+${data.locale === 'fa' ? 'URL:' : 'URL:'} ${data.url || 'N/A'}
+${data.locale === 'fa' ? 'زمان:' : 'Time:'} ${new Date().toLocaleString(data.locale === 'fa' ? 'fa-IR' : 'en-US')}
   `.trim()
 }
 
 /**
  * Generate HTML confirmation email for user
  */
-function generateUserConfirmationHTML(name: string, lang: string): string {
-  const isRTL = lang === 'fa'
+function generateUserConfirmationHTML(name: string, locale: 'fa' | 'en'): string {
+  const isRTL = locale === 'fa'
   const fontFamily = isRTL ? 'Vazirmatn, sans-serif' : 'Inter, sans-serif'
   const textAlign = isRTL ? 'right' : 'left'
   const dir = isRTL ? 'rtl' : 'ltr'
 
+  const greeting = locale === 'fa' ? `سلام ${name}،` : `Hi ${name},`
+  const thankYou = locale === 'fa'
+    ? 'ممنون از شما برای ارسال درخواست پروژه. ما درخواست شما را دریافت کردیم و خیلی زود آن را بررسی می‌کنیم و با شما تماس می‌گیریم.'
+    : "Thank you for submitting your project request. We've received your inquiry and will review it and get back to you soon."
+  const replyNote = locale === 'fa'
+    ? 'اگر جزئیات بیشتری لازم است، می‌توانید مستقیماً به این ایمیل پاسخ بدهید و جزئیات بیشتری ارسال کنید.'
+    : "If you need to share additional details, you can reply directly to this email with more information."
+  const closing = locale === 'fa'
+    ? 'با احترام،<br><strong style="color: #ff6b35;">تیم آریو استودیو</strong>'
+    : 'Best regards,<br><strong style="color: #ff6b35;">The Ario Studio Team</strong>'
+
   return `
 <!DOCTYPE html>
-<html dir="${dir}" lang="${lang}">
+<html dir="${dir}" lang="${locale}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${lang === 'fa' ? 'درخواست پروژه شما دریافت شد' : 'We received your project request'}</title>
+  <title>${locale === 'fa' ? 'درخواست پروژه شما دریافت شد' : 'We received your project request'}</title>
 </head>
 <body style="margin: 0; padding: 0; font-family: ${fontFamily}; background-color: #0a0a0a; color: #e5e5e5;">
   <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #0a0a0a;">
@@ -362,17 +412,16 @@ function generateUserConfirmationHTML(name: string, lang: string): string {
 
     <div style="background-color: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; padding: 32px;">
       <p style="margin: 0 0 16px 0; font-size: 16px; color: #e5e5e5; text-align: ${textAlign};">
-        ${lang === 'fa' ? `سلام ${name}،` : `Hi ${name},`}
+        ${greeting}
       </p>
       <p style="margin: 0 0 16px 0; font-size: 14px; color: #e5e5e5; text-align: ${textAlign}; line-height: 1.6;">
-        ${lang === 'fa' 
-          ? 'ممنون از شما برای ارسال درخواست پروژه. ما درخواست شما را دریافت کردیم و خیلی زود با شما تماس خواهیم گرفت.'
-          : 'Thank you for submitting your project request. We\'ve received your inquiry and will get back to you soon.'}
+        ${thankYou}
+      </p>
+      <p style="margin: 16px 0; font-size: 14px; color: #a0a0a0; text-align: ${textAlign}; line-height: 1.6;">
+        ${replyNote}
       </p>
       <p style="margin: 16px 0 0 0; font-size: 14px; color: #a0a0a0; text-align: ${textAlign};">
-        ${lang === 'fa' 
-          ? 'با احترام،<br><strong style="color: #ff6b35;">تیم آریو استودیو</strong>'
-          : 'Best regards,<br><strong style="color: #ff6b35;">The Ario Studio Team</strong>'}
+        ${closing}
       </p>
     </div>
   </div>
@@ -384,17 +433,25 @@ function generateUserConfirmationHTML(name: string, lang: string): string {
 /**
  * Generate plain text confirmation email for user
  */
-function generateUserConfirmationText(name: string, lang: string): string {
+function generateUserConfirmationText(name: string, locale: 'fa' | 'en'): string {
+  const greeting = locale === 'fa' ? `سلام ${name}،` : `Hi ${name},`
+  const thankYou = locale === 'fa'
+    ? 'ممنون از شما برای ارسال درخواست پروژه. ما درخواست شما را دریافت کردیم و خیلی زود آن را بررسی می‌کنیم و با شما تماس می‌گیریم.'
+    : "Thank you for submitting your project request. We've received your inquiry and will review it and get back to you soon."
+  const replyNote = locale === 'fa'
+    ? 'اگر جزئیات بیشتری لازم است، می‌توانید مستقیماً به این ایمیل پاسخ بدهید و جزئیات بیشتری ارسال کنید.'
+    : "If you need to share additional details, you can reply directly to this email with more information."
+  const closing = locale === 'fa'
+    ? 'با احترام،\nتیم آریو استودیو'
+    : 'Best regards,\nThe Ario Studio Team'
+
   return `
-${lang === 'fa' ? `سلام ${name}،` : `Hi ${name},`}
+${greeting}
 
-${lang === 'fa' 
-  ? 'ممنون از شما برای ارسال درخواست پروژه. ما درخواست شما را دریافت کردیم و خیلی زود با شما تماس خواهیم گرفت.'
-  : 'Thank you for submitting your project request. We\'ve received your inquiry and will get back to you soon.'}
+${thankYou}
 
-${lang === 'fa' 
-  ? 'با احترام،\nتیم آریو استودیو'
-  : 'Best regards,\nThe Ario Studio Team'}
+${replyNote}
+
+${closing}
   `.trim()
 }
-

@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import StartProjectForm from '@/components/StartProjectForm'
+import MultiStepProjectForm from '@/components/MultiStepProjectForm'
 import { generateSEOMetadata } from '@/lib/seo'
 
 export const revalidate = 3600
@@ -14,6 +13,7 @@ export const revalidate = 3600
  * - EN route: /en/start-project
  * - Route path determines language, not user preference cookie
  * - This is the main CTA target
+ * - Fullscreen modal-style experience
  */
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'
@@ -29,26 +29,14 @@ export default async function StartProjectPage() {
   const lang = 'fa'
 
   return (
-    <main className="relative min-h-screen bg-base">
-      <Header />
-      <div className="container-custom py-32">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16 rtl">
-            <h1 className="text-h1 font-semibold text-text-primary mb-4">
-              شروع یک پروژه
-            </h1>
-            <p className="text-body-lg text-text-secondary max-w-2xl mx-auto">
-              بیایید تجربه دیجیتالی بعدی شما را بسازیم
-            </p>
-          </div>
-
-          <div className="bg-surface border border-border-subtle rounded-xl p-8">
-            <StartProjectForm lang={lang} />
-          </div>
-        </div>
+    <main className="relative min-h-screen bg-base flex items-center justify-center p-4">
+      {/* Fullscreen backdrop - no header/footer in modal style */}
+      <div className="fixed inset-0 bg-base" />
+      
+      {/* Modal Card */}
+      <div className="relative z-10 w-full max-w-[720px] bg-surface border border-border-subtle rounded-2xl shadow-2xl p-8 md:p-12">
+        <MultiStepProjectForm lang={lang} />
       </div>
-      <Footer />
     </main>
   )
 }
-

@@ -44,8 +44,8 @@ export default function FAQAccordion({ items, lang }: FAQAccordionProps) {
               <ChevronDown
                 size={20}
                 className={`text-text-secondary flex-shrink-0 transition-transform ${
-                  isOpen ? 'rotate-180' : ''
-                } ${isRTL ? 'rtl:rotate-180' : ''}`}
+                  isOpen ? 'rotate-180 rtl:rotate-180' : ''
+                }`}
               />
             </button>
             <AnimatePresence>
