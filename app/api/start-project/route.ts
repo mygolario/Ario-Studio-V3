@@ -49,14 +49,20 @@ function getFromEmail(): string {
  */
 function getBudgetRangeLabel(budgetRange: string, lang: 'fa' | 'en'): string {
   const labels: Record<string, { fa: string; en: string }> = {
+    // FA ranges
+    'under-20m': { fa: 'زیر ۲۰ میلیون', en: 'Under $2,000' },
+    '20-40m': { fa: '۲۰ تا ۴۰ میلیون', en: '$2,000–$4,000' },
+    '40-80m': { fa: '۴۰ تا ۸۰ میلیون', en: '$4,000–$8,000' },
+    'above-80m': { fa: 'بیش از ۸۰ میلیون', en: 'Above $8,000' },
+    // EN ranges
+    'under-2000': { fa: 'زیر ۲۰ میلیون', en: 'Under $2,000' },
+    '2000-4000': { fa: '۲۰ تا ۴۰ میلیون', en: '$2,000–$4,000' },
+    '4000-8000': { fa: '۴۰ تا ۸۰ میلیون', en: '$4,000–$8,000' },
+    'above-8000': { fa: 'بیش از ۸۰ میلیون', en: 'Above $8,000' },
+    // Legacy support (keep for backward compatibility)
     'under-1000': { fa: 'زیر ۲۰ میلیون', en: 'Under $1,000' },
     '1000-2000': { fa: '۲۰ تا ۴۰ میلیون', en: '$1,000 – $2,000' },
-    '2000-4000': { fa: '۴۰ تا ۸۰ میلیون', en: '$2,000 – $4,000' },
     'above-4000': { fa: 'بیشتر از ۸۰ میلیون', en: 'Above $4,000' },
-    'under-20m': { fa: 'زیر ۲۰ میلیون', en: 'Under $1,000' },
-    '20-40m': { fa: '۲۰ تا ۴۰ میلیون', en: '$1,000 – $2,000' },
-    '40-80m': { fa: '۴۰ تا ۸۰ میلیون', en: '$2,000 – $4,000' },
-    'above-80m': { fa: 'بیشتر از ۸۰ میلیون', en: 'Above $4,000' },
   }
 
   return labels[budgetRange]?.[lang] || budgetRange
