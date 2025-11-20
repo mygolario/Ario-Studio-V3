@@ -18,7 +18,7 @@ export const processSteps: ProcessStep[] = [
       en: 'Discovery',
     },
     description: {
-      fa: 'فهم دقیق هدف، بازار و نیازهای پروژه.',
+      fa: 'درک دقیق هدف، بازار و نیازهای پروژه.',
       en: 'Understanding goals, audience, and project scope.',
     },
   },

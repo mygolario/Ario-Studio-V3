@@ -8,12 +8,13 @@ import type { ProcessStep, Highlight } from '@prisma/client'
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'
   
+  // This is a FA route, always return Farsi metadata
   return {
-    title: 'About Ario Studio',
-    description: 'Learn about Ario Studio—cinematic UX, high-performance engineering, and AI-driven innovation.',
+    title: 'درباره استودیو آریو | آریو استودیو',
+    description: 'درباره استودیو آریو — تجربه کاربری سینمایی، مهندسی با عملکرد بالا و نوآوری مبتنی بر هوش مصنوعی.',
     openGraph: {
-      title: 'About Ario Studio',
-      description: 'Cinematic UX, high-performance engineering, and AI-driven innovation.',
+      title: 'درباره استودیو آریو',
+      description: 'تجربه کاربری سینمایی، مهندسی با عملکرد بالا و نوآوری مبتنی بر هوش مصنوعی.',
     },
     alternates: {
       canonical: `${baseUrl}/about`,
