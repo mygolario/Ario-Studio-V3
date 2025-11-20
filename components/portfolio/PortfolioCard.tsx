@@ -2,14 +2,13 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { type LocalizedContent } from '@/lib/content/types'
-import { mapCategoryToLabel } from '@/lib/content/mapLocalizedContent'
+import { type PortfolioSample } from '@/content/portfolioSamples'
 import { type SupportedLang } from '@/lib/i18n'
 import { trackEvent } from '@/lib/analytics/trackEvent'
 
 interface PortfolioCardProps {
   lang: SupportedLang
-  item: LocalizedContent
+  item: PortfolioSample
 }
 
 /**
@@ -21,40 +20,26 @@ interface PortfolioCardProps {
 export default function PortfolioCard({ lang, item }: PortfolioCardProps) {
   const isRTL = lang === 'fa'
   
-  // Determine status from tags
-  let status: 'Live' | 'In development' | 'Concept' | 'Internal project' = 'In development'
+  // Localized content
+  const title = item.title[lang]
+  const description = item.description[lang]
+  const tags = item.tags[lang]
   
-  if (item.tags && item.tags.length > 0) {
-    const statusTag = item.tags.find(tag => 
-      tag.toLowerCase().includes('live') || 
-      tag.toLowerCase().includes('فعال') ||
-      tag.toLowerCase().includes('concept') ||
-      tag.toLowerCase().includes('کانسپت')
-    )
-    if (statusTag) {
-      if (statusTag.toLowerCase().includes('live') || statusTag.includes('فعال')) {
-        status = 'Live'
-      } else if (statusTag.toLowerCase().includes('concept') || statusTag.includes('کانسپت')) {
-        status = 'Concept'
+  const uiTexts = lang === 'fa' 
+    ? {
+        label: 'نمونه نمایشی',
+        cta: 'مشاهده جزئیات',
       }
-    }
-  }
-
-  // Status labels (bilingual)
-  const statusLabels: Record<string, { fa: string; en: string }> = {
-    'Live': { fa: 'فعال', en: 'Live' },
-    'In development': { fa: 'در حال توسعه', en: 'In development' },
-    'Concept': { fa: 'کانسپت', en: 'Concept' },
-    'Internal project': { fa: 'پروژه داخلی', en: 'Internal project' },
-  }
-
-  const statusLabel = statusLabels[status]?.[lang] || status
+    : {
+        label: 'Sample project',
+        cta: 'View details',
+      }
 
   const handleClick = () => {
     trackEvent('portfolio_card_click', {
       lang,
       slug: item.slug,
-      category: item.category ?? '',
+      category: 'sample',
     })
   }
 
@@ -62,97 +47,62 @@ export default function PortfolioCard({ lang, item }: PortfolioCardProps) {
     <Link
       href={`/${lang}/work/${item.slug}`}
       onClick={handleClick}
-      className="group bg-surface rounded-xl overflow-hidden border border-border-subtle hover:shadow-card-hover hover:-translate-y-2 hover:border-orange/50 transition-all duration-300 cursor-pointer block relative"
+      className="group flex bg-surface rounded-2xl overflow-hidden border border-border-subtle hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full flex-col"
     >
-      {/* Subtle inner glow on hover */}
-      <div className="absolute inset-0 bg-gradient-to-br from-orange/0 via-orange/0 to-orange/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl z-0" />
-      
-      {/* Subtle light streak effect on hover */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-0">
-        <div 
-          className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-orange/30 to-transparent"
-          style={{
-            transform: 'translateY(-50%)',
-          }}
-        />
-      </div>
-      
-      {/* Image Section */}
-      <div className="relative h-64 bg-surface-alt overflow-hidden rounded-t-xl z-10">
-        {item.featuredImage ? (
-          <Image
-            src={item.featuredImage}
-            alt={item.title}
-            fill
-            className="object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-surface-alt to-elevated group-hover:scale-110 transition-transform duration-500 ease-out" />
-        )}
+      {/* Thumbnail Section */}
+      <div className="relative aspect-[16/10] bg-surface-alt overflow-hidden w-full">
+        {/* Placeholder Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-surface-elevated to-surface-alt group-hover:scale-105 transition-transform duration-500 ease-out" />
         
-        {/* Overlay - appears on hover */}
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-200 flex items-center justify-center">
-          <div className={`opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-center px-6 ${isRTL ? 'text-right' : 'text-left'}`}>
-            <p className="text-pure-white text-body font-medium mb-2">{item.title}</p>
-            {item.excerpt && (
-              <p className="text-pure-white/80 text-body-sm">{item.excerpt}</p>
-            )}
-          </div>
-        </div>
-        
-        {/* Default content - hidden on hover */}
-        <div className="absolute inset-0 flex items-center justify-center group-hover:opacity-0 transition-opacity duration-200">
-          <p className={`text-text-muted text-sm ${isRTL ? 'text-right' : 'text-left'}`}>
-            {lang === 'fa' ? 'مشاهده جزئیات' : 'View case study'}
-          </p>
+        {/* Optional: Overlay Title for placeholder look */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-10 group-hover:opacity-20 transition-opacity duration-300">
+          <span className="text-4xl font-bold text-text-primary">{title.charAt(0)}</span>
         </div>
       </div>
 
       {/* Content Section */}
-      <div className="p-6">
-        <div className={`flex items-start justify-between mb-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
-          <h3 className={`text-h4 font-semibold text-text-primary group-hover:text-orange transition-colors duration-200 ${isRTL ? 'text-right' : 'text-left'}`}>
-            {item.title}
-          </h3>
-          <span className={`text-label text-text-muted bg-surface-alt border border-border-subtle px-2 py-1 rounded text-xs ${isRTL ? 'ml-2 mr-0' : 'mr-2 ml-0'}`}>
-            {statusLabel}
+      <div className={`p-6 flex flex-col flex-grow ${isRTL ? 'text-right' : 'text-left'}`}>
+        {/* Label */}
+        <div className={`mb-3 flex ${isRTL ? 'justify-end' : 'justify-start'}`}>
+          <span className="text-xs font-medium text-orange bg-orange/10 px-2 py-1 rounded-md">
+            {uiTexts.label}
           </span>
         </div>
-        
-        {/* Category Badge */}
-        {item.category && (
-          <div className={`mb-2 ${isRTL ? 'text-right' : 'text-left'}`}>
-            <span className="inline-flex rounded-full px-3 py-1 text-xs uppercase tracking-wide opacity-80 bg-surface-alt border border-border-subtle text-text-secondary">
-              {mapCategoryToLabel(item.category, lang)}
-            </span>
-          </div>
-        )}
-        
-        {(item.excerpt || item.subtitle) && (
-          <p className={`text-body text-text-secondary mb-4 ${isRTL ? 'text-right' : 'text-left'}`}>
-            {item.excerpt || item.subtitle}
-          </p>
-        )}
+
+        {/* Title */}
+        <h3 className="text-h4 font-bold text-text-primary mb-3 group-hover:text-orange transition-colors duration-200">
+          {title}
+        </h3>
+
+        {/* Description */}
+        <p className="text-body text-text-secondary mb-6 line-clamp-2">
+          {description}
+        </p>
 
         {/* Tags */}
-        {item.tags && item.tags.length > 0 && (
-          <div className={`flex flex-wrap gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
-            {item.tags
-              .filter(tag => !tag.toLowerCase().includes('live') && 
-                           !tag.toLowerCase().includes('فعال') &&
-                           !tag.toLowerCase().includes('concept') &&
-                           !tag.toLowerCase().includes('کانسپت'))
-              .map((tag) => (
-                <span
-                  key={tag}
-                  className="text-label text-text-muted bg-surface-alt border border-border-subtle px-3 py-1 rounded-full hover:border-orange hover:text-orange hover:bg-orange/5 transition-all duration-200 cursor-default"
-                >
-                  {tag}
-                </span>
-              ))}
-          </div>
-        )}
+        <div className={`flex flex-wrap gap-2 mb-6 mt-auto ${isRTL ? 'flex-row-reverse' : ''}`}>
+          {tags.map((tag) => (
+            <span
+              key={tag}
+              className="text-xs text-text-muted bg-surface-alt border border-border-subtle px-2.5 py-1 rounded-full"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <div className={`flex items-center text-sm font-medium text-text-primary group-hover:text-orange transition-colors duration-200 ${isRTL ? 'flex-row-reverse' : ''}`}>
+          <span>{uiTexts.cta}</span>
+          <svg 
+            className={`w-4 h-4 ${isRTL ? 'mr-1 rotate-180' : 'ml-1'} transition-transform duration-200 group-hover:translate-x-1 rtl:group-hover:-translate-x-1`} 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
       </div>
     </Link>
   )

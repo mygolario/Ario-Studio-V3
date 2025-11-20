@@ -31,9 +31,8 @@ export default async function HomeEN() {
   const lang = 'en'
 
   // Fetch multilingual content from database
-  const [servicesContent, portfolioContent, processSteps, highlights] = await Promise.all([
+  const [servicesContent, processSteps, highlights] = await Promise.all([
     getLocalizedContentList('service', lang).catch(() => []),
-    getLocalizedContentList('portfolio', lang).catch(() => []),
     getProcessSteps().catch(() => []),
     getHighlights('about').catch(() => []),
   ])
@@ -50,7 +49,7 @@ export default async function HomeEN() {
       {/* Scene 3: WHAT WE DO */}
       <Services servicesContent={servicesContent} lang={lang} />
       {/* Scene 4: OUR WORK */}
-      <Portfolio portfolioContent={portfolioContent} lang={lang} />
+      <Portfolio lang={lang} />
       {/* Scene 5: OUR PROCESS */}
       <DesignEthos processSteps={processSteps} />
       {/* Scene 6: ABOUT ARIO STUDIO */}

@@ -3,7 +3,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Portfolio from '@/components/Portfolio'
 import { getServerLang } from '@/lib/i18n'
-import { getLocalizedContentList } from '@/lib/content/queries'
+
 
 // Revalidate work listing every 3600 seconds (1 hour)
 export const revalidate = 3600
@@ -71,12 +71,12 @@ export default async function WorkPage({ params }: { params: { lang: string } })
   const lang = params.lang === 'fa' ? 'fa' : 'en'
   
   // Fetch all published portfolio items
-  const portfolioContent = await getLocalizedContentList('portfolio', lang).catch(() => [])
+
 
   return (
     <main className="relative min-h-screen bg-base">
       <Header />
-      <Portfolio portfolioContent={portfolioContent} lang={lang} />
+      <Portfolio lang={lang} />
       <Footer />
     </main>
   )

@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import Link from 'next/link'
-import Image from 'next/image'
-import { getAllProjects } from '@/lib/portfolio'
+import PortfolioCard from '@/components/portfolio/PortfolioCard'
+import { portfolioSamples } from '@/content/portfolioSamples'
 import { generateSEOMetadata } from '@/lib/seo'
 
 export const revalidate = 3600
@@ -29,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function PortfolioPage() {
   // This is a FA route, always use Farsi language
   const lang = 'fa'
-  const projects = getAllProjects('fa')
+
 
   return (
     <main className="relative min-h-screen bg-base">
@@ -51,40 +50,11 @@ export default async function PortfolioPage() {
             </p>
           </div>
 
-          {projects.length > 0 ? (
-            <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-12">
-              {projects.map((project) => (
-                <div
-                  key={project.id}
-                  className="group bg-surface rounded-xl overflow-hidden border border-border-subtle hover:shadow-card-hover hover:-translate-y-1 hover:border-orange/50 transition-all duration-300 relative rtl"
-                >
-                  {project.thumbnailUrl && (
-                    <div className="relative h-64 bg-surface-alt overflow-hidden rounded-t-xl">
-                      <Image
-                        src={project.thumbnailUrl}
-                        alt={project.title}
-                        fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
-                      />
-                    </div>
-                  )}
-                  <div className="p-6">
-                    <h3 className="text-h4 font-semibold text-text-primary mb-2 group-hover:text-orange transition-colors">
-                      {project.title}
-                    </h3>
-                    <p className="text-body text-text-secondary mb-3">
-                      {project.shortDescription}
-                    </p>
-                    {project.status === 'coming-soon' && (
-                      <span className="inline-block text-body-sm text-text-muted bg-surface-alt border border-border-subtle px-3 py-1 rounded-full">
-                        به‌زودی
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : null}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            {portfolioSamples.map((item) => (
+              <PortfolioCard key={item.id} lang={lang} item={item} />
+            ))}
+          </div>
           
           <div className="text-center rtl">
             <p className="text-body text-text-secondary max-w-2xl mx-auto mb-4 sm:mb-6 leading-relaxed">

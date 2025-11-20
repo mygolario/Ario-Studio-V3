@@ -33,9 +33,8 @@ export default async function HomePage() {
   // Fetch multilingual content from database
   // TODO: Add error handling UI for when content fails to load
   // TODO: Consider adding loading skeletons for better UX
-  const [servicesContent, portfolioContent, processSteps, highlights] = await Promise.all([
+  const [servicesContent, processSteps, highlights] = await Promise.all([
     getLocalizedContentList('service', lang).catch(() => []),
-    getLocalizedContentList('portfolio', lang).catch(() => []),
     getProcessSteps().catch(() => []),
     getHighlights('about').catch(() => []),
   ])
@@ -52,7 +51,7 @@ export default async function HomePage() {
       {/* Scene 3: WHAT WE DO */}
       <Services servicesContent={servicesContent} lang={lang} />
       {/* Scene 4: OUR WORK */}
-      <Portfolio portfolioContent={portfolioContent} lang={lang} />
+      <Portfolio lang={lang} />
       {/* Scene 5: OUR PROCESS */}
       <DesignEthos processSteps={processSteps} />
       {/* Scene 6: ABOUT ARIO STUDIO */}

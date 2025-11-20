@@ -2,12 +2,11 @@
 
 import { useEffect, useRef } from 'react'
 import { animateSectionReveal } from '@/lib/gsapClient'
-import { type LocalizedContent } from '@/lib/content/types'
 import { type SupportedLang } from '@/lib/i18n'
 import PortfolioCard from './portfolio/PortfolioCard'
+import { portfolioSamples } from '@/content/portfolioSamples'
 
 interface PortfolioProps {
-  portfolioContent?: LocalizedContent[]
   lang?: SupportedLang
 }
 
@@ -17,7 +16,7 @@ interface PortfolioProps {
  * Displays a grid of portfolio items (case studies) with bilingual support.
  * Uses PortfolioCard component for each item.
  */
-export default function Portfolio({ portfolioContent = [], lang }: PortfolioProps) {
+export default function Portfolio({ lang }: PortfolioProps) {
   const sectionRef = useRef<HTMLElement>(null)
   
   // Use lang from props or default to 'fa'
@@ -27,14 +26,12 @@ export default function Portfolio({ portfolioContent = [], lang }: PortfolioProp
   const uiTexts = currentLang === 'fa' 
     ? {
         title: 'کارهای ما',
-        subtitle: 'نمونه‌ای از پروژه‌هایی که با نگاه سینمایی و مبتنی بر هوش مصنوعی طراحی کرده‌ایم.',
-        emptyState: 'به‌زودی نمونه‌کارهای سینمایی اینجا قرار می‌گیرند.',
+        subtitle: 'چند نمونه از تیپ پروژه‌هایی که برای کسب‌وکارها طراحی و اجرا می‌کنیم.',
         cta: 'مشاهده همه پروژه‌ها',
       }
     : {
-        title: 'Our Work',
-        subtitle: 'A selection of cinematic, AI-powered web projects we\'ve crafted.',
-        emptyState: 'Cinematic case studies will appear here soon.',
+        title: 'Selected work',
+        subtitle: 'A few example project types we design and build for our clients.',
         cta: 'View all projects',
       }
 
@@ -86,19 +83,13 @@ export default function Portfolio({ portfolioContent = [], lang }: PortfolioProp
           </div>
 
           {/* Projects Grid */}
-          {portfolioContent.length === 0 ? (
-            <div className={`text-center py-16 ${currentLang === 'fa' ? 'rtl:text-right' : ''}`}>
-              <p className="text-text-secondary">{uiTexts.emptyState}</p>
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 gap-8">
-              {portfolioContent.map((item) => (
-                <div key={item.slug} data-animate-child>
-                  <PortfolioCard lang={currentLang} item={item} />
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {portfolioSamples.map((item) => (
+              <div key={item.id} data-animate-child>
+                <PortfolioCard lang={currentLang} item={item} />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
