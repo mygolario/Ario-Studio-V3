@@ -1,125 +1,152 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { CheckCircle2 } from 'lucide-react'
-import { animateSectionReveal } from '@/lib/gsapClient'
 import { useTranslation } from '@/lib/useTranslation'
-import { Highlight } from '@prisma/client'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 interface AboutProps {
-  highlights?: Highlight[]
+  highlights?: any[] // Legacy prop, not used in new design
 }
 
+/**
+ * About Section Component
+ * 
+ * Redesigned with 3 subsections:
+ * 1. Intro Section (Hero About) - Professional short story
+ * 2. Values Grid - 3-4 value cards
+ * 3. Mission/Vision Block - Highlighted statements
+ */
 export default function About({ highlights: dbHighlights = [] }: AboutProps) {
   const t = useTranslation()
-  const sectionRef = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    if (sectionRef.current) {
-      animateSectionReveal(sectionRef, {
-        y: 30,
-        duration: 0.8,
-        ease: 'power3.out',
-        stagger: 0.1,
-      }).catch(() => {
-        if (sectionRef.current) {
-          sectionRef.current.style.opacity = '1'
-          sectionRef.current.style.transform = 'translateY(0)'
-        }
-      })
-    }
-  }, [])
+  const { language } = useLanguage()
+  const isRTL = language === 'fa'
 
   return (
     <section
-      ref={sectionRef}
       id="about"
-      className="relative py-16 sm:py-24 lg:py-32 overflow-hidden bg-surface-alt"
+      className={`relative py-16 sm:py-24 lg:py-32 overflow-hidden bg-base ${isRTL ? 'rtl' : ''}`}
     >
-      {/* Enhanced background with soft neon gradients */}
-      <div 
-        className="absolute inset-0 opacity-[0.02] dark:opacity-[0.05]"
-        style={{
-          backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)',
-          backgroundSize: '32px 32px',
-        }}
-      />
-      {/* Subtle gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-orange/5 to-transparent opacity-30 pointer-events-none" />
-      
-      <div className="container-custom relative z-10">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-16" data-animate-child>
-            <div className="mb-6">
-              {/* Section Label */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, ease: 'power3.out' }}
-                className="mb-4"
-              >
-                <span className="text-label text-orange uppercase tracking-wider font-medium">
-                  {t.about.label}
-                </span>
-              </motion.div>
-              <h2 className="text-h1 font-semibold text-text-primary mb-4">
-                {t.about.title}
-              </h2>
-              {/* Section accent line */}
-              <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full mx-auto" />
-            </div>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: 'power3.out', delay: 0.2 }}
-              className="text-body-lg text-text-secondary max-w-2xl mx-auto leading-relaxed"
-            >
-              {t.about.subtitle}
-            </motion.p>
-          </div>
+      {/* Geometric Background Patterns */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Very faint grid / mesh background */}
+        <div
+          className="absolute inset-0 opacity-[0.02]"
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, currentColor 1px, transparent 1px),
+              linear-gradient(to bottom, currentColor 1px, transparent 1px)
+            `,
+            backgroundSize: '60px 60px',
+            color: '#000',
+          }}
+        />
 
-          {/* Principles Section */}
+        {/* Soft pastel orange gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#F87449]/5 via-transparent to-[#F7693A]/3 opacity-40" />
+
+        {/* AI-coded geometric patterns - thin node-lines */}
+        <svg
+          className="absolute inset-0 w-full h-full opacity-[0.03]"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {/* Horizontal lines */}
+          <line x1="0" y1="20%" x2="100%" y2="18%" stroke="#F87449" strokeWidth="0.5" />
+          <line x1="0" y1="50%" x2="100%" y2="52%" stroke="#F7693A" strokeWidth="0.5" />
+          <line x1="0" y1="80%" x2="100%" y2="78%" stroke="#F87449" strokeWidth="0.5" />
+          
+          {/* Vertical lines */}
+          <line x1="15%" y1="0" x2="17%" y2="100%" stroke="#F87449" strokeWidth="0.5" />
+          <line x1="50%" y1="0" x2="48%" y2="100%" stroke="#F7693A" strokeWidth="0.5" />
+          <line x1="85%" y1="0" x2="83%" y2="100%" stroke="#F87449" strokeWidth="0.5" />
+          
+          {/* Diagonal curves */}
+          <path
+            d="M 10% 30% Q 30% 20%, 50% 30% T 90% 30%"
+            stroke="#F87449"
+            strokeWidth="0.5"
+            fill="none"
+            opacity="0.4"
+          />
+          <path
+            d="M 10% 70% Q 30% 80%, 50% 70% T 90% 70%"
+            stroke="#F7693A"
+            strokeWidth="0.5"
+            fill="none"
+            opacity="0.4"
+          />
+          
+          {/* Connection points / dots */}
+          <circle cx="15%" cy="20%" r="1.5" fill="#F87449" opacity="0.3" />
+          <circle cx="50%" cy="50%" r="1.5" fill="#F7693A" opacity="0.3" />
+          <circle cx="85%" cy="80%" r="1.5" fill="#F87449" opacity="0.3" />
+          <circle cx="30%" cy="60%" r="1" fill="#F7693A" opacity="0.25" />
+          <circle cx="70%" cy="40%" r="1" fill="#F87449" opacity="0.25" />
+        </svg>
+      </div>
+
+      <div className="container-custom relative z-10">
+        <div className="max-w-6xl mx-auto">
+          {/* A) Intro Section (Hero About) */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+            className={`text-center mb-16 sm:mb-20 ${isRTL ? 'rtl:text-right' : ''}`}
+          >
+            <p className="text-body-lg sm:text-body-xl text-text-secondary max-w-3xl mx-auto leading-relaxed">
+              {t.about.intro}
+            </p>
+          </motion.div>
+
+          {/* B) Values Grid */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: 'power3.out', delay: 0.4 }}
-            className="bg-surface border border-border-subtle rounded-xl p-8 md:p-12"
+            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
+            className="mb-16 sm:mb-20"
           >
-            <h3 className="text-h4 font-semibold text-text-primary mb-6">
-              {t.about.subSectionTitle}
-            </h3>
-            <ul className="grid md:grid-cols-2 gap-4">
-              {(dbHighlights.length > 0
-                ? dbHighlights.map((h) => h.title)
-                : t.about.principles
-              ).map((principle, index) => (
-                <motion.li
-                  key={principle}
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {t.about.values.map((value, index) => (
+                <motion.div
+                  key={value.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{
-                    duration: 0.5,
-                    ease: 'power3.out',
-                    delay: 0.5 + (index * 0.1),
+                  transition={{ duration: 0.5, ease: 'easeOut', delay: 0.2 + index * 0.1 }}
+                  whileHover={{
+                    y: -4,
+                    transition: { duration: 0.2 },
                   }}
-                  className="flex items-start gap-3 group"
+                  className="group h-full"
                 >
-                  <CheckCircle2 
-                    size={20} 
-                    className="text-orange flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform duration-200" 
-                  />
-                  <span className="text-body text-text-secondary group-hover:text-text-primary transition-colors duration-200">
-                    {principle}
-                  </span>
-                </motion.li>
+                  <div className="bg-surface border border-gray-100 rounded-xl p-6 h-full shadow-sm hover:shadow-md transition-all duration-300">
+                    <h3 className="text-h5 font-semibold text-text-primary mb-3">
+                      {value.title}
+                    </h3>
+                    <p className="text-body-sm text-text-secondary leading-relaxed">
+                      {value.description}
+                    </p>
+                  </div>
+                </motion.div>
               ))}
-            </ul>
+            </div>
+          </motion.div>
+
+          {/* C) Mission / Vision Block */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.3 }}
+            className={`text-center ${isRTL ? 'rtl:text-right' : ''}`}
+          >
+            <div className="max-w-3xl mx-auto">
+              <p className="text-h4 sm:text-h3 font-semibold text-text-primary leading-tight">
+                {t.about.mission}
+              </p>
+            </div>
           </motion.div>
         </div>
       </div>

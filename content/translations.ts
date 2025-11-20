@@ -122,16 +122,26 @@ export const translations = {
       subtitle: 'کارهای انتخاب شده و پروژه‌های در حال انجام.',
     },
     about: {
-      label: 'درباره',
-      title: 'استودیو آریو یک تمرین طراحی وب سینمایی و مبتنی بر هوش مصنوعی است.',
-      subtitle: 'به رهبری آریو کاوه، استودیو آریو زیبایی‌شناسی سینمایی، مهندسی مدرن و اتوماسیون هوش مصنوعی را ترکیب می‌کند تا تجربیات دیجیتالی که زنده به نظر می‌رسند را ایجاد کند. هر پروژه طراحی، انیمیشن و سیستم‌های هوشمند را ترکیب می‌کند—ساخته شده با دقت و قصد.',
-      subSectionTitle: 'آنچه کار ما را تعریف می‌کند:',
-      principles: [
-        'توجه به جزئیات',
-        'حساسیت طراحی سطح بالا',
-        'معماری مدرن و مقیاس‌پذیر',
-        'حل مسئله اولویت‌دار هوش مصنوعی',
+      intro: 'استودیو آریو یک استودیو طراحی و خلاقیت است که تجربه‌های وب سینمایی و هوشمند برای کسب‌وکارهای مدرن می‌سازد. ما طراحی بصری، مهندسی مدرن و هوش مصنوعی را ترکیب می‌کنیم تا محصولات دیجیتالی که هم زیبا هستند و هم مؤثر عمل می‌کنند.',
+      values: [
+        {
+          title: 'طراحی با دقت',
+          description: 'هر جزئیات با نگاه حرفه‌ای و توجه به کیفیت طراحی می‌شود.',
+        },
+        {
+          title: 'هویت‌سازی مدرن',
+          description: 'ساخت هویت بصری معاصر که با برند شما هماهنگ است.',
+        },
+        {
+          title: 'حل مسئله با نگاه هوش مصنوعی',
+          description: 'استفاده از هوش مصنوعی برای ایجاد راه‌حل‌های هوشمند و کارآمد.',
+        },
+        {
+          title: 'تجربه‌های دیجیتالی تأثیرگذار',
+          description: 'ساخت تجربه‌هایی که کاربران را تحت تأثیر قرار می‌دهند.',
+        },
       ],
+      mission: 'ماموریت ما ساخت تجربه‌هایی است که هم زیبا باشند و هم هوشمند و مؤثر.',
     },
     startProject: {
       label: 'بیایید همکاری کنیم',
@@ -400,16 +410,26 @@ export const translations = {
       },
     },
     about: {
-      label: 'About',
-      title: 'Ario Studio is a cinematic, AI-driven web design practice.',
-      subtitle: 'Led by Ario Kaveh, Ario Studio blends cinematic aesthetics, modern engineering, and AI automation to create digital experiences that feel alive. Every project combines design, motion, and intelligent systems—crafted with precision and intention.',
-      subSectionTitle: 'What defines our work:',
-      principles: [
-        'Attention to detail',
-        'High-end design sensibility',
-        'Modern, scalable architecture',
-        'AI-first problem solving',
+      intro: 'Ario Studio is a design and creative studio that builds cinematic, intelligent web experiences for modern businesses. We combine visual design, modern engineering, and AI to create digital products that are both beautiful and effective.',
+      values: [
+        {
+          title: 'Precision-driven design',
+          description: 'Every detail is crafted with professional care and attention to quality.',
+        },
+        {
+          title: 'Modern identity building',
+          description: 'Creating contemporary visual identities that align with your brand.',
+        },
+        {
+          title: 'AI-first problem solving',
+          description: 'Leveraging AI to create intelligent and efficient solutions.',
+        },
+        {
+          title: 'Impactful digital experiences',
+          description: 'Building experiences that truly impact users.',
+        },
       ],
+      mission: 'Our mission is to craft digital experiences that are beautiful, intelligent, and effective.',
     },
     startProject: {
       label: "Let's collaborate",
