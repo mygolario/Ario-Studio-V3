@@ -356,7 +356,19 @@ export default function HomePageV2() {
                   <div className="badge-dot"></div>
                   <span>{c.badge}</span>
                 </div>
-                <h1 className="hero-title">{c.hero_title}</h1>
+                <h1 className="hero-title">
+                  {language === 'en' ? (
+                    <>
+                      The <span className="gradient-text">Future</span> of{' '}
+                      <span className="gradient-text">Web Design</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="gradient-text">آینده</span> طراحی{' '}
+                      <span className="gradient-text">وب</span>
+                    </>
+                  )}
+                </h1>
                 <p className="hero-description">{c.hero_description}</p>
                 <div className="hero-ctas">
                   <a
@@ -377,15 +389,40 @@ export default function HomePageV2() {
                 </div>
               </div>
               <div className="hero-visual">
-                <div className="visual-container">
-                  <div className="visual-orb large"></div>
-                  <div className="visual-orb medium"></div>
-                  <div className="visual-orb small"></div>
-                  <div className="visual-core"></div>
-                  <div className="particle"></div>
-                  <div className="particle"></div>
-                  <div className="particle"></div>
-                  <div className="particle"></div>
+                <div className="card-stack">
+                  <div className="floating-card card-1">
+                    <div className="card-icon">🎨</div>
+                    <h3 className="card-title">
+                      {language === 'en' ? 'Design' : 'طراحی'}
+                    </h3>
+                    <p className="card-text">
+                      {language === 'en'
+                        ? 'Stunning visuals that captivate'
+                        : 'تصاویر خیره‌کننده که جذاب می‌کنند'}
+                    </p>
+                  </div>
+                  <div className="floating-card card-2">
+                    <div className="card-icon">⚡</div>
+                    <h3 className="card-title">
+                      {language === 'en' ? 'Build' : 'ساخت'}
+                    </h3>
+                    <p className="card-text">
+                      {language === 'en'
+                        ? 'High-performance solutions'
+                        : 'راه‌حل‌های با عملکرد بالا'}
+                    </p>
+                  </div>
+                  <div className="floating-card card-3">
+                    <div className="card-icon">🤖</div>
+                    <h3 className="card-title">
+                      {language === 'en' ? 'Automate' : 'خودکارسازی'}
+                    </h3>
+                    <p className="card-text">
+                      {language === 'en'
+                        ? 'AI-powered experiences'
+                        : 'تجربیات مبتنی بر هوش مصنوعی'}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
