@@ -20,6 +20,13 @@ img {
   --font-vazir: 'Vazirmatn', 'IRANSans', system-ui, sans-serif;
   --font-iran: 'Vazirmatn', 'IRANSans', system-ui, sans-serif;
   
+  /* V2 Dark Theme Colors */
+  --primary: #FF6B35;
+  --secondary: #FFA552;
+  --dark: #0a0a0a;
+  --dark-light: #1a1a1a;
+  --text-dim: #a0a0a0;
+  
   /* Theme Tokens - Day Mode (Default) */
   --color-base: #FFFFFF;
   --color-surface: #FFFFFF;
@@ -68,6 +75,17 @@ body {
   position: relative;
   transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
               color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* V2 Dark Theme */
+body.v2-dark {
+  background: #0a0a0a;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+}
+
+body.v2-dark[dir="rtl"] {
+  font-family: 'IRANSans', Arial, sans-serif;
 }
 
 /* Custom scrollbar */

@@ -43,6 +43,7 @@ const config: Config = {
       },
       backgroundImage: {
         'gradient-orange': 'linear-gradient(135deg, #FF6A3D 0%, #FF8C6B 100%)',
+        'gradient-radial': 'radial-gradient(circle, var(--tw-gradient-stops))',
       },
       fontSize: {
         'hero': ['56px', { lineHeight: '64px', fontWeight: '600', letterSpacing: '-1px' }],
@@ -79,6 +80,15 @@ const config: Config = {
         'fade-in': 'fadeIn 0.5s ease-out',
         'slide-up': 'slideUp 0.5s ease-out',
         'scale-in': 'scaleIn 0.3s ease-out',
+        'float-1': 'float 20s infinite ease-in-out',
+        'float-2': 'float 20s infinite ease-in-out 5s',
+        'float-3': 'float 20s infinite ease-in-out 10s',
+        'orbit': 'orbit 20s linear infinite',
+        'orbit-reverse': 'orbit 20s linear infinite reverse',
+        'morph-shape': 'morphShape 8s ease-in-out infinite',
+        'particle-float': 'particleFloat 3s infinite ease-in-out',
+        'pulse-dot': 'pulse 2s infinite',
+        'rotate-gradient': 'rotateGradient 15s linear infinite',
       },
       keyframes: {
         fadeIn: {
@@ -92,6 +102,33 @@ const config: Config = {
         scaleIn: {
           '0%': { opacity: '0', transform: 'scale(0.95)' },
           '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translate(0, 0) scale(1)' },
+          '33%': { transform: 'translate(100px, -100px) scale(1.1)' },
+          '66%': { transform: 'translate(-100px, 100px) scale(0.9)' },
+        },
+        orbit: {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
+        },
+        morphShape: {
+          '0%, 100%': { borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%' },
+          '25%': { borderRadius: '58% 42% 75% 25% / 76% 46% 54% 24%' },
+          '50%': { borderRadius: '50% 50% 33% 67% / 55% 27% 73% 45%' },
+          '75%': { borderRadius: '33% 67% 58% 42% / 63% 68% 32% 37%' },
+        },
+        particleFloat: {
+          '0%, 100%': { transform: 'translateY(0)', opacity: '0.5' },
+          '50%': { transform: 'translateY(-30px)', opacity: '1' },
+        },
+        pulse: {
+          '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+          '50%': { opacity: '0.5', transform: 'scale(0.8)' },
+        },
+        rotateGradient: {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
         },
       },
     },

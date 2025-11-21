@@ -10,20 +10,20 @@ import CTAV2 from '@/components/v2/CTAV2'
 import FooterV2 from '@/components/v2/FooterV2'
 import { generateSEOMetadata } from '@/lib/seo'
 
-// Revalidate homepage every 60 seconds
-export const revalidate = 60
-
 /**
- * Generate metadata for EN homepage
+ * Homepage V2 - Dark Cinematic Theme
+ * 
+ * This is the new dark-themed homepage based on the provided HTML design.
+ * To use this, rename this file to page.tsx or create a route to switch themes.
  */
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ario-studio-v3.vercel.app'
-  return generateSEOMetadata('en', {
-    url: `${baseUrl}/en`,
+  return generateSEOMetadata('fa', {
+    url: baseUrl,
   })
 }
 
-export default async function HomeEN() {
+export default async function HomePageV2() {
   return (
     <main className="relative min-h-screen v2-dark">
       <AnimatedBackground />

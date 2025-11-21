@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
-import Header from '@/components/layout/Header'
-import Hero from '@/components/home/Hero'
-import Services from '@/components/home/Services'
-import Process from '@/components/home/Process'
-import AboutPreview from '@/components/home/AboutPreview'
-import CTA from '@/components/home/CTA'
-import Footer from '@/components/layout/Footer'
+import HeaderV2 from '@/components/v2/HeaderV2'
+import AnimatedBackground from '@/components/v2/AnimatedBackground'
+import HeroV2 from '@/components/v2/HeroV2'
+import StatsV2 from '@/components/v2/StatsV2'
+import ServicesV2 from '@/components/v2/ServicesV2'
+import ProcessV2 from '@/components/v2/ProcessV2'
+import ShowcaseV2 from '@/components/v2/ShowcaseV2'
+import CTAV2 from '@/components/v2/CTAV2'
+import FooterV2 from '@/components/v2/FooterV2'
 import { generateSEOMetadata } from '@/lib/seo'
 
 // Revalidate homepage every 60 seconds
@@ -23,14 +25,18 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function HomePage() {
   return (
-    <main className="relative bg-white">
-      <Header />
-      <Hero />
-      <Services />
-      <Process />
-      <AboutPreview />
-      <CTA />
-      <Footer />
+    <main className="relative min-h-screen v2-dark">
+      <AnimatedBackground />
+      <div className="relative z-10">
+        <HeaderV2 />
+        <HeroV2 />
+        <StatsV2 />
+        <ServicesV2 />
+        <ProcessV2 />
+        <ShowcaseV2 />
+        <CTAV2 />
+        <FooterV2 />
+      </div>
     </main>
   )
 }
