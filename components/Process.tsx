@@ -4,8 +4,9 @@ import { useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin);
 
 const steps = [
   {
@@ -97,6 +98,7 @@ export function Process() {
 
   return (
     <section
+      id="process"
       ref={sectionRef}
       className="relative bg-ario-bg py-20 text-white md:py-28"
     >

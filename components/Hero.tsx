@@ -4,8 +4,9 @@ import { useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin);
 
 export function Hero() {
   const heroRef = useRef<HTMLDivElement | null>(null);
@@ -77,12 +78,24 @@ export function Hero() {
           },
           "-=0.6"
         );
+
+      // پارالاکس ملایم بک‌گراند با اسکرول
+      gsap.to(".hero-bg-glow", {
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: 1.5,
+        },
+        yPercent: 20,
+      });
     },
     { scope: heroRef }
   );
 
   return (
     <section
+      id="hero"
       ref={heroRef}
       className="relative overflow-hidden bg-ario-bg text-white"
     >
@@ -159,4 +172,3 @@ export function Hero() {
     </section>
   );
 }
-

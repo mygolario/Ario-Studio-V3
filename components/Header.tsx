@@ -4,11 +4,20 @@ import { useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin);
 
 export function Header() {
   const headerRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollToSection = (hash: string) => {
+    gsap.to(window, {
+      duration: 1,
+      scrollTo: { y: hash, offsetY: 90 },
+      ease: "power2.out",
+    });
+  };
 
   useGSAP(
     () => {
@@ -54,7 +63,10 @@ export function Header() {
     >
       <div className="site-header-inner flex w-full max-w-6xl items-center justify-between gap-6 rounded-full border border-white/10 bg-ario-bg/60 px-5 py-3 backdrop-blur-md">
         {/* لوگو / نام برند */}
-        <div className="flex items-center gap-2">
+        <div
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={() => scrollToSection("#hero")}
+        >
           <div className="h-7 w-7 rounded-full bg-gradient-to-tr from-orange-400 to-amber-300" />
           <span className="text-sm font-semibold tracking-[0.18em] text-white uppercase">
             Ario Studio
@@ -63,18 +75,32 @@ export function Header() {
 
         {/* ناوبری دسکتاپ */}
         <nav className="hidden items-center gap-6 text-xs font-medium text-gray-200 md:flex">
-          <button className="transition hover:text-white">Services</button>
-          <button className="transition hover:text-white">Process</button>
-          <button className="transition hover:text-white">Work</button>
-          <button className="transition hover:text-white">About</button>
+          <button
+            className="transition hover:text-white"
+            onClick={() => scrollToSection("#services")}
+          >
+            Services
+          </button>
+          <button
+            className="transition hover:text-white"
+            onClick={() => scrollToSection("#process")}
+          >
+            Process
+          </button>
+          <button
+            className="transition hover:text-white"
+            onClick={() => scrollToSection("#contact")}
+          >
+            Contact
+          </button>
         </nav>
 
         {/* CTA */}
         <div className="flex items-center gap-3">
-          <button className="hidden text-xs text-gray-300 md:inline-flex hover:text-white transition">
-            Contact
-          </button>
-          <button className="rounded-full bg-orange-400 px-4 py-1.5 text-xs font-semibold text-black shadow-lg shadow-orange-500/40 transition hover:bg-orange-300">
+          <button
+            onClick={() => scrollToSection("#contact")}
+            className="rounded-full bg-orange-400 px-4 py-1.5 text-xs font-semibold text-black shadow-lg shadow-orange-500/40 transition hover:bg-orange-300"
+          >
             Start a project
           </button>
         </div>
@@ -82,4 +108,3 @@ export function Header() {
     </header>
   );
 }
-

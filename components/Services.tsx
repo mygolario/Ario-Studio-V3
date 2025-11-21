@@ -4,8 +4,9 @@ import { useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin);
 
 const services = [
   {
@@ -81,6 +82,7 @@ export function Services() {
 
   return (
     <section
+      id="services"
       ref={sectionRef}
       className="relative bg-ario-bg pb-24 pt-10 text-white md:pb-32 md:pt-20"
     >

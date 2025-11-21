@@ -4,8 +4,9 @@ import { useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin);
 
 export function FinalCTA() {
   const sectionRef = useRef<HTMLDivElement | null>(null);
@@ -63,6 +64,7 @@ export function FinalCTA() {
 
   return (
     <section
+      id="contact"
       ref={sectionRef}
       className="relative mt-20 overflow-hidden py-24 text-white md:py-32"
     >
