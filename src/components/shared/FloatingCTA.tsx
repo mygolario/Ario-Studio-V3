@@ -27,7 +27,7 @@ export default function FloatingCTA({ onClick }: FloatingCTAProps) {
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 100 }}
-          className="fixed bottom-8 right-8 z-50"
+          className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50"
         >
           <MagneticButton onClick={onClick} variant="primary">
             <span className="flex items-center gap-2">

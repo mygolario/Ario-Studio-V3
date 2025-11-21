@@ -53,7 +53,7 @@ export default function SectionDotsNav() {
   };
 
   return (
-    <div className="hidden lg:flex fixed right-8 top-1/2 -translate-y-1/2 z-50 flex-col gap-4">
+    <div className="hidden lg:flex fixed right-6 xl:right-8 top-1/2 -translate-y-1/2 z-50 flex-col gap-3 xl:gap-4">
       {sections.map((section) => (
         <button
           key={section.id}

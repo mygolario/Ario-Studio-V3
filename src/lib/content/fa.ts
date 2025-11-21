@@ -77,7 +77,7 @@ export const content = {
       id: "1",
       name: "پلتفرم SaaS مدیریت پروژه",
       type: "SaaS",
-      tags: ["SaaS", "Dashboard", "UI/UX"],
+      tags: ["SaaS", "داشبورد", "UI/UX"],
       shortResult: "افزایش ۳۵٪ در نرخ تبدیل کاربران رایگان به پولی",
       longDescription: "یک پلتفرم کامل مدیریت پروژه با داشبورد پیشرفته، سیستم همکاری تیمی و گزارش‌گیری حرفه‌ای. طراحی مینیمال و کاربردی که کارایی تیم‌ها را به شدت افزایش داد.",
       highlights: [
@@ -92,7 +92,7 @@ export const content = {
       id: "2",
       name: "لندینگ پیج پریمیوم برند مد",
       type: "Landing Page",
-      tags: ["Landing Page", "E-commerce", "Brand"],
+      tags: ["لندینگ پیج", "تجارت الکترونیک", "برندینگ"],
       shortResult: "افزایش ۲۵۰٪ در ترافیک ارگانیک و ۱۸۰٪ در فروش آنلاین",
       longDescription: "یک لندینگ پیج سینماتیک و پریمیوم برای برند مد لوکس. با استفاده از انیمیشن‌های GSAP و طراحی مینیمال، تجربه خرید آنلاین را به سطح جدیدی رساندیم.",
       highlights: [
@@ -107,7 +107,7 @@ export const content = {
       id: "3",
       name: "وبسایت کامل آژانس خلاقیت",
       type: "Website",
-      tags: ["Website", "Portfolio", "Agency"],
+      tags: ["وبسایت", "نمونه‌کار", "آژانس"],
       shortResult: "افزایش ۳۰۰٪ در درخواست‌های مشتری جدید",
       longDescription: "وبسایت کامل یک آژانس خلاقیت با بخش‌های مختلف: نمونه‌کارها، خدمات، تیم و تماس. طراحی مدرن و تعاملی که هویت برند را به خوبی نمایش می‌دهد.",
       highlights: [
@@ -122,7 +122,7 @@ export const content = {
       id: "4",
       name: "فروشگاه آنلاین تکنولوژی",
       type: "E-commerce",
-      tags: ["E-commerce", "Shop", "UI/UX"],
+      tags: ["تجارت الکترونیک", "فروشگاه", "UI/UX"],
       shortResult: "افزایش ۴۵٪ در نرخ تبدیل و کاهش ۳۰٪ در نرخ ترک سبد خرید",
       longDescription: "یک فروشگاه آنلاین کامل با سیستم مدیریت محصولات، سبد خرید، پرداخت و پنل مدیریت. UX بهینه شده که فرآیند خرید را ساده و لذت‌بخش کرده است.",
       highlights: [
@@ -228,12 +228,12 @@ export const content = {
   } as ContactContent,
 
   marquee: [
-    "AI-powered Websites",
-    "Cinematic Design",
-    "Premium UX",
-    "Landing Pages",
-    "SaaS Interfaces",
-    "E-commerce Solutions",
+    "وبسایت‌های مبتنی بر هوش مصنوعی",
+    "طراحی سینماتیک",
+    "تجربه کاربری پریمیوم",
+    "لندینگ پیج",
+    "رابط‌های SaaS",
+    "راه‌حل‌های تجارت الکترونیک",
   ],
 };
 

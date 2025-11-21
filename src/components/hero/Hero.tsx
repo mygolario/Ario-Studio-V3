@@ -5,6 +5,8 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "framer-motion";
 import MagneticButton from "../shared/MagneticButton";
+import { content } from "@/lib/content/fa";
+import { animations } from "@/lib/animations";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -60,16 +62,16 @@ export default function Hero({ onProjectRequest, onViewPortfolio }: HeroProps) {
       tl.from(badgeRef.current, {
         opacity: 0,
         y: 20,
-        duration: 0.8,
-        ease: "power3.out",
+        duration: animations.duration.normal,
+        ease: animations.easing.smooth,
       })
         .from(
           titleRef.current,
           {
             opacity: 0,
             y: 40,
-            duration: 1,
-            ease: "power3.out",
+            duration: animations.duration.slow,
+            ease: animations.easing.smooth,
           },
           "-=0.4"
         )
@@ -78,8 +80,8 @@ export default function Hero({ onProjectRequest, onViewPortfolio }: HeroProps) {
           {
             opacity: 0,
             y: 30,
-            duration: 0.8,
-            ease: "power3.out",
+            duration: animations.duration.normal,
+            ease: animations.easing.smooth,
           },
           "-=0.6"
         )
@@ -88,9 +90,9 @@ export default function Hero({ onProjectRequest, onViewPortfolio }: HeroProps) {
           {
             opacity: 0,
             y: 20,
-            duration: 0.6,
-            stagger: 0.2,
-            ease: "power3.out",
+            duration: animations.duration.normal,
+            stagger: animations.stagger.slow,
+            ease: animations.easing.smooth,
           },
           "-=0.4"
         );
@@ -149,20 +151,20 @@ export default function Hero({ onProjectRequest, onViewPortfolio }: HeroProps) {
 
         <h1
           ref={titleRef}
-          className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent"
+          className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent leading-tight"
         >
           آریو استودیو
         </h1>
 
         <p
           ref={subtitleRef}
-          className="text-lg sm:text-xl text-slate-300 max-w-3xl mb-12 leading-relaxed"
+          className="text-base sm:text-lg lg:text-xl text-slate-300 max-w-3xl mb-12 leading-relaxed"
         >
           استودیوی دیجیتال و هوش مصنوعی که با ترکیب طراحی سینماتیک، تکنولوژی
           پیشرفته و UX بین‌المللی، تجربه‌های وب استثنایی خلق می‌کند.
         </p>
 
-        <div ref={ctaRef} className="flex flex-col sm:flex-row gap-4">
+        <div ref={ctaRef} className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
           <MagneticButton onClick={onProjectRequest} variant="primary">
             درخواست پروژه
           </MagneticButton>
@@ -173,16 +175,9 @@ export default function Hero({ onProjectRequest, onViewPortfolio }: HeroProps) {
       </div>
 
       {/* Scrolling Marquee */}
-      <div className="absolute bottom-20 left-0 right-0 overflow-hidden">
-        <div className="flex gap-8 text-slate-500 text-sm">
-          {[
-            "AI-powered Websites",
-            "Cinematic Design",
-            "Premium UX",
-            "Landing Pages",
-            "SaaS Interfaces",
-            "E-commerce Solutions",
-          ].map((text, i) => (
+      <div className="absolute bottom-12 sm:bottom-20 left-0 right-0 overflow-hidden">
+        <div className="flex gap-4 sm:gap-8 text-slate-500 text-xs sm:text-sm">
+          {content.marquee.map((text, i) => (
             <div
               key={i}
               className="whitespace-nowrap animate-marquee"

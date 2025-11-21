@@ -72,6 +72,7 @@ export default function ProjectRequestModal({
   };
 
   const handleSubmit = () => {
+    // TODO: Replace with actual API call
     console.log("Project Request:", formData);
     localStorage.removeItem("projectRequest");
     setStep(5); // Success step
@@ -105,7 +106,7 @@ export default function ProjectRequestModal({
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           onClick={(e) => e.stopPropagation()}
-          className="glass rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+          className="glass rounded-2xl p-6 sm:p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
         >
           {/* Progress Indicator */}
           {step < 5 && (
@@ -175,7 +176,7 @@ export default function ProjectRequestModal({
               className="space-y-6"
             >
               <h2 className="text-2xl font-bold mb-6">نوع پروژه</h2>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
                 {projectTypes.map((type) => (
                   <button
                     key={type.id}

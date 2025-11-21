@@ -30,7 +30,7 @@ export default function ScrollToTopButton() {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0 }}
           onClick={scrollToTop}
-          className="fixed bottom-8 left-8 z-50 w-12 h-12 rounded-full glass border border-brand-500/30 flex items-center justify-center hover:border-brand-500 transition-colors"
+          className="fixed bottom-6 left-6 sm:bottom-8 sm:left-8 z-50 w-10 h-10 sm:w-12 sm:h-12 rounded-full glass border border-brand-500/30 flex items-center justify-center hover:border-brand-500 transition-colors"
           aria-label="بازگشت به بالا"
         >
           <svg

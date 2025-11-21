@@ -14,7 +14,7 @@ export default function PricingSection({
 }: PricingSectionProps) {
   return (
     <SectionWrapper id="pricing" className="py-20">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -22,12 +22,12 @@ export default function PricingSection({
           className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl font-bold mb-4">پکیج‌های ما</h2>
-          <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+          <p className="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
             راه‌حل‌های متنوع برای نیازهای مختلف کسب‌وکار شما
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
           {content.packages.map((pkg, index) => (
             <motion.div
               key={pkg.id}
@@ -35,10 +35,10 @@ export default function PricingSection({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className={`relative rounded-2xl p-8 glass border-2 ${
+              className={`relative rounded-2xl p-6 sm:p-8 glass border-2 transition-all ${
                 pkg.popular
-                  ? "border-brand-500 scale-105 md:scale-110"
-                  : "border-slate-800"
+                  ? "border-brand-500 scale-105 lg:scale-110 shadow-lg shadow-brand-500/20"
+                  : "border-slate-800 hover:border-slate-700"
               }`}
             >
               {pkg.popular && (

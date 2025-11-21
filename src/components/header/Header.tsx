@@ -74,7 +74,7 @@ export default function Header({ onProjectRequest }: HeaderProps) {
             </div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-8">
+            <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
               {navItems.map((item) => (
                 <button
                   key={item.id}

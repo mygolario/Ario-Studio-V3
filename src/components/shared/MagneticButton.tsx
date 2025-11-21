@@ -53,7 +53,7 @@ export default function MagneticButton({
         stiffness: 300,
         damping: 20,
       }}
-      className={`relative px-6 py-3 rounded-full font-medium transition-all duration-300 ${baseStyles} ${className}`}
+      className={`relative px-6 py-3 rounded-full font-medium transition-all duration-300 shadow-lg hover:shadow-xl ${baseStyles} ${className}`}
     >
       {children}
     </motion.button>

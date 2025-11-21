@@ -3,6 +3,7 @@
 import { ReactNode, useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { animations } from "@/lib/animations";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -33,12 +34,12 @@ export default function SectionWrapper({
         {
           opacity: 1,
           y: 0,
-          duration: 1,
-          ease: "power3.out",
+          duration: animations.duration.slow,
+          ease: animations.easing.smooth,
           scrollTrigger: {
             trigger: section,
-            start: "top 80%",
-            end: "top 20%",
+            start: animations.scrollTrigger.start,
+            end: animations.scrollTrigger.end,
             toggleActions: "play none none reverse",
           },
         }

@@ -42,7 +42,7 @@ export default function CaseStudyModal({
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           onClick={(e) => e.stopPropagation()}
-          className="glass rounded-2xl p-8 max-w-6xl w-full max-h-[90vh] overflow-y-auto"
+          className="glass rounded-2xl p-6 sm:p-8 max-w-6xl w-full max-h-[90vh] overflow-y-auto"
         >
           {/* Close Button */}
           <button

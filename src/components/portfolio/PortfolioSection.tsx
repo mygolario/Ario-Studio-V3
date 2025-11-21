@@ -9,6 +9,7 @@ import PortfolioFilters from "./PortfolioFilters";
 import CaseStudyModal from "./CaseStudyModal";
 import { content } from "@/lib/content/fa";
 import { PortfolioProject } from "@/lib/content/fa";
+import { animations } from "@/lib/animations";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -48,12 +49,12 @@ export default function PortfolioSection({
           opacity: 1,
           y: 0,
           scale: 1,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: "power3.out",
+          duration: animations.duration.normal,
+          stagger: animations.stagger.normal,
+          ease: animations.easing.smooth,
           scrollTrigger: {
             trigger: cardsRef.current,
-            start: "top 80%",
+            start: animations.scrollTrigger.start,
             toggleActions: "play none none reverse",
           },
         }
@@ -70,13 +71,13 @@ export default function PortfolioSection({
       gsap.to(cards, {
         opacity: 0,
         scale: 0.9,
-        duration: 0.3,
+        duration: animations.duration.fast,
         onComplete: () => {
           gsap.to(cards, {
             opacity: 1,
             scale: 1,
-            duration: 0.4,
-            stagger: 0.05,
+            duration: animations.duration.normal,
+            stagger: animations.stagger.fast,
           });
         },
       });
@@ -116,7 +117,7 @@ export default function PortfolioSection({
 
   return (
     <SectionWrapper id="portfolio" className="py-20">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -126,7 +127,7 @@ export default function PortfolioSection({
           <h2 className="text-4xl sm:text-5xl font-bold mb-4">
             نمونه‌کارهای ما
           </h2>
-          <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+          <p className="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
             پروژه‌هایی که با دقت و خلاقیت طراحی و توسعه داده‌ایم
           </p>
         </motion.div>
@@ -138,23 +139,23 @@ export default function PortfolioSection({
 
         <div
           ref={cardsRef}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
         >
           {filteredProjects.map((project) => (
             <motion.div
               key={project.id}
               whileHover={{ y: -8 }}
-              className="group relative rounded-2xl overflow-hidden glass border border-slate-800 cursor-pointer"
+              className="group relative rounded-2xl overflow-hidden glass border border-slate-800 hover:border-brand-500/30 cursor-pointer transition-all"
               onClick={() => openModal(project)}
             >
               {/* Image Placeholder */}
-              <div className="relative h-64 bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center">
+              <div className="relative h-48 sm:h-64 bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center">
                 <div className="text-slate-600 text-sm">{project.name}</div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
 
               {/* Content */}
-              <div className="p-6">
+              <div className="p-4 sm:p-6">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="px-2 py-1 rounded bg-brand-500/20 text-brand-400 text-xs">
                     {project.type}

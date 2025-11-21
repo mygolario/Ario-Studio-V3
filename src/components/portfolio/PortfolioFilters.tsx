@@ -7,7 +7,7 @@ const filters = [
   { id: "all", label: "همه" },
   { id: "Landing Page", label: "لندینگ پیج" },
   { id: "Website", label: "سایت کامل" },
-  { id: "SaaS", label: "SaaS" },
+  { id: "SaaS", label: "پلتفرم SaaS" },
   { id: "E-commerce", label: "فروشگاه" },
 ];
 

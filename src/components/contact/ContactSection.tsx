@@ -20,7 +20,7 @@ export default function ContactSection() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate API call
+    // TODO: Replace with actual API call
     setTimeout(() => {
       console.log("Contact Form:", formData);
       setIsSubmitting(false);
@@ -38,7 +38,7 @@ export default function ContactSection() {
 
   return (
     <SectionWrapper id="contact" className="py-20">
-      <div className="container mx-auto px-4 max-w-4xl">
+      <div className="container mx-auto max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -48,12 +48,12 @@ export default function ContactSection() {
           <h2 className="text-4xl sm:text-5xl font-bold mb-4">
             {content.contact.headline}
           </h2>
-          <p className="text-slate-400 text-lg">
+          <p className="text-slate-400 text-lg leading-relaxed">
             {content.contact.subtext}
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Form */}
           <motion.form
             initial={{ opacity: 0, x: -40 }}
@@ -171,16 +171,16 @@ export default function ContactSection() {
             viewport={{ once: true }}
             className="space-y-6"
           >
-            <div className="glass rounded-2xl p-8 border border-slate-800">
+            <div className="glass rounded-2xl p-8 border border-slate-800 hover:border-slate-700 transition-colors">
               <h3 className="text-xl font-bold mb-6">راه‌های ارتباطی</h3>
               <div className="space-y-4">
                 <a
                   href="https://wa.me/1234567890"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 p-4 rounded-lg glass border border-slate-700 hover:border-brand-500 transition-colors"
+                  className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl glass border border-slate-700 hover:border-brand-500 transition-colors"
                 >
-                  <div className="w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-green-500/20 flex items-center justify-center flex-shrink-0">
                     <span className="text-2xl">💬</span>
                   </div>
                   <div>
@@ -193,9 +193,9 @@ export default function ContactSection() {
                   href="https://t.me/ariostudio"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 p-4 rounded-lg glass border border-slate-700 hover:border-brand-500 transition-colors"
+                  className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl glass border border-slate-700 hover:border-brand-500 transition-colors"
                 >
-                  <div className="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-500/20 flex items-center justify-center flex-shrink-0">
                     <span className="text-2xl">✈️</span>
                   </div>
                   <div>
@@ -206,9 +206,9 @@ export default function ContactSection() {
 
                 <a
                   href="mailto:info@ariostudio.com"
-                  className="flex items-center gap-4 p-4 rounded-lg glass border border-slate-700 hover:border-brand-500 transition-colors"
+                  className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl glass border border-slate-700 hover:border-brand-500 transition-colors"
                 >
-                  <div className="w-12 h-12 rounded-lg bg-brand-500/20 flex items-center justify-center">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-brand-500/20 flex items-center justify-center flex-shrink-0">
                     <span className="text-2xl">✉️</span>
                   </div>
                   <div>
@@ -221,7 +221,7 @@ export default function ContactSection() {
               </div>
             </div>
 
-            <div className="glass rounded-2xl p-6 border border-slate-800">
+            <div className="glass rounded-2xl p-6 border border-slate-800 hover:border-slate-700 transition-colors">
               {content.contact.reassurance.map((text, i) => (
                 <div key={i} className="flex items-start gap-3 text-slate-400 text-sm mb-3">
                   <span className="text-brand-400">✓</span>
