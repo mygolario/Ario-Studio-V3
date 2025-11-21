@@ -1,0 +1,66 @@
+'use client'
+
+import { useEffect, useRef } from 'react'
+import Button from './Button'
+import { animateSectionReveal } from '@/lib/gsapClient'
+
+export default function Contact() {
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    if (sectionRef.current) {
+      animateSectionReveal(sectionRef, {
+        y: 30,
+        duration: 0.8,
+        ease: 'power3.out',
+      })
+    }
+  }, [])
+  return (
+    <section
+      ref={sectionRef}
+      id="contact"
+      className="relative py-32 overflow-hidden bg-base"
+    >
+      <div className="container-custom">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center space-y-8">
+            {/* Header */}
+            <div className="mb-6">
+              <h2 className="text-h1 font-semibold text-text-primary mb-4">
+                Let&apos;s build something with long-term value.
+              </h2>
+              {/* Section accent line */}
+              <div className="w-16 h-1 bg-gradient-to-r from-orange to-orange-light rounded-full mx-auto" />
+            </div>
+            <p className="text-body-lg text-text-secondary leading-relaxed mb-8">
+              Clear timelines, structured communication, and a professional workflow.
+            </p>
+
+            {/* CTA Button */}
+            <div className="pt-4">
+              <Button href="mailto:hello@ariostudio.com" variant="primary" className="!px-12 !py-5">
+                Start Your Project
+              </Button>
+            </div>
+
+            {/* Email */}
+            <div className="pt-4">
+            <a
+              href="mailto:hello@ariostudio.com"
+              className="text-body-lg text-text-secondary hover:text-orange transition-colors"
+            >
+              hello@ariostudio.com
+            </a>
+          </div>
+
+          {/* Note */}
+          <p className="text-body-sm text-text-muted pt-2">
+              We respond within 24 hours.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
