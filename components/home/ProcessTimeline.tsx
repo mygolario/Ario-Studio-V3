@@ -164,16 +164,16 @@ export default function ProcessTimeline({ processSteps: dbSteps = [] }: ProcessT
                     {/* Left Column - Title & Short Description */}
                     <div className={`xl:col-span-5 ${isRTL ? 'xl:rtl:col-span-5' : ''}`}>
                       <div className="flex items-start gap-4">
-                        {/* Icon */}
+                        {/* Icon - Minimal, thin stroke */}
                         <div className="flex-shrink-0 mt-1">
                           <div className="w-8 h-8 flex items-center justify-center">
-                            <Icon className="w-5 h-5 text-orange" strokeWidth={1.5} />
+                            <Icon className="w-5 h-5 text-orange" strokeWidth={1} />
                           </div>
                         </div>
 
                         {/* Title & Short Description */}
                         <div className="flex-1">
-                          <h3 className="text-2xl lg:text-3xl font-semibold text-gray-900 mb-3">
+                          <h3 className="text-2xl lg:text-3xl font-semibold text-gray-900 mb-4">
                             {step.title}
                           </h3>
                           <p className="text-base text-gray-600 leading-relaxed">

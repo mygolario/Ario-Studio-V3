@@ -191,21 +191,21 @@ export default function HeroTimeline() {
                 <div
                   key={panel.id}
                   data-feature-panel
-                  className="group relative bg-white border border-gray-200 rounded-2xl p-8 lg:p-10 transition-all duration-300 hover:scale-[1.02] hover:shadow-sm hover:border-orange/20"
+                  className="group relative bg-white border border-gray-200 rounded-2xl p-8 lg:p-10 transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:border-orange/10"
                 >
-                  {/* Icon */}
-                  <div className="mb-6">
-                    <div className="w-12 h-12 flex items-center justify-center">
-                      <Icon className="w-6 h-6 text-orange" strokeWidth={1.5} />
+                  {/* Icon - Minimal, thin stroke */}
+                  <div className="mb-8">
+                    <div className="w-10 h-10 flex items-center justify-center">
+                      <Icon className="w-5 h-5 text-orange" strokeWidth={1} />
                     </div>
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-xl lg:text-2xl font-semibold text-gray-900 mb-3">
+                  <h3 className="text-xl lg:text-2xl font-semibold text-gray-900 mb-4">
                     {panel.title}
                   </h3>
 
-                  {/* Description */}
+                  {/* Description - Minimal, 1-2 lines */}
                   <p className="text-base text-gray-600 leading-relaxed">
                     {panel.description}
                   </p>
