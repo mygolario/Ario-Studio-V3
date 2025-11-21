@@ -17,7 +17,8 @@ img {
   --font-inter: 'Inter', system-ui, sans-serif;
   --font-display: 'Space Grotesk', system-ui, sans-serif;
   --font-serif: 'Playfair Display', serif;
-  --font-vazir: 'Vazirmatn', system-ui, sans-serif;
+  --font-vazir: 'Vazirmatn', 'IRANSans', system-ui, sans-serif;
+  --font-iran: 'Vazirmatn', 'IRANSans', system-ui, sans-serif;
   
   /* Theme Tokens - Day Mode (Default) */
   --color-base: #FFFFFF;

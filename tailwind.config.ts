@@ -39,6 +39,7 @@ const config: Config = {
         'sans': ['var(--font-inter)', 'system-ui', 'sans-serif'],
         'display': ['var(--font-inter)', 'system-ui', 'sans-serif'],
         'vazir': ['var(--font-vazir)', 'system-ui', 'sans-serif'],
+        'iran': ['var(--font-iran)', 'system-ui', 'sans-serif'],
       },
       backgroundImage: {
         'gradient-orange': 'linear-gradient(135deg, #FF6A3D 0%, #FF8C6B 100%)',

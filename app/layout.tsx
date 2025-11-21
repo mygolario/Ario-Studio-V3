@@ -48,6 +48,11 @@ export default async function RootLayout({
   return (
     <html lang={htmlLang} dir={htmlDir} className="scroll-smooth" suppressHydrationWarning>
       <head>
+        {/* IRANSans Font for Farsi */}
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css"
+        />
         {/* Structured Data - Organization */}
         <script
           type="application/ld+json"
