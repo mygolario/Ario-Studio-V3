@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+:root {
+  --background: #050816;
+  --foreground: #f9fafb;
+}
+
+@theme {
+  --color-brand-50: #fff7ee;
+  --color-brand-100: #ffe4cc;
+  --color-brand-200: #ffc799;
+  --color-brand-300: #ffa866;
+  --color-brand-400: #ff8c3d;
+  --color-brand-500: #ff6b35;
+  --color-brand-600: #e4582b;
+  --color-brand-700: #b53f1f;
+  --color-brand-800: #7f2a15;
+  --color-brand-900: #45140a;
+  --color-dark: #050816;
+  
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: 
+    radial-gradient(circle at 0% 0%, rgba(255, 107, 53, 0.25), transparent 55%),
+    radial-gradient(circle at 100% 0%, rgba(255, 168, 102, 0.18), transparent 55%),
+    radial-gradient(circle at 50% 100%, rgba(15, 23, 42, 0.95), #020617);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.55));
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* Noise layer */
+.noise-layer {
+  position: fixed;
+  pointer-events: none;
+  inset: 0;
+  opacity: 0.14;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  z-index: 9999;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--color-brand-500), var(--color-brand-600));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--color-brand-400), var(--color-brand-500));
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-brand-500) rgba(15, 23, 42, 0.5);
+}
+
+/* Marquee animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* Section visibility */
+section.visible {
+  opacity: 1 !important;
+}
