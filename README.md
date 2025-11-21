@@ -1,36 +1,125 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# آریو استودیو - Ario Studio
 
-## Getting Started
+یک وبسایت سینماتیک و پریمیوم برای استودیوی دیجیتال و هوش مصنوعی آریو استودیو.
 
-First, run the development server:
+## ویژگی‌ها
+
+- ✨ طراحی سینماتیک و پریمیوم
+- 🎨 انیمیشن‌های نرم با GSAP و Framer Motion
+- 📱 کاملاً ریسپانسیو
+- 🌐 پشتیبانی کامل RTL برای فارسی
+- 🚀 بهینه‌سازی شده برای عملکرد بالا
+- 🎯 فرم درخواست پروژه چندمرحله‌ای
+- 💼 بخش نمونه‌کارها با فیلتر و مودال
+- 💰 بخش قیمت‌گذاری
+- ❓ بخش سوالات متداول
+- 📧 بخش تماس
+
+## تکنولوژی‌ها
+
+- **Next.js 14** (App Router)
+- **TypeScript**
+- **Tailwind CSS**
+- **GSAP** (انیمیشن‌های پیشرفته)
+- **Framer Motion** (انیمیشن‌های UI)
+- **Lenis** (اسکرول نرم)
+
+## نصب و راه‌اندازی
 
 ```bash
+# نصب وابستگی‌ها
+npm install
+
+# اجرای پروژه در حالت توسعه
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# ساخت برای تولید
+npm run build
+
+# اجرای نسخه تولید
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+پس از اجرای `npm run dev`، پروژه در آدرس [http://localhost:3000](http://localhost:3000) در دسترس خواهد بود.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ساختار پروژه
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/                    # صفحات و layout
+│   ├── layout.tsx         # Layout اصلی با RTL
+│   ├── page.tsx           # صفحه اصلی
+│   └── globals.css        # استایل‌های全局
+├── components/             # کامپوننت‌ها
+│   ├── header/            # هدر و ناوبری
+│   ├── hero/              # بخش Hero
+│   ├── portfolio/         # نمونه‌کارها
+│   ├── pricing/           # قیمت‌گذاری
+│   ├── faq/               # سوالات متداول
+│   ├── contact/           # تماس
+│   ├── navigation/        # ناوبری (نقاط، پیشرفت اسکرول)
+│   └── shared/            # کامپوننت‌های مشترک
+├── hooks/                 # هوک‌های سفارشی
+├── lib/                   # کتابخانه‌ها و utilities
+│   └── content/           # محتوای متنی
+│       └── fa.ts          # محتوای فارسی
+└── public/                # فایل‌های استاتیک
+```
 
-## Learn More
+## سفارشی‌سازی
 
-To learn more about Next.js, take a look at the following resources:
+### تغییر محتوا
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+تمام متن‌های فارسی در فایل `src/lib/content/fa.ts` قرار دارند. می‌توانید این فایل را ویرایش کنید تا محتوای سایت را تغییر دهید.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### تغییر رنگ‌ها
 
-## Deploy on Vercel
+رنگ‌های برند در فایل `src/app/globals.css` در بخش `@theme` تعریف شده‌اند. می‌توانید این مقادیر را تغییر دهید.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### اضافه کردن تصاویر
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+برای اضافه کردن تصاویر پروژه‌ها:
+1. تصاویر را در پوشه `public/projects/` قرار دهید
+2. مسیر تصاویر را در `src/lib/content/fa.ts` در بخش `portfolioProjects` به‌روزرسانی کنید
+
+### تغییر فونت
+
+برای استفاده از فونت فارسی (مثلاً Vazirmatn):
+1. فونت را از Google Fonts یا منابع دیگر دانلود کنید
+2. فایل فونت را در `public/fonts/` قرار دهید
+3. در `src/app/layout.tsx` فونت را import کنید
+4. در `src/app/globals.css` فونت را به `--font-sans` اضافه کنید
+
+## کامپوننت‌های کلیدی
+
+### ProjectRequestModal
+مودال چندمرحله‌ای برای درخواست پروژه که شامل:
+- اطلاعات تماس
+- نوع پروژه
+- بودجه
+- زمان‌بندی
+- توضیحات
+
+### MagneticButton
+دکمه با افکت مغناطیسی که هنگام hover به سمت ماوس حرکت می‌کند.
+
+### PortfolioSection
+بخش نمونه‌کارها با:
+- فیلتر بر اساس نوع پروژه
+- کارت‌های تعاملی
+- مودال جزئیات پروژه
+
+## نکات مهم
+
+- تمام متن‌ها به فارسی و RTL هستند
+- برای تغییر زبان، می‌توانید فایل `en.ts` اضافه کنید و سیستم چندزبانه پیاده‌سازی کنید
+- فرم‌ها در حال حاضر فقط داده‌ها را در console.log نمایش می‌دهند - باید backend اضافه شود
+- تصاویر پروژه‌ها placeholder هستند - باید تصاویر واقعی اضافه شوند
+
+## پشتیبانی
+
+برای سوالات و پشتیبانی، با تیم آریو استودیو تماس بگیرید.
+
+---
+
+ساخته شده با ❤️ توسط آریو استودیو
