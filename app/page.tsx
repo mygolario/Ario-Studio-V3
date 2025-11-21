@@ -3,6 +3,7 @@ import { Hero } from "@/components/Hero";
 import { Services } from "@/components/Services";
 import { Process } from "@/components/Process";
 import { FinalCTA } from "@/components/FinalCTA";
+import { Footer } from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
         <Services />
         <Process />
         <FinalCTA />
+        <Footer />
       </div>
     </main>
   );
