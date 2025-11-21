@@ -1,0 +1,204 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Service {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  subtitle  String?  @map("subtitle")
+  pillLabel String?  @map("pill_label")
+  items     Json // Array of bullet points
+  order     Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("services")
+}
+
+model Project {
+  id               String      @id @default(cuid())
+  title            String
+  slug             String      @unique
+  shortDescription String      @map("short_description")
+  longDescription  String?     @map("long_description")
+  tags             String[] // Array of tags
+  thumbnailUrl     String?     @map("thumbnail_url")
+  heroImageUrl     String?     @map("hero_image_url")
+  year             Int?
+  clientName       String?     @map("client_name")
+  role             String?
+  liveUrl          String?     @map("live_url")
+  isFeatured       Boolean     @default(false) @map("is_featured")
+  order            Int         @default(0)
+  createdAt        DateTime    @default(now()) @map("created_at")
+  updatedAt        DateTime    @updatedAt @map("updated_at")
+  caseStudies      CaseStudy[]
+
+  @@map("projects")
+}
+
+model ProcessStep {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  order       Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("process_steps")
+}
+
+model Highlight {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  type        String // e.g. "about", "philosophy", "metric"
+  order       Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("highlights")
+}
+
+model Lead {
+  id              String   @id @default(cuid())
+  name            String
+  email           String
+  companyName     String?  @map("company_name")
+  website         String?  @map("website")
+  budgetRange     String?  @map("budget_range")
+  timeline        String?
+  businessType    String?  @map("business_type")
+  servicesNeeded  String[] @map("services_needed")
+  message         String
+  source          String // e.g. "hero_form", "contact", "direct"
+  status          String   @default("new") // "new", "reviewing", "contacted", "in_progress", "won", "lost"
+  aiSummary       String?  @map("ai_summary")
+  aiTags          String[] @default([]) @map("ai_tags")
+  aiPriorityScore Int?     @map("ai_priority_score")
+  aiNotes         String?  @map("ai_notes")
+  internalNotes   String?  @map("internal_notes")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@map("leads")
+}
+
+model BlogPost {
+  id            String    @id @default(cuid())
+  title         String
+  slug          String    @unique
+  excerpt       String
+  content       String
+  coverImageUrl String?   @map("cover_image_url")
+  tags          String[]
+  status        String    @default("draft") // "draft" | "published"
+  publishedAt   DateTime? @map("published_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@map("blog_posts")
+}
+
+model CaseStudy {
+  id           String    @id @default(cuid())
+  projectId    String    @map("project_id")
+  slug         String    @unique
+  title        String
+  heroImageUrl String?   @map("hero_image_url")
+  summary      String
+  challenge    String
+  solution     String
+  results      String
+  metrics      Json? // Optional structured data
+  content      String? // Optional long-form content
+  status       String    @default("draft") // "draft" | "published"
+  publishedAt  DateTime? @map("published_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  project      Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("case_studies")
+}
+
+// ============================================
+// Multilingual Content System
+// ============================================
+// This system provides a normalized, scalable approach to managing
+// multilingual content (Portfolio, Services, Blog) with separate
+// translation records for each language.
+
+enum ContentType {
+  portfolio
+  service
+  blog
+}
+
+enum ContentLang {
+  fa
+  en
+}
+
+model Content {
+  id          String      @id @default(cuid())
+  type        ContentType
+  slug        String      @unique // Language-agnostic slug
+  // TODO: enforce slug normalization/validation (only lowercase letters, numbers, hyphen)
+  isPublished Boolean     @default(false)
+  order       Int?
+  featured    Boolean     @default(false)
+  archived    Boolean     @default(false)
+  layoutType  String?     @map("layout_type") // Case study layout type: "basic" | "cinematic" | "split" | "story"
+  category    String? // Portfolio category: "landing-page" | "full-site" | "automation" | "brand-experience"
+  tags        String? // Comma-separated tags or JSON string
+
+  // Service-specific fields
+  servicePriceFrom Int?    @map("service_price_from") // Starting price (e.g., in USD or equivalent)
+  serviceCurrency  String? @map("service_currency") // Currency code: "USD" | "IRR" | etc.
+  serviceDuration  String? @map("service_duration") // Free text: "2–4 weeks"
+  serviceLevel     String? @map("service_level") // "starter" | "pro" | "premium"
+
+  createdAt    DateTime             @default(now()) @map("created_at")
+  updatedAt    DateTime             @updatedAt @map("updated_at")
+  translations ContentTranslation[]
+
+  @@map("contents")
+}
+
+model ContentTranslation {
+  id              String      @id @default(cuid())
+  content         Content     @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  contentId       String      @map("content_id")
+  lang            ContentLang
+  title           String
+  excerpt         String?
+  body            String? // Full content (for blog/case study) - legacy field, prefer bodyIntro for new content
+  metaTitle       String?     @map("meta_title")
+  metaDescription String?     @map("meta_description")
+  subtitle        String?
+  tags            String[]    @default([])
+
+  // Case Study specific fields
+  bodyIntro     String? @map("body_intro") // Introduction/Overview text
+  bodyProblem   String? @map("body_problem") // Problem/Challenge section
+  bodySolution  String? @map("body_solution") // Solution section
+  bodyProcess   String? @map("body_process") // Process section
+  bodyResult    String? @map("body_result") // Result/Outcome section
+  featuredImage String? @map("featured_image") // URL of main featured image
+  galleryImages Json?   @map("gallery_images") // Array of image URLs (stored as JSON)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([contentId, lang]) // Each content can have only one translation per language
+  @@map("content_translations")
+}
