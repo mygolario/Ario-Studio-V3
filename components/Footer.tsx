@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useTranslation } from '@/lib/useTranslation'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useMemo, useCallback } from 'react'
+import WaveTransition from '@/components/home/WaveTransition'
 
 /**
  * Footer Component
@@ -126,8 +127,11 @@ export default function Footer() {
   const contactEmail = 'info@ariostudio.net'
 
   return (
-    <footer className="relative border-t border-border-subtle bg-surface-alt">
-      <div className="container-custom py-12 md:py-16">
+    <>
+      {/* Wave Transition */}
+      <WaveTransition />
+      <footer className="relative bg-surface-alt">
+        <div className="container-custom py-12 md:py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-8 md:mb-12">
           {/* Brand Column */}
           <div className="sm:col-span-2 lg:col-span-1">
@@ -263,5 +267,6 @@ export default function Footer() {
         </motion.div>
       </div>
     </footer>
+    </>
   )
 }

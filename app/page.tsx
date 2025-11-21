@@ -1,12 +1,9 @@
 import type { Metadata } from 'next'
 import Header from '@/components/Header'
-import Hero from '@/components/Hero'
-import ServicesOverview from '@/components/ServicesOverview'
-import Services from '@/components/Services'
-import Portfolio from '@/components/Portfolio'
-import DesignEthos from '@/components/DesignEthos'
-import About from '@/components/About'
-import StartProjectSection from '@/components/StartProjectSection'
+import HeroTimeline from '@/components/home/HeroTimeline'
+import ServicesGrid from '@/components/home/ServicesGrid'
+import ProcessTimeline from '@/components/home/ProcessTimeline'
+import FinalCTA from '@/components/home/FinalCTA'
 import Footer from '@/components/Footer'
 import BetaNotice from '@/components/BetaNotice'
 import { getProcessSteps, getHighlights } from '@/lib/db'
@@ -42,22 +39,16 @@ export default async function HomePage() {
   return (
     <main className="relative">
       <Header />
-      {/* Scene 1: HERO */}
-      <Hero />
+      {/* Scene 1: HERO TIMELINE */}
+      <HeroTimeline />
       {/* Beta Notice (Farsi only) */}
       <BetaNotice />
-      {/* Scene 2: SERVICES OVERVIEW */}
-      <ServicesOverview />
-      {/* Scene 3: WHAT WE DO */}
-      <Services servicesContent={servicesContent} lang={lang} />
-      {/* Scene 4: OUR WORK */}
-      <Portfolio lang={lang} />
-      {/* Scene 5: OUR PROCESS */}
-      <DesignEthos processSteps={processSteps} />
-      {/* Scene 6: ABOUT ARIO STUDIO */}
-      <About highlights={highlights} />
-      {/* Scene 7: FINAL CTA */}
-      <StartProjectSection />
+      {/* Scene 2: SERVICES GRID */}
+      <ServicesGrid servicesContent={servicesContent} lang={lang} />
+      {/* Scene 3: PROCESS TIMELINE */}
+      <ProcessTimeline processSteps={processSteps} />
+      {/* Scene 4: FINAL CTA */}
+      <FinalCTA />
       <Footer />
     </main>
   )
