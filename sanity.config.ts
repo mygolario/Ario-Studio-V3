@@ -29,7 +29,6 @@ export default defineConfig({
     visionTool({
       defaultApiVersion: apiVersion,
       defaultDataset: dataset || SANITY_DATASET,
-      defaultQuery: '*[_type == "homePage"][0]',
     }),
   ],
 })
