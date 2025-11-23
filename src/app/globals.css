@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #02020a;
+  --foreground: #ededed;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-space-grotesk), sans-serif;
+}
+
+/* RTL Support for Farsi */
+[dir="rtl"] body {
+  font-family: var(--font-vazirmatn), sans-serif;
+}
