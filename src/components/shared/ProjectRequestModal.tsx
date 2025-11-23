@@ -48,7 +48,10 @@ export default function ProjectRequestModal({
     if (isOpen) {
       const saved = localStorage.getItem("projectRequest");
       if (saved) {
-        setFormData(JSON.parse(saved));
+        // Use setTimeout to avoid "setState synchronously within an effect" warning
+        setTimeout(() => {
+          setFormData(JSON.parse(saved));
+        }, 0);
       }
     }
   }, [isOpen]);
