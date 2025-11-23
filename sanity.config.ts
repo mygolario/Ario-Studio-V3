@@ -1,7 +1,7 @@
 'use client'
 
 /**
- * This configuration is used to for the Sanity Studio that’s mounted on the `/app/studio/[[...index]]/page.tsx` route
+ * This configuration is used to for the Sanity Studio that's mounted on the `/app/studio/[[...index]]/page.tsx` route
  */
 
 import {visionTool} from '@sanity/vision'
@@ -12,10 +12,14 @@ import {structureTool} from 'sanity/structure'
 import {apiVersion, dataset, projectId} from './src/sanity/env'
 import {schema} from './src/sanity/schemaTypes'
 
+// Hardcode values for standalone Studio deployment (these are public values)
+const SANITY_PROJECT_ID = 'v3ydinkq'
+const SANITY_DATASET = 'production'
+
 export default defineConfig({
   basePath: '/studio',
-  projectId,
-  dataset,
+  projectId: projectId || SANITY_PROJECT_ID,
+  dataset: dataset || SANITY_DATASET,
   // Add and edit the content schema in the './sanity/schema' folder
   schema,
   plugins: [
