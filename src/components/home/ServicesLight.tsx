@@ -6,13 +6,18 @@ interface ServicesLightProps {
   lang: 'en' | 'fa';
 }
 
+interface ServiceItem {
+  title: string;
+  body: string;
+}
+
 export default function ServicesLight({ data, lang }: ServicesLightProps) {
   const isFa = lang === 'fa';
   const [activeRow, setActiveRow] = useState(1);
 
   // Get services from CMS or use fallback
   const servicesFromCMS = data?.servicesSecondary || [];
-  const content = {
+  const content: { heading: string[]; services: ServiceItem[] } = {
     heading: isFa
       ? ["ما برای رشد محصولات دیجیتال شما راه‌حل‌های ویژه طراحی می‌کنیم.", "از صفر تا مقیاس جهانی، همراه برندتان هستیم."]
       : ["We take creative leaps and offer tailored solutions for the growth of your digital products.", "From scratch to success and beyond."],
@@ -58,7 +63,7 @@ export default function ServicesLight({ data, lang }: ServicesLightProps) {
         </div>
 
         <div className="space-y-0">
-          {content.services.map((service, i) => (
+          {content.services.map((service: ServiceItem, i: number) => (
             <div
               key={i}
               onMouseEnter={() => setActiveRow(i)}
