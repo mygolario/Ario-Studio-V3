@@ -15,19 +15,34 @@ export default function LogoWall({ lang }: LogoWallProps) {
   ];
 
   return (
-    <section className="py-20 bg-background border-t border-white/5">
-      <div className="container mx-auto px-6">
-        <h3 className="text-center text-xl text-gray-400 mb-16 max-w-2xl mx-auto">
-          {heading}
-        </h3>
+    <section className="py-20 bg-background border-t border-white/5 relative overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-full blur-3xl" />
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10">
+        {/* Header */}
+        <div className="mb-16 text-center">
+          <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 mb-6">
+            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+            <span className="text-xs font-bold text-gray-300 uppercase tracking-widest">
+              {isFa ? "مشتریان ما" : "Our Clients"}
+            </span>
+          </div>
+          <h3 className="text-xl md:text-2xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            {heading}
+          </h3>
+        </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {/* Client Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
           {clients.map((client, i) => (
             <div 
               key={i} 
-              className="aspect-video bg-surface rounded-2xl flex items-center justify-center border border-white/5 hover:border-white/10 transition-colors group"
+              className="group aspect-video bg-white/5 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/5 hover:border-white/20 hover:bg-white/10 transition-all cursor-pointer"
             >
-              <span className="text-gray-500 font-bold text-lg group-hover:text-white transition-colors">
+              <span className="text-gray-500 font-bold text-base md:text-lg group-hover:text-white transition-colors">
                 {client}
               </span>
             </div>
