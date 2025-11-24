@@ -3,12 +3,17 @@ interface KeyStrengthsProps {
   lang: 'en' | 'fa';
 }
 
+interface StrengthItem {
+  title: string;
+  body: string;
+}
+
 export default function KeyStrengths({ data, lang }: KeyStrengthsProps) {
   const isFa = lang === 'fa';
 
   // Get strengths from CMS or use fallback
   const strengthsFromCMS = data?.strengths || [];
-  const strengths = strengthsFromCMS.length > 0
+  const strengths: StrengthItem[] = strengthsFromCMS.length > 0
     ? strengthsFromCMS.map((s: any) => ({
         title: isFa ? s.titleFa : s.titleEn,
         body: isFa ? s.bodyFa : s.bodyEn,
@@ -31,7 +36,7 @@ export default function KeyStrengths({ data, lang }: KeyStrengthsProps) {
     <section className="py-32 bg-[#02020a] border-t border-white/5">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {strengths.map((item, i) => (
+          {strengths.map((item: StrengthItem, i: number) => (
             <div key={i} className="p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-white/20 transition-all group hover:bg-white/10">
               <div className="w-16 h-16 mb-8 bg-white/10 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
                 {icons[i] || '✨'}
