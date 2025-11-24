@@ -105,7 +105,7 @@ export default function Footer({ lang }: { lang: 'en' | 'fa' }) {
               <h4 className="font-bold mb-6 text-gray-400 uppercase text-xs tracking-widest">
                 {isFa ? "آدرس" : "Address"}
               </h4>
-              <p className="text-gray-400 text-sm leading-relaxed">
+              <p className="text-gray-400 text-sm leading-relaxed whitespace-pre-line">
                 {isFa 
                   ? "تهران، ایران\ninfo@ariostudio.net\n+98 21 1234 5678"
                   : "Tehran, Iran\ninfo@ariostudio.net\n+98 21 1234 5678"

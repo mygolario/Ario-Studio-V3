@@ -29,7 +29,7 @@ export default function Intro({ data, lang }: IntroProps) {
             </div>
             
             {/* Description */}
-            <div className="text-lg lg:text-xl text-gray-300 leading-relaxed max-w-2xl">
+            <div className="text-lg lg:text-xl text-gray-300 leading-relaxed max-w-2xl whitespace-pre-line">
               {content.description}
             </div>
           </div>
