@@ -10,28 +10,39 @@ export default function ServicesLight({ data, lang }: ServicesLightProps) {
   const isFa = lang === 'fa';
   const [activeRow, setActiveRow] = useState(1);
 
+  // Get services from CMS or use fallback
+  const servicesFromCMS = data?.servicesSecondary || [];
   const content = {
     heading: isFa
       ? ["ما برای رشد محصولات دیجیتال شما راه‌حل‌های ویژه طراحی می‌کنیم.", "از صفر تا مقیاس جهانی، همراه برندتان هستیم."]
       : ["We take creative leaps and offer tailored solutions for the growth of your digital products.", "From scratch to success and beyond."],
-    services: [
-      {
-        title: "Branding identity",
-        body: isFa ? "نام، هویت بصری و سیستم گرافیکی برند شما را از پایه طراحی می‌کنیم." : "Crafting memorable identities for modern digital brands."
-      },
-      {
-        title: "UI/UX design",
-        body: isFa ? "طراحی تجربه و رابط کاربری محصولات وب و موبایل با تمرکز روی رفتار واقعی کاربر." : "Designing impactful journeys for ambitious modern brands."
-      },
-      {
-        title: "Web development",
-        body: isFa ? "توسعه وبسایت‌های سریع، امن و قابل مقیاس با جدیدترین تکنولوژی‌ها." : "Building robust, scalable, and high-performance web applications."
-      },
-      {
-        title: "Visual design",
-        body: isFa ? "طراحی‌های بصری، گرافیک و محتوای تصویری برای کمپین‌ها و لانچ‌های مهم." : "Creating stunning visual assets that capture attention and drive engagement."
-      }
-    ]
+    services: servicesFromCMS.length > 0
+      ? servicesFromCMS.map((s: any) => ({
+          title: s.title || '',
+          body: isFa ? s.bodyFa : s.bodyEn,
+        }))
+      : [
+          {
+            title: "(01) Interactive design experiences",
+            body: isFa ? "ایجاد تجربیات دیجیتالی فراگیر که درگیر می‌کند و تبدیل می‌کند." : "Creating immersive digital experiences that engage and convert."
+          },
+          {
+            title: "(02) Motion graphics production",
+            body: isFa ? "زنده کردن برندها از طریق انیمیشن‌های پویا و داستان‌سرایی بصری." : "Bringing brands to life through dynamic animations and visual storytelling."
+          },
+          {
+            title: "(03) Website design development",
+            body: isFa ? "ساخت برنامه‌های وب قوی، مقیاس‌پذیر و با عملکرد بالا." : "Building robust, scalable, and high-performance web applications."
+          },
+          {
+            title: "(04) Digital marketing solutions",
+            body: isFa ? "کمپین‌های بازاریابی استراتژیک که رشد و تعامل را به همراه دارد." : "Strategic marketing campaigns that drive growth and engagement."
+          },
+          {
+            title: "(05) Packaging design innovation",
+            body: isFa ? "راه‌حل‌های بسته‌بندی نوآورانه که در قفسه‌ها برجسته می‌شوند." : "Innovative packaging solutions that stand out on shelves."
+          }
+        ]
   };
 
   return (

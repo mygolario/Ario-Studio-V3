@@ -13,29 +13,40 @@ export default function Intro({ data, lang }: IntroProps) {
   };
 
   return (
-    <section className="py-32 bg-background">
+    <section className="py-32 bg-[#02020a]">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Avatars */}
-          <div className="flex -space-x-4 rtl:space-x-reverse justify-center lg:justify-start">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="w-16 h-16 rounded-full border-2 border-background bg-surface flex items-center justify-center text-xs text-gray-500">
-                User {i}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+          {/* Left: Icon + Description */}
+          <div className="space-y-8">
+            {/* Icon */}
+            <div className="w-16 h-16 flex items-center justify-center">
+              <div className="grid grid-cols-2 gap-2 w-12 h-12">
+                <div className="w-5 h-5 rounded-full bg-white/20" />
+                <div className="w-5 h-5 rounded-full bg-white/20" />
+                <div className="w-5 h-5 rounded-full bg-white/20" />
+                <div className="w-5 h-5 rounded-full bg-white/20" />
               </div>
-            ))}
-            <div className="w-16 h-16 rounded-full border-2 border-background bg-surface flex items-center justify-center text-xs font-bold text-white">
-              +2k
+            </div>
+            
+            {/* Description */}
+            <div className="text-lg lg:text-xl text-gray-300 leading-relaxed max-w-2xl">
+              {content.description}
             </div>
           </div>
 
-          {/* Text */}
-          <div className="space-y-8">
-             <h2 className="text-6xl lg:text-8xl font-bold tracking-tighter text-white">
-               Ariostudio
-             </h2>
-             <div className="text-lg lg:text-xl text-gray-400 leading-relaxed whitespace-pre-line">
-               {content.description}
-             </div>
+          {/* Right: Large Studio Text + Stats */}
+          <div className="flex flex-col items-end lg:items-start space-y-6">
+            <div className="flex items-center gap-4">
+              <h2 className="text-8xl lg:text-9xl font-bold tracking-tighter text-white">
+                Studio
+              </h2>
+              <div className="w-16 h-16 rounded-full bg-purple-500/20 flex items-center justify-center border-2 border-purple-500/30">
+                <span className="text-3xl">😊</span>
+              </div>
+            </div>
+            <p className="text-gray-400 text-lg">
+              {isFa ? "مورد اعتماد ۱۵,۰۰۰+ بنیان‌گذار و صاحب کسب‌وکار" : "Trusted by 15,000+ founders & business owners"}
+            </p>
           </div>
         </div>
       </div>

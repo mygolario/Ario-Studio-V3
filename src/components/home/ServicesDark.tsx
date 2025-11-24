@@ -10,20 +10,24 @@ export default function ServicesDark({ data, lang }: ServicesDarkProps) {
   const isFa = lang === 'fa';
   const [activeService, setActiveService] = useState(1);
 
+  // Get services from CMS or use fallback
+  const servicesFromCMS = data?.servicesSecondary || [];
   const content = {
     heading: isFa 
-      ? "ایده‌های جسورانه و اجرای دقیق که رشد قابل اندازه‌گیری می‌سازد"
+      ? "ایده‌های نوآورانه و اجرای جسورانه که رشد قابل اندازه‌گیری ایجاد می‌کند"
       : "Innovative ideas and bold execution that drive measurable growth.",
     description: isFa
       ? "ما ترکیب استراتژی، دیزاین و تکنولوژی را ارائه می‌دهیم تا هر وبسایت و هر هویت بصری، فقط زیبا نباشد؛ برای بیزنس شما کار کند."
       : "We combine strategy, design, and technology to ensure every website and visual identity isn't just beautiful—it works for your business.",
-    services: [
-      "Interactive design experiences",
-      "Motion graphics production",
-      "Website design development",
-      "Digital marketing solutions",
-      "Packaging design innovation"
-    ]
+    services: servicesFromCMS.length > 0 
+      ? servicesFromCMS.map((s: any) => s.title || s)
+      : [
+          "(01) Interactive design experiences",
+          "(02) Motion graphics production",
+          "(03) Website design development",
+          "(04) Digital marketing solutions",
+          "(05) Packaging design innovation"
+        ]
   };
 
   return (
@@ -39,33 +43,45 @@ export default function ServicesDark({ data, lang }: ServicesDarkProps) {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Visual */}
-          <div className="relative aspect-[4/5] bg-surface rounded-3xl overflow-hidden border border-white/10 flex items-center justify-center">
-             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 opacity-50" />
-             <span className="text-white/20 font-bold text-2xl relative z-10">Service Visual {activeService + 1}</span>
+          {/* Visual - VR Headset Image */}
+          <div className="relative aspect-[4/5] rounded-3xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/15 to-pink-500/20 blur-3xl" />
+            <div className="relative w-full h-full bg-gradient-to-br from-blue-900/40 to-purple-900/40 rounded-3xl border border-white/10 backdrop-blur-sm flex items-center justify-center">
+              {/* Placeholder for VR headset image */}
+              <div className="text-center space-y-4">
+                <div className="w-40 h-40 mx-auto bg-white/10 rounded-full flex items-center justify-center border-2 border-white/20">
+                  <svg className="w-20 h-20 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <span className="text-white/20 font-medium text-sm">Service Visual</span>
+              </div>
+            </div>
           </div>
 
           {/* List */}
-          <div className="space-y-2">
-            {content.services.map((service, i) => (
-              <div
-                key={i}
-                onMouseEnter={() => setActiveService(i)}
-                className={`p-6 rounded-2xl cursor-pointer transition-all duration-300 flex items-center justify-between group ${
-                  activeService === i 
-                    ? 'bg-white text-background scale-105 shadow-lg shadow-white/5' 
-                    : 'hover:bg-surface text-gray-400 hover:text-white'
-                }`}
-              >
-                <div className="flex items-center gap-6">
-                  <span className="text-xs font-mono opacity-50">0{i + 1}</span>
-                  <span className="text-xl font-bold">{service}</span>
+          <div className="space-y-3">
+            {content.services.map((service: string, i: number) => {
+              const isActive = activeService === i;
+              return (
+                <div
+                  key={i}
+                  onMouseEnter={() => setActiveService(i)}
+                  className={`p-6 rounded-2xl cursor-pointer transition-all duration-300 flex items-center justify-between group ${
+                    isActive 
+                      ? 'bg-white text-[#02020a] shadow-xl' 
+                      : 'bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white border border-white/5'
+                  }`}
+                >
+                  <span className="text-xl font-bold">
+                    {service}
+                  </span>
+                  <span className={`text-2xl transition-transform ${isActive ? 'rotate-0' : '-rotate-45 opacity-0 group-hover:opacity-100'}`}>
+                    →
+                  </span>
                 </div>
-                <span className={`transform transition-transform ${activeService === i ? 'rotate-0' : '-rotate-45 opacity-0 group-hover:opacity-100'}`}>
-                  →
-                </span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

@@ -5,31 +5,42 @@ interface IdentityHighlightProps {
   lang: 'en' | 'fa';
 }
 
+import { urlFor } from '@/sanity/lib/image';
+
 export default function IdentityHighlight({ data, lang }: IdentityHighlightProps) {
   const isFa = lang === 'fa';
 
+  const identityData = data?.identityHighlight || {};
   const content = {
     heading: isFa 
-      ? "طراحی سفرهای تأثیرگذار برای برندهای جسور دیجیتال"
-      : "Designing impactful journeys for ambitious modern brands.",
+      ? (identityData.headingFa || "طراحی سفرهای تأثیرگذار برای برندهای جسور دیجیتال")
+      : (identityData.headingEn || "Designing impactful journeys for ambitious modern brands."),
     paragraph: isFa
-      ? "ما هویت‌هایی می‌سازیم که در همه‌ی نقاط تماس با کاربر، قابل تشخیص، سازگار و ماندگار باشند."
-      : "We create identities that are timeless, adaptable, and built to thrive across every platform.",
+      ? (identityData.paragraphFa || "ما هویت‌هایی می‌سازیم که در همه‌ی نقاط تماس با کاربر، قابل تشخیص، سازگار و ماندگار باشند.")
+      : (identityData.paragraphEn || "We create identities that are timeless, adaptable, and built to thrive across every platform."),
     links: isFa
       ? ["استراتژی برند", "تحقیقات بازار"]
-      : ["Brand strategy", "Market research"]
+      : ["Brand strategy", "Market research"],
+    image: identityData.image ? urlFor(identityData.image).width(800).height(1000).url() : null,
   };
 
   return (
     <section className="py-32 bg-white text-background">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Image Placeholder */}
-          <div className="aspect-[3/4] bg-gray-100 rounded-3xl overflow-hidden relative">
-             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-             <div className="absolute bottom-8 left-8 text-white font-bold text-xl">
-                Identity Visual
-             </div>
+          {/* Image */}
+          <div className="aspect-[3/4] rounded-3xl overflow-hidden relative">
+            {content.image ? (
+              <img 
+                src={content.image} 
+                alt="Identity"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                <span className="text-gray-400 font-medium">Identity Visual</span>
+              </div>
+            )}
           </div>
 
           {/* Content */}

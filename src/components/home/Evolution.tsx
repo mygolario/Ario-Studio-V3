@@ -8,12 +8,13 @@ interface EvolutionProps {
 export default function Evolution({ data, lang }: EvolutionProps) {
   const isFa = lang === 'fa';
 
+  const evolutionData = data?.evolution || {};
   const content = {
-    heading1: isFa ? "تکامل برند" : "Evolution",
-    heading2: isFa ? "از مسیر طراحی" : "through design",
+    heading1: isFa ? "تکامل" : "Evolution",
+    heading2: isFa ? "از طریق طراحی" : "through design",
     paragraph: isFa
-      ? "آریو استودیو با ترکیب تفکر استراتژیک، دیزاین تجربی و هوش مصنوعی، برند شما را از یک هویت بصری ساده به یک سیستم زنده و قابل رشد تبدیل می‌کند."
-      : "Our studio connects strategic thinking, experiential design, and AI to turn your brand into a living system that can grow, adapt, and scale.",
+      ? (evolutionData.paragraphFa || "استودیوی ما تفکر استراتژیک، طراحی تجربی و هوش مصنوعی را به هم متصل می‌کند تا برند شما را به یک سیستم زنده تبدیل کند که می‌تواند رشد کند، سازگار شود و مقیاس‌پذیر باشد.")
+      : (evolutionData.paragraphEn || "Our studio connects strategic thinking, experiential design, and AI to turn your brand into a living system that can grow, adapt, and scale."),
     cta: isFa ? "درخواست پروژه" : "Start a project",
     stats: isFa
       ? [
