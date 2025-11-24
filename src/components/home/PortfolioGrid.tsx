@@ -5,6 +5,13 @@ interface PortfolioGridProps {
   lang: 'en' | 'fa';
 }
 
+interface ProjectItem {
+  title: string;
+  year: string;
+  slug: string;
+  image: string | null;
+}
+
 import { urlFor } from '@/sanity/lib/image';
 
 export default function PortfolioGrid({ data, lang }: PortfolioGridProps) {
@@ -16,7 +23,7 @@ export default function PortfolioGrid({ data, lang }: PortfolioGridProps) {
 
   // Get projects from CMS or use fallback
   const projectsFromCMS = data?.portfolioHighlight || [];
-  const projects = projectsFromCMS.length > 0
+  const projects: ProjectItem[] = projectsFromCMS.length > 0
     ? projectsFromCMS.map((p: any) => ({
         title: p.title || 'Project',
         year: p.year || '2024',
@@ -45,7 +52,7 @@ export default function PortfolioGrid({ data, lang }: PortfolioGridProps) {
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {projects.map((project, i) => (
+          {projects.map((project: ProjectItem, i: number) => (
             <Link 
               key={i} 
               href={project.slug ? `/${lang}/work/${project.slug}` : '#'} 
