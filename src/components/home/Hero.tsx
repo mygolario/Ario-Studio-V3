@@ -10,7 +10,7 @@ interface HeroProps {
 
 export default function Hero({ data, lang }: HeroProps) {
   const isFa = lang === 'fa';
-  const heroRef = useRef<HTMLElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
   
   // Fallback content if CMS data is missing
   const content = {
