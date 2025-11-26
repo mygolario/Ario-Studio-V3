@@ -1,12 +1,17 @@
+import { Hero } from "@/components/sections/Hero";
+import { Services } from "@/components/sections/Services";
+import { Projects } from "@/components/sections/Projects";
+import { About } from "@/components/sections/About";
+import { ContactCTA } from "@/components/sections/ContactCTA";
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Ario Studio</h1>
-        <p className="text-gray-600">
-          Fresh Next.js project ready for development
-        </p>
-      </div>
-    </main>
+    <div className="flex flex-col gap-0">
+      <Hero />
+      <Services />
+      <Projects />
+      <About />
+      <ContactCTA />
+    </div>
   );
 }
