@@ -18,6 +18,16 @@ export function Footer() {
             <p className="text-text-muted-custom max-w-sm">
               {t("description")}
             </p>
+            
+            <div className="pt-2">
+              <h4 className="text-sm font-medium text-text-main mb-1">{t("emailLabel")}</h4>
+              <a 
+                href="mailto:info@ariostudio.net" 
+                className="text-text-muted-custom hover:text-text-main transition-colors border-b border-transparent hover:border-text-main pb-0.5"
+              >
+                info@ariostudio.net
+              </a>
+            </div>
           </div>
 
           <div>

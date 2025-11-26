@@ -18,10 +18,10 @@
     --bg-elevated: #ffffff;
     --border-subtle: rgba(0, 0, 0, 0.08);
     --text-main: #1d1d1f;
-    --text-muted: #86868b;
+    --text-muted: #515155; /* Darkened for better readability on light bg */
     --accent: #8B5CF6; /* Purple */
     --accent-soft: rgba(139, 92, 246, 0.1);
-    --nav-bg: rgba(255, 255, 255, 0.75);
+    --nav-bg: rgba(255, 255, 255, 0.85); /* Slightly more opaque for better legibility */
     --nav-border: rgba(0, 0, 0, 0.05);
     --card-glass: rgba(255, 255, 255, 0.7);
   }

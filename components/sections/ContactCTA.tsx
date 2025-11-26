@@ -17,8 +17,11 @@ export function ContactCTA() {
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-accent-purple/20 to-accent-blue/10 border border-border-subtle p-12 md:p-24 text-center"
+          className="relative rounded-3xl overflow-hidden bg-page-elevated border border-border-subtle p-12 md:p-24 text-center shadow-sm"
         >
+          {/* Subtle Gradient Background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-accent-purple/5 to-accent-blue/5 opacity-100" />
+          
           {/* Background Glow */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-accent-purple/10 blur-[100px] pointer-events-none" />
 
@@ -40,9 +43,9 @@ export function ContactCTA() {
                 size="lg"
                 variant="outline"
                 asChild
-                className="w-full sm:w-auto"
+                className="w-full sm:w-auto bg-transparent border-border-subtle hover:bg-surface-hover text-text-main"
               >
-                <Link href="mailto:hello@ariostudio.com">{t("buttons.email")}</Link>
+                <Link href="mailto:info@ariostudio.net">{t("buttons.email")}</Link>
               </Button>
             </div>
           </div>

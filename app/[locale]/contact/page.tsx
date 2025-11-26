@@ -115,13 +115,13 @@ export default function ContactPage() {
               <div className="space-y-4 pt-8 border-t border-border-subtle">
                 <div className="flex flex-col">
                   <span className="text-sm text-text-muted-custom mb-1">
-                    {t("emailDirectly")}
+                    {t("emailMeta")}
                   </span>
                   <a
-                    href="mailto:hello@ariostudio.com"
+                    href="mailto:info@ariostudio.net"
                     className="text-2xl text-text-main hover:text-accent-purple transition-colors"
                   >
-                    hello@ariostudio.com
+                    info@ariostudio.net
                   </a>
                 </div>
               </div>

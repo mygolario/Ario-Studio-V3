@@ -7,7 +7,7 @@
     "description": "Let's turn your vision into a world-class digital experience. Schedule a discovery call with us today.",
     "buttons": {
       "request": "Project Request Form",
-      "email": "hello@ariostudio.com"
+      "email": "info@ariostudio.net"
     }
   },
   "page": {
@@ -16,7 +16,7 @@
       "highlight": "conversation."
     },
     "description": "Whether you have a specific project in mind or just want to explore what's possible, we'd love to hear from you.",
-    "emailDirectly": "Email us directly",
+    "emailMeta": "You can also email us directly at",
     "steps": {
       "1": "Project Basics",
       "2": "Goals & Scope",

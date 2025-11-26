@@ -78,22 +78,23 @@ export function Projects() {
             >
               <Link href={`/projects/${project.slug}`} className="group block">
                 <div
-                  className={`relative aspect-[16/9] rounded-2xl overflow-hidden bg-gradient-to-br ${project.gradient} border border-border-subtle group-hover:border-border-subtle/50 transition-all duration-500`}
+                  className={`relative aspect-[16/9] rounded-2xl overflow-hidden bg-page-elevated border border-border-subtle group-hover:border-accent-purple/30 group-hover:shadow-lg transition-all duration-500`}
                 >
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
+                   {/* Gradient Overlay for subtle color */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-50 group-hover:opacity-70 transition-opacity duration-500`} />
                   
                   {/* Hover Glow */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-black/20 via-transparent to-transparent dark:from-black/80" />
 
                   <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                    <span className="text-sm font-medium text-white/80 mb-2 block">
+                    <span className="text-sm font-medium text-text-main/80 dark:text-white/80 mb-2 block">
                       {project.category}
                     </span>
                     <div className="flex items-center justify-between">
-                      <h3 className="text-2xl font-bold text-white">
+                      <h3 className="text-2xl font-bold text-text-main dark:text-white">
                         {project.title}
                       </h3>
-                      <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center gap-2 text-sm font-medium">
+                      <span className="text-text-main dark:text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center gap-2 text-sm font-medium">
                         {t("preview")} <ArrowRight className="w-4 h-4" />
                       </span>
                     </div>

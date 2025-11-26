@@ -9,7 +9,8 @@ const BREVO_API_URL = "https://api.brevo.com/v3/smtp/email";
 export async function GET() {
   try {
     const apiKey = process.env.BREVO_API_KEY;
-    const adminEmail = process.env.ADMIN_EMAIL;
+    const fromEmail = process.env.CONTACT_FROM_EMAIL;
+    const toEmail = process.env.CONTACT_TO_EMAIL;
 
     // Check environment variables
     if (!apiKey) {
@@ -22,10 +23,10 @@ export async function GET() {
       );
     }
 
-    if (!adminEmail) {
+    if (!fromEmail || !toEmail) {
       return NextResponse.json(
         { 
-          error: "ADMIN_EMAIL not found in environment variables",
+          error: "CONTACT_FROM_EMAIL or CONTACT_TO_EMAIL not found",
           status: "❌ Configuration Error"
         },
         { status: 500 }
@@ -72,14 +73,15 @@ export async function GET() {
         companyName: testData.companyName,
       },
       configuration: {
-        adminEmail,
+        fromEmail,
+        toEmail,
         apiKeyConfigured: true,
         apiKeyPrefix: apiKey.substring(0, 15) + "...",
       },
       emailTest: {
         message: "Connection verified. Ready to send emails.",
-        senderEmail: "no-reply@ariostudio.net",
-        note: "Make sure 'no-reply@ariostudio.net' is verified in Brevo if using a custom domain",
+        senderEmail: fromEmail,
+        note: `Make sure '${fromEmail}' is verified in Brevo if using a custom domain`,
       },
     });
   } catch (error) {

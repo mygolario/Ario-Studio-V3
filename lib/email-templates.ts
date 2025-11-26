@@ -5,127 +5,61 @@ export function generateClientEmail(name: string, projectType: string, primaryGo
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project Request Received</title>
-  <style>
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      line-height: 1.6;
-      color: #333;
-      margin: 0;
-      padding: 0;
-      background-color: #f9f9f9;
-    }
-    .container {
-      max-width: 600px;
-      margin: 40px auto;
-      background: #ffffff;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    }
-    .header {
-      background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
-      padding: 40px;
-      text-align: center;
-    }
-    .header h1 {
-      color: white;
-      margin: 0;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 24px;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-    }
-    .content {
-      padding: 40px;
-    }
-    .greeting {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 24px;
-      color: #111;
-    }
-    .text {
-      color: #555;
-      margin-bottom: 24px;
-    }
-    .summary {
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 24px;
-    }
-    .summary-item {
-      margin-bottom: 8px;
-      font-size: 14px;
-    }
-    .steps {
-      background: #f8f9fa;
-      border-radius: 12px;
-      padding: 24px;
-      margin: 32px 0;
-    }
-    .steps h3 {
-      margin-top: 0;
-      font-size: 16px;
-      color: #111;
-    }
-    .steps ul {
-      margin: 0;
-      padding-left: 20px;
-      color: #555;
-    }
-    .steps li {
-      margin-bottom: 8px;
-    }
-    .footer {
-      background: #111;
-      color: #888;
-      padding: 32px;
-      text-align: center;
-      font-size: 14px;
-    }
-    .footer a {
-      color: #fff;
-      text-decoration: none;
-    }
-  </style>
+  <title>Ario Studio - Project Request</title>
 </head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1>Ario Studio</h1>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #1d1d1f; margin: 0; padding: 0; background-color: #f5f5f7;">
+  <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+    
+    <!-- Header -->
+    <div style="margin-bottom: 32px; border-bottom: 1px solid #e5e7eb; padding-bottom: 24px;">
+      <span style="font-size: 20px; font-weight: 600; letter-spacing: -0.02em; color: #1d1d1f;">Ario Studio</span>
     </div>
-    <div class="content">
-      <div class="greeting">Hi ${name}, thanks for reaching out.</div>
-      <div class="text">
-        We have received your project request. Our team will review the details and get back to you within 24–48 hours.
-      </div>
-      
-      <div class="summary">
-        <div class="summary-item"><strong>Project Type:</strong> ${projectType}</div>
-        <div class="summary-item"><strong>Primary Goal:</strong> ${primaryGoal}</div>
-        <div class="summary-item"><strong>Budget Range:</strong> ${budgetRange}</div>
+
+    <!-- Content -->
+    <div style="margin-bottom: 32px;">
+      <p style="font-size: 16px; margin-bottom: 24px;">Hi ${name},</p>
+      <p style="font-size: 16px; margin-bottom: 24px; color: #515155;">
+        Thank you for reaching out to Ario Studio. We have received your project request and are excited to review it.
+      </p>
+
+      <div style="background-color: #f5f5f7; padding: 24px; border-radius: 8px; margin-bottom: 32px;">
+        <h3 style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: #86868b; margin-top: 0; margin-bottom: 16px;">Summary of your request</h3>
+        
+        <div style="margin-bottom: 12px;">
+          <span style="color: #86868b; font-size: 14px; margin-right: 8px;">Project Type:</span>
+          <span style="font-weight: 500; font-size: 14px;">${projectType}</span>
+        </div>
+        <div style="margin-bottom: 12px;">
+          <span style="color: #86868b; font-size: 14px; margin-right: 8px;">Primary Goal:</span>
+          <span style="font-weight: 500; font-size: 14px;">${primaryGoal}</span>
+        </div>
+        <div>
+          <span style="color: #86868b; font-size: 14px; margin-right: 8px;">Budget Range:</span>
+          <span style="font-weight: 500; font-size: 14px;">${budgetRange}</span>
+        </div>
       </div>
 
-      <div class="steps">
-        <h3>What happens next?</h3>
-        <ul>
-          <li>We review your goals and requirements</li>
-          <li>We check feasibility & timeline availability</li>
-          <li>We respond with a preliminary plan or a call invite</li>
-        </ul>
-      </div>
+      <h3 style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: #86868b; margin-bottom: 16px;">What happens next?</h3>
+      <ul style="padding-left: 20px; color: #515155; font-size: 15px; margin-bottom: 32px;">
+        <li style="margin-bottom: 8px;">Our team will review your project details.</li>
+        <li style="margin-bottom: 8px;">We may reach out with a few clarifying questions.</li>
+        <li>We will get back to you with a timeline and next steps within 24–48 hours.</li>
+      </ul>
 
-      <div class="text">
-        We look forward to potentially working with you.
-      </div>
+      <p style="font-size: 16px; margin-bottom: 0;">
+        Best,<br>
+        Ario Studio
+      </p>
     </div>
-    <div class="footer">
-      <p>&copy; ${new Date().getFullYear()} Ario Studio. All rights reserved.</p>
-      <p><a href="https://ariostudio.net">ariostudio.net</a></p>
+
+    <!-- Footer -->
+    <div style="border-top: 1px solid #e5e7eb; padding-top: 24px; text-align: center; color: #86868b; font-size: 12px;">
+      <p style="margin-bottom: 8px;">&copy; ${new Date().getFullYear()} Ario Studio</p>
+      <p style="margin: 0;">
+        <a href="mailto:info@ariostudio.net" style="color: #86868b; text-decoration: none;">info@ariostudio.net</a>
+      </p>
     </div>
+
   </div>
 </body>
 </html>
@@ -133,88 +67,94 @@ export function generateClientEmail(name: string, projectType: string, primaryGo
 }
 
 export function generateAdminEmail(data: any) {
-  const timestamp = new Date().toLocaleString("en-US", {
-    timeZone: "Asia/Tehran",
-  });
-
   return `
 <!DOCTYPE html>
 <html>
 <head>
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #333; line-height: 1.5; }
-    .container { max-width: 600px; margin: 0 auto; }
-    .section { margin-bottom: 24px; background: #f9fafb; padding: 16px; border-radius: 8px; }
-    .section-title { font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; margin-bottom: 12px; font-weight: 600; }
-    .row { display: flex; margin-bottom: 8px; }
-    .label { flex: 0 0 140px; font-weight: 500; color: #4b5563; font-size: 14px; }
-    .value { flex: 1; color: #111827; font-size: 14px; }
-    .highlight { background: #eff6ff; padding: 2px 6px; border-radius: 4px; color: #1d4ed8; font-weight: 500; }
-    hr { border: 0; border-top: 1px solid #e5e7eb; margin: 24px 0; }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Project Request</title>
 </head>
-<body>
-  <div class="container">
-    <h2>New Project Request</h2>
-    <p style="color: #6b7280; font-size: 13px;">Submitted at: ${timestamp}</p>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.5; color: #1d1d1f; margin: 0; padding: 0; background-color: #f5f5f7;">
+  <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
     
-    <div class="section">
-      <div class="section-title">Project Basics</div>
-      <div class="row">
-        <div class="label">Project Type:</div>
-        <div class="value"><span class="highlight">${data.projectType}</span></div>
+    <!-- Header -->
+    <div style="margin-bottom: 24px; border-bottom: 1px solid #e5e7eb; padding-bottom: 24px;">
+      <h1 style="font-size: 22px; font-weight: 600; letter-spacing: -0.01em; margin: 0; color: #1d1d1f;">New project request</h1>
+      <p style="font-size: 14px; color: #86868b; margin-top: 8px; margin-bottom: 0;">
+        A new project request has been submitted via the Ario Studio website.
+      </p>
+    </div>
+
+    <!-- Project Basics -->
+    <div style="margin-bottom: 32px;">
+      <h3 style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #86868b; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px; margin-bottom: 16px;">Project Basics</h3>
+      
+      <div style="display: flex; margin-bottom: 12px;">
+        <div style="width: 140px; font-size: 14px; color: #86868b;">Project Type</div>
+        <div style="flex: 1; font-size: 14px; font-weight: 500;">${data.projectType}</div>
       </div>
-      <div class="row">
-        <div class="label">Business Name:</div>
-        <div class="value">${data.businessName || '-'}</div>
+      <div style="display: flex; margin-bottom: 12px;">
+        <div style="width: 140px; font-size: 14px; color: #86868b;">Business Name</div>
+        <div style="flex: 1; font-size: 14px;">${data.businessName || '-'}</div>
       </div>
-      <div class="row">
-        <div class="label">Current Website:</div>
-        <div class="value">${data.currentWebsite ? `<a href="${data.currentWebsite}">${data.currentWebsite}</a>` : '-'}</div>
+      <div style="display: flex; margin-bottom: 12px;">
+        <div style="width: 140px; font-size: 14px; color: #86868b;">Website</div>
+        <div style="flex: 1; font-size: 14px;">${data.currentWebsite ? `<a href="${data.currentWebsite}" style="color: #007aff; text-decoration: none;">${data.currentWebsite}</a>` : '-'}</div>
       </div>
     </div>
 
-    <div class="section">
-      <div class="section-title">Goals & Scope</div>
-      <div class="row">
-        <div class="label">Primary Goal:</div>
-        <div class="value">${data.primaryGoal}</div>
+    <!-- Goals & Scope -->
+    <div style="margin-bottom: 32px;">
+      <h3 style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #86868b; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px; margin-bottom: 16px;">Goals & Scope</h3>
+      
+      <div style="display: flex; margin-bottom: 12px;">
+        <div style="width: 140px; font-size: 14px; color: #86868b;">Primary Goal</div>
+        <div style="flex: 1; font-size: 14px; font-weight: 500;">${data.primaryGoal}</div>
       </div>
-      <div class="row">
-        <div class="label">Timeline:</div>
-        <div class="value">${data.timeline || 'Flexible'}</div>
+      <div style="display: flex; margin-bottom: 12px;">
+        <div style="width: 140px; font-size: 14px; color: #86868b;">Timeline</div>
+        <div style="flex: 1; font-size: 14px;">${data.timeline || 'Flexible'}</div>
       </div>
-      <div style="margin-top: 12px;">
-        <div class="label" style="margin-bottom: 4px;">Project Summary:</div>
-        <div class="value" style="background: white; padding: 12px; border: 1px solid #e5e7eb; border-radius: 6px; font-family: monospace; white-space: pre-wrap;">${data.projectSummary}</div>
+      <div style="margin-top: 16px;">
+        <div style="font-size: 14px; color: #86868b; margin-bottom: 8px;">Project Summary</div>
+        <div style="background-color: #f9f9fa; padding: 16px; border-radius: 8px; font-size: 14px; line-height: 1.6; color: #1d1d1f; white-space: pre-wrap;">${data.projectSummary}</div>
       </div>
     </div>
 
-    <div class="section">
-      <div class="section-title">Budget & Contact</div>
-      <div class="row">
-        <div class="label">Budget Range:</div>
-        <div class="value"><span class="highlight">${data.budgetRange}</span></div>
+    <!-- Budget & Contact -->
+    <div style="margin-bottom: 24px;">
+      <h3 style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #86868b; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px; margin-bottom: 16px;">Budget & Contact</h3>
+      
+      <div style="display: flex; margin-bottom: 12px;">
+        <div style="width: 140px; font-size: 14px; color: #86868b;">Budget Range</div>
+        <div style="flex: 1; font-size: 14px; font-weight: 500; color: #007aff;">${data.budgetRange}</div>
       </div>
-      <div class="row">
-        <div class="label">Full Name:</div>
-        <div class="value">${data.fullName}</div>
+      <div style="display: flex; margin-bottom: 12px;">
+        <div style="width: 140px; font-size: 14px; color: #86868b;">Full Name</div>
+        <div style="flex: 1; font-size: 14px; font-weight: 500;">${data.fullName}</div>
       </div>
-      <div class="row">
-        <div class="label">Email:</div>
-        <div class="value"><a href="mailto:${data.email}">${data.email}</a></div>
+      <div style="display: flex; margin-bottom: 12px;">
+        <div style="width: 140px; font-size: 14px; color: #86868b;">Email</div>
+        <div style="flex: 1; font-size: 14px;"><a href="mailto:${data.email}" style="color: #007aff; text-decoration: none;">${data.email}</a></div>
       </div>
-      <div class="row">
-        <div class="label">Social Link:</div>
-        <div class="value">${data.socialLink || '-'}</div>
+      <div style="display: flex; margin-bottom: 12px;">
+        <div style="width: 140px; font-size: 14px; color: #86868b;">Social Link</div>
+        <div style="flex: 1; font-size: 14px;">${data.socialLink || '-'}</div>
       </div>
-      ${data.extraNotes ? `
-      <div style="margin-top: 12px;">
-        <div class="label" style="margin-bottom: 4px;">Extra Notes:</div>
-        <div class="value" style="white-space: pre-wrap;">${data.extraNotes}</div>
+       ${data.extraNotes ? `
+      <div style="margin-top: 16px;">
+        <div style="font-size: 14px; color: #86868b; margin-bottom: 8px;">Extra Notes</div>
+        <div style="font-size: 14px; line-height: 1.6; color: #515155; white-space: pre-wrap;">${data.extraNotes}</div>
       </div>
       ` : ''}
     </div>
+
+    <!-- Footer -->
+    <div style="border-top: 1px solid #e5e7eb; padding-top: 24px; margin-top: 40px; text-align: center; color: #86868b; font-size: 12px;">
+      <p style="margin-bottom: 0;">Sent via Ario Studio Contact Form</p>
+    </div>
+
   </div>
 </body>
 </html>

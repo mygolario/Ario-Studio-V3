@@ -1,14 +1,14 @@
 {
   "hero": {
     "headline": {
-      "prefix": "We design and build",
-      "highlight": "high-end",
-      "suffix": ", modern websites."
+      "prefix": "Modern websites for",
+      "highlight": "ambitious brands",
+      "suffix": "."
     },
-    "description": "Ario Studio is a hybrid digital agency crafting cinematic, future-ready digital experiences for forward-thinking brands.",
+    "description": "Ario Studio is a small, focused studio that designs and builds clean, cinematic web experiences with real business impact.",
     "cta": {
-      "startProject": "Start a Project",
-      "viewWork": "View Work"
+      "startProject": "Start a project",
+      "viewWork": "View case studies"
     }
   },
   "services": {

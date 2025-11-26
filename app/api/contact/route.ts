@@ -42,12 +42,14 @@ export async function POST(request: Request) {
     }
 
     const apiKey = process.env.BREVO_API_KEY;
-    const adminEmail = process.env.ADMIN_EMAIL;
+    const fromEmail = process.env.CONTACT_FROM_EMAIL;
+    const toEmail = process.env.CONTACT_TO_EMAIL;
 
-    if (!apiKey || !adminEmail) {
+    if (!apiKey || !fromEmail || !toEmail) {
       console.error("❌ Missing environment variables:", {
         hasApiKey: !!apiKey,
-        hasAdminEmail: !!adminEmail,
+        hasFromEmail: !!fromEmail,
+        hasToEmail: !!toEmail,
       });
       return NextResponse.json(
         { error: "Server configuration error" },
@@ -59,13 +61,13 @@ export async function POST(request: Request) {
 
     // 2. Send Admin Notification
     const adminPayload = {
-      sender: { name: "Ario Studio System", email: "no-reply@ariostudio.net" },
-      to: [{ email: adminEmail }],
+      sender: { name: "Ario Studio System", email: fromEmail },
+      to: [{ email: toEmail }],
       subject: `New Project Request — From ${fullName}`,
       htmlContent: generateAdminEmail(body),
     };
 
-    console.log("📤 Sending admin email to:", adminEmail);
+    console.log("📤 Sending admin email to:", toEmail);
 
     const adminEmailRes = await fetch(BREVO_API_URL, {
       method: "POST",
@@ -97,7 +99,7 @@ export async function POST(request: Request) {
 
     // 3. Send Client Confirmation
     const clientPayload = {
-      sender: { name: "Ario Studio", email: adminEmail },
+      sender: { name: "Ario Studio", email: fromEmail },
       to: [{ email: email, name: fullName }],
       subject: "Ario Studio — Your project request has been received",
       htmlContent: generateClientEmail(fullName, projectType, primaryGoal, budgetRange),
