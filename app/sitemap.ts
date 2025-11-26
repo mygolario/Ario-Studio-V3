@@ -1,22 +1,31 @@
 import { MetadataRoute } from "next";
 import { allProjects } from "@/lib/projects";
+import { getAllProjectSlugs } from "@/sanity/queries";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://ariostudio.net";
 
-  const staticRoutes = [
-    "",
-    "/projects",
-    "/contact",
-  ].map((route) => ({
+  const staticRoutes = ["", "/projects", "/contact"].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: route === "" ? 1 : 0.8,
   }));
 
-  const projectRoutes = allProjects.map((project) => ({
-    url: `${baseUrl}/projects/${project.slug}`,
+  let projectSlugs: string[] = [];
+
+  try {
+    // Try to fetch from Sanity first
+    const sanitySlugs = await getAllProjectSlugs();
+    projectSlugs = sanitySlugs && sanitySlugs.length > 0 ? sanitySlugs : allProjects.map((p) => p.slug);
+  } catch (error) {
+    console.error("Error fetching project slugs from Sanity:", error);
+    // Fallback to static data
+    projectSlugs = allProjects.map((p) => p.slug);
+  }
+
+  const projectRoutes = projectSlugs.map((slug) => ({
+    url: `${baseUrl}/projects/${slug}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
     priority: 0.9,

@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
-
-import { getProjectBySlug } from "@/lib/projects";
+import { useState, useEffect } from "react";
+import { getProjectBySlug, SanityProject } from "@/sanity/queries";
+import { getProjectBySlug as getStaticProject } from "@/lib/projects";
 import { notFound } from "next/navigation";
 
 export default function ProjectDetails({
@@ -15,7 +16,64 @@ export default function ProjectDetails({
 }: {
   params: { slug: string };
 }) {
-  const project = getProjectBySlug(params.slug);
+  const [project, setProject] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProject() {
+      try {
+        const sanityProject = await getProjectBySlug(params.slug);
+        if (sanityProject) {
+          // Map Sanity project to our format
+          const mappedProject = {
+            title: sanityProject.title,
+            category: sanityProject.category,
+            description: sanityProject.description,
+            gradient: sanityProject.gradient,
+            client: sanityProject.client,
+            year: sanityProject.year,
+            services: sanityProject.services,
+            challenge: sanityProject.challenge,
+            solution: sanityProject.solution,
+            results: sanityProject.results,
+            slug: sanityProject.slug.current,
+            coverImage: sanityProject.coverImage,
+            images: sanityProject.images,
+          };
+          setProject(mappedProject);
+        } else {
+          // Fallback to static data
+          const staticProject = getStaticProject(params.slug);
+          if (staticProject) {
+            setProject(staticProject);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching project from Sanity:", error);
+        // Fallback to static data
+        const staticProject = getStaticProject(params.slug);
+        if (staticProject) {
+          setProject(staticProject);
+        }
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProject();
+  }, [params.slug]);
+
+  if (loading) {
+    return (
+      <div className="pt-20 min-h-screen flex items-center justify-center">
+        <div className="relative w-16 h-16">
+          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-accent-blue via-accent-purple to-accent-pink animate-pulse blur-xl opacity-50" />
+          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-accent-blue via-accent-purple to-accent-pink animate-spin-slow opacity-80" />
+          <div className="absolute inset-1 bg-background rounded-full" />
+        </div>
+      </div>
+    );
+  }
 
   if (!project) {
     notFound();
@@ -103,7 +161,7 @@ export default function ProjectDetails({
                 Services
               </h3>
               <div className="flex flex-wrap gap-2">
-                {project.services.map((service) => (
+                {project.services.map((service: string) => (
                   <span
                     key={service}
                     className="inline-block px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-foreground/80"
@@ -161,15 +219,19 @@ export default function ProjectDetails({
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-8">
                 {project.solution}
               </p>
-              
+
               {/* Visual Showcase Placeholder */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
-                 <div className="aspect-[4/3] bg-muted rounded-2xl border border-border/10 flex items-center justify-center">
-                    <span className="text-muted-foreground/40 text-sm">Visual 1</span>
-                 </div>
-                 <div className="aspect-[4/3] bg-muted rounded-2xl border border-border/10 flex items-center justify-center">
-                    <span className="text-muted-foreground/40 text-sm">Visual 2</span>
-                 </div>
+                <div className="aspect-[4/3] bg-muted rounded-2xl border border-border/10 flex items-center justify-center">
+                  <span className="text-muted-foreground/40 text-sm">
+                    Visual 1
+                  </span>
+                </div>
+                <div className="aspect-[4/3] bg-muted rounded-2xl border border-border/10 flex items-center justify-center">
+                  <span className="text-muted-foreground/40 text-sm">
+                    Visual 2
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -202,8 +264,8 @@ export default function ProjectDetails({
               Ready to build something similar?
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-12">
-              Let's collaborate to bring your vision to life with the same level of
-              precision and passion.
+              Let&apos;s collaborate to bring your vision to life with the same
+              level of precision and passion.
             </p>
             <Button size="lg" asChild className="h-14 px-8 text-lg">
               <Link href="/contact">
