@@ -1,0 +1,157 @@
+import type { Viewport } from "next";
+import { Vazirmatn, Inter } from "next/font/google";
+import "../globals.css";
+import { cn } from "@/lib/utils";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
+import { ThemeProvider } from "@/components/layout/ThemeProvider";
+import { BackgroundGlow } from "@/components/ui/BackgroundGlow";
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages, getTranslations } from 'next-intl/server';
+import { notFound } from 'next/navigation';
+
+const vazirmatn = Vazirmatn({
+  subsets: ["arabic", "latin"],
+  variable: "--font-vazirmatn",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "white" },
+    { media: "(prefers-color-scheme: dark)", color: "black" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+};
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
+  const isFa = locale === 'fa';
+  
+  return {
+    metadataBase: new URL("https://ariostudio.net"),
+    title: {
+      default: isFa ? "آریو استودیو | تجربه‌های دیجیتال خاص" : "Ario Studio | Premium Digital Experiences",
+      template: isFa ? "%s | آریو استودیو" : "%s | Ario Studio",
+    },
+    description: isFa 
+      ? "آریو استودیو یک آژانس دیجیتال هیبریدی است که تجربه‌های سینمایی و آینده‌نگرانه برای برندهای پیشرو خلق می‌کند."
+      : "Ario Studio is a hybrid digital agency crafting cinematic, future-ready digital experiences for forward-thinking brands.",
+    openGraph: {
+      type: "website",
+      locale: isFa ? "fa_IR" : "en_US",
+      url: `https://ariostudio.net/${locale}`,
+      siteName: isFa ? "آریو استودیو" : "Ario Studio",
+      title: isFa ? "آریو استودیو | تجربه‌های دیجیتال خاص" : "Ario Studio | Premium Digital Experiences",
+      description: isFa 
+        ? "آریو استودیو یک آژانس دیجیتال هیبریدی است که تجربه‌های سینمایی و آینده‌نگرانه برای برندهای پیشرو خلق می‌کند."
+        : "Ario Studio is a hybrid digital agency crafting cinematic, future-ready digital experiences for forward-thinking brands.",
+      images: [
+        {
+          url: "/opengraph-image", // This might need to be localized path if opengraph-image.tsx generates it
+          width: 1200,
+          height: 630,
+          alt: "Ario Studio",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: isFa ? "آریو استودیو | تجربه‌های دیجیتال خاص" : "Ario Studio | Premium Digital Experiences",
+      description: isFa 
+        ? "آریو استودیو یک آژانس دیجیتال هیبریدی است که تجربه‌های سینمایی و آینده‌نگرانه برای برندهای پیشرو خلق می‌کند."
+        : "Ario Studio is a hybrid digital agency crafting cinematic, future-ready digital experiences for forward-thinking brands.",
+      images: ["/opengraph-image"],
+      creator: "@ariostudio",
+    },
+    icons: {
+      icon: "/favicon.ico",
+      apple: "/apple-touch-icon.png",
+    },
+    alternates: {
+        canonical: `https://ariostudio.net/${locale}`,
+        languages: {
+            'en': 'https://ariostudio.net/en',
+            'fa': 'https://ariostudio.net/fa',
+        },
+    }
+  };
+}
+
+export default async function RootLayout({
+  children,
+  params: { locale }
+}: {
+  children: React.ReactNode;
+  params: { locale: string };
+}) {
+  if (!['en', 'fa'].includes(locale)) {
+    notFound();
+  }
+
+  const messages = await getMessages();
+  const isRtl = locale === 'fa';
+  
+  // JSON-LD
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        name: isRtl ? "آریو استودیو" : "Ario Studio",
+        url: "https://ariostudio.net",
+        logo: "https://ariostudio.net/logo.png",
+        sameAs: [
+          "https://twitter.com/ariostudio",
+          "https://instagram.com/ariostudio",
+          "https://linkedin.com/company/ariostudio",
+        ],
+      },
+      {
+        "@type": "WebSite",
+        name: isRtl ? "آریو استودیو" : "Ario Studio",
+        url: "https://ariostudio.net",
+        potentialAction: {
+          "@type": "SearchAction",
+          target: "https://ariostudio.net/search?q={search_term_string}",
+          "query-input": "required name=search_term_string",
+        },
+      },
+    ],
+  };
+
+  return (
+    <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'} className="scroll-smooth" suppressHydrationWarning>
+      <body
+        className={cn(
+          isRtl ? vazirmatn.className : inter.className,
+          "bg-background text-foreground antialiased selection:bg-accent-purple/30 selection:text-white"
+        )}
+      >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <NextIntlClientProvider messages={messages}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <BackgroundGlow />
+            <Header />
+            <main className="min-h-screen pt-20">{children}</main>
+            <Footer />
+          </ThemeProvider>
+        </NextIntlClientProvider>
+      </body>
+    </html>
+  );
+}

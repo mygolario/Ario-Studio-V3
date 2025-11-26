@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+// import Link from "next/link"; // Replaced by next-intl Link
+import { Link, usePathname } from "@/lib/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -10,18 +11,20 @@ import { cn } from "@/lib/utils";
 import { ModeToggle } from "@/components/layout/ModeToggle";
 import { Logo } from "@/components/ui/Logo";
 
-const navItems = [
-  { name: "Home", href: "/" },
-  { name: "Services", href: "/#services" },
-  { name: "Projects", href: "/projects" },
-  { name: "About", href: "/#about" },
-  { name: "Contact", href: "/contact" },
-];
-
 export function Header() {
+  const t = useTranslations('common.navigation');
   const [isScrolled, setIsScrolled] = useState(false);
   const [hoveredPath, setHoveredPath] = useState<string | null>(null);
   const pathname = usePathname();
+  const locale = useLocale();
+
+  const navItems = [
+    { name: t('home'), href: "/" },
+    { name: t('services'), href: "/#services" },
+    { name: t('projects'), href: "/projects" },
+    { name: t('about'), href: "/#about" },
+    { name: t('contact'), href: "/contact" },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,7 +39,7 @@ export function Header() {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b border-transparent",
         isScrolled
-          ? "bg-background/80 backdrop-blur-xl border-border/40 py-3 shadow-sm"
+          ? "bg-nav-bg backdrop-blur-xl border-nav-border py-3 shadow-sm"
           : "bg-transparent py-6"
       )}
     >
@@ -49,16 +52,20 @@ export function Header() {
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-1 relative">
           {navItems.map((item) => {
-            const isActive = pathname === item.href;
+            // Check if active. pathname from next-intl doesn't include locale.
+            // But strict equality might fail for hash links or subpaths.
+            // simple check:
+            const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+            
             return (
               <Link
-                key={item.name}
+                key={item.href} // Use href as key since name changes with locale
                 href={item.href}
                 className={cn(
                   "relative px-4 py-2 text-sm font-medium transition-colors duration-300",
                   isActive
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "text-text-main"
+                    : "text-text-muted-custom hover:text-text-main"
                 )}
                 onMouseEnter={() => setHoveredPath(item.href)}
                 onMouseLeave={() => setHoveredPath(null)}
@@ -77,7 +84,7 @@ export function Header() {
                 {isActive && (
                   <motion.div
                     layoutId="navbar-active"
-                    className="absolute bottom-0 left-0 right-0 h-px bg-foreground"
+                    className="absolute bottom-0 left-0 right-0 h-px bg-text-main"
                     transition={{ duration: 0.3 }}
                   />
                 )}
@@ -86,11 +93,36 @@ export function Header() {
           })}
         </nav>
 
-        {/* CTA Button & Theme Toggle */}
+        {/* CTA Button & Theme Toggle & Lang Switcher */}
         <div className="flex items-center gap-4">
+            {/* Language Switcher */}
+            <div className="flex items-center gap-1 text-sm font-medium">
+                <Link 
+                    href={pathname} 
+                    locale="fa" 
+                    className={cn(
+                        "transition-colors hover:text-accent-purple",
+                        locale === 'fa' ? "text-text-main" : "text-text-muted-custom"
+                    )}
+                >
+                    FA
+                </Link>
+                <span className="text-text-muted-custom/30">|</span>
+                <Link 
+                    href={pathname} 
+                    locale="en" 
+                    className={cn(
+                        "transition-colors hover:text-accent-purple",
+                        locale === 'en' ? "text-text-main" : "text-text-muted-custom"
+                    )}
+                >
+                    EN
+                </Link>
+            </div>
+
           <ModeToggle />
           <Button variant="glow" size="sm" asChild className="hidden sm:flex">
-            <Link href="/contact">Request Project</Link>
+            <Link href="/contact">{t('requestProject')}</Link>
           </Button>
         </div>
       </Container>

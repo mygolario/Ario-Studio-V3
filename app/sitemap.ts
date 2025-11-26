@@ -4,13 +4,19 @@ import { getAllProjectSlugs } from "@/sanity/queries";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://ariostudio.net";
+  const locales = ['en', 'fa'];
 
-  const staticRoutes = ["", "/projects", "/contact"].map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly" as const,
-    priority: route === "" ? 1 : 0.8,
-  }));
+  // Static routes
+  const staticPaths = ["", "/projects", "/contact"];
+  
+  const staticRoutes = locales.flatMap(locale => 
+    staticPaths.map((route) => ({
+      url: `${baseUrl}/${locale}${route}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: route === "" ? 1 : 0.8,
+    }))
+  );
 
   let projectSlugs: string[] = [];
 
@@ -24,12 +30,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     projectSlugs = allProjects.map((p) => p.slug);
   }
 
-  const projectRoutes = projectSlugs.map((slug) => ({
-    url: `${baseUrl}/projects/${slug}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly" as const,
-    priority: 0.9,
-  }));
+  const projectRoutes = locales.flatMap(locale => 
+    projectSlugs.map((slug) => ({
+      url: `${baseUrl}/${locale}/projects/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    }))
+  );
 
   return [...staticRoutes, ...projectRoutes];
 }

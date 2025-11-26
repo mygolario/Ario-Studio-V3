@@ -3,10 +3,12 @@
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { motion, useScroll, useTransform } from "framer-motion";
-import Link from "next/link";
+import { Link } from "@/lib/navigation";
 import { useRef } from "react";
+import { useTranslations } from "next-intl";
 
 export function Hero() {
+  const t = useTranslations("home.hero");
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -38,11 +40,11 @@ export function Hero() {
             transition={{ duration: 0.8, ease: [0.32, 0, 0.67, 0] }}
           >
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1]">
-              We design and build{" "}
+              {t('headline.prefix')}{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-blue to-accent-purple">
-                high-end
+                {t('headline.highlight')}
               </span>
-              , modern websites.
+              {t('headline.suffix')}
             </h1>
           </motion.div>
 
@@ -54,10 +56,9 @@ export function Hero() {
               delay: 0.2,
               ease: [0.32, 0, 0.67, 0],
             }}
-            className="text-lg md:text-xl text-muted-foreground max-w-lg leading-relaxed"
+            className="text-lg md:text-xl text-text-muted-custom max-w-lg leading-relaxed"
           >
-            Ario Studio is a hybrid digital agency crafting cinematic,
-            future-ready digital experiences for forward-thinking brands.
+            {t('description')}
           </motion.p>
 
           <motion.div
@@ -71,7 +72,7 @@ export function Hero() {
             className="flex flex-wrap gap-4"
           >
             <Button size="lg" className="text-base" asChild>
-              <Link href="/contact">Start a Project</Link>
+              <Link href="/contact">{t('cta.startProject')}</Link>
             </Button>
             <Button
               variant="outline"
@@ -79,7 +80,7 @@ export function Hero() {
               className="text-base"
               asChild
             >
-              <Link href="/projects">View Work</Link>
+              <Link href="/projects">{t('cta.viewWork')}</Link>
             </Button>
           </motion.div>
         </motion.div>

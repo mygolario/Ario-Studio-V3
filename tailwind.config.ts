@@ -10,6 +10,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Legacy/Shadcn mappings (kept for compatibility)
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
@@ -20,6 +21,19 @@ const config: Config = {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
         },
+        
+        // New Design Tokens
+        page: "var(--bg)",
+        "page-elevated": "var(--bg-elevated)",
+        "border-subtle": "var(--border-subtle)",
+        "text-main": "var(--text-main)",
+        "text-muted-custom": "var(--text-muted)", // Avoid conflict with 'text-muted' utility from shadcn
+        "accent-main": "var(--accent)",
+        "accent-soft": "var(--accent-soft)",
+        "nav-bg": "var(--nav-bg)",
+        "nav-border": "var(--nav-border)",
+        "card-glass": "var(--card-glass)",
+
         accent: {
           purple: "#8B5CF6",
           blue: "#3B82F6",
@@ -38,7 +52,7 @@ const config: Config = {
         widest: "0.1em",
       },
       fontFamily: {
-        sans: ["var(--font-space-grotesk)", "var(--font-inter)", "sans-serif"],
+        sans: ["var(--font-vazirmatn)", "var(--font-inter)", "sans-serif"],
       },
       fontSize: {
         h1: ["3.4rem", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "600" }],

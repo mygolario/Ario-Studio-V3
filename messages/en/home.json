@@ -1,0 +1,62 @@
+{
+  "hero": {
+    "headline": {
+      "prefix": "We design and build",
+      "highlight": "high-end",
+      "suffix": ", modern websites."
+    },
+    "description": "Ario Studio is a hybrid digital agency crafting cinematic, future-ready digital experiences for forward-thinking brands.",
+    "cta": {
+      "startProject": "Start a Project",
+      "viewWork": "View Work"
+    }
+  },
+  "services": {
+    "title": "Our Expertise",
+    "items": {
+      "01": {
+        "title": "Website & Landing Design",
+        "subtitle": "Visual Excellence",
+        "description": "We craft visually stunning, high-converting landing pages and websites that tell your brand's story with precision and elegance."
+      },
+      "02": {
+        "title": "Brand & Visual System",
+        "subtitle": "Identity Design",
+        "description": "Complete design systems, logo design, and brand guidelines that ensure consistency and premium positioning across all touchpoints."
+      },
+      "03": {
+        "title": "UX for Real-Life Goals",
+        "subtitle": "User Experience",
+        "description": "User-centric design that focuses on clarity, usability, and achieving tangible business goals through intuitive interfaces."
+      }
+    }
+  },
+  "projects": {
+    "title": "Selected Works",
+    "description": "A curated selection of our most recent digital products and experiences.",
+    "viewAll": "View All Projects",
+    "preview": "Preview"
+  },
+  "about": {
+    "title": "A small studio built for <highlight>focused work</highlight>.",
+    "p1": "We don't believe in factory-line production. Ario Studio was founded on the principle that exceptional digital products require deep focus, obsession with detail, and a personal touch.",
+    "p2": "Our team is small by design. This allows us to partner closely with a select few clients each year, treating their businesses as if they were our own. No account managers, no layers of bureaucracy—just direct collaboration with the creators.",
+    "howWeWork": {
+      "title": "How we work",
+      "items": [
+        "Deep dive discovery sessions",
+        "Iterative design & feedback loops",
+        "Pixel-perfect development",
+        "Performance-first engineering"
+      ]
+    },
+    "whoWeFit": {
+      "title": "Who we fit",
+      "items": [
+        "Early-stage startups needing a strong debut",
+        "Established brands looking for a refresh",
+        "Companies valuing design as a differentiator"
+      ]
+    }
+  }
+}

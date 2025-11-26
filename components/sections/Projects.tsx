@@ -4,8 +4,9 @@ import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
-import Link from "next/link";
+import { Link } from "@/lib/navigation";
 import { ArrowRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const projects = [
   {
@@ -39,6 +40,8 @@ const projects = [
 ];
 
 export function Projects() {
+  const t = useTranslations("home.projects");
+
   return (
     <Section id="projects">
       <Container>
@@ -48,18 +51,17 @@ export function Projects() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-3xl md:text-4xl font-bold text-white mb-4"
+              className="text-3xl md:text-4xl font-bold text-text-main mb-4"
             >
-              Selected Works
+              {t("title")}
             </motion.h2>
-            <p className="text-white/60 max-w-md">
-              A curated selection of our most recent digital products and
-              experiences.
+            <p className="text-text-muted-custom max-w-md">
+              {t("description")}
             </p>
           </div>
           <Button variant="outline" asChild>
             <Link href="/projects" className="group">
-              View All Projects
+              {t("viewAll")}
               <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </Button>
@@ -76,7 +78,7 @@ export function Projects() {
             >
               <Link href={`/projects/${project.slug}`} className="group block">
                 <div
-                  className={`relative aspect-[16/9] rounded-2xl overflow-hidden bg-gradient-to-br ${project.gradient} border border-white/5 group-hover:border-white/20 transition-all duration-500`}
+                  className={`relative aspect-[16/9] rounded-2xl overflow-hidden bg-gradient-to-br ${project.gradient} border border-border-subtle group-hover:border-border-subtle/50 transition-all duration-500`}
                 >
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
                   
@@ -84,7 +86,7 @@ export function Projects() {
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
 
                   <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                    <span className="text-sm font-medium text-white/60 mb-2 block">
+                    <span className="text-sm font-medium text-white/80 mb-2 block">
                       {project.category}
                     </span>
                     <div className="flex items-center justify-between">
@@ -92,7 +94,7 @@ export function Projects() {
                         {project.title}
                       </h3>
                       <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center gap-2 text-sm font-medium">
-                        Preview <ArrowRight className="w-4 h-4" />
+                        {t("preview")} <ArrowRight className="w-4 h-4" />
                       </span>
                     </div>
                   </div>

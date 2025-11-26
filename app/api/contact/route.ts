@@ -6,15 +6,37 @@ const BREVO_API_URL = "https://api.brevo.com/v3/smtp/email";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email, message } = body;
+    const { 
+      projectType,
+      businessName,
+      currentWebsite,
+      primaryGoal,
+      projectSummary,
+      timeline,
+      budgetRange,
+      fullName,
+      email,
+      socialLink,
+      extraNotes
+    } = body;
 
-    console.log("📧 Contact form submission received:", { name, email });
+    console.log("📧 Contact form submission received:", { fullName, email });
 
     // 1. Validation
-    if (!name || !email || !message) {
+    if (!projectType || !primaryGoal || !projectSummary || !budgetRange || !fullName || !email) {
       console.error("❌ Validation failed: Missing required fields");
       return NextResponse.json(
         { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      console.error("❌ Validation failed: Invalid email format");
+      return NextResponse.json(
+        { error: "Invalid email format" },
         { status: 400 }
       );
     }
@@ -39,8 +61,8 @@ export async function POST(request: Request) {
     const adminPayload = {
       sender: { name: "Ario Studio System", email: "no-reply@ariostudio.net" },
       to: [{ email: adminEmail }],
-      subject: `New Project Request — From ${name}`,
-      htmlContent: generateAdminEmail(name, email, message),
+      subject: `New Project Request — From ${fullName}`,
+      htmlContent: generateAdminEmail(body),
     };
 
     console.log("📤 Sending admin email to:", adminEmail);
@@ -76,9 +98,9 @@ export async function POST(request: Request) {
     // 3. Send Client Confirmation
     const clientPayload = {
       sender: { name: "Ario Studio", email: adminEmail },
-      to: [{ email: email, name: name }],
+      to: [{ email: email, name: fullName }],
       subject: "Ario Studio — Your project request has been received",
-      htmlContent: generateClientEmail(name),
+      htmlContent: generateClientEmail(fullName, projectType, primaryGoal, budgetRange),
     };
 
     console.log("📤 Sending client confirmation to:", email);

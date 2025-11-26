@@ -16,7 +16,7 @@ export function Logo({ className, showWordmark = true }: LogoProps) {
 
       {/* Wordmark */}
       {showWordmark && (
-        <span className="font-space-grotesk font-semibold text-lg tracking-[0.04em] uppercase text-foreground">
+        <span className="font-sans font-semibold text-lg tracking-[0.04em] uppercase text-foreground">
           Ario Studio
         </span>
       )}

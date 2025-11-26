@@ -4,6 +4,7 @@
 
 @layer base {
   :root {
+    /* Existing Shadcn/UI (mapped to new system where possible or kept for compatibility) */
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --primary: 0 0% 9%;
@@ -11,38 +12,63 @@
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%;
     --border: 0 0% 89.8%;
+
+    /* New Design Tokens (Light Mode - Apple-like) */
+    --bg: #f5f5f7;
+    --bg-elevated: #ffffff;
+    --border-subtle: rgba(0, 0, 0, 0.08);
+    --text-main: #1d1d1f;
+    --text-muted: #86868b;
+    --accent: #8B5CF6; /* Purple */
+    --accent-soft: rgba(139, 92, 246, 0.1);
+    --nav-bg: rgba(255, 255, 255, 0.75);
+    --nav-border: rgba(0, 0, 0, 0.05);
+    --card-glass: rgba(255, 255, 255, 0.7);
   }
 
   .dark {
-    --background: 0 0% 3.9%;
+    /* Existing Shadcn/UI */
+    --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
     --primary: 0 0% 98%;
     --primary-foreground: 0 0% 9%;
     --muted: 0 0% 14.9%;
     --muted-foreground: 0 0% 63.9%;
     --border: 0 0% 14.9%;
+
+    /* New Design Tokens (Dark Mode - Cinematic) */
+    --bg: #050509;
+    --bg-elevated: #0f0f13;
+    --border-subtle: rgba(255, 255, 255, 0.1);
+    --text-main: #f5f5f7;
+    --text-muted: #a1a1a6;
+    --accent: #8B5CF6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --nav-bg: rgba(5, 5, 9, 0.75);
+    --nav-border: rgba(255, 255, 255, 0.08);
+    --card-glass: rgba(15, 15, 19, 0.6);
   }
 }
 
 body {
-  @apply bg-background text-foreground font-sans antialiased selection:bg-accent-purple/30 selection:text-white;
+  @apply bg-[var(--bg)] text-[color:var(--text-main)] font-sans antialiased selection:bg-accent-purple/30 selection:text-white transition-colors duration-300;
   font-feature-settings: "ss01", "ss02", "cv01", "cv02";
 }
 
 h1 {
-  @apply text-h1;
+  @apply text-h1 text-[color:var(--text-main)];
 }
 
 h2 {
-  @apply text-h2;
+  @apply text-h2 text-[color:var(--text-main)];
 }
 
 h3 {
-  @apply text-h3;
+  @apply text-h3 text-[color:var(--text-main)];
 }
 
 p {
-  @apply text-body text-muted-foreground;
+  @apply text-body text-[color:var(--text-muted)];
 }
 
 /* Custom Scrollbar */
@@ -51,13 +77,14 @@ p {
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-background;
+  background: var(--bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-muted-foreground/20 rounded-full;
+  background-color: var(--border-subtle);
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-muted-foreground/40;
+  background-color: var(--text-muted);
 }

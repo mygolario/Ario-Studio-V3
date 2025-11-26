@@ -3,13 +3,15 @@
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { motion } from "framer-motion";
-import Link from "next/link";
+import { Link } from "@/lib/navigation";
 import { ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getAllProjects, SanityProject } from "@/sanity/queries";
 import { allProjects } from "@/lib/projects";
+import { useTranslations } from "next-intl";
 
 export default function ProjectsPage() {
+  const t = useTranslations("projects.page");
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -64,18 +66,17 @@ export default function ProjectsPage() {
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-5xl md:text-7xl font-bold text-white mb-6"
+              className="text-5xl md:text-7xl font-bold text-text-main mb-6"
             >
-              Our Work
+              {t("title")}
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-xl text-white/60 max-w-2xl"
+              className="text-xl text-text-muted-custom max-w-2xl"
             >
-              A collection of digital experiences crafted with precision,
-              passion, and a focus on user impact.
+              {t("description")}
             </motion.p>
           </div>
 
@@ -93,7 +94,7 @@ export default function ProjectsPage() {
                   className="group block space-y-4"
                 >
                   <div
-                    className={`relative aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br ${project.gradient} border border-white/5 group-hover:border-white/20 transition-all duration-500`}
+                    className={`relative aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br ${project.gradient} border border-border-subtle group-hover:border-border-subtle/50 transition-all duration-500`}
                   >
                     <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
                     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
@@ -107,14 +108,14 @@ export default function ProjectsPage() {
 
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-2xl font-bold text-white group-hover:text-accent-purple transition-colors">
+                      <h3 className="text-2xl font-bold text-text-main group-hover:text-accent-purple transition-colors">
                         {project.title}
                       </h3>
-                      <span className="text-sm font-mono text-white/40">
+                      <span className="text-sm font-mono text-text-muted-custom">
                         {project.category}
                       </span>
                     </div>
-                    <p className="text-white/60 text-sm md:text-base">
+                    <p className="text-text-muted-custom text-sm md:text-base">
                       {project.description}
                     </p>
                   </div>
