@@ -1,6 +1,6 @@
 import { MetadataRoute } from "next";
 import { allProjects } from "@/lib/projects";
-import { getAllProjectSlugs } from "@/sanity/queries";
+import { getAllProjects } from "@/lib/projects-data";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://ariostudio.net";
@@ -21,11 +21,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let projectSlugs: string[] = [];
 
   try {
-    // Try to fetch from Sanity first
-    const sanitySlugs = await getAllProjectSlugs();
-    projectSlugs = sanitySlugs && sanitySlugs.length > 0 ? sanitySlugs : allProjects.map((p) => p.slug);
+    // Fetch all projects using the unified data layer
+    const projects = await getAllProjects();
+    projectSlugs = projects.map((p) => p.slug);
   } catch (error) {
-    console.error("Error fetching project slugs from Sanity:", error);
+    console.error("Error fetching project slugs:", error);
     // Fallback to static data
     projectSlugs = allProjects.map((p) => p.slug);
   }

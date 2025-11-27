@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { getProjectBySlug } from "@/lib/projects";
+import { getProjectBySlug } from "@/lib/projects-data";
 
 export const runtime = "edge";
 
@@ -12,7 +12,7 @@ export const size = {
 export const contentType = "image/png";
 
 export default async function Image({ params }: { params: { slug: string } }) {
-  const project = getProjectBySlug(params.slug);
+  const project = await getProjectBySlug(params.slug);
 
   if (!project) {
     return new ImageResponse(
@@ -59,9 +59,9 @@ export default async function Image({ params }: { params: { slug: string } }) {
             bottom: 0,
             opacity: 0.3,
             background: `linear-gradient(to bottom right, ${
-              project.gradient.split(" ")[0].replace("from-", "").replace("/20", "")
+              (project.gradient || "from-gray-500/20 to-slate-500/20").split(" ")[0].replace("from-", "").replace("/20", "")
             }, ${
-              project.gradient.split(" ")[1].replace("to-", "").replace("/20", "")
+              (project.gradient || "from-gray-500/20 to-slate-500/20").split(" ")[1].replace("to-", "").replace("/20", "")
             })`,
             filter: "blur(100px)",
           }}
