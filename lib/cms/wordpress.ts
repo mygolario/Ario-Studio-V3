@@ -82,6 +82,18 @@ function mapProject(item: any): WPProject {
     });
   }
 
+  // Handle thumbnail_image - can be string URL or object with url property
+  const thumbRaw = item.acf?.thumbnail_image;
+  let thumbnailImage: string | null = null;
+  
+  if (thumbRaw) {
+    if (typeof thumbRaw === 'string') {
+      thumbnailImage = thumbRaw;
+    } else if (typeof thumbRaw === 'object' && thumbRaw.url) {
+      thumbnailImage = thumbRaw.url;
+    }
+  }
+
   return {
     id: item.id,
     slug: item.slug,
@@ -99,7 +111,7 @@ function mapProject(item: any): WPProject {
     gradient: item.acf?.gradient || "from-gray-500/20 to-slate-500/20", // Fallback gradient
     images: item.acf?.images || [],
     approachVisuals: approachVisuals.length > 0 ? approachVisuals : undefined,
-    thumbnailImage: item.acf?.thumbnail_image || null,
+    thumbnailImage,
   };
 }
 
@@ -119,14 +131,24 @@ export async function fetchAllProjectsFromWP(): Promise<WPProject[]> {
 export async function fetchProjectBySlugFromWP(
   slug: string
 ): Promise<WPProject | null> {
+  console.log('[fetchProjectBySlugFromWP] Fetching slug:', slug);
+  console.log('[fetchProjectBySlugFromWP] Endpoint:', WORDPRESS_PROJECTS_ENDPOINT);
+  
   try {
     const data = await fetchAPI(WORDPRESS_PROJECTS_ENDPOINT, {
       slug,
       _embed: "true",
     });
+    
+    console.log('[fetchProjectBySlugFromWP] Response:', Array.isArray(data) ? `Array with ${data.length} items` : typeof data);
+    
     if (Array.isArray(data) && data.length > 0) {
+      console.log('[fetchProjectBySlugFromWP] Found project:', data[0].title?.rendered);
+      console.log('[fetchProjectBySlugFromWP] ACF thumbnail_image:', data[0].acf?.thumbnail_image);
       return mapProject(data[0]);
     }
+    
+    console.log('[fetchProjectBySlugFromWP] No project found for slug:', slug);
     return null;
   } catch (error) {
     console.error(`Error fetching project by slug ${slug} from WP:`, error);

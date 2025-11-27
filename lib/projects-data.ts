@@ -54,21 +54,32 @@ export async function getAllProjects(): Promise<Project[]> {
   try {
     const wpProjects = await fetchAllProjectsFromWP();
     if (wpProjects.length > 0) {
-      return wpProjects.map(mapWPProject);
+      console.log('[getAllProjects] Fetched', wpProjects.length, 'projects from WordPress');
+      const mapped = wpProjects.map(mapWPProject);
+      // Log thumbnail info for first project
+      if (mapped[0]) {
+        console.log('[getAllProjects] First project:', mapped[0].title, 'thumbnailImage:', mapped[0].thumbnailImage);
+      }
+      return mapped;
     }
   } catch (e) {
     console.error("Failed to fetch projects from WordPress, falling back to static data", e);
   }
   
   // Fallback to static data
+  console.log('[getAllProjects] Using static fallback data');
   return staticProjects.map(mapStaticProject);
 }
 
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
+  console.log('[getProjectBySlug] Fetching slug:', slug);
+  
   try {
     const wpProject = await fetchProjectBySlugFromWP(slug);
     if (wpProject) {
-      return mapWPProject(wpProject);
+      const mappedProject = mapWPProject(wpProject);
+      console.log('[getProjectBySlug] Found project:', mappedProject.title, 'thumbnailImage:', mappedProject.thumbnailImage);
+      return mappedProject;
     }
   } catch (e) {
     console.error(`Failed to fetch project ${slug} from WordPress, falling back to static data`, e);
@@ -76,5 +87,10 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
   
   // Fallback to static data
   const staticProject = getStaticProjectBySlug(slug);
+  if (staticProject) {
+    console.log('[getProjectBySlug] Using static fallback for:', slug);
+  } else {
+    console.log('[getProjectBySlug] No project found for slug:', slug);
+  }
   return staticProject ? mapStaticProject(staticProject) : null;
 }
