@@ -7,40 +7,19 @@ import { motion } from "framer-motion";
 import { Link } from "@/lib/navigation";
 import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
+import type { Project } from "@/lib/projects-data";
 
-const projects = [
-  {
-    id: 1,
-    title: "Lumina Finance",
-    category: "Fintech",
-    slug: "lumina-finance",
-    gradient: "from-blue-500/20 to-cyan-500/20",
-  },
-  {
-    id: 2,
-    title: "Nebula AI",
-    category: "Artificial Intelligence",
-    slug: "nebula-ai",
-    gradient: "from-purple-500/20 to-pink-500/20",
-  },
-  {
-    id: 3,
-    title: "Velox Motors",
-    category: "Automotive",
-    slug: "velox-motors",
-    gradient: "from-orange-500/20 to-red-500/20",
-  },
-  {
-    id: 4,
-    title: "Aether Architecture",
-    category: "Real Estate",
-    slug: "aether-architecture",
-    gradient: "from-emerald-500/20 to-teal-500/20",
-  },
-];
+type ProjectsProps = {
+  projects: Project[];
+  locale: string;
+};
 
-export function Projects() {
+export function Projects({ projects, locale }: ProjectsProps) {
   const t = useTranslations("home.projects");
+  
+  // Show first 4 projects
+  const featuredProjects = projects.slice(0, 4);
 
   return (
     <Section id="projects">
@@ -68,20 +47,31 @@ export function Projects() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-          {projects.map((project, index) => (
+          {featuredProjects.map((project, index) => (
             <motion.div
-              key={project.id}
+              key={project.slug}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
             >
-              <Link href={`/projects/${project.slug}`} className="group block">
+              <Link href={`/${locale}/projects/${project.slug}`} className="group block">
                 <div
                   className={`relative aspect-[16/9] rounded-2xl overflow-hidden bg-page-elevated border border-border-subtle group-hover:border-accent-purple/30 group-hover:shadow-lg transition-all duration-500`}
                 >
-                   {/* Gradient Overlay for subtle color */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-50 group-hover:opacity-70 transition-opacity duration-500`} />
+                  {/* Thumbnail Image (if available) */}
+                  {project.thumbnailImage && (
+                    <Image
+                      src={project.thumbnailImage}
+                      alt={project.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  )}
+                  
+                  {/* Gradient Overlay */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient || 'from-gray-500/20 to-slate-500/20'} ${project.thumbnailImage ? 'opacity-60' : 'opacity-50'} group-hover:opacity-70 transition-opacity duration-500`} />
                   
                   {/* Hover Glow */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-black/20 via-transparent to-transparent dark:from-black/80" />

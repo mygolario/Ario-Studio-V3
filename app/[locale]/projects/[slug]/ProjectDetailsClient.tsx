@@ -180,17 +180,17 @@ export default function ProjectDetailsClient({
                 {project.solution}
               </p>
 
-              {/* Visual Showcase Placeholder */}
+              {/* Visual Showcase */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
-                {project.images && project.images.length > 0 ? (
-                  project.images.map((img, idx) => (
+                {project.approachVisuals && project.approachVisuals.length > 0 ? (
+                  project.approachVisuals.map((visual) => (
                     <div
-                      key={idx}
+                      key={visual.id}
                       className="aspect-[4/3] bg-page-elevated rounded-2xl border border-border-subtle overflow-hidden relative"
                     >
                       <Image
-                        src={img}
-                        alt={`Visual ${idx + 1}`}
+                        src={visual.imageUrl}
+                        alt={visual.label}
                         fill
                         className="object-cover"
                         sizes="(max-width: 768px) 100vw, 50vw"

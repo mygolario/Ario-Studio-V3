@@ -27,6 +27,8 @@ export type Project = {
   results?: string;
   gradient?: string;
   images?: string[];
+  approachVisuals?: { id: string; label: string; imageUrl: string }[];
+  thumbnailImage?: string | null;
 };
 
 // Helper to map StaticProject to our unified Project type

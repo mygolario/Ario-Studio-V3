@@ -14,6 +14,8 @@ export type WPProject = {
   results?: string;
   gradient?: string;
   images?: string[];
+  approachVisuals?: { id: string; label: string; imageUrl: string }[];
+  thumbnailImage?: string | null;
 };
 
 const WORDPRESS_API_URL = process.env.WORDPRESS_API_URL;
@@ -61,6 +63,25 @@ async function fetchAPI(endpoint: string, params: Record<string, string> = {}) {
 }
 
 function mapProject(item: any): WPProject {
+  // Map approach visuals from ACF fields
+  const approachVisuals: { id: string; label: string; imageUrl: string }[] = [];
+  
+  if (item.acf?.approach_visual_1) {
+    approachVisuals.push({
+      id: "approach_visual_1",
+      label: "Visual 1",
+      imageUrl: item.acf.approach_visual_1,
+    });
+  }
+  
+  if (item.acf?.approach_visual_2) {
+    approachVisuals.push({
+      id: "approach_visual_2",
+      label: "Visual 2",
+      imageUrl: item.acf.approach_visual_2,
+    });
+  }
+
   return {
     id: item.id,
     slug: item.slug,
@@ -77,6 +98,8 @@ function mapProject(item: any): WPProject {
     results: item.acf?.results || "",
     gradient: item.acf?.gradient || "from-gray-500/20 to-slate-500/20", // Fallback gradient
     images: item.acf?.images || [],
+    approachVisuals: approachVisuals.length > 0 ? approachVisuals : undefined,
+    thumbnailImage: item.acf?.thumbnail_image || null,
   };
 }
 

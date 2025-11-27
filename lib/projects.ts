@@ -12,6 +12,7 @@ export interface Project {
   solution: string;
   results: string;
   images: string[];
+  thumbnailImage?: string | null;
 }
 
 export const allProjects: Project[] = [
@@ -32,6 +33,7 @@ export const allProjects: Project[] = [
     results:
       "Since launch, Lumina has seen a 40% increase in daily active users and a 25% increase in session duration. The new design has been praised for its clarity and ease of use.",
     images: ["/projects/lumina-1.jpg", "/projects/lumina-2.jpg"],
+    thumbnailImage: null,
   },
   {
     id: 2,
@@ -50,6 +52,7 @@ export const allProjects: Project[] = [
     results:
       "Nebula AI secured Series A funding shortly after the redesign. The platform is now used by Fortune 500 marketing teams for content generation.",
     images: ["/projects/nebula-1.jpg", "/projects/nebula-2.jpg"],
+    thumbnailImage: null,
   },
   {
     id: 3,
@@ -68,6 +71,7 @@ export const allProjects: Project[] = [
     results:
       "Pre-orders for the new model exceeded expectations by 200%. The configurator conversion rate is 3x higher than the industry average.",
     images: ["/projects/velox-1.jpg", "/projects/velox-2.jpg"],
+    thumbnailImage: null,
   },
   {
     id: 4,
@@ -86,6 +90,7 @@ export const allProjects: Project[] = [
     results:
       "The average time on site increased to over 4 minutes. Aether reported a significant increase in qualified leads for their penthouse units.",
     images: ["/projects/aether-1.jpg", "/projects/aether-2.jpg"],
+    thumbnailImage: null,
   },
   {
     id: 5,
@@ -104,6 +109,7 @@ export const allProjects: Project[] = [
     results:
       "Patient satisfaction scores hit 4.8/5. The app has one of the lowest drop-off rates in the telemedicine sector.",
     images: ["/projects/quantum-1.jpg", "/projects/quantum-2.jpg"],
+    thumbnailImage: null,
   },
   {
     id: 6,
@@ -122,6 +128,7 @@ export const allProjects: Project[] = [
     results:
       "Return rates dropped by 30%. The brand was featured in Vogue for its innovative approach to sustainable e-commerce.",
     images: ["/projects/nova-1.jpg", "/projects/nova-2.jpg"],
+    thumbnailImage: null,
   },
 ];
 
