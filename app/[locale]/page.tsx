@@ -10,14 +10,13 @@ type PageProps = {
 };
 
 export default async function Home({ params }: PageProps) {
-  const { locale } = params;
   const projects = await getAllProjects();
 
   return (
     <div className="flex flex-col gap-0">
       <Hero />
       <Services />
-      <Projects projects={projects} locale={locale} />
+      <Projects projects={projects} />
       <About />
       <ContactCTA />
     </div>
