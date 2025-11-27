@@ -86,9 +86,9 @@
           "label": "Budget Range",
           "placeholder": "Select budget range",
           "options": {
-            "below_tier1": "Under $5k",
-            "tier1_tier2": "$5k - $15k",
-            "above_tier2": "$15k+"
+            "tier1": "1,000 – 3,000 USD",
+            "tier2": "3,000 – 6,000 USD",
+            "tier3": "6,000 – 12,000 USD"
           }
         },
         "fullName": {

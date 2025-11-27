@@ -45,8 +45,11 @@ export function Header() {
     >
       <Container className="flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="group">
-          <BrandLogo className="h-10" />
+        <Link href="/" className="group flex items-center gap-2">
+          <BrandLogo className="h-10 w-10" />
+          <span className="text-sm md:text-base font-semibold tracking-tight text-text-main hidden sm:inline-block">
+            Ario Studio
+          </span>
         </Link>
 
         {/* Desktop Nav */}

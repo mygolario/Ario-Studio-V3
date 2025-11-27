@@ -17,7 +17,8 @@ export async function POST(request: Request) {
       fullName,
       email,
       socialLink,
-      extraNotes
+      extraNotes,
+      locale = "en"
     } = body;
 
     // console.log("📧 Contact form submission received:", { fullName, email });
@@ -64,7 +65,7 @@ export async function POST(request: Request) {
       sender: { name: "Ario Studio System", email: fromEmail },
       to: [{ email: toEmail }],
       subject: `New Project Request — From ${fullName}`,
-      htmlContent: generateAdminEmail(body),
+      htmlContent: generateAdminEmail(body, locale),
     };
 
     // console.log("📤 Sending admin email to:", toEmail);
@@ -102,7 +103,7 @@ export async function POST(request: Request) {
       sender: { name: "Ario Studio", email: fromEmail },
       to: [{ email: email, name: fullName }],
       subject: "Ario Studio — Your project request has been received",
-      htmlContent: generateClientEmail(fullName, projectType, primaryGoal, budgetRange),
+      htmlContent: generateClientEmail(fullName, projectType, primaryGoal, budgetRange, locale),
     };
 
     // console.log("📤 Sending client confirmation to:", email);
