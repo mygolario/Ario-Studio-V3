@@ -48,7 +48,7 @@ export function Header() {
         <Link href="/" className="group flex items-center gap-2">
           <BrandLogo className="h-10 w-10" />
           <span className="text-sm md:text-base font-semibold tracking-tight text-text-main hidden sm:inline-block">
-            Ario Studio
+            {locale === "fa" ? "آریو استودیو" : "Ario Studio"}
           </span>
         </Link>
 

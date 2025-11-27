@@ -75,17 +75,24 @@ export function Projects({ projects }: ProjectsProps) {
                   {/* Hover Glow */}
                   <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-black/20 via-transparent to-transparent dark:from-black/80" />
 
-                  <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 pointer-events-none">
-                    <span className="text-sm font-medium text-text-main/80 dark:text-white/80 mb-2 block">
-                      {project.category}
-                    </span>
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-2xl font-bold text-text-main dark:text-white">
-                        {project.title}
-                      </h3>
-                      <span className="text-text-main dark:text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center gap-2 text-sm font-medium">
-                        {t("preview")} <ArrowRight className="w-4 h-4" />
+                  {/* Text Overlay with Dark Background */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 pointer-events-none">
+                    {/* Dark gradient overlay behind text for readability */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/65 to-transparent dark:from-black/90 dark:via-black/70" />
+                    
+                    {/* Text content */}
+                    <div className="relative z-10">
+                      <span className="text-xs md:text-sm font-semibold uppercase tracking-wider text-white/95 mb-2 block">
+                        {project.category}
                       </span>
+                      <div className="flex items-center justify-between gap-4">
+                        <h3 className="text-xl md:text-2xl font-bold text-white leading-tight">
+                          {project.title}
+                        </h3>
+                        <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center gap-2 text-sm font-medium flex-shrink-0">
+                          {t("preview")} <ArrowRight className="w-4 h-4" />
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
