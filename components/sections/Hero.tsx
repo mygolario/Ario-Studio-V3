@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/Button";
+import { PremiumButton } from "@/components/ui/PremiumButton";
 import { Container } from "@/components/ui/Container";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Link } from "@/lib/navigation";
 import { useRef } from "react";
 import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
 
 export function Hero() {
   const t = useTranslations("home.hero");
@@ -69,19 +69,16 @@ export function Hero() {
               delay: 0.4,
               ease: [0.32, 0, 0.67, 0],
             }}
-            className="flex flex-wrap gap-4"
+            className="flex flex-wrap gap-6"
           >
-            <Button size="lg" className="text-base" asChild>
-              <Link href="/contact">{t('cta.startProject')}</Link>
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="text-base bg-transparent border-border-subtle hover:bg-surface-hover text-text-main"
-              asChild
-            >
-              <Link href="/projects">{t('cta.viewWork')}</Link>
-            </Button>
+            {/* Novel Animated Buttons - Stable (No Magnetic Jitter) */}
+            <PremiumButton href="/contact" variant="primary">
+                {t('cta.startProject')}
+            </PremiumButton>
+            
+            <PremiumButton href="/projects" variant="secondary">
+                {t('cta.viewWork')}
+            </PremiumButton>
           </motion.div>
         </motion.div>
 
@@ -137,7 +134,6 @@ export function Hero() {
                 duration: 5,
                 repeat: Infinity,
                 ease: "easeInOut",
-                delay: 1,
               }}
               className="absolute -left-8 bottom-20 w-32 h-32 bg-gradient-to-tr from-accent-blue to-cyan-400 rounded-full blur-2xl opacity-30"
             />

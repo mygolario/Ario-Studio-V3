@@ -88,3 +88,13 @@ p {
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--text-muted);
 }
+
+/* Shimmer Animation for Premium Buttons */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-200%) skewX(-12deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-12deg);
+  }
+}

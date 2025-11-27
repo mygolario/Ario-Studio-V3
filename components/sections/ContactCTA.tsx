@@ -1,10 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/Button";
+import { PremiumButton } from "@/components/ui/PremiumButton";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { motion } from "framer-motion";
-import { Link } from "@/lib/navigation";
 import { useTranslations } from "next-intl";
 
 export function ContactCTA() {
@@ -35,18 +34,13 @@ export function ContactCTA() {
             <p className="text-lg md:text-xl text-text-muted-custom">
               {t("description")}
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-              <Button size="lg" variant="glow" asChild className="w-full sm:w-auto">
-                <Link href="/contact">{t("buttons.request")}</Link>
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                asChild
-                className="w-full sm:w-auto bg-transparent border-border-subtle hover:bg-surface-hover text-text-main"
-              >
-                <Link href="mailto:info@ariostudio.net">{t("buttons.email")}</Link>
-              </Button>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4">
+              <PremiumButton href="/contact" variant="primary">
+                {t("buttons.request")}
+              </PremiumButton>
+              <PremiumButton href="mailto:info@ariostudio.net" variant="secondary">
+                {t("buttons.email")}
+              </PremiumButton>
             </div>
           </div>
         </motion.div>
