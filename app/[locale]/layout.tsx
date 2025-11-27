@@ -70,10 +70,6 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       images: ["/opengraph-image"],
       creator: "@ariostudio",
     },
-    icons: {
-      icon: "/brand/ario-studio-logo.png",
-      apple: "/apple-touch-icon.png",
-    },
     alternates: {
         canonical: `https://ariostudio.net/${locale}`,
         languages: {
