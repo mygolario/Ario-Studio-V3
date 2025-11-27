@@ -7,6 +7,7 @@ import { Link } from "@/lib/navigation";
 import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Project } from "@/lib/projects-data";
+import Image from "next/image";
 
 interface ProjectsClientProps {
   projects: Project[];
@@ -56,10 +57,12 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
                     } border border-border-subtle group-hover:border-border-subtle/50 transition-all duration-500`}
                   >
                     {project.coverImageUrl && (
-                      <img
+                      <Image
                         src={project.coverImageUrl}
                         alt={project.title}
-                        className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500"
+                        fill
+                        className="object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500"
+                        sizes="(max-width: 768px) 100vw, 50vw"
                       />
                     )}
                     <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />

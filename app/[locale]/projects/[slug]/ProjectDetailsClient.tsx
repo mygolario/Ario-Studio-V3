@@ -8,6 +8,7 @@ import { Link } from "@/lib/navigation";
 import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Project } from "@/lib/projects-data";
+import Image from "next/image";
 
 interface ProjectDetailsClientProps {
   project: Project;
@@ -122,10 +123,13 @@ export default function ProjectDetailsClient({
             }`}
           >
             {project.coverImageUrl ? (
-              <img
+              <Image
                 src={project.coverImageUrl}
                 alt={project.title}
-                className="absolute inset-0 w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="100vw"
+                priority
               />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center">
@@ -184,10 +188,12 @@ export default function ProjectDetailsClient({
                       key={idx}
                       className="aspect-[4/3] bg-page-elevated rounded-2xl border border-border-subtle overflow-hidden relative"
                     >
-                      <img
+                      <Image
                         src={img}
                         alt={`Visual ${idx + 1}`}
-                        className="absolute inset-0 w-full h-full object-cover"
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 50vw"
                       />
                     </div>
                   ))
