@@ -12,10 +12,9 @@ import type { Project } from "@/lib/projects-data";
 
 type ProjectsProps = {
   projects: Project[];
-  locale: string;
 };
 
-export function Projects({ projects, locale }: ProjectsProps) {
+export function Projects({ projects }: ProjectsProps) {
   const t = useTranslations("home.projects");
   
   // Show first 4 projects
@@ -55,7 +54,7 @@ export function Projects({ projects, locale }: ProjectsProps) {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
             >
-              <Link href={`/${locale}/projects/${project.slug}`} className="group block">
+              <Link href={`/projects/${project.slug}`} className="group block">
                 <div
                   className={`relative aspect-[16/9] rounded-2xl overflow-hidden bg-page-elevated border border-border-subtle group-hover:border-accent-purple/30 group-hover:shadow-lg transition-all duration-500`}
                 >
