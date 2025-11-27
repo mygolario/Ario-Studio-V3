@@ -96,7 +96,7 @@ function mapProject(item: any): WPProject {
 
   return {
     id: item.id,
-    slug: item.slug,
+    slug: item.slug || "",
     title: item.title?.rendered ?? "",
     excerpt: stripHtml(item.excerpt?.rendered),
     content: item.content?.rendered ?? "",
@@ -121,7 +121,7 @@ export async function fetchAllProjectsFromWP(): Promise<WPProject[]> {
       per_page: "100",
       _embed: "true",
     });
-    return Array.isArray(data) ? data.map(mapProject) : [];
+    return Array.isArray(data) ? data.map(mapProject).filter(p => p.slug) : [];
   } catch (error) {
     console.error("Error fetching all projects from WP:", error);
     throw error;

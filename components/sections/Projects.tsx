@@ -54,7 +54,7 @@ export function Projects({ projects }: ProjectsProps) {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
             >
-              <Link href={`/projects/${project.slug}`} className="group block">
+              <Link href={`/projects/${project.slug}`} className="group block relative z-10">
                 <div
                   className={`relative aspect-[16/9] rounded-2xl overflow-hidden bg-page-elevated border border-border-subtle group-hover:border-accent-purple/30 group-hover:shadow-lg transition-all duration-500`}
                 >
@@ -70,12 +70,12 @@ export function Projects({ projects }: ProjectsProps) {
                   )}
                   
                   {/* Gradient Overlay */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient || 'from-gray-500/20 to-slate-500/20'} ${project.thumbnailImage ? 'opacity-60' : 'opacity-50'} group-hover:opacity-70 transition-opacity duration-500`} />
+                  <div className={`absolute inset-0 pointer-events-none bg-gradient-to-br ${project.gradient || 'from-gray-500/20 to-slate-500/20'} ${project.thumbnailImage ? 'opacity-60' : 'opacity-50'} group-hover:opacity-70 transition-opacity duration-500`} />
                   
                   {/* Hover Glow */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-black/20 via-transparent to-transparent dark:from-black/80" />
+                  <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-black/20 via-transparent to-transparent dark:from-black/80" />
 
-                  <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                  <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 pointer-events-none">
                     <span className="text-sm font-medium text-text-main/80 dark:text-white/80 mb-2 block">
                       {project.category}
                     </span>

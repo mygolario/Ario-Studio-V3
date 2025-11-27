@@ -49,7 +49,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
               >
                 <Link
                   href={`/projects/${project.slug}`}
-                  className="group block space-y-4"
+                  className="group block space-y-4 relative z-10"
                 >
                   <div
                     className={`relative aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br ${
@@ -65,10 +65,10 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
                         sizes="(max-width: 768px) 100vw, 50vw"
                       />
                     )}
-                    <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                    <div className="absolute inset-0 pointer-events-none bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
+                    <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
 
-                    <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-2 group-hover:translate-y-0">
+                    <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-2 group-hover:translate-y-0 pointer-events-none">
                       <div className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center">
                         <ArrowRight className="w-5 h-5" />
                       </div>
