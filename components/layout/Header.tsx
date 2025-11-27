@@ -9,7 +9,7 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { ModeToggle } from "@/components/layout/ModeToggle";
-import { Logo } from "@/components/ui/Logo";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 
 export function Header() {
   const t = useTranslations('common.navigation');
@@ -46,7 +46,7 @@ export function Header() {
       <Container className="flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="group">
-          <Logo />
+          <BrandLogo className="h-10" />
         </Link>
 
         {/* Desktop Nav */}

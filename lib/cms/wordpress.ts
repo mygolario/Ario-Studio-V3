@@ -131,8 +131,8 @@ export async function fetchAllProjectsFromWP(): Promise<WPProject[]> {
 export async function fetchProjectBySlugFromWP(
   slug: string
 ): Promise<WPProject | null> {
-  console.log('[fetchProjectBySlugFromWP] Fetching slug:', slug);
-  console.log('[fetchProjectBySlugFromWP] Endpoint:', WORDPRESS_PROJECTS_ENDPOINT);
+  // console.log('[fetchProjectBySlugFromWP] Fetching slug:', slug);
+  // console.log('[fetchProjectBySlugFromWP] Endpoint:', WORDPRESS_PROJECTS_ENDPOINT);
   
   try {
     const data = await fetchAPI(WORDPRESS_PROJECTS_ENDPOINT, {
@@ -140,15 +140,15 @@ export async function fetchProjectBySlugFromWP(
       _embed: "true",
     });
     
-    console.log('[fetchProjectBySlugFromWP] Response:', Array.isArray(data) ? `Array with ${data.length} items` : typeof data);
+    // console.log('[fetchProjectBySlugFromWP] Response:', Array.isArray(data) ? `Array with ${data.length} items` : typeof data);
     
     if (Array.isArray(data) && data.length > 0) {
-      console.log('[fetchProjectBySlugFromWP] Found project:', data[0].title?.rendered);
-      console.log('[fetchProjectBySlugFromWP] ACF thumbnail_image:', data[0].acf?.thumbnail_image);
+      // console.log('[fetchProjectBySlugFromWP] Found project:', data[0].title?.rendered);
+      // console.log('[fetchProjectBySlugFromWP] ACF thumbnail_image:', data[0].acf?.thumbnail_image);
       return mapProject(data[0]);
     }
     
-    console.log('[fetchProjectBySlugFromWP] No project found for slug:', slug);
+    console.warn('[fetchProjectBySlugFromWP] No project found for slug:', slug);
     return null;
   } catch (error) {
     console.error(`Error fetching project by slug ${slug} from WP:`, error);

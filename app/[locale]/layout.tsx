@@ -71,7 +71,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       creator: "@ariostudio",
     },
     icons: {
-      icon: "/favicon.ico",
+      icon: "/brand/ario-studio-logo.png",
       apple: "/apple-touch-icon.png",
     },
     alternates: {
@@ -106,7 +106,7 @@ export default async function RootLayout({
         "@type": "Organization",
         name: isRtl ? "آریو استودیو" : "Ario Studio",
         url: "https://ariostudio.net",
-        logo: "https://ariostudio.net/logo.png",
+        logo: "https://ariostudio.net/brand/ario-studio-logo.png",
         sameAs: [
           "https://twitter.com/ariostudio",
           "https://instagram.com/ariostudio",

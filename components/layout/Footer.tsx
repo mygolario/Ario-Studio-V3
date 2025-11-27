@@ -1,6 +1,6 @@
 import { Link } from "@/lib/navigation";
 import { Container } from "@/components/ui/Container";
-import { Logo } from "@/components/ui/Logo";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 import { useTranslations } from "next-intl";
 
 export function Footer() {
@@ -13,7 +13,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           <div className="col-span-1 md:col-span-2 space-y-6">
             <Link href="/" className="inline-block">
-              <Logo />
+              <BrandLogo className="h-12" />
             </Link>
             <p className="text-text-muted-custom max-w-sm">
               {t("description")}

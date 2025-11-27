@@ -20,7 +20,7 @@ export async function POST(request: Request) {
       extraNotes
     } = body;
 
-    console.log("📧 Contact form submission received:", { fullName, email });
+    // console.log("📧 Contact form submission received:", { fullName, email });
 
     // 1. Validation
     if (!projectType || !primaryGoal || !projectSummary || !budgetRange || !fullName || !email) {
@@ -57,7 +57,7 @@ export async function POST(request: Request) {
       );
     }
 
-    console.log("✅ Environment variables validated");
+    // console.log("✅ Environment variables validated");
 
     // 2. Send Admin Notification
     const adminPayload = {
@@ -67,7 +67,7 @@ export async function POST(request: Request) {
       htmlContent: generateAdminEmail(body),
     };
 
-    console.log("📤 Sending admin email to:", toEmail);
+    // console.log("📤 Sending admin email to:", toEmail);
 
     const adminEmailRes = await fetch(BREVO_API_URL, {
       method: "POST",
@@ -95,7 +95,7 @@ export async function POST(request: Request) {
       );
     }
 
-    console.log("✅ Admin email sent successfully:", adminResponseData);
+    // console.log("✅ Admin email sent successfully:", adminResponseData);
 
     // 3. Send Client Confirmation
     const clientPayload = {
@@ -105,7 +105,7 @@ export async function POST(request: Request) {
       htmlContent: generateClientEmail(fullName, projectType, primaryGoal, budgetRange),
     };
 
-    console.log("📤 Sending client confirmation to:", email);
+    // console.log("📤 Sending client confirmation to:", email);
 
     const clientEmailRes = await fetch(BREVO_API_URL, {
       method: "POST",
@@ -126,7 +126,7 @@ export async function POST(request: Request) {
         response: clientResponseData,
       });
     } else {
-      console.log("✅ Client confirmation sent successfully:", clientResponseData);
+      // console.log("✅ Client confirmation sent successfully:", clientResponseData);
     }
 
     return NextResponse.json({ success: true });
