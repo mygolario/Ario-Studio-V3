@@ -115,7 +115,7 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on escape key
+  // Close mobile menu on escape key and improve backdrop handling
   useEffect(() => {
     if (!isMobileMenuOpen) return;
     
@@ -125,8 +125,15 @@ export function Header() {
       }
     };
 
+    // Prevent body scroll when menu is open
+    document.body.style.overflow = 'hidden';
+    
     document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
+    
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = '';
+    };
   }, [isMobileMenuOpen]);
 
   return (
@@ -321,12 +328,23 @@ export function Header() {
 
         {/* Mobile Menu Backdrop - Click to close */}
         {isMobileMenuOpen && (
-          <div
-            className="md:hidden fixed inset-0 bg-black/20 dark:bg-black/40 backdrop-blur-sm z-40"
-            style={{ top: 0, left: 0, right: 0, bottom: 0 }}
-            onClick={() => setIsMobileMenuOpen(false)}
-            onTouchStart={() => setIsMobileMenuOpen(false)}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm z-40"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsMobileMenuOpen(false);
+            }}
+            onTouchStart={(e) => {
+              e.stopPropagation();
+              setIsMobileMenuOpen(false);
+            }}
             aria-hidden="true"
+            role="button"
+            tabIndex={-1}
           />
         )}
 
@@ -341,6 +359,31 @@ export function Header() {
             onClick={(e) => e.stopPropagation()}
             onMouseDown={(e) => e.stopPropagation()}
           >
+            {/* Close Button inside Menu */}
+            <div className="flex items-center justify-between p-3 border-b border-black/10 dark:border-white/10">
+              <span className="text-sm font-semibold text-text-main">
+                {locale === "fa" ? "منو" : "Menu"}
+              </span>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsMobileMenuOpen(false);
+                }}
+                onTouchStart={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsMobileMenuOpen(false);
+                }}
+                className="flex items-center justify-center w-10 h-10 rounded-full bg-black/10 dark:bg-white/10 border border-black/10 dark:border-white/10 text-text-main hover:bg-black/20 dark:hover:bg-white/20 active:scale-95 transition-all duration-200 touch-manipulation"
+                aria-label={locale === "fa" ? "بستن منو" : "Close menu"}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
             <nav className="flex flex-col p-2" aria-label={locale === "fa" ? "منوی موبایل" : "Mobile navigation"}>
               {navItems.map((item) => {
                 const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
