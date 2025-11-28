@@ -73,10 +73,16 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     icons: {
       icon: [
         { url: "/favicon.ico", sizes: "any" },
-        { url: "/icon.png", type: "image/png", sizes: "256x256" },
+        { url: "/icon.png", type: "image/png", sizes: "48x48" },
+        { url: "/icon.png", type: "image/png", sizes: "192x192" },
+        { url: "/icon.png", type: "image/png", sizes: "512x512" },
       ],
-      apple: "/apple-touch-icon.png",
+      apple: [
+        { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      ],
+      shortcut: "/favicon.ico",
     },
+    manifest: "/manifest.json",
     alternates: {
         canonical: `https://ariostudio.net/${locale}`,
         languages: {
