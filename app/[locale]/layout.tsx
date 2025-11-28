@@ -86,9 +86,9 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     alternates: {
         canonical: `https://www.ariostudio.net/${locale}`,
         languages: {
-            'en': 'https://www.ariostudio.net/en',
             'fa': 'https://www.ariostudio.net/fa',
-            'x-default': 'https://www.ariostudio.net/en',
+            'en': 'https://www.ariostudio.net/en',
+            'x-default': 'https://www.ariostudio.net/fa',
         },
     }
   };

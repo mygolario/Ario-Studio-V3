@@ -56,7 +56,7 @@ export async function generateMetadata({
       languages: {
         'en': `https://www.ariostudio.net/en/projects/${params.slug}`,
         'fa': `https://www.ariostudio.net/fa/projects/${params.slug}`,
-        'x-default': `https://www.ariostudio.net/en/projects/${params.slug}`,
+        'x-default': `https://www.ariostudio.net/fa/projects/${params.slug}`,
       },
     },
   };

@@ -46,7 +46,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       languages: {
         'en': 'https://www.ariostudio.net/en/projects',
         'fa': 'https://www.ariostudio.net/fa/projects',
-        'x-default': 'https://www.ariostudio.net/en/projects',
+        'x-default': 'https://www.ariostudio.net/fa/projects',
       },
     },
   };

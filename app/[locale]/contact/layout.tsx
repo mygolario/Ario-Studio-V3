@@ -44,7 +44,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       languages: {
         'en': 'https://www.ariostudio.net/en/contact',
         'fa': 'https://www.ariostudio.net/fa/contact',
-        'x-default': 'https://www.ariostudio.net/en/contact',
+        'x-default': 'https://www.ariostudio.net/fa/contact',
       },
     },
   };

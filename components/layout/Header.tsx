@@ -30,14 +30,14 @@ function EnhancedRequestButton() {
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.98 }}
       transition={{ type: "spring", stiffness: 400, damping: 30 }}
-      className="hidden sm:flex relative group rounded-full"
+      className="flex relative group rounded-full"
     >
       <Link
         href="/contact"
         onMouseMove={handleMouseMove}
         className={cn(
           "relative flex items-center justify-center overflow-hidden",
-          "rounded-full px-5 h-9 font-medium",
+          "rounded-full px-3 sm:px-5 h-8 sm:h-9 font-medium text-xs sm:text-sm min-w-[80px] sm:min-w-auto",
           "bg-accent-purple/20 text-accent-purple",
           "border border-accent-purple/50",
           "shadow-md shadow-accent-purple/10",
@@ -75,7 +75,7 @@ function EnhancedRequestButton() {
         </div>
 
         {/* Button Text */}
-        <span className="relative z-10 text-sm font-medium tracking-wide">
+        <span className="relative z-10 text-xs sm:text-sm font-medium tracking-wide whitespace-nowrap">
           {t('requestProject')}
         </span>
       </Link>
@@ -88,6 +88,7 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [hoveredPath, setHoveredPath] = useState<string | null>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const locale = useLocale();
   const { setTheme, theme } = useTheme();
@@ -113,6 +114,21 @@ export function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('header')) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [isMobileMenuOpen]);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
@@ -205,15 +221,15 @@ export function Header() {
           {/* Right Actions: Lang + Theme + CTA */}
           <div className="flex items-center gap-1 sm:gap-2 relative z-10 pr-1">
             
-            {/* Language Switcher "Keys" */}
-            <div className="hidden sm:flex items-center bg-black/5 dark:bg-white/5 rounded-full p-1 border border-black/5 dark:border-white/5 h-9">
+            {/* Language Switcher "Keys" - Visible on all devices */}
+            <div className="flex items-center bg-black/5 dark:bg-white/5 rounded-full p-0.5 sm:p-1 border border-black/5 dark:border-white/5 h-8 sm:h-9">
                 {['fa', 'en'].map((l) => (
                     <Link 
                         key={l}
                         href={pathname} 
                         locale={l as 'fa' | 'en'} 
                         className={cn(
-                            "relative z-10 w-8 h-7 flex items-center justify-center text-[10px] font-bold uppercase transition-colors duration-300 rounded-full",
+                            "relative z-10 w-7 h-7 sm:w-8 sm:h-7 flex items-center justify-center text-[9px] sm:text-[10px] font-bold uppercase transition-colors duration-300 rounded-full",
                             locale === l ? "text-text-main" : "text-text-muted-custom hover:text-text-main"
                         )}
                     >
@@ -229,17 +245,17 @@ export function Header() {
                 ))}
             </div>
 
-            {/* Theme Toggle "Keys" */}
+            {/* Theme Toggle "Keys" - Visible on all devices */}
             {mounted && (
-              <div className="hidden sm:flex items-center bg-black/5 dark:bg-white/5 rounded-full p-1 border border-black/5 dark:border-white/5 h-9 sm:ml-1">
+              <div className="flex items-center bg-black/5 dark:bg-white/5 rounded-full p-0.5 sm:p-1 border border-black/5 dark:border-white/5 h-8 sm:h-9 sm:ml-1">
                 <button
                   onClick={() => setTheme('light')}
                   className={cn(
-                    "relative w-8 h-7 flex items-center justify-center rounded-full transition-all duration-300",
+                    "relative w-7 h-7 sm:w-8 sm:h-7 flex items-center justify-center rounded-full transition-all duration-300",
                     theme === 'light' ? "text-amber-500" : "text-text-muted-custom hover:text-text-main"
                   )}
                 >
-                  <Sun className="w-4 h-4" strokeWidth={2.5} />
+                  <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={2.5} />
                   {theme === 'light' && (
                     <motion.div
                       layoutId="theme-active"
@@ -251,11 +267,11 @@ export function Header() {
                 <button
                   onClick={() => setTheme('dark')}
                   className={cn(
-                    "relative w-8 h-7 flex items-center justify-center rounded-full transition-all duration-300",
+                    "relative w-7 h-7 sm:w-8 sm:h-7 flex items-center justify-center rounded-full transition-all duration-300",
                     theme === 'dark' ? "text-blue-400" : "text-text-muted-custom hover:text-text-main"
                   )}
                 >
-                  <Moon className="w-4 h-4" strokeWidth={2.5} />
+                  <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={2.5} />
                   {theme === 'dark' && (
                     <motion.div
                       layoutId="theme-active"
@@ -269,20 +285,76 @@ export function Header() {
 
             <div className="w-px h-5 bg-border-subtle hidden sm:block sm:mx-1" />
 
-            {/* CTA Button - Enhanced Hover Effect */}
+            {/* CTA Button - Enhanced Hover Effect - Visible on all devices */}
             <EnhancedRequestButton />
             
             {/* Mobile Menu Button */}
             <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="md:hidden flex items-center justify-center w-9 h-9 rounded-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 text-text-main hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
-              aria-label="Menu"
+              aria-label={locale === "fa" ? "منو" : "Menu"}
+              aria-expanded={isMobileMenuOpen}
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
+              {isMobileMenuOpen ? (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
             </button>
           </div>
         </motion.div>
+
+        {/* Mobile Menu Dropdown */}
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="md:hidden mt-3 rounded-2xl backdrop-blur-xl bg-[rgba(245,245,247,0.95)] dark:bg-[rgba(15,15,19,0.95)] border border-black/[0.08] dark:border-white/[0.08] shadow-lg overflow-hidden"
+          >
+            <nav className="flex flex-col p-2" aria-label={locale === "fa" ? "منوی موبایل" : "Mobile navigation"}>
+              {navItems.map((item) => {
+                const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={cn(
+                      "relative px-4 py-3 text-sm font-medium transition-colors duration-300 rounded-xl",
+                      isActive
+                        ? "text-text-main bg-black/5 dark:bg-white/10"
+                        : "text-text-muted-custom hover:text-text-main hover:bg-black/5 dark:hover:bg-white/5"
+                    )}
+                  >
+                    {item.name}
+                    {isActive && (
+                      <motion.div
+                        layoutId="mobile-nav-active"
+                        className="absolute left-0 top-0 bottom-0 w-1 bg-text-main rounded-r-full"
+                        transition={{ duration: 0.3 }}
+                      />
+                    )}
+                  </Link>
+                );
+              })}
+              {/* Mobile CTA Button */}
+              <div className="mt-2 pt-2 border-t border-border-subtle">
+                <Link
+                  href="/contact"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center justify-center w-full px-4 py-3 rounded-xl bg-accent-purple/20 text-accent-purple border border-accent-purple/50 font-medium text-sm transition-all hover:bg-accent-purple/30"
+                >
+                  {t('requestProject')}
+                </Link>
+              </div>
+            </nav>
+          </motion.div>
+        )}
       </Container>
     </header>
   );
