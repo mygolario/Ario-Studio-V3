@@ -115,40 +115,23 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu when clicking outside
+  // Close mobile menu on escape key
   useEffect(() => {
     if (!isMobileMenuOpen) return;
     
-    const handleClickOutside = (event: Event) => {
-      const target = event.target as HTMLElement;
-      // Don't close if clicking inside the mobile menu dropdown
-      if (target.closest('[data-mobile-menu]')) {
-        return;
-      }
-      // Don't close if clicking the menu button itself
-      if (target.closest('[data-mobile-menu-button]')) {
-        return;
-      }
-      // Close if clicking outside the header
-      if (!target.closest('header')) {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
         setIsMobileMenuOpen(false);
       }
     };
 
-    // Use a longer delay to avoid conflicts with click handlers
-    const timeoutId = setTimeout(() => {
-      document.addEventListener('click', handleClickOutside, true);
-    }, 300);
-
-    return () => {
-      clearTimeout(timeoutId);
-      document.removeEventListener('click', handleClickOutside, true);
-    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
   }, [isMobileMenuOpen]);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
-      <Container className="pt-4">
+      <Container className="pt-4 relative">
         {/* Floating Capsule Container - Glass Effect */}
         <motion.div
           style={{ willChange: "box-shadow, background-color" }} // Optimized for performance
@@ -335,6 +318,17 @@ export function Header() {
             </button>
           </div>
         </motion.div>
+
+        {/* Mobile Menu Backdrop - Click to close */}
+        {isMobileMenuOpen && (
+          <div
+            className="md:hidden fixed inset-0 bg-black/20 dark:bg-black/40 backdrop-blur-sm z-40"
+            style={{ top: 0, left: 0, right: 0, bottom: 0 }}
+            onClick={() => setIsMobileMenuOpen(false)}
+            onTouchStart={() => setIsMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+        )}
 
         {/* Mobile Menu Dropdown */}
         {isMobileMenuOpen && (
