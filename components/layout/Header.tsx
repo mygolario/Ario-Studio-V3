@@ -121,13 +121,22 @@ export function Header() {
     
     const handleClickOutside = (event: Event) => {
       const target = event.target as HTMLElement;
-      if (!target.closest('header')) {
-        setIsMobileMenuOpen(false);
+      // Don't close if clicking inside the mobile menu dropdown
+      if (!target.closest('header') || target.closest('[data-mobile-menu]')) {
+        return;
       }
+      setIsMobileMenuOpen(false);
     };
 
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
+    // Use a small delay to avoid conflicts with click handlers
+    const timeoutId = setTimeout(() => {
+      document.addEventListener('click', handleClickOutside);
+    }, 100);
+
+    return () => {
+      clearTimeout(timeoutId);
+      document.removeEventListener('click', handleClickOutside);
+    };
   }, [isMobileMenuOpen]);
 
   return (
@@ -316,7 +325,9 @@ export function Header() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
+            data-mobile-menu
             className="md:hidden mt-3 rounded-2xl backdrop-blur-xl bg-[rgba(245,245,247,0.95)] dark:bg-[rgba(15,15,19,0.95)] border border-black/[0.08] dark:border-white/[0.08] shadow-lg overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
           >
             <nav className="flex flex-col p-2" aria-label={locale === "fa" ? "منوی موبایل" : "Mobile navigation"}>
               {navItems.map((item) => {
@@ -358,7 +369,11 @@ export function Header() {
                       key={l}
                       href={pathname} 
                       locale={l as 'fa' | 'en'}
-                      onClick={() => setIsMobileMenuOpen(false)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // Close menu after a small delay to allow navigation
+                        setTimeout(() => setIsMobileMenuOpen(false), 100);
+                      }}
                       className={cn(
                         "relative flex-1 flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300",
                         locale === l
@@ -382,7 +397,10 @@ export function Header() {
                   </div>
                   <div className="flex items-center gap-2 px-2">
                     <button
-                      onClick={() => setTheme('light')}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setTheme('light');
+                      }}
                       className={cn(
                         "flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300",
                         theme === 'light'
@@ -394,7 +412,10 @@ export function Header() {
                       {locale === "fa" ? "روشن" : "Light"}
                     </button>
                     <button
-                      onClick={() => setTheme('dark')}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setTheme('dark');
+                      }}
                       className={cn(
                         "flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300",
                         theme === 'dark'
@@ -413,7 +434,10 @@ export function Header() {
               <div className="mt-3 pt-3 border-t border-border-subtle">
                 <Link
                   href="/contact"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsMobileMenuOpen(false);
+                  }}
                   className="flex items-center justify-center w-full px-4 py-3 rounded-xl bg-accent-purple/20 text-accent-purple border border-accent-purple/50 font-medium text-sm transition-all hover:bg-accent-purple/30"
                 >
                   {t('requestProject')}
