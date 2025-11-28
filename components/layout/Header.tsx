@@ -154,7 +154,7 @@ export function Header() {
           />
 
           {/* Logo */}
-          <Link href="/" className="group flex items-center gap-2 sm:gap-3 pl-2 sm:pl-3 relative z-10">
+          <Link href="/" className="group flex items-center gap-2 sm:gap-3 pl-2 sm:pl-3 relative z-10" aria-label={locale === "fa" ? "برو به صفحه اصلی آریو استودیو" : "Go to Ario Studio homepage"}>
             <BrandLogo className="h-8 w-8 sm:h-9 sm:w-9" />
             <span className="text-xs sm:text-sm md:text-base font-semibold tracking-tight text-text-main hidden sm:inline-block">
               {locale === "fa" ? "آریو استودیو" : "Ario Studio"}
@@ -162,7 +162,7 @@ export function Header() {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1 relative z-10 mx-auto">
+          <nav className="hidden md:flex items-center gap-1 relative z-10 mx-auto" aria-label={locale === "fa" ? "منوی اصلی" : "Main navigation"}>
             {navItems.map((item) => {
               const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
               

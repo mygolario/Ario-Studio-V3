@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
 import { Link } from "@/lib/navigation";
 import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Project } from "@/lib/projects-data";
 import Image from "next/image";
 
@@ -19,27 +19,50 @@ export default function ProjectDetailsClient({
 }: ProjectDetailsClientProps) {
   const t = useTranslations("projects.detail");
 
+  const locale = useLocale();
+  const isRtl = locale === "fa";
+  
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
+    "@graph": [
       {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://ariostudio.net",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: isRtl ? "خانه" : "Home",
+            item: `https://www.ariostudio.net/${locale}`,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: isRtl ? "پروژه‌ها" : "Projects",
+            item: `https://www.ariostudio.net/${locale}/projects`,
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: project.title,
+            item: `https://www.ariostudio.net/${locale}/projects/${project.slug}`,
+          },
+        ],
       },
       {
-        "@type": "ListItem",
-        position: 2,
-        name: "Projects",
-        item: "https://ariostudio.net/projects",
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
+        "@type": "CreativeWork",
+        "@id": `https://www.ariostudio.net/${locale}/projects/${project.slug}#creativework`,
         name: project.title,
-        item: `https://ariostudio.net/projects/${project.slug}`,
+        description: project.description || project.excerpt || "",
+        url: `https://www.ariostudio.net/${locale}/projects/${project.slug}`,
+        creator: {
+          "@type": "Organization",
+          name: isRtl ? "آریو استودیو" : "Ario Studio",
+          url: "https://www.ariostudio.net",
+        },
+        datePublished: project.year ? `${project.year}-01-01` : undefined,
+        image: project.coverImageUrl || project.thumbnailImage,
+        keywords: project.category,
+        inLanguage: locale === 'fa' ? 'fa-IR' : 'en-US',
       },
     ],
   };
@@ -125,7 +148,7 @@ export default function ProjectDetailsClient({
             {project.coverImageUrl ? (
               <Image
                 src={project.coverImageUrl}
-                alt={project.title}
+                alt={isRtl ? `تصویر کاور پروژه ${project.title}` : `Cover image for ${project.title} project`}
                 fill
                 className="object-cover"
                 sizes="100vw"

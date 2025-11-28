@@ -59,10 +59,11 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
                     {project.coverImageUrl && (
                       <Image
                         src={project.coverImageUrl}
-                        alt={project.title}
+                        alt={`${project.title} - ${project.category}`}
                         fill
                         className="object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500"
                         sizes="(max-width: 768px) 100vw, 50vw"
+                        loading="lazy"
                       />
                     )}
                     <div className="absolute inset-0 pointer-events-none bg-black/20 group-hover:bg-transparent transition-colors duration-500" />

@@ -131,10 +131,11 @@ export function Projects({ projects }: ProjectsProps) {
                   {project.thumbnailImage && (
                     <Image
                       src={project.thumbnailImage}
-                      alt={project.title}
+                      alt={`${project.title} - ${project.category}`}
                       fill
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, 50vw"
+                      loading="lazy"
                     />
                   )}
                   

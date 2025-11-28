@@ -35,7 +35,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   const isFa = locale === 'fa';
   
   return {
-    metadataBase: new URL("https://ariostudio.net"),
+    metadataBase: new URL("https://www.ariostudio.net"),
     title: {
       default: isFa ? "آریو استودیو | تجربه‌های دیجیتال خاص" : "Ario Studio | Premium Digital Experiences",
       template: isFa ? "%s | آریو استودیو" : "%s | Ario Studio",
@@ -46,7 +46,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     openGraph: {
       type: "website",
       locale: isFa ? "fa_IR" : "en_US",
-      url: `https://ariostudio.net/${locale}`,
+      url: `https://www.ariostudio.net/${locale}`,
       siteName: isFa ? "آریو استودیو" : "Ario Studio",
       title: isFa ? "آریو استودیو | تجربه‌های دیجیتال خاص" : "Ario Studio | Premium Digital Experiences",
       description: isFa 
@@ -84,10 +84,11 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     },
     manifest: "/manifest.json",
     alternates: {
-        canonical: `https://ariostudio.net/${locale}`,
+        canonical: `https://www.ariostudio.net/${locale}`,
         languages: {
-            'en': 'https://ariostudio.net/en',
-            'fa': 'https://ariostudio.net/fa',
+            'en': 'https://www.ariostudio.net/en',
+            'fa': 'https://www.ariostudio.net/fa',
+            'x-default': 'https://www.ariostudio.net/en',
         },
     }
   };
@@ -107,28 +108,50 @@ export default async function RootLayout({
   const messages = await getMessages();
   const isRtl = locale === 'fa';
   
-  // JSON-LD
+  // JSON-LD Structured Data
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "Organization",
+        "@id": "https://www.ariostudio.net/#organization",
         name: isRtl ? "آریو استودیو" : "Ario Studio",
-        url: "https://ariostudio.net",
-        logo: "https://ariostudio.net/brand/ario-studio-logo.png",
+        url: "https://www.ariostudio.net",
+        logo: {
+          "@type": "ImageObject",
+          url: "https://www.ariostudio.net/brand/ario-studio-logo.png",
+          width: 512,
+          height: 512,
+        },
+        description: isRtl
+          ? "آریو استودیو یک آژانس دیجیتال هیبریدی است که تجربه‌های سینمایی و آینده‌نگرانه برای برندهای پیشرو خلق می‌کند."
+          : "Ario Studio is a hybrid digital agency crafting cinematic, future-ready digital experiences for forward-thinking brands.",
         sameAs: [
           "https://twitter.com/ariostudio",
           "https://instagram.com/ariostudio",
           "https://linkedin.com/company/ariostudio",
         ],
+        contactPoint: {
+          "@type": "ContactPoint",
+          email: "info@ariostudio.net",
+          contactType: "Customer Service",
+        },
       },
       {
         "@type": "WebSite",
+        "@id": "https://www.ariostudio.net/#website",
         name: isRtl ? "آریو استودیو" : "Ario Studio",
-        url: "https://ariostudio.net",
+        url: "https://www.ariostudio.net",
+        publisher: {
+          "@id": "https://www.ariostudio.net/#organization",
+        },
+        inLanguage: [locale === 'fa' ? 'fa-IR' : 'en-US'],
         potentialAction: {
           "@type": "SearchAction",
-          target: "https://ariostudio.net/search?q={search_term_string}",
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate: "https://www.ariostudio.net/search?q={search_term_string}",
+          },
           "query-input": "required name=search_term_string",
         },
       },

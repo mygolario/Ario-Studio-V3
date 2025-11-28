@@ -32,29 +32,31 @@ export function Footer() {
 
           <div>
             <h4 className="text-text-main font-medium mb-6">{t("sitemap")}</h4>
-            <ul className="space-y-4 text-sm text-text-muted-custom">
-              <li>
-                <Link href="/" className="hover:text-text-main transition-colors">
-                  {tNav("home")}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/projects"
-                  className="hover:text-text-main transition-colors"
-                >
-                  {tNav("projects")}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/contact"
-                  className="hover:text-text-main transition-colors"
-                >
-                  {tNav("contact")}
-                </Link>
-              </li>
-            </ul>
+            <nav aria-label={t("sitemap")}>
+              <ul className="space-y-4 text-sm text-text-muted-custom">
+                <li>
+                  <Link href="/" className="hover:text-text-main transition-colors">
+                    {tNav("home")}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/projects"
+                    className="hover:text-text-main transition-colors"
+                  >
+                    {tNav("projects")}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/contact"
+                    className="hover:text-text-main transition-colors"
+                  >
+                    {tNav("contact")}
+                  </Link>
+                </li>
+              </ul>
+            </nav>
           </div>
 
           <div>

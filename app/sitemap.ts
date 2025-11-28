@@ -3,7 +3,7 @@ import { allProjects } from "@/lib/projects";
 import { getAllProjects } from "@/lib/projects-data";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://ariostudio.net";
+  const baseUrl = "https://www.ariostudio.net";
   const locales = ['en', 'fa'];
 
   // Static routes
