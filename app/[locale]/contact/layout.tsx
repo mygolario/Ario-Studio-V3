@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { ReactNode } from "react";
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const isFa = locale === 'fa';
@@ -48,5 +48,13 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       },
     },
   };
+}
+
+export default function ContactLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  return <>{children}</>;
 }
 
