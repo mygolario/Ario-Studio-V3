@@ -122,7 +122,7 @@ export function Header() {
           style={{ willChange: "box-shadow, background-color" }} // Optimized for performance
           className={cn(
             "pointer-events-auto relative flex items-center justify-between",
-            "px-2 md:px-3 py-2 md:py-2", // Compact and sleek
+            "px-2 sm:px-3 md:px-4 py-2", // Compact and sleek
             "rounded-full", // Always pill-shaped
             "backdrop-blur-xl",
             // Glass background matching site theme
@@ -154,9 +154,9 @@ export function Header() {
           />
 
           {/* Logo */}
-          <Link href="/" className="group flex items-center gap-3 pl-3 relative z-10">
-            <BrandLogo className="h-9 w-9" />
-            <span className="text-sm md:text-base font-semibold tracking-tight text-text-main hidden sm:inline-block">
+          <Link href="/" className="group flex items-center gap-2 sm:gap-3 pl-2 sm:pl-3 relative z-10">
+            <BrandLogo className="h-8 w-8 sm:h-9 sm:w-9" />
+            <span className="text-xs sm:text-sm md:text-base font-semibold tracking-tight text-text-main hidden sm:inline-block">
               {locale === "fa" ? "آریو استودیو" : "Ario Studio"}
             </span>
           </Link>
@@ -203,7 +203,7 @@ export function Header() {
           </nav>
 
           {/* Right Actions: Lang + Theme + CTA */}
-          <div className="flex items-center gap-2 relative z-10 pr-1">
+          <div className="flex items-center gap-1 sm:gap-2 relative z-10 pr-1">
             
             {/* Language Switcher "Keys" */}
             <div className="hidden sm:flex items-center bg-black/5 dark:bg-white/5 rounded-full p-1 border border-black/5 dark:border-white/5 h-9">
@@ -231,7 +231,7 @@ export function Header() {
 
             {/* Theme Toggle "Keys" */}
             {mounted && (
-              <div className="hidden sm:flex items-center bg-black/5 dark:bg-white/5 rounded-full p-1 border border-black/5 dark:border-white/5 h-9 ml-1">
+              <div className="hidden sm:flex items-center bg-black/5 dark:bg-white/5 rounded-full p-1 border border-black/5 dark:border-white/5 h-9 sm:ml-1">
                 <button
                   onClick={() => setTheme('light')}
                   className={cn(
@@ -267,10 +267,20 @@ export function Header() {
               </div>
             )}
 
-            <div className="w-px h-5 bg-border-subtle hidden sm:block mx-1" />
+            <div className="w-px h-5 bg-border-subtle hidden sm:block sm:mx-1" />
 
             {/* CTA Button - Enhanced Hover Effect */}
             <EnhancedRequestButton />
+            
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden flex items-center justify-center w-9 h-9 rounded-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 text-text-main hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+              aria-label="Menu"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
           </div>
         </motion.div>
       </Container>

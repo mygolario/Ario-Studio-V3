@@ -95,20 +95,20 @@ export default function ContactPage() {
     <div className="pt-20 min-h-screen flex flex-col justify-center">
       <Section>
         <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-start">
             {/* Left Side: Intro & Info */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="space-y-8 sticky top-32"
+              className="space-y-6 sm:space-y-8 lg:sticky lg:top-32"
             >
-              <h1 className="text-5xl md:text-7xl font-bold text-text-main tracking-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-text-main tracking-tight">
                 {t("title.prefix")} <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-blue to-accent-purple">
                   {t("title.highlight")}
                 </span>
               </h1>
-              <p className="text-xl text-text-muted-custom max-w-md leading-relaxed">
+              <p className="text-lg sm:text-xl text-text-muted-custom max-w-md leading-relaxed">
                 {t("description")}
               </p>
 
@@ -132,7 +132,7 @@ export default function ContactPage() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-card-glass backdrop-blur-xl border border-border-subtle p-8 md:p-10 rounded-3xl relative overflow-hidden"
+              className="bg-card-glass backdrop-blur-xl border border-border-subtle p-6 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl relative overflow-hidden"
             >
               {status === "success" ? (
                 <div className="flex flex-col items-center justify-center text-center py-12 space-y-6 min-h-[400px]">
@@ -212,7 +212,7 @@ export default function ContactPage() {
                             <label className="text-sm font-medium text-text-main">
                               {t("form.fields.projectType.label")} <span className="text-red-500">*</span>
                             </label>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                               {Object.keys(t.raw("form.fields.projectType.options")).map((optionKey) => (
                                 <button
                                   key={optionKey}
@@ -303,7 +303,7 @@ export default function ContactPage() {
                             <label className="text-sm font-medium text-text-main">
                               {t("form.fields.timeline.label")}
                             </label>
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-2 gap-2 sm:gap-3">
                               {Object.keys(t.raw("form.fields.timeline.options")).map((optionKey) => (
                                 <button
                                   key={optionKey}
@@ -356,7 +356,7 @@ export default function ContactPage() {
                             </div>
                           </div>
 
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                             <div className="space-y-2">
                               <label className="text-sm font-medium text-text-main">
                                 {t("form.fields.fullName.label")} <span className="text-red-500">*</span>
@@ -420,13 +420,13 @@ export default function ContactPage() {
                     )}
 
                     {/* Navigation Buttons */}
-                    <div className="flex items-center justify-between mt-8 pt-6 border-t border-border-subtle">
+                    <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-4 mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-border-subtle">
                       {currentStep > 1 ? (
                         <Button
                           variant="outline"
                           onClick={handleBack}
                           disabled={status === "loading"}
-                          className="text-text-muted-custom hover:text-text-main"
+                          className="text-text-muted-custom hover:text-text-main w-full sm:w-auto min-h-[44px]"
                         >
                           {isRtl ? <ChevronRight className="w-4 h-4 ml-2" /> : <ChevronLeft className="w-4 h-4 mr-2" />}
                           {t("form.back")}
@@ -440,6 +440,7 @@ export default function ContactPage() {
                           variant="glow"
                           onClick={handleNext}
                           disabled={!validateStep(currentStep)}
+                          className="w-full sm:w-auto min-h-[44px]"
                         >
                           {t("form.next")}
                           {isRtl ? <ChevronLeft className="w-4 h-4 mr-2" /> : <ChevronRight className="w-4 h-4 ml-2" />}
@@ -449,6 +450,7 @@ export default function ContactPage() {
                           variant="glow"
                           onClick={handleSubmit}
                           disabled={!validateStep(3) || status === "loading"}
+                          className="w-full sm:w-auto min-h-[44px]"
                         >
                           {status === "loading" ? (
                             <>

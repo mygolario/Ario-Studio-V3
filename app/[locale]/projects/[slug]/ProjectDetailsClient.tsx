@@ -69,10 +69,10 @@ export default function ProjectDetailsClient({
             <span className="block text-accent-purple font-mono text-sm mb-4 tracking-wider uppercase">
               {project.category}
             </span>
-            <h1 className="text-5xl md:text-7xl font-bold text-text-main mb-8 tracking-tighter">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-text-main mb-6 sm:mb-8 tracking-tighter">
               {project.title}
             </h1>
-            <p className="text-xl md:text-2xl text-text-muted-custom max-w-3xl leading-relaxed">
+            <p className="text-lg sm:text-xl md:text-2xl text-text-muted-custom max-w-3xl leading-relaxed">
               {project.description || project.excerpt}
             </p>
           </motion.div>
@@ -82,7 +82,7 @@ export default function ProjectDetailsClient({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-8 border-y border-border-subtle py-8 mb-16"
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 border-y border-border-subtle py-6 sm:py-8 mb-12 sm:mb-16"
           >
             <div>
               <h3 className="text-sm font-mono text-text-muted-custom mb-2 uppercase tracking-wider">
@@ -118,7 +118,7 @@ export default function ProjectDetailsClient({
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
-            className={`w-full aspect-video rounded-3xl border border-border-subtle mb-24 relative overflow-hidden bg-gradient-to-br ${
+            className={`w-full aspect-video rounded-2xl sm:rounded-3xl border border-border-subtle mb-12 sm:mb-16 md:mb-24 relative overflow-hidden bg-gradient-to-br ${
               project.gradient || "from-gray-500/20 to-slate-500/20"
             }`}
           >
@@ -145,14 +145,14 @@ export default function ProjectDetailsClient({
       {/* Case Study Content */}
       <Section className="bg-page-elevated">
         <Container>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
             <div className="md:col-span-4">
-              <h2 className="text-3xl font-bold mb-6 sticky top-32 text-text-main">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 md:sticky md:top-32 text-text-main">
                 {t("challenge")}
               </h2>
             </div>
             <div className="md:col-span-8">
-              <p className="text-lg md:text-xl text-text-muted-custom leading-relaxed">
+              <p className="text-base sm:text-lg md:text-xl text-text-muted-custom leading-relaxed">
                 {project.challenge}
               </p>
               {/* If we have raw content from WP, we might want to display it here or below */}
@@ -169,19 +169,19 @@ export default function ProjectDetailsClient({
 
       <Section>
         <Container>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
             <div className="md:col-span-4">
-              <h2 className="text-3xl font-bold mb-6 sticky top-32 text-text-main">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 md:sticky md:top-32 text-text-main">
                 {t("solution")}
               </h2>
             </div>
             <div className="md:col-span-8">
-              <p className="text-lg md:text-xl text-text-muted-custom leading-relaxed mb-8">
+              <p className="text-base sm:text-lg md:text-xl text-text-muted-custom leading-relaxed mb-6 sm:mb-8">
                 {project.solution}
               </p>
 
               {/* Visual Showcase */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
+              <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-8 sm:mt-12">
                 {project.approachVisuals && project.approachVisuals.length > 0 ? (
                   project.approachVisuals.map((visual) => (
                     <div
@@ -219,7 +219,7 @@ export default function ProjectDetailsClient({
 
       <Section className="bg-accent-purple/5 border-y border-accent-purple/10">
         <Container>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
             <div className="md:col-span-4">
               <h2 className="text-3xl font-bold mb-6 text-text-main">
                 {t("results")}
@@ -241,13 +241,13 @@ export default function ProjectDetailsClient({
       <Section>
         <Container>
           <div className="border-t border-border-subtle pt-24 text-center">
-            <h2 className="text-4xl md:text-5xl font-bold mb-8 text-text-main">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 sm:mb-8 text-text-main">
               {t("nextCta.title")}
             </h2>
-            <p className="text-xl text-text-muted-custom max-w-2xl mx-auto mb-12">
+            <p className="text-lg sm:text-xl text-text-muted-custom max-w-2xl mx-auto mb-8 sm:mb-12">
               {t("nextCta.description")}
             </p>
-            <Button size="lg" asChild className="h-14 px-8 text-lg">
+            <Button size="lg" asChild className="h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg min-h-[44px]">
               <Link href="/contact">
                 {t("nextCta.button")} <ArrowRight className="ml-2 w-5 h-5" />
               </Link>

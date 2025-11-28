@@ -10,8 +10,8 @@ export function Footer() {
   return (
     <footer className="bg-page-elevated border-t border-border-subtle py-12 md:py-16">
       <Container>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-          <div className="col-span-1 md:col-span-2 space-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 mb-8 sm:mb-12">
+          <div className="col-span-1 sm:col-span-2 md:col-span-2 space-y-4 sm:space-y-6">
             <Link href="/" className="inline-block">
               <BrandLogo className="h-12" />
             </Link>

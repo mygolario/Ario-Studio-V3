@@ -12,7 +12,7 @@ export function About() {
   return (
     <Section id="about" className="bg-page-elevated">
       <Container>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 lg:gap-24">
           {/* Left: Storytelling */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -20,12 +20,12 @@ export function About() {
             viewport={{ once: true }}
             className="space-y-8"
           >
-            <h2 className="text-3xl md:text-5xl font-bold text-text-main leading-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-text-main leading-tight">
               {t.rich("title", {
                 highlight: (chunks) => <span className="text-accent-purple">{chunks}</span>
               })}
             </h2>
-            <div className="space-y-6 text-lg text-text-muted-custom leading-relaxed">
+            <div className="space-y-4 sm:space-y-6 text-base sm:text-lg text-text-muted-custom leading-relaxed">
               <p>{t("p1")}</p>
               <p>{t("p2")}</p>
             </div>

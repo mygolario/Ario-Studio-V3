@@ -97,13 +97,13 @@ export function Projects({ projects }: ProjectsProps) {
   return (
     <Section id="projects">
       <Container>
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-20 gap-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 sm:mb-12 md:mb-20 gap-4 sm:gap-6">
           <div>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-3xl md:text-4xl font-bold text-text-main mb-4"
+              className="text-2xl sm:text-3xl md:text-4xl font-bold text-text-main mb-3 sm:mb-4"
             >
               {t("title")}
             </motion.h2>
@@ -114,7 +114,7 @@ export function Projects({ projects }: ProjectsProps) {
           <EnhancedViewAllButton href="/projects" text={t("viewAll")} />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
           {featuredProjects.map((project, index) => (
             <motion.div
               key={project.slug}
@@ -154,12 +154,12 @@ export function Projects({ projects }: ProjectsProps) {
                       <span className="text-xs md:text-sm font-semibold uppercase tracking-wider text-white/95 mb-2 block">
                         {project.category}
                       </span>
-                      <div className="flex items-center justify-between gap-4">
-                        <h3 className="text-xl md:text-2xl font-bold text-white leading-tight">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
+                        <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white leading-tight">
                           {project.title}
                         </h3>
-                        <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center gap-2 text-sm font-medium flex-shrink-0">
-                          {t("preview")} <ArrowRight className="w-4 h-4" />
+                        <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center gap-2 text-xs sm:text-sm font-medium flex-shrink-0">
+                          {t("preview")} <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />
                         </span>
                       </div>
                     </div>

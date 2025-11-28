@@ -35,7 +35,7 @@ export function PremiumButton({ children, href, className, variant = "primary" }
       <Link
         href={href}
         className={cn(
-          "relative flex items-center justify-center gap-2 overflow-hidden rounded-full px-8 py-4 transition-all duration-500",
+          "relative flex items-center justify-center gap-2 overflow-hidden rounded-full px-6 sm:px-8 py-3 sm:py-4 min-h-[44px] transition-all duration-500",
           isPrimary 
             ? cn(
                 "bg-white text-black font-semibold",

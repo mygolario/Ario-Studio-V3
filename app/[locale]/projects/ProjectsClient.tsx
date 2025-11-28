@@ -24,7 +24,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-5xl md:text-7xl font-bold text-text-main mb-6"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-text-main mb-4 sm:mb-6"
             >
               {t("title")}
             </motion.h1>
@@ -32,13 +32,13 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-xl text-text-muted-custom max-w-2xl"
+              className="text-lg sm:text-xl text-text-muted-custom max-w-2xl"
             >
               {t("description")}
             </motion.p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
             {projects.map((project, index) => (
               <motion.div
                 key={project.id}

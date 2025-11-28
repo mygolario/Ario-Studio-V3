@@ -55,9 +55,9 @@ export function Services() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="group relative border-t border-border-subtle py-12 md:py-16 transition-colors hover:bg-surface-hover"
+              className="group relative border-t border-border-subtle py-8 sm:py-12 md:py-16 transition-colors hover:bg-surface-hover"
             >
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-start">
                 <div className="md:col-span-2 flex items-center gap-4">
                   <span className="text-sm font-mono text-text-muted-custom group-hover:text-text-main transition-colors">
                     {service.id}
@@ -68,7 +68,7 @@ export function Services() {
                 </div>
 
                 <div className="md:col-span-5">
-                  <h3 className="text-2xl md:text-3xl font-bold text-text-main mb-2 group-hover:translate-x-2 transition-transform duration-300">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-text-main mb-2 group-hover:translate-x-0 sm:group-hover:translate-x-2 transition-transform duration-300">
                     {service.title}
                   </h3>
                   <span className="text-sm text-accent-purple/80 font-medium uppercase tracking-wider">
@@ -77,7 +77,7 @@ export function Services() {
                 </div>
 
                 <div className="md:col-span-5">
-                  <p className="text-text-muted-custom text-lg leading-relaxed group-hover:text-text-main transition-colors">
+                  <p className="text-text-muted-custom text-base sm:text-lg leading-relaxed group-hover:text-text-main transition-colors">
                     {service.description}
                   </p>
                 </div>

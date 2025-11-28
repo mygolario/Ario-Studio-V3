@@ -16,7 +16,7 @@ export function ContactCTA() {
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="relative rounded-3xl overflow-hidden bg-page-elevated border border-border-subtle p-12 md:p-24 text-center shadow-sm"
+          className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-page-elevated border border-border-subtle p-8 sm:p-12 md:p-16 lg:p-24 text-center shadow-sm"
         >
           {/* Subtle Gradient Background */}
           <div className="absolute inset-0 bg-gradient-to-br from-accent-purple/5 to-accent-blue/5 opacity-100" />
@@ -25,16 +25,16 @@ export function ContactCTA() {
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-accent-purple/10 blur-[100px] pointer-events-none" />
 
           <div className="relative z-10 max-w-2xl mx-auto space-y-8">
-            <h2 className="text-4xl md:text-6xl font-bold text-text-main tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-text-main tracking-tight">
               {t("headline.prefix")} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-blue to-accent-purple">
                 {t("headline.highlight")}
               </span>
             </h2>
-            <p className="text-lg md:text-xl text-text-muted-custom">
+            <p className="text-base sm:text-lg md:text-xl text-text-muted-custom">
               {t("description")}
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 sm:gap-6 pt-4 w-full sm:w-auto">
               <PremiumButton href="/contact" variant="primary">
                 {t("buttons.request")}
               </PremiumButton>

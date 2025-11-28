@@ -22,7 +22,7 @@ export function Hero() {
   return (
     <section
       ref={ref}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
+          className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden pt-20 sm:pt-24"
     >
       {/* Background Gradients - Adjusted for light mode readability */}
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -31,7 +31,7 @@ export function Hero() {
         <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay" />
       </div>
 
-      <Container className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <Container className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
         {/* Left Content */}
         <motion.div style={{ opacity, y }} className="space-y-8">
           <motion.div
@@ -39,7 +39,7 @@ export function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.32, 0, 0.67, 0] }}
           >
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] text-text-main">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] text-text-main">
               {t('headline.prefix')}{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-blue to-accent-purple">
                 {t('headline.highlight')}
@@ -56,7 +56,7 @@ export function Hero() {
               delay: 0.2,
               ease: [0.32, 0, 0.67, 0],
             }}
-            className="text-lg md:text-xl text-text-muted-custom max-w-lg leading-relaxed"
+            className="text-base sm:text-lg md:text-xl text-text-muted-custom max-w-lg leading-relaxed"
           >
             {t('description')}
           </motion.p>
@@ -69,7 +69,7 @@ export function Hero() {
               delay: 0.4,
               ease: [0.32, 0, 0.67, 0],
             }}
-            className="flex flex-wrap gap-6"
+            className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-6"
           >
             {/* Novel Animated Buttons - Stable (No Magnetic Jitter) */}
             <PremiumButton href="/contact" variant="primary">
