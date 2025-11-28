@@ -169,10 +169,10 @@ export function Header() {
             className="absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent dark:via-white/[0.15] opacity-50"
           />
 
-          {/* Logo */}
+          {/* Logo + Website Name - Always visible */}
           <Link href="/" className="group flex items-center gap-2 sm:gap-3 pl-2 sm:pl-3 relative z-10" aria-label={locale === "fa" ? "برو به صفحه اصلی آریو استودیو" : "Go to Ario Studio homepage"}>
             <BrandLogo className="h-8 w-8 sm:h-9 sm:w-9" />
-            <span className="text-xs sm:text-sm md:text-base font-semibold tracking-tight text-text-main hidden sm:inline-block">
+            <span className="text-xs sm:text-sm md:text-base font-semibold tracking-tight text-text-main">
               {locale === "fa" ? "آریو استودیو" : "Ario Studio"}
             </span>
           </Link>
@@ -218,75 +218,77 @@ export function Header() {
             })}
           </nav>
 
-          {/* Right Actions: Lang + Theme + CTA */}
-          <div className="flex items-center gap-1 sm:gap-2 relative z-10 pr-1">
-            
-            {/* Language Switcher "Keys" - Visible on all devices */}
-            <div className="flex items-center bg-black/5 dark:bg-white/5 rounded-full p-0.5 sm:p-1 border border-black/5 dark:border-white/5 h-8 sm:h-9">
-                {['fa', 'en'].map((l) => (
-                    <Link 
-                        key={l}
-                        href={pathname} 
-                        locale={l as 'fa' | 'en'} 
-                        className={cn(
-                            "relative z-10 w-7 h-7 sm:w-8 sm:h-7 flex items-center justify-center text-[9px] sm:text-[10px] font-bold uppercase transition-colors duration-300 rounded-full",
-                            locale === l ? "text-text-main" : "text-text-muted-custom hover:text-text-main"
-                        )}
-                    >
-                        {l}
-                        {locale === l && (
-                            <motion.div
-                                layoutId="lang-active"
-                                className="absolute inset-0 bg-white dark:bg-white/10 rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.08)] -z-10 border border-black/5 dark:border-white/5"
-                                transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                            />
-                        )}
-                    </Link>
-                ))}
-            </div>
-
-            {/* Theme Toggle "Keys" - Visible on all devices */}
-            {mounted && (
-              <div className="flex items-center bg-black/5 dark:bg-white/5 rounded-full p-0.5 sm:p-1 border border-black/5 dark:border-white/5 h-8 sm:h-9 sm:ml-1">
-                <button
-                  onClick={() => setTheme('light')}
-                  className={cn(
-                    "relative w-7 h-7 sm:w-8 sm:h-7 flex items-center justify-center rounded-full transition-all duration-300",
-                    theme === 'light' ? "text-amber-500" : "text-text-muted-custom hover:text-text-main"
-                  )}
-                >
-                  <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={2.5} />
-                  {theme === 'light' && (
-                    <motion.div
-                      layoutId="theme-active"
-                      className="absolute inset-0 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.08)] rounded-full -z-10 border border-black/5"
-                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                    />
-                  )}
-                </button>
-                <button
-                  onClick={() => setTheme('dark')}
-                  className={cn(
-                    "relative w-7 h-7 sm:w-8 sm:h-7 flex items-center justify-center rounded-full transition-all duration-300",
-                    theme === 'dark' ? "text-blue-400" : "text-text-muted-custom hover:text-text-main"
-                  )}
-                >
-                  <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={2.5} />
-                  {theme === 'dark' && (
-                    <motion.div
-                      layoutId="theme-active"
-                      className="absolute inset-0 bg-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.2)] rounded-full -z-10 border border-white/5"
-                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                    />
-                  )}
-                </button>
+          {/* Right Actions: Only Menu Button on Mobile, Desktop Nav + Actions */}
+          <div className="flex items-center gap-2 relative z-10 pr-1">
+            {/* Desktop: Navigation + Language + Theme + CTA */}
+            <div className="hidden md:flex items-center gap-2">
+              {/* Language Switcher "Keys" */}
+              <div className="flex items-center bg-black/5 dark:bg-white/5 rounded-full p-1 border border-black/5 dark:border-white/5 h-9">
+                  {['fa', 'en'].map((l) => (
+                      <Link 
+                          key={l}
+                          href={pathname} 
+                          locale={l as 'fa' | 'en'} 
+                          className={cn(
+                              "relative z-10 w-8 h-7 flex items-center justify-center text-[10px] font-bold uppercase transition-colors duration-300 rounded-full",
+                              locale === l ? "text-text-main" : "text-text-muted-custom hover:text-text-main"
+                          )}
+                      >
+                          {l}
+                          {locale === l && (
+                              <motion.div
+                                  layoutId="lang-active"
+                                  className="absolute inset-0 bg-white dark:bg-white/10 rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.08)] -z-10 border border-black/5 dark:border-white/5"
+                                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                              />
+                          )}
+                      </Link>
+                  ))}
               </div>
-            )}
 
-            <div className="w-px h-5 bg-border-subtle hidden sm:block sm:mx-1" />
+              {/* Theme Toggle "Keys" */}
+              {mounted && (
+                <div className="flex items-center bg-black/5 dark:bg-white/5 rounded-full p-1 border border-black/5 dark:border-white/5 h-9 ml-1">
+                  <button
+                    onClick={() => setTheme('light')}
+                    className={cn(
+                      "relative w-8 h-7 flex items-center justify-center rounded-full transition-all duration-300",
+                      theme === 'light' ? "text-amber-500" : "text-text-muted-custom hover:text-text-main"
+                    )}
+                  >
+                    <Sun className="w-4 h-4" strokeWidth={2.5} />
+                    {theme === 'light' && (
+                      <motion.div
+                        layoutId="theme-active"
+                        className="absolute inset-0 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.08)] rounded-full -z-10 border border-black/5"
+                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                      />
+                    )}
+                  </button>
+                  <button
+                    onClick={() => setTheme('dark')}
+                    className={cn(
+                      "relative w-8 h-7 flex items-center justify-center rounded-full transition-all duration-300",
+                      theme === 'dark' ? "text-blue-400" : "text-text-muted-custom hover:text-text-main"
+                    )}
+                  >
+                    <Moon className="w-4 h-4" strokeWidth={2.5} />
+                    {theme === 'dark' && (
+                      <motion.div
+                        layoutId="theme-active"
+                        className="absolute inset-0 bg-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.2)] rounded-full -z-10 border border-white/5"
+                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                      />
+                    )}
+                  </button>
+                </div>
+              )}
 
-            {/* CTA Button - Enhanced Hover Effect - Visible on all devices */}
-            <EnhancedRequestButton />
+              <div className="w-px h-5 bg-border-subtle mx-1" />
+
+              {/* CTA Button - Desktop only */}
+              <EnhancedRequestButton />
+            </div>
             
             {/* Mobile Menu Button */}
             <button
@@ -342,8 +344,73 @@ export function Header() {
                   </Link>
                 );
               })}
+              
+              {/* Language Switcher in Mobile Menu */}
+              <div className="mt-3 pt-3 border-t border-border-subtle">
+                <div className="px-2 mb-2">
+                  <span className="text-xs font-medium text-text-muted-custom uppercase tracking-wider">
+                    {locale === "fa" ? "زبان" : "Language"}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 px-2">
+                  {['fa', 'en'].map((l) => (
+                    <Link 
+                      key={l}
+                      href={pathname} 
+                      locale={l as 'fa' | 'en'}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={cn(
+                        "relative flex-1 flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300",
+                        locale === l
+                          ? "bg-accent-purple/20 text-accent-purple border border-accent-purple/50"
+                          : "bg-black/5 dark:bg-white/5 text-text-muted-custom border border-transparent hover:bg-black/10 dark:hover:bg-white/10"
+                      )}
+                    >
+                      {l === 'fa' ? (locale === "fa" ? "فارسی" : "Persian") : "English"}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Theme Toggle in Mobile Menu */}
+              {mounted && (
+                <div className="mt-3 pt-3 border-t border-border-subtle">
+                  <div className="px-2 mb-2">
+                    <span className="text-xs font-medium text-text-muted-custom uppercase tracking-wider">
+                      {locale === "fa" ? "تم" : "Theme"}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 px-2">
+                    <button
+                      onClick={() => setTheme('light')}
+                      className={cn(
+                        "flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300",
+                        theme === 'light'
+                          ? "bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/50"
+                          : "bg-black/5 dark:bg-white/5 text-text-muted-custom border border-transparent hover:bg-black/10 dark:hover:bg-white/10"
+                      )}
+                    >
+                      <Sun className="w-4 h-4" strokeWidth={2.5} />
+                      {locale === "fa" ? "روشن" : "Light"}
+                    </button>
+                    <button
+                      onClick={() => setTheme('dark')}
+                      className={cn(
+                        "flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300",
+                        theme === 'dark'
+                          ? "bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/50"
+                          : "bg-black/5 dark:bg-white/5 text-text-muted-custom border border-transparent hover:bg-black/10 dark:hover:bg-white/10"
+                      )}
+                    >
+                      <Moon className="w-4 h-4" strokeWidth={2.5} />
+                      {locale === "fa" ? "تاریک" : "Dark"}
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Mobile CTA Button */}
-              <div className="mt-2 pt-2 border-t border-border-subtle">
+              <div className="mt-3 pt-3 border-t border-border-subtle">
                 <Link
                   href="/contact"
                   onClick={() => setIsMobileMenuOpen(false)}
