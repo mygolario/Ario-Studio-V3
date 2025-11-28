@@ -119,7 +119,7 @@ export function Header() {
   useEffect(() => {
     if (!isMobileMenuOpen) return;
     
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: Event) => {
       const target = event.target as HTMLElement;
       if (!target.closest('header')) {
         setIsMobileMenuOpen(false);
