@@ -122,20 +122,27 @@ export function Header() {
     const handleClickOutside = (event: Event) => {
       const target = event.target as HTMLElement;
       // Don't close if clicking inside the mobile menu dropdown
-      if (!target.closest('header') || target.closest('[data-mobile-menu]')) {
+      if (target.closest('[data-mobile-menu]')) {
         return;
       }
-      setIsMobileMenuOpen(false);
+      // Don't close if clicking the menu button itself
+      if (target.closest('[data-mobile-menu-button]')) {
+        return;
+      }
+      // Close if clicking outside the header
+      if (!target.closest('header')) {
+        setIsMobileMenuOpen(false);
+      }
     };
 
-    // Use a small delay to avoid conflicts with click handlers
+    // Use a longer delay to avoid conflicts with click handlers
     const timeoutId = setTimeout(() => {
-      document.addEventListener('click', handleClickOutside);
-    }, 100);
+      document.addEventListener('click', handleClickOutside, true);
+    }, 300);
 
     return () => {
       clearTimeout(timeoutId);
-      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener('click', handleClickOutside, true);
     };
   }, [isMobileMenuOpen]);
 
@@ -228,7 +235,7 @@ export function Header() {
           </nav>
 
           {/* Right Actions: Only Menu Button on Mobile, Desktop Nav + Actions */}
-          <div className="flex items-center gap-2 relative z-10 pr-1">
+          <div className="flex items-center gap-2 relative z-50 pr-1">
             {/* Desktop: Navigation + Language + Theme + CTA */}
             <div className="hidden md:flex items-center gap-2">
               {/* Language Switcher "Keys" */}
@@ -301,8 +308,18 @@ export function Header() {
             
             {/* Mobile Menu Button */}
             <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden flex items-center justify-center w-9 h-9 rounded-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 text-text-main hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                setIsMobileMenuOpen((prev) => !prev);
+              }}
+              onTouchStart={(e) => {
+                e.stopPropagation();
+                setIsMobileMenuOpen((prev) => !prev);
+              }}
+              type="button"
+              data-mobile-menu-button
+              className="md:hidden flex items-center justify-center w-9 h-9 rounded-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 text-text-main hover:bg-black/10 dark:hover:bg-white/10 active:bg-black/15 dark:active:bg-white/15 transition-colors cursor-pointer z-50 relative touch-manipulation"
               aria-label={locale === "fa" ? "منو" : "Menu"}
               aria-expanded={isMobileMenuOpen}
             >
@@ -326,8 +343,9 @@ export function Header() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             data-mobile-menu
-            className="md:hidden mt-3 rounded-2xl backdrop-blur-xl bg-[rgba(245,245,247,0.95)] dark:bg-[rgba(15,15,19,0.95)] border border-black/[0.08] dark:border-white/[0.08] shadow-lg overflow-hidden"
+            className="md:hidden mt-3 rounded-2xl backdrop-blur-xl bg-[rgba(245,245,247,0.95)] dark:bg-[rgba(15,15,19,0.95)] border border-black/[0.08] dark:border-white/[0.08] shadow-lg overflow-hidden pointer-events-auto z-50 relative"
             onClick={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
           >
             <nav className="flex flex-col p-2" aria-label={locale === "fa" ? "منوی موبایل" : "Mobile navigation"}>
               {navItems.map((item) => {
