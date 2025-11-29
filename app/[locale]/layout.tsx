@@ -100,6 +100,11 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   };
 }
 
+// Generate static params for all locales
+export function generateStaticParams() {
+  return [{ locale: 'en' }, { locale: 'fa' }];
+}
+
 export default async function RootLayout({
   children,
   params: { locale }

@@ -11,6 +11,11 @@ const ContactCTA = dynamicImport(() => import("@/components/sections/ContactCTA"
 export const dynamic = "force-static";
 export const revalidate = 3600; // Revalidate every hour
 
+// Generate static params for all locales
+export function generateStaticParams() {
+  return [{ locale: 'en' }, { locale: 'fa' }];
+}
+
 type PageProps = {
   params: { locale: string };
 };

@@ -10,6 +10,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { cn } from "@/lib/utils";
 
 // Force static generation (client component, but page itself can be static)
+// Note: generateStaticParams is handled by parent layout for client components
 export const dynamic = "force-static";
 
 export default function ContactPage() {

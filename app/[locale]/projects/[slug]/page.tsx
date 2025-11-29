@@ -7,6 +7,20 @@ import ProjectDetailsClient from "./ProjectDetailsClient";
 export const dynamic = "force-static";
 export const revalidate = 3600; // Revalidate every hour
 
+// Generate static params for all locales and projects
+export async function generateStaticParams() {
+  const { getAllProjects } = await import("@/lib/projects-data");
+  const projects = await getAllProjects();
+  const locales = ['en', 'fa'];
+  
+  return locales.flatMap(locale =>
+    projects.map((project) => ({
+      locale,
+      slug: project.slug,
+    }))
+  );
+}
+
 export async function generateMetadata({ 
   params 
 }: { 
