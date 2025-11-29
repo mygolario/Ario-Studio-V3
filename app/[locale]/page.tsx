@@ -1,11 +1,11 @@
-import dynamic from 'next/dynamic';
+import dynamicImport from 'next/dynamic';
 import { Hero } from "@/components/sections/Hero";
 import { getAllProjects } from "@/lib/projects-data";
 
-const Services = dynamic(() => import("@/components/sections/Services").then(mod => mod.Services));
-const Projects = dynamic(() => import("@/components/sections/Projects").then(mod => mod.Projects));
-const About = dynamic(() => import("@/components/sections/About").then(mod => mod.About));
-const ContactCTA = dynamic(() => import("@/components/sections/ContactCTA").then(mod => mod.ContactCTA));
+const Services = dynamicImport(() => import("@/components/sections/Services").then(mod => mod.Services));
+const Projects = dynamicImport(() => import("@/components/sections/Projects").then(mod => mod.Projects));
+const About = dynamicImport(() => import("@/components/sections/About").then(mod => mod.About));
+const ContactCTA = dynamicImport(() => import("@/components/sections/ContactCTA").then(mod => mod.ContactCTA));
 
 // Force static generation with revalidation
 export const dynamic = "force-static";
