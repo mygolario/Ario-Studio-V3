@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
+// Using node runtime to enable static generation
+export const runtime = "nodejs";
 
 export const alt = "Ario Studio | Premium Digital Experiences";
 export const size = {

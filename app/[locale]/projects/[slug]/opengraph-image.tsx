@@ -1,7 +1,8 @@
 import { ImageResponse } from "next/og";
 import { getProjectBySlug } from "@/lib/projects-data";
 
-export const runtime = "edge";
+// Using node runtime to enable static generation
+export const runtime = "nodejs";
 
 export const alt = "Project Preview";
 export const size = {
