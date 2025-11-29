@@ -188,28 +188,21 @@ export function Header() {
             <div className="hidden md:flex items-center gap-2">
               {/* Language Switcher "Keys" */}
               <div className="flex items-center bg-black/5 dark:bg-white/5 rounded-full p-1 border border-black/5 dark:border-white/5 h-9">
-                  {['fa', 'en'].map((l) => {
-                      // Get pathname without locale prefix for proper navigation
-                      const pathWithoutLocale = pathname.startsWith(`/${locale}`) 
-                        ? pathname.replace(`/${locale}`, '') || '/' 
-                        : pathname;
-                      
-                      return (
-                          <Link 
-                              key={l}
-                              href={pathWithoutLocale} 
-                              locale={l as 'fa' | 'en'} 
-                              className={cn(
-                                  "relative z-10 w-8 h-7 flex items-center justify-center text-[10px] font-bold uppercase transition-all duration-300 rounded-full cursor-pointer",
-                                  locale === l 
-                                    ? "text-text-main bg-white dark:bg-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.08)] border border-black/5 dark:border-white/5" 
-                                    : "text-text-muted-custom hover:text-text-main"
-                              )}
-                          >
-                              {l}
-                          </Link>
-                      );
-                  })}
+                  {['fa', 'en'].map((l) => (
+                      <Link 
+                          key={l}
+                          href={pathname} 
+                          locale={l as 'fa' | 'en'} 
+                          className={cn(
+                              "relative z-10 w-8 h-7 flex items-center justify-center text-[10px] font-bold uppercase transition-all duration-300 rounded-full cursor-pointer",
+                              locale === l 
+                                ? "text-text-main bg-white dark:bg-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.08)] border border-black/5 dark:border-white/5" 
+                                : "text-text-muted-custom hover:text-text-main"
+                          )}
+                      >
+                          {l}
+                      </Link>
+                  ))}
               </div>
 
               {/* Theme Toggle "Keys" */}

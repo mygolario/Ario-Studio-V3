@@ -59,6 +59,10 @@ body {
   @apply bg-[var(--bg)] text-[color:var(--text-main)] font-sans antialiased selection:bg-accent-purple/30 selection:text-white transition-colors duration-300;
   font-feature-settings: "ss01", "ss02", "cv01", "cv02";
   overflow-x: hidden;
+  /* Force font rendering to prevent FOUT */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 html {

@@ -185,6 +185,11 @@ export default async function RootLayout({
           isRtl ? vazirmatn.className : inter.className,
           "bg-background text-foreground antialiased selection:bg-accent-purple/30 selection:text-white"
         )}
+        style={{
+          fontFamily: isRtl 
+            ? `var(--font-vazirmatn), sans-serif` 
+            : `var(--font-inter), sans-serif`
+        }}
       >
         {/* Preconnect to essential origins for faster resource loading (max 4) - Critical path optimization */}
         <script
