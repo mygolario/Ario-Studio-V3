@@ -14,7 +14,7 @@ export default function middleware(request: NextRequest) {
   const hasLocale = pathname.startsWith('/fa/') || pathname.startsWith('/en/') || 
                    pathname === '/fa' || pathname === '/en';
   
-  // If accessing root path without locale, detect country and redirect
+  // If accessing root path without locale, detect country and rewrite (not redirect)
   if (!hasLocale && (pathname === '/' || !pathname.startsWith('/fa') && !pathname.startsWith('/en'))) {
     // Get country from Vercel header (available on Vercel deployments)
     const country = request.headers.get('x-vercel-ip-country') || 
@@ -30,7 +30,8 @@ export default function middleware(request: NextRequest) {
     
     const url = request.nextUrl.clone();
     url.pathname = `/${preferredLocale}${pathname === '/' ? '' : pathname}`;
-    return NextResponse.redirect(url);
+    // Use rewrite instead of redirect to avoid redirect chains
+    return NextResponse.rewrite(url);
   }
 
   // Use next-intl middleware for all other requests

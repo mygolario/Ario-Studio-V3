@@ -7,6 +7,10 @@ const Projects = dynamic(() => import("@/components/sections/Projects").then(mod
 const About = dynamic(() => import("@/components/sections/About").then(mod => mod.About));
 const ContactCTA = dynamic(() => import("@/components/sections/ContactCTA").then(mod => mod.ContactCTA));
 
+// Force static generation with revalidation
+export const dynamic = "force-static";
+export const revalidate = 3600; // Revalidate every hour
+
 type PageProps = {
   params: { locale: string };
 };

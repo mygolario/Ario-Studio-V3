@@ -144,6 +144,17 @@ p {
   will-change: transform, opacity;
 }
 
+/* Delay animations until after first paint to prevent forced reflow */
+.animate-pulse-slow,
+.animate-pulse-slower {
+  animation-play-state: paused;
+}
+
+.animations-ready .animate-pulse-slow,
+.animations-ready .animate-pulse-slower {
+  animation-play-state: running;
+}
+
 /* Entry Animations (LCP Optimized) */
 @keyframes fade-in-up {
   0% {
@@ -154,6 +165,17 @@ p {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Delay fade-in animations until after first paint */
+.animate-fade-in-up,
+.animate-fade-in {
+  animation-play-state: paused;
+}
+
+.animations-ready .animate-fade-in-up,
+.animations-ready .animate-fade-in {
+  animation-play-state: running;
 }
 
 @keyframes fade-in {
@@ -181,3 +203,8 @@ p {
 .delay-300 { animation-delay: 300ms; }
 .delay-400 { animation-delay: 400ms; }
 .delay-500 { animation-delay: 500ms; }
+
+/* Fixed min-height for navbar container to prevent layout shift */
+nav {
+  min-height: 64px;
+}

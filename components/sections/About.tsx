@@ -13,9 +13,7 @@ export function About() {
       <Container>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 lg:gap-24">
           {/* Left: Storytelling */}
-          <div
-            className="space-y-8"
-          >
+          <div className="space-y-8">
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-text-main leading-tight">
               {t.rich("title", {
                 highlight: (chunks) => <span className="text-accent-purple">{chunks}</span>
@@ -28,9 +26,7 @@ export function About() {
           </div>
 
           {/* Right: Lists */}
-          <div
-            className="space-y-12"
-          >
+          <div className="space-y-12">
             <div>
               <h3 className="text-xl font-bold text-text-main mb-6">{t("howWeWork.title")}</h3>
               <ul className="space-y-4">

@@ -3,6 +3,10 @@ import { getProjectBySlug } from "@/lib/projects-data";
 import { notFound } from "next/navigation";
 import ProjectDetailsClient from "./ProjectDetailsClient";
 
+// Force static generation with revalidation for project pages
+export const dynamic = "force-static";
+export const revalidate = 3600; // Revalidate every hour
+
 export async function generateMetadata({ 
   params 
 }: { 

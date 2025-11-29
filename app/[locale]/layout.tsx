@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
+import { CriticalCSSPreload } from "@/components/layout/CriticalCSSPreload";
 import dynamic from 'next/dynamic';
 
 const BackgroundGlow = dynamic(() => import("@/components/ui/BackgroundGlow").then(mod => mod.BackgroundGlow), {
@@ -171,10 +172,62 @@ export default async function RootLayout({
           "bg-background text-foreground antialiased selection:bg-accent-purple/30 selection:text-white"
         )}
       >
+        {/* Preconnect to essential origins for faster resource loading (max 4) - Critical path optimization */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                // Preconnect to Google Fonts (essential for LCP)
+                const preconnects = [
+                  { rel: 'preconnect', href: 'https://fonts.googleapis.com', crossorigin: 'anonymous' },
+                  { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'anonymous' },
+                  { rel: 'dns-prefetch', href: 'https://fonts.googleapis.com' },
+                  { rel: 'dns-prefetch', href: 'https://fonts.gstatic.com' }
+                ];
+                
+                preconnects.forEach(function(link) {
+                  if (!document.querySelector('link[rel="' + link.rel + '"][href="' + link.href + '"]')) {
+                    const el = document.createElement('link');
+                    el.rel = link.rel;
+                    el.href = link.href;
+                    if (link.crossorigin) el.crossOrigin = link.crossorigin;
+                    document.head.appendChild(el);
+                  }
+                });
+              })();
+            `,
+          }}
+        />
+        {/* Enable animations after first paint to prevent forced reflow */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                // Wait for first paint before enabling animations
+                if (document.readyState === 'loading') {
+                  document.addEventListener('DOMContentLoaded', function() {
+                    requestAnimationFrame(function() {
+                      requestAnimationFrame(function() {
+                        document.documentElement.classList.add('animations-ready');
+                      });
+                    });
+                  });
+                } else {
+                  requestAnimationFrame(function() {
+                    requestAnimationFrame(function() {
+                      document.documentElement.classList.add('animations-ready');
+                    });
+                  });
+                }
+              })();
+            `,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <CriticalCSSPreload />
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider
             attribute="class"

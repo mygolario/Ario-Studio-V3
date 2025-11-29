@@ -3,6 +3,10 @@ import { getAllProjects } from "@/lib/projects-data";
 import ProjectsClient from "./ProjectsClient";
 import { getTranslations } from "next-intl/server";
 
+// Force static generation with revalidation
+export const dynamic = "force-static";
+export const revalidate = 3600; // Revalidate every hour
+
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const isFa = locale === 'fa';
   

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useLayoutEffect, useCallback, useRef } from "react";
 import { Link, usePathname } from "@/lib/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { Container } from "@/components/ui/Container";
@@ -66,17 +66,45 @@ export function Header() {
     { name: t('contact'), href: "/contact" },
   ];
 
+  // Use requestAnimationFrame to batch scroll reads and prevent forced reflow
+  const scrollRafRef = useRef<number | null>(null);
+  const lastScrollYRef = useRef(0);
+  
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      // Cancel previous RAF if it exists
+      if (scrollRafRef.current !== null) {
+        cancelAnimationFrame(scrollRafRef.current);
+      }
+      
+      // Batch scroll reads using requestAnimationFrame
+      scrollRafRef.current = requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        // Only update state if scroll position changed significantly (avoid unnecessary re-renders)
+        if (Math.abs(scrollY - lastScrollYRef.current) > 5) {
+          lastScrollYRef.current = scrollY;
+          setIsScrolled(scrollY > 20);
+        }
+      });
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (scrollRafRef.current !== null) {
+        cancelAnimationFrame(scrollRafRef.current);
+      }
+    };
   }, []);
 
   // Close mobile menu on escape key and improve backdrop handling
-  useEffect(() => {
-    if (!isMobileMenuOpen) return;
+  // Use useLayoutEffect to prevent body scroll before paint
+  useLayoutEffect(() => {
+    if (!isMobileMenuOpen) {
+      // Restore scroll when menu closes
+      document.body.style.overflow = '';
+      return;
+    }
     
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -84,14 +112,19 @@ export function Header() {
       }
     };
 
-    // Prevent body scroll when menu is open
-    document.body.style.overflow = 'hidden';
+    // Prevent body scroll when menu is open - batch with RAF to avoid forced reflow
+    requestAnimationFrame(() => {
+      document.body.style.overflow = 'hidden';
+    });
     
     document.addEventListener('keydown', handleEscape);
     
     return () => {
       document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = '';
+      // Restore scroll on cleanup
+      requestAnimationFrame(() => {
+        document.body.style.overflow = '';
+      });
     };
   }, [isMobileMenuOpen]);
 
@@ -114,11 +147,6 @@ export function Header() {
             "hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
           )}
         >
-          {/* Top edge highlight for glass feel */}
-          <div 
-            className="absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent dark:via-white/[0.15] opacity-50"
-          />
-
           {/* Logo + Website Name - Always visible */}
           <Link href="/" className="group flex items-center gap-2 sm:gap-3 pl-2 sm:pl-3 relative z-10" aria-label={locale === "fa" ? "برو به صفحه اصلی آریو استودیو" : "Go to Ario Studio homepage"}>
             <BrandLogo className="h-8 w-8 sm:h-9 sm:w-9" />

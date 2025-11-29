@@ -9,6 +9,9 @@ import { Loader2, CheckCircle, AlertCircle, ChevronRight, ChevronLeft } from "lu
 import { useTranslations, useLocale } from "next-intl";
 import { cn } from "@/lib/utils";
 
+// Force static generation (client component, but page itself can be static)
+export const dynamic = "force-static";
+
 export default function ContactPage() {
   const t = useTranslations("contact.page");
   const locale = useLocale();
