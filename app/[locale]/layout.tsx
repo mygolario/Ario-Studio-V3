@@ -9,6 +9,7 @@ import dynamic from 'next/dynamic';
 
 const BackgroundGlow = dynamic(() => import("@/components/ui/BackgroundGlow").then(mod => mod.BackgroundGlow), {
   ssr: false,
+  loading: () => null,
 });
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';

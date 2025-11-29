@@ -166,12 +166,12 @@ p {
 }
 
 .animate-fade-in-up {
-  animation: fade-in-up 0.8s cubic-bezier(0.32, 0, 0.67, 0) forwards;
+  animation: fade-in-up 0.6s cubic-bezier(0.32, 0, 0.67, 0) forwards;
   will-change: transform, opacity;
 }
 
 .animate-fade-in {
-  animation: fade-in 0.8s cubic-bezier(0.32, 0, 0.67, 0) forwards;
+  animation: fade-in 0.6s cubic-bezier(0.32, 0, 0.67, 0) forwards;
   will-change: opacity;
 }
 
