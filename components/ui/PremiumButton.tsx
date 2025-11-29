@@ -19,8 +19,10 @@ export function PremiumButton({ children, href, className, variant = "primary" }
 
   function handleMouseMove({ currentTarget, clientX, clientY }: MouseEvent) {
     const { left, top } = currentTarget.getBoundingClientRect();
-    mouseX.set(clientX - left);
-    mouseY.set(clientY - top);
+    requestAnimationFrame(() => {
+      mouseX.set(clientX - left);
+      mouseY.set(clientY - top);
+    });
   }
 
   const isPrimary = variant === "primary";

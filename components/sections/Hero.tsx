@@ -22,12 +22,12 @@ export function Hero() {
   return (
     <section
       ref={ref}
-          className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden pt-20 sm:pt-24"
+      className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden pt-20 sm:pt-24"
     >
-      {/* Background Gradients - Adjusted for light mode readability */}
+      {/* Background Gradients - CSS Animation for Performance */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-accent-purple/20 rounded-full blur-[120px] animate-pulse-slow dark:opacity-100 opacity-40" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-accent-blue/10 rounded-full blur-[120px] animate-pulse-slow delay-1000 dark:opacity-100 opacity-40" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-accent-blue/10 rounded-full blur-[120px] animate-pulse-slower dark:opacity-100 opacity-40" />
         <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay" />
       </div>
 
@@ -37,7 +37,7 @@ export function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.32, 0, 0.67, 0] }}
+            transition={{ duration: 0.6, ease: [0.32, 0, 0.67, 0] }}
           >
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] text-text-main">
               {t('headline.prefix')}{" "}
@@ -52,8 +52,8 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
-              duration: 0.8,
-              delay: 0.2,
+              duration: 0.6,
+              delay: 0.1,
               ease: [0.32, 0, 0.67, 0],
             }}
             className="text-base sm:text-lg md:text-xl text-text-muted-custom max-w-lg leading-relaxed"
@@ -65,8 +65,8 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
-              duration: 0.8,
-              delay: 0.4,
+              duration: 0.6,
+              delay: 0.2,
               ease: [0.32, 0, 0.67, 0],
             }}
             className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-6"
@@ -87,7 +87,7 @@ export function Hero() {
           style={{ scale }}
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.3, ease: [0.32, 0, 0.67, 0] }}
+          transition={{ duration: 0.8, delay: 0.15, ease: [0.32, 0, 0.67, 0] }}
           className="relative hidden lg:block"
         >
           <div className="relative w-full aspect-square max-w-lg mx-auto">
@@ -118,24 +118,12 @@ export function Hero() {
               </div>
             </div>
 
-            {/* Floating Elements */}
-            <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="absolute -right-8 top-20 w-24 h-24 bg-gradient-to-br from-accent-purple to-blue-600 rounded-2xl blur-xl opacity-40"
+            {/* Floating Elements - Reduced Complexity */}
+            <div
+              className="absolute -right-8 top-20 w-24 h-24 bg-gradient-to-br from-accent-purple to-blue-600 rounded-2xl blur-xl opacity-40 animate-pulse-slow"
             />
-            <motion.div
-              animate={{ y: [0, 15, 0] }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="absolute -left-8 bottom-20 w-32 h-32 bg-gradient-to-tr from-accent-blue to-cyan-400 rounded-full blur-2xl opacity-30"
+            <div
+              className="absolute -left-8 bottom-20 w-32 h-32 bg-gradient-to-tr from-accent-blue to-cyan-400 rounded-full blur-2xl opacity-30 animate-pulse-slower"
             />
           </div>
         </motion.div>

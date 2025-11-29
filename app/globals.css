@@ -19,9 +19,14 @@
     --border-subtle: rgba(0, 0, 0, 0.08);
     --text-main: #1d1d1f;
     --text-muted: #515155; /* Darkened for better readability on light bg */
-    --accent: #8B5CF6; /* Purple */
+    --accent: #8b5cf6; /* Purple */
     --accent-soft: rgba(139, 92, 246, 0.1);
-    --nav-bg: rgba(255, 255, 255, 0.85); /* Slightly more opaque for better legibility */
+    --nav-bg: rgba(
+      255,
+      255,
+      255,
+      0.85
+    ); /* Slightly more opaque for better legibility */
     --nav-border: rgba(0, 0, 0, 0.05);
     --card-glass: rgba(255, 255, 255, 0.7);
   }
@@ -42,7 +47,7 @@
     --border-subtle: rgba(255, 255, 255, 0.1);
     --text-main: #f5f5f7;
     --text-muted: #a1a1a6;
-    --accent: #8B5CF6;
+    --accent: #8b5cf6;
     --accent-soft: rgba(139, 92, 246, 0.15);
     --nav-bg: rgba(5, 5, 9, 0.75);
     --nav-border: rgba(255, 255, 255, 0.08);
@@ -102,4 +107,39 @@ p {
   100% {
     transform: translateX(200%) skewX(-12deg);
   }
+}
+
+/* Pulse Animation for Background Glow (Performance Optimized) */
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes pulse-slower {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.2);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 10s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.animate-pulse-slower {
+  animation: pulse-slower 15s ease-in-out infinite;
+  will-change: transform, opacity;
 }

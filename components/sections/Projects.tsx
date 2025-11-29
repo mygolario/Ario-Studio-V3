@@ -134,8 +134,9 @@ export function Projects({ projects }: ProjectsProps) {
                       alt={`${project.title} - ${project.category}`}
                       fill
                       className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      loading="lazy"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      loading={index < 2 ? "eager" : "lazy"}
+                      priority={index < 2}
                     />
                   )}
                   
