@@ -170,7 +170,16 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'} className="scroll-smooth" suppressHydrationWarning>
+    <html 
+      lang={locale} 
+      dir={isRtl ? 'rtl' : 'ltr'} 
+      className={cn(
+        "scroll-smooth",
+        vazirmatn.variable,
+        inter.variable
+      )} 
+      suppressHydrationWarning
+    >
       <body
         className={cn(
           isRtl ? vazirmatn.className : inter.className,
