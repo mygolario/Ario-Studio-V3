@@ -66,9 +66,6 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react', 'framer-motion', 'date-fns'],
     // Optimize CSS bundling for better performance
     optimizeCss: true,
-    // Remove legacy browser support and ES5 polyfills for smaller bundle size
-    legacyBrowsers: false,
-    browsersListForSwc: true,
   },
   // Compression
   compress: true,

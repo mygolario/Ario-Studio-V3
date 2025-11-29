@@ -16,6 +16,7 @@ export function Hero() {
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-accent-purple/20 rounded-full blur-[120px] animate-pulse-slow dark:opacity-100 opacity-40" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-accent-blue/10 rounded-full blur-[120px] animate-pulse-slower dark:opacity-100 opacity-40" />
         {/* Noise texture - Using img tag for LCP optimization with high priority */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/noise.avif"
           alt=""
