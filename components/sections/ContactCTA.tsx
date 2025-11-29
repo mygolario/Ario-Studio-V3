@@ -3,7 +3,6 @@
 import { PremiumButton } from "@/components/ui/PremiumButton";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 
 export function ContactCTA() {
@@ -12,10 +11,7 @@ export function ContactCTA() {
   return (
     <Section className="py-24 md:py-32">
       <Container>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
+        <div
           className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-page-elevated border border-border-subtle p-8 sm:p-12 md:p-16 lg:p-24 text-center shadow-sm"
         >
           {/* Subtle Gradient Background */}
@@ -43,7 +39,7 @@ export function ContactCTA() {
               </PremiumButton>
             </div>
           </div>
-        </motion.div>
+        </div>
       </Container>
     </Section>
   );

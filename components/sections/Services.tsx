@@ -2,7 +2,6 @@
 
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 
 export function Services() {
@@ -36,25 +35,18 @@ export function Services() {
     <Section id="services" className="bg-page-elevated">
       <Container>
         <div className="mb-16 md:mb-24">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+          <h2
             className="text-3xl md:text-4xl font-bold text-text-main mb-4"
           >
             {t("title")}
-          </motion.h2>
+          </h2>
           <div className="h-1 w-20 bg-gradient-to-r from-accent-purple to-accent-blue rounded-full" />
         </div>
 
         <div className="space-y-0">
-          {services.map((service, index) => (
-            <motion.div
+          {services.map((service) => (
+            <div
               key={service.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
               className="group relative border-t border-border-subtle py-8 sm:py-12 md:py-16 transition-colors hover:bg-surface-hover"
             >
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-start">
@@ -82,7 +74,7 @@ export function Services() {
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
           <div className="border-t border-border-subtle" />
         </div>

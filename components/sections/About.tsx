@@ -2,7 +2,6 @@
 
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -14,10 +13,7 @@ export function About() {
       <Container>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 lg:gap-24">
           {/* Left: Storytelling */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+          <div
             className="space-y-8"
           >
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-text-main leading-tight">
@@ -29,13 +25,10 @@ export function About() {
               <p>{t("p1")}</p>
               <p>{t("p2")}</p>
             </div>
-          </motion.div>
+          </div>
 
           {/* Right: Lists */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+          <div
             className="space-y-12"
           >
             <div>
@@ -65,7 +58,7 @@ export function About() {
                 ))}
               </ul>
             </div>
-          </motion.div>
+          </div>
         </div>
       </Container>
     </Section>

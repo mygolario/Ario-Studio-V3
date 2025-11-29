@@ -2,7 +2,6 @@
 
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-import { motion } from "framer-motion";
 import { Link } from "@/lib/navigation";
 import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -21,31 +20,22 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
       <Section>
         <Container>
           <div className="mb-20">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+            <h1
               className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-text-main mb-4 sm:mb-6"
             >
               {t("title")}
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
+            </h1>
+            <p
               className="text-lg sm:text-xl text-text-muted-custom max-w-2xl"
             >
               {t("description")}
-            </motion.p>
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
-            {projects.map((project, index) => (
-              <motion.div
+            {projects.map((project) => (
+              <div
                 key={project.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.05 }}
               >
                 <Link
                   href={`/projects/${project.slug}`}
@@ -90,7 +80,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
                     </p>
                   </div>
                 </Link>
-              </motion.div>
+              </div>
             ))}
           </div>
         </Container>

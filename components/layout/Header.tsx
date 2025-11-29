@@ -1,85 +1,44 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-// import Link from "next/link"; // Replaced by next-intl Link
+import React, { useState, useEffect, useCallback } from "react";
 import { Link, usePathname } from "@/lib/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/utils";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
-import { useMotionTemplate, useMotionValue } from "framer-motion";
-import { MouseEvent } from "react";
 
-// Enhanced Request Project Button with Beautiful Hover Effect
-function EnhancedRequestButton() {
+// Simplified Request Project Button - CSS only hover effects
+function RequestButton() {
   const t = useTranslations('common.navigation');
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  function handleMouseMove({ currentTarget, clientX, clientY }: MouseEvent<HTMLAnchorElement>) {
-    const { left, top } = currentTarget.getBoundingClientRect();
-    mouseX.set(clientX - left);
-    mouseY.set(clientY - top);
-  }
 
   return (
-    <motion.div
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ type: "spring", stiffness: 400, damping: 30 }}
-      className="flex relative group rounded-full"
+    <Link
+      href="/contact"
+      className={cn(
+        "group relative flex items-center justify-center overflow-hidden",
+        "rounded-full px-3 sm:px-5 h-8 sm:h-9 font-medium text-xs sm:text-sm min-w-[80px] sm:min-w-auto",
+        "bg-accent-purple/20 text-accent-purple",
+        "border border-accent-purple/50",
+        "shadow-md shadow-accent-purple/10",
+        "transition-all duration-300",
+        "hover:bg-accent-purple/30",
+        "hover:border-accent-purple/70",
+        "hover:shadow-[0_0_25px_rgba(139,92,246,0.4)]",
+        "hover:scale-[1.02] active:scale-[0.98]"
+      )}
     >
-      <Link
-        href="/contact"
-        onMouseMove={handleMouseMove}
-        className={cn(
-          "relative flex items-center justify-center overflow-hidden",
-          "rounded-full px-3 sm:px-5 h-8 sm:h-9 font-medium text-xs sm:text-sm min-w-[80px] sm:min-w-auto",
-          "bg-accent-purple/20 text-accent-purple",
-          "border border-accent-purple/50",
-          "shadow-md shadow-accent-purple/10",
-          "transition-all duration-500",
-          "hover:bg-accent-purple/30",
-          "hover:border-accent-purple/70",
-          "hover:shadow-[0_0_25px_rgba(139,92,246,0.4)]"
-        )}
-      >
-        {/* Mouse-following Spotlight Effect */}
-        <motion.div
-          className="pointer-events-none absolute -inset-px rounded-full opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-          style={{
-            background: useMotionTemplate`
-              radial-gradient(
-                150px circle at ${mouseX}px ${mouseY}px,
-                rgba(139, 92, 246, 0.3),
-                transparent 70%
-              )
-            `,
-          }}
-        />
+      {/* Shimmer Effect */}
+      <div className="absolute inset-0 z-0 overflow-hidden rounded-full">
+        <div className="absolute top-0 left-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 -translate-x-[200%] group-hover:animate-[shimmer_1.5s_infinite]" />
+      </div>
 
-        {/* Enhanced Glow Ring on Hover */}
-        <motion.div
-          className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          style={{
-            boxShadow: "0 0 30px rgba(139, 92, 246, 0.5), inset 0 0 20px rgba(139, 92, 246, 0.2)",
-          }}
-        />
-
-        {/* Shimmer Effect */}
-        <div className="absolute inset-0 z-0 overflow-hidden rounded-full">
-          <div className="absolute top-0 left-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 -translate-x-[200%] group-hover:animate-[shimmer_1.5s_infinite]" />
-        </div>
-
-        {/* Button Text */}
-        <span className="relative z-10 text-xs sm:text-sm font-medium tracking-wide whitespace-nowrap">
-          {t('requestProject')}
-        </span>
-      </Link>
-    </motion.div>
+      {/* Button Text */}
+      <span className="relative z-10 text-xs sm:text-sm font-medium tracking-wide whitespace-nowrap">
+        {t('requestProject')}
+      </span>
+    </Link>
   );
 }
 
@@ -140,35 +99,20 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
       <Container className="pt-4 relative">
         {/* Floating Capsule Container - Glass Effect */}
-        <motion.div
-          style={{ willChange: "box-shadow, background-color" }} // Optimized for performance
+        <div
           className={cn(
             "pointer-events-auto relative flex items-center justify-between",
-            "px-2 sm:px-3 md:px-4 py-2", // Compact and sleek
-            "rounded-full", // Always pill-shaped
+            "px-2 sm:px-3 md:px-4 py-2",
+            "rounded-full",
             "backdrop-blur-xl",
-            // Glass background matching site theme
-            "bg-[rgba(245,245,247,0.85)]", // Light mode
-            "dark:bg-[rgba(15,15,19,0.75)]", // Dark mode
-            // Subtle border
+            "bg-[rgba(245,245,247,0.85)]",
+            "dark:bg-[rgba(15,15,19,0.75)]",
             "border border-black/[0.08]",
             "dark:border-white/[0.08]",
-            // Soft shadow
             "shadow-lg shadow-black/5 dark:shadow-black/20",
-            "transition-shadow duration-300 ease-out"
+            "transition-shadow duration-300 ease-out",
+            "hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
           )}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          animate={{
-            // REMOVED y and scale to prevent jitter/wobble ("eating blood")
-            boxShadow: isHovered 
-              ? "0 8px 30px rgba(0,0,0,0.08)" // Stronger shadow on hover
-              : "0 4px 20px rgba(0,0,0,0.04)", // Default shadow
-          }}
-          transition={{
-            duration: 0.3,
-            ease: "easeOut",
-          }}
         >
           {/* Top edge highlight for glass feel */}
           <div 
@@ -193,30 +137,16 @@ export function Header() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-full",
+                    "relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full",
                     isActive
-                      ? "text-text-main"
-                      : "text-text-muted-custom hover:text-text-main"
+                      ? "text-text-main bg-black/5 dark:bg-white/10"
+                      : "text-text-muted-custom hover:text-text-main hover:bg-black/5 dark:hover:bg-white/10"
                   )}
-                  onMouseEnter={() => setHoveredPath(item.href)}
-                  onMouseLeave={() => setHoveredPath(null)}
                 >
                   {item.name}
-                  {item.href === hoveredPath && (
-                    <motion.div
-                      layoutId="navbar-hover"
-                      className="absolute inset-0 bg-black/5 dark:bg-white/10 rounded-full -z-10"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                    />
-                  )}
                   {isActive && (
-                    <motion.div
-                      layoutId="navbar-active"
+                    <span
                       className="absolute bottom-1.5 left-4 right-4 h-0.5 bg-text-main rounded-full"
-                      transition={{ duration: 0.3 }}
                     />
                   )}
                 </Link>
@@ -236,18 +166,13 @@ export function Header() {
                           href={pathname} 
                           locale={l as 'fa' | 'en'} 
                           className={cn(
-                              "relative z-10 w-8 h-7 flex items-center justify-center text-[10px] font-bold uppercase transition-colors duration-300 rounded-full",
-                              locale === l ? "text-text-main" : "text-text-muted-custom hover:text-text-main"
+                              "relative z-10 w-8 h-7 flex items-center justify-center text-[10px] font-bold uppercase transition-all duration-300 rounded-full",
+                              locale === l 
+                                ? "text-text-main bg-white dark:bg-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.08)] border border-black/5 dark:border-white/5" 
+                                : "text-text-muted-custom hover:text-text-main"
                           )}
                       >
                           {l}
-                          {locale === l && (
-                              <motion.div
-                                  layoutId="lang-active"
-                                  className="absolute inset-0 bg-white dark:bg-white/10 rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.08)] -z-10 border border-black/5 dark:border-white/5"
-                                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                              />
-                          )}
                       </Link>
                   ))}
               </div>
@@ -259,33 +184,23 @@ export function Header() {
                     onClick={() => setTheme('light')}
                     className={cn(
                       "relative w-8 h-7 flex items-center justify-center rounded-full transition-all duration-300",
-                      theme === 'light' ? "text-amber-500" : "text-text-muted-custom hover:text-text-main"
+                      theme === 'light' 
+                        ? "text-amber-500 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.08)] border border-black/5" 
+                        : "text-text-muted-custom hover:text-text-main"
                     )}
                   >
                     <Sun className="w-4 h-4" strokeWidth={2.5} />
-                    {theme === 'light' && (
-                      <motion.div
-                        layoutId="theme-active"
-                        className="absolute inset-0 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.08)] rounded-full -z-10 border border-black/5"
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                      />
-                    )}
                   </button>
                   <button
                     onClick={() => setTheme('dark')}
                     className={cn(
                       "relative w-8 h-7 flex items-center justify-center rounded-full transition-all duration-300",
-                      theme === 'dark' ? "text-blue-400" : "text-text-muted-custom hover:text-text-main"
+                      theme === 'dark' 
+                        ? "text-blue-400 bg-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.2)] border border-white/5" 
+                        : "text-text-muted-custom hover:text-text-main"
                     )}
                   >
                     <Moon className="w-4 h-4" strokeWidth={2.5} />
-                    {theme === 'dark' && (
-                      <motion.div
-                        layoutId="theme-active"
-                        className="absolute inset-0 bg-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.2)] rounded-full -z-10 border border-white/5"
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                      />
-                    )}
                   </button>
                 </div>
               )}
@@ -293,7 +208,7 @@ export function Header() {
               <div className="w-px h-5 bg-border-subtle mx-1" />
 
               {/* CTA Button - Desktop only */}
-              <EnhancedRequestButton />
+              <RequestButton />
             </div>
             
             {/* Mobile Menu Button */}
@@ -324,16 +239,12 @@ export function Header() {
               )}
             </button>
           </div>
-        </motion.div>
+        </div>
 
         {/* Mobile Menu Backdrop - Click to close */}
         {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm z-40"
+          <div
+            className="md:hidden fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm z-40 animate-fade-in"
             onClick={(e) => {
               e.stopPropagation();
               setIsMobileMenuOpen(false);
@@ -350,12 +261,9 @@ export function Header() {
 
         {/* Mobile Menu Dropdown */}
         {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+          <div
             data-mobile-menu
-            className="md:hidden mt-3 rounded-2xl backdrop-blur-xl bg-[rgba(245,245,247,0.95)] dark:bg-[rgba(15,15,19,0.95)] border border-black/[0.08] dark:border-white/[0.08] shadow-lg overflow-hidden pointer-events-auto z-50 relative"
+            className="md:hidden mt-3 rounded-2xl backdrop-blur-xl bg-[rgba(245,245,247,0.95)] dark:bg-[rgba(15,15,19,0.95)] border border-black/[0.08] dark:border-white/[0.08] shadow-lg overflow-hidden pointer-events-auto z-50 relative animate-fade-in-up"
             onClick={(e) => e.stopPropagation()}
             onMouseDown={(e) => e.stopPropagation()}
           >
@@ -401,10 +309,8 @@ export function Header() {
                   >
                     {item.name}
                     {isActive && (
-                      <motion.div
-                        layoutId="mobile-nav-active"
+                      <span
                         className="absolute left-0 top-0 bottom-0 w-1 bg-text-main rounded-r-full"
-                        transition={{ duration: 0.3 }}
                       />
                     )}
                   </Link>
@@ -499,7 +405,7 @@ export function Header() {
                 </Link>
               </div>
             </nav>
-          </motion.div>
+          </div>
         )}
       </Container>
     </header>

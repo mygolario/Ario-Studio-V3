@@ -2,26 +2,13 @@
 
 import { PremiumButton } from "@/components/ui/PremiumButton";
 import { Container } from "@/components/ui/Container";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
 import { useTranslations } from "next-intl";
-import { cn } from "@/lib/utils";
 
 export function Hero() {
   const t = useTranslations("home.hero");
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
-
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const y = useTransform(scrollYProgress, [0, 0.5], [0, 100]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
 
   return (
     <section
-      ref={ref}
       className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden pt-20 sm:pt-24"
     >
       {/* Background Gradients - CSS Animation for Performance */}
@@ -32,9 +19,9 @@ export function Hero() {
       </div>
 
       <Container className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
-        {/* Left Content */}
-        <motion.div style={{ opacity, y }} className="space-y-8">
-          <div className="animate-fade-in-up">
+        {/* Left Content - No motion wrapper for faster LCP */}
+        <div className="space-y-8">
+          <div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] text-text-main">
               {t('headline.prefix')}{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-blue to-accent-purple">
@@ -45,13 +32,13 @@ export function Hero() {
           </div>
 
           <p
-            className="text-base sm:text-lg md:text-xl text-text-muted-custom max-w-lg leading-relaxed animate-fade-in-up delay-100 opacity-0"
+            className="text-base sm:text-lg md:text-xl text-text-muted-custom max-w-lg leading-relaxed"
           >
             {t('description')}
           </p>
 
           <div
-            className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-6 animate-fade-in-up delay-200 opacity-0"
+            className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-6"
           >
             {/* Novel Animated Buttons - Stable (No Magnetic Jitter) */}
             <PremiumButton href="/contact" variant="primary">
@@ -62,12 +49,11 @@ export function Hero() {
                 {t('cta.viewWork')}
             </PremiumButton>
           </div>
-        </motion.div>
+        </div>
 
         {/* Right UI Preview */}
-        <motion.div
-          style={{ scale }}
-          className="relative hidden lg:block animate-fade-in delay-300 opacity-0"
+        <div
+          className="relative hidden lg:block"
         >
           <div className="relative w-full aspect-square max-w-lg mx-auto">
             {/* Abstract UI Card */}
@@ -105,7 +91,7 @@ export function Hero() {
               className="absolute -left-8 bottom-20 w-32 h-32 bg-gradient-to-tr from-accent-blue to-cyan-400 rounded-full blur-2xl opacity-30 animate-pulse-slower"
             />
           </div>
-        </motion.div>
+        </div>
       </Container>
     </section>
   );
