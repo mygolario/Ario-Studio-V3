@@ -1,9 +1,11 @@
+import dynamic from 'next/dynamic';
 import { Hero } from "@/components/sections/Hero";
-import { Services } from "@/components/sections/Services";
-import { Projects } from "@/components/sections/Projects";
-import { About } from "@/components/sections/About";
-import { ContactCTA } from "@/components/sections/ContactCTA";
 import { getAllProjects } from "@/lib/projects-data";
+
+const Services = dynamic(() => import("@/components/sections/Services").then(mod => mod.Services));
+const Projects = dynamic(() => import("@/components/sections/Projects").then(mod => mod.Projects));
+const About = dynamic(() => import("@/components/sections/About").then(mod => mod.About));
+const ContactCTA = dynamic(() => import("@/components/sections/ContactCTA").then(mod => mod.ContactCTA));
 
 type PageProps = {
   params: { locale: string };
