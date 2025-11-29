@@ -2,39 +2,29 @@ import createMiddleware from 'next-intl/middleware';
 import {routing} from './lib/navigation';
 import {NextRequest, NextResponse} from 'next/server';
 
-// Countries where Farsi should be the default
-const FARSI_COUNTRIES = ['IR']; // Iran
-
 const intlMiddleware = createMiddleware(routing);
 
 export default function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   
+  // Always rewrite root path (/) to /en (English homepage)
+  if (pathname === '/') {
+    const url = request.nextUrl.clone();
+    url.pathname = '/en';
+    return NextResponse.rewrite(url);
+  }
+  
   // Check if path already has a locale
   const hasLocale = pathname.startsWith('/fa/') || pathname.startsWith('/en/') || 
                    pathname === '/fa' || pathname === '/en';
   
-  // If accessing root path without locale, detect country and rewrite (not redirect)
-  if (!hasLocale && (pathname === '/' || !pathname.startsWith('/fa') && !pathname.startsWith('/en'))) {
-    // Get country from Vercel header (available on Vercel deployments)
-    const country = request.headers.get('x-vercel-ip-country') || 
-                    request.headers.get('cf-ipcountry') || 
-                    null;
-
-    // Determine locale based on country
-    // If from Iran, use Farsi; otherwise use English
-    // Default to Farsi if country cannot be detected (since fa is the default locale)
-    const preferredLocale = country 
-      ? (FARSI_COUNTRIES.includes(country) ? 'fa' : 'en')
-      : 'fa'; // Default to Farsi when country detection fails
-    
-    const url = request.nextUrl.clone();
-    url.pathname = `/${preferredLocale}${pathname === '/' ? '' : pathname}`;
-    // Use rewrite instead of redirect to avoid redirect chains
-    return NextResponse.rewrite(url);
+  // If accessing path without locale (but not root), use next-intl middleware
+  // This will handle locale detection and routing
+  if (!hasLocale && pathname !== '/') {
+    return intlMiddleware(request);
   }
 
-  // Use next-intl middleware for all other requests
+  // Use next-intl middleware for all other requests (with locale)
   return intlMiddleware(request);
 }
  
