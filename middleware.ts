@@ -1,3 +1,19 @@
+/**
+ * MIDDLEWARE: Root path routing handler
+ * 
+ * This middleware handles the root path (/) and redirects to locale-specific routes.
+ * 
+ * ROUTING LOGIC:
+ * - / → Always redirects to /fa (light Farsi homepage)
+ * - /fa → Handled by app/[locale]/page.tsx (Farsi homepage with light theme)
+ * - /en → Handled by app/[locale]/page.tsx (English homepage with light theme)
+ * - /fa/* and /en/* → Handled by next-intl middleware
+ * 
+ * NOTE: Root path (/) always redirects to /fa to ensure the light Farsi homepage is shown
+ * 
+ * NOTE: There is no app/page.tsx - all homepage rendering is done via app/[locale]/page.tsx
+ */
+
 import createMiddleware from 'next-intl/middleware';
 import {routing} from './lib/navigation';
 import {NextRequest, NextResponse} from 'next/server';
@@ -14,22 +30,11 @@ export default function middleware(request: NextRequest) {
   const hasLocale = pathname.startsWith('/fa/') || pathname.startsWith('/en/') || 
                    pathname === '/fa' || pathname === '/en';
   
-  // If accessing root path without locale, detect country and redirect
+  // If accessing root path without locale, always redirect to /fa (light Farsi homepage)
   if (!hasLocale && (pathname === '/' || !pathname.startsWith('/fa') && !pathname.startsWith('/en'))) {
-    // Get country from Vercel header (available on Vercel deployments)
-    const country = request.headers.get('x-vercel-ip-country') || 
-                    request.headers.get('cf-ipcountry') || 
-                    null;
-
-    // Determine locale based on country
-    // If from Iran, use Farsi; otherwise use English
-    // Default to Farsi if country cannot be detected (since fa is the default locale)
-    const preferredLocale = country 
-      ? (FARSI_COUNTRIES.includes(country) ? 'fa' : 'en')
-      : 'fa'; // Default to Farsi when country detection fails
-    
+    // Always redirect to /fa for the light Farsi homepage
     const url = request.nextUrl.clone();
-    url.pathname = `/${preferredLocale}${pathname === '/' ? '' : pathname}`;
+    url.pathname = `/fa${pathname === '/' ? '' : pathname}`;
     return NextResponse.redirect(url);
   }
 

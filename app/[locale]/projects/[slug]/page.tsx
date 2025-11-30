@@ -1,3 +1,16 @@
+/**
+ * ROUTE: /fa/projects/[slug] and /en/projects/[slug]
+ * 
+ * Individual project detail pages for both Farsi and English locales.
+ * 
+ * DESIGN STATUS: Uses the same theme system as homepage (light/dark via ThemeProvider)
+ * - Renders in the same layout as homepage (app/[locale]/layout.tsx)
+ * - Theme is controlled by the root layout's ThemeProvider
+ * - Supports RTL for Farsi, LTR for English
+ * 
+ * LANGUAGE: Mixed (FA / EN) - Content is internationalized via next-intl
+ */
+
 import { Metadata } from "next";
 import { getProjectBySlug } from "@/lib/projects-data";
 import { notFound } from "next/navigation";

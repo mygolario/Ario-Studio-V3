@@ -1,3 +1,25 @@
+/**
+ * LAYOUT: Root layout for all [locale] routes (/fa, /en)
+ * 
+ * This layout wraps all pages under the [locale] dynamic segment, including:
+ * - /fa (Farsi homepage)
+ * - /en (English homepage)
+ * - /fa/contact, /en/contact
+ * - /fa/projects, /en/projects
+ * - /fa/projects/[slug], /en/projects/[slug]
+ * 
+ * DESIGN STATUS: CURRENT_MAIN_HOMEPAGE (defaultTheme="light")
+ * - Defaults to light theme (defaultTheme="light") for the new light, white-background design
+ * - CSS supports both light and dark modes via CSS variables
+ * - Theme can be toggled by users, but default is light for the new design
+ * 
+ * LANGUAGE HANDLING:
+ * - Supports both Farsi (fa) and English (en) locales
+ * - Sets RTL direction for Farsi, LTR for English
+ * - Uses appropriate fonts: Vazirmatn for Farsi, Inter for English
+ * - Uses next-intl for internationalization
+ */
+
 import type { Viewport } from "next";
 import { Vazirmatn, Inter } from "next/font/google";
 import "../globals.css";
@@ -178,7 +200,7 @@ export default async function RootLayout({
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider
             attribute="class"
-            defaultTheme="dark"
+            defaultTheme="light"
             enableSystem
             disableTransitionOnChange
           >
