@@ -26,6 +26,8 @@
  * - Uses next-themes with ThemeProvider
  * - Supports system preference detection (enableSystem)
  * - CSS variables in globals.css define both light and dark color schemes
+ * - Light: #f5f5f7 background (desired - new design, currently default)
+ * - Dark: #050509 background (legacy - old design, available via toggle)
  */
 
 import type { Viewport } from "next";
