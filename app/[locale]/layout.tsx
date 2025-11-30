@@ -1,7 +1,8 @@
 /**
  * LAYOUT: Root layout for all [locale] routes (/fa, /en)
  * 
- * This layout wraps all pages under the [locale] dynamic segment, including:
+ * ROUTE STRUCTURE:
+ * - Wraps all pages under the [locale] dynamic route segment
  * - /fa (Farsi homepage)
  * - /en (English homepage)
  * - /fa/contact, /en/contact
@@ -10,14 +11,21 @@
  * 
  * DESIGN STATUS: CURRENT_MAIN_HOMEPAGE (defaultTheme="light")
  * - Defaults to light theme (defaultTheme="light") for the new light, white-background design
- * - CSS supports both light and dark modes via CSS variables
+ * - Light mode: #f5f5f7 background (Apple-like design - current desired design)
+ * - Dark mode: #050509 background (legacy design - available via theme toggle)
+ * - CSS supports both light and dark modes via CSS variables in globals.css
  * - Theme can be toggled by users, but default is light for the new design
  * 
- * LANGUAGE HANDLING:
- * - Supports both Farsi (fa) and English (en) locales
+ * LANGUAGE SUPPORT:
+ * - Handles both Farsi (fa) and English (en) locales
  * - Sets RTL direction for Farsi, LTR for English
- * - Uses appropriate fonts: Vazirmatn for Farsi, Inter for English
- * - Uses next-intl for internationalization
+ * - Loads appropriate fonts: Vazirmatn for Farsi, Inter for English
+ * - Provides next-intl translation context for internationalization
+ * 
+ * THEME SYSTEM:
+ * - Uses next-themes with ThemeProvider
+ * - Supports system preference detection (enableSystem)
+ * - CSS variables in globals.css define both light and dark color schemes
  */
 
 import type { Viewport } from "next";
