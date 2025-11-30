@@ -1,3 +1,29 @@
+/**
+ * LAYOUT FOR CURRENT_MAIN_HOMEPAGE - Light/White Design (Apple-like)
+ * 
+ * ROUTE STRUCTURE:
+ * - Wraps all pages under /fa and /en routes
+ * - This layout applies to the [locale] dynamic route segment
+ * 
+ * DESIGN STATE:
+ * - Currently defaults to DARK theme (defaultTheme="dark" on line 181)
+ * - DESIRED: Change to defaultTheme="light" for the new light/white design
+ * - LEGACY: Dark theme is the old version (currently active by default)
+ * 
+ * LANGUAGE SUPPORT:
+ * - Handles both Farsi (fa) and English (en)
+ * - Sets RTL direction for Farsi, LTR for English
+ * - Loads appropriate fonts (Vazirmatn for Farsi, Inter for English)
+ * - Provides next-intl translation context
+ * 
+ * THEME SYSTEM:
+ * - Uses next-themes with ThemeProvider
+ * - Supports system preference detection (enableSystem)
+ * - CSS variables in globals.css define both light and dark color schemes
+ * - Light: #f5f5f7 background (desired - new design)
+ * - Dark: #050509 background (legacy - old design, currently default)
+ */
+
 import type { Viewport } from "next";
 import { Vazirmatn, Inter } from "next/font/google";
 import "../globals.css";
@@ -176,9 +202,15 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <NextIntlClientProvider messages={messages}>
+          {/* 
+            THEME DEFAULT - CURRENT STATE:
+            - ✅ Set to "light" (CURRENT_MAIN_HOMEPAGE - new light/white design)
+            - Light theme uses white/light gray background (#f5f5f7) - Apple-like design
+            - Dark theme (legacy) still available via theme toggle for users who prefer it
+          */}
           <ThemeProvider
             attribute="class"
-            defaultTheme="dark"
+            defaultTheme="light"
             enableSystem
             disableTransitionOnChange
           >
