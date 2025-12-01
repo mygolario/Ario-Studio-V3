@@ -27,8 +27,8 @@
 import dynamic from 'next/dynamic';
 import { Hero } from "@/components/sections/Hero";
 import { draftMode } from 'next/headers';
+import { getFeaturedServices } from "@/lib/services-data"; // Use data layer with fallback
 import { 
-  getFeaturedServices, 
   getAllProjects, 
   getAllTestimonials,
   getSiteSettings 

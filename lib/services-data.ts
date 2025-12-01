@@ -1,4 +1,7 @@
-import { getAllServices as fetchSanityServices } from "@/sanity/queries";
+import { 
+  getAllServices as fetchSanityServices,
+  getFeaturedServices as fetchFeaturedServices 
+} from "@/sanity/queries";
 import type { Service as SanityService } from "@/sanity/queries";
 
 export type Service = {
@@ -38,6 +41,10 @@ const fallbackServices: Service[] = [
   },
 ];
 
+/**
+ * Get all services with fallback to static data
+ * Maintains resilience pattern - if Sanity is unavailable, returns fallback services
+ */
 export async function getAllServices(): Promise<Service[]> {
   try {
     const sanityServices = await fetchSanityServices();
@@ -45,8 +52,8 @@ export async function getAllServices(): Promise<Service[]> {
       return sanityServices.map((s: SanityService) => ({
         id: s.slug?.current || s._id,
         title: s.title,
-        subtitle: s.shortDescription || '',
-        description: '', // Service description is not in the current query, add if needed
+        subtitle: s.shortDescription || '', // Use shortDescription only, not tier
+        description: s.shortDescription || '', // Use shortDescription for description
         color: getServiceColorClass(s.tier),
         order: s.orderRank || 0,
       }));
@@ -56,6 +63,31 @@ export async function getAllServices(): Promise<Service[]> {
   }
   
   // Fallback to default services
+  return fallbackServices;
+}
+
+/**
+ * Get featured services with fallback to static data
+ * Maintains resilience pattern - if Sanity is unavailable or has no featured services, returns fallback
+ */
+export async function getFeaturedServices(): Promise<Service[]> {
+  try {
+    const sanityServices = await fetchFeaturedServices();
+    if (sanityServices.length > 0) {
+      return sanityServices.map((s: SanityService) => ({
+        id: s.slug?.current || s._id,
+        title: s.title,
+        subtitle: s.shortDescription || '', // Use shortDescription only, not tier
+        description: s.shortDescription || '', // Use shortDescription for description
+        color: getServiceColorClass(s.tier),
+        order: s.orderRank || 0,
+      }));
+    }
+  } catch (e) {
+    console.error("Failed to fetch featured services from Sanity, falling back to default data", e);
+  }
+  
+  // Fallback to default services (show all fallback services as featured)
   return fallbackServices;
 }
 

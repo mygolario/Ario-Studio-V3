@@ -3,7 +3,7 @@
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { useTranslations } from "next-intl";
-import type { Service } from "@/sanity/queries";
+import type { Service } from "@/lib/services-data";
 
 type ServicesProps = {
   services: Service[];
@@ -11,16 +11,6 @@ type ServicesProps = {
 
 export function Services({ services }: ServicesProps) {
   const t = useTranslations("home.services");
-
-  // Map Sanity service data to match existing component structure
-  const mappedServices = services.map((service, index) => ({
-    id: String(index + 1).padStart(2, '0'), // Generate ID like "01", "02", etc.
-    title: service.title,
-    subtitle: service.tier || service.shortDescription || '',
-    description: service.shortDescription || '',
-    color: getColorForTier(service.tier) || "bg-accent-purple",
-    order: service.orderRank || index,
-  }));
 
   return (
     <Section id="services" className="bg-page-elevated">
@@ -35,7 +25,7 @@ export function Services({ services }: ServicesProps) {
         </div>
 
         <div className="space-y-0">
-          {mappedServices.map((service) => (
+          {services.map((service) => (
             <div
               key={service.id}
               className="group relative border-t border-border-subtle py-8 sm:py-12 md:py-16 transition-colors hover:bg-surface-hover"
@@ -74,18 +64,4 @@ export function Services({ services }: ServicesProps) {
       </Container>
     </Section>
   );
-}
-
-// Helper function to map tier to color class
-function getColorForTier(tier?: string): string {
-  switch (tier) {
-    case 'Starter':
-      return 'bg-accent-blue';
-    case 'Growth':
-      return 'bg-accent-purple';
-    case 'Elite':
-      return 'bg-pink-500';
-    default:
-      return 'bg-accent-purple';
-  }
 }
