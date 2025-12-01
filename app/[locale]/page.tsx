@@ -50,7 +50,7 @@ export default async function Home({ params }: PageProps) {
   // Note: Homepage doesn't need draft preview, but we check for consistency
   const [siteSettings, featuredServices, projects, testimonials] = await Promise.all([
     getSiteSettings(),
-    getFeaturedServices(),
+    getFeaturedServices(params.locale), // Pass locale for translated fallback
     getAllProjects(),
     getAllTestimonials(),
   ]);
