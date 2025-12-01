@@ -159,6 +159,9 @@ NEXT_PUBLIC_SANITY_PROJECT_ID=your-project-id
 NEXT_PUBLIC_SANITY_DATASET=production
 NEXT_PUBLIC_SANITY_API_VERSION=2024-01-01
 
+# Sanity Studio App ID (for authentication)
+NEXT_PUBLIC_SANITY_STUDIO_APP_ID=p7qzilf5wc0zwwml5i1elwlk
+
 # Sanity API Token (for authenticated requests and preview)
 SANITY_API_READ_TOKEN=your-read-token
 

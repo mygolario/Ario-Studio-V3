@@ -10,6 +10,8 @@ export default defineConfig({
   projectId: sanityConfig.projectId,
   dataset: sanityConfig.dataset,
   basePath: '/studio',
+  // Studio App ID for authentication
+  appId: sanityConfig.studioAppId,
   plugins: [
     structureTool({
       structure,
