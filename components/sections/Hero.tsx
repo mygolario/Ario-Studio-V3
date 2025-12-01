@@ -3,9 +3,20 @@
 import { PremiumButton } from "@/components/ui/PremiumButton";
 import { Container } from "@/components/ui/Container";
 import { useTranslations } from "next-intl";
+import type { SiteSettings } from "@/sanity/queries";
 
-export function Hero() {
+type HeroProps = {
+  siteSettings: SiteSettings | null;
+};
+
+export function Hero({ siteSettings }: HeroProps) {
   const t = useTranslations("home.hero");
+
+  // Use Sanity data if available, otherwise fall back to translations
+  const headline = siteSettings?.heroHeadline || t('headline.prefix') + " " + t('headline.highlight') + " " + t('headline.suffix');
+  const subheadline = siteSettings?.heroSubheadline || t('description');
+  const ctaLabel = siteSettings?.heroCtaLabel || t('cta.startProject');
+  const ctaLink = siteSettings?.heroCtaLink || "/contact";
 
   return (
     <section
@@ -23,26 +34,34 @@ export function Hero() {
         <div className="space-y-8">
           <div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] text-text-main">
-              {t('headline.prefix')}{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-blue to-accent-purple">
-                {t('headline.highlight')}
-              </span>
-              {t('headline.suffix')}
+              {siteSettings?.heroHeadline ? (
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-blue to-accent-purple">
+                  {headline}
+                </span>
+              ) : (
+                <>
+                  {t('headline.prefix')}{" "}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-blue to-accent-purple">
+                    {t('headline.highlight')}
+                  </span>
+                  {t('headline.suffix')}
+                </>
+              )}
             </h1>
           </div>
 
           <p
             className="text-base sm:text-lg md:text-xl text-text-muted-custom max-w-lg leading-relaxed"
           >
-            {t('description')}
+            {subheadline}
           </p>
 
           <div
             className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-6"
           >
             {/* Novel Animated Buttons - Stable (No Magnetic Jitter) */}
-            <PremiumButton href="/contact" variant="primary">
-                {t('cta.startProject')}
+            <PremiumButton href={ctaLink} variant="primary">
+                {ctaLabel}
             </PremiumButton>
             
             <PremiumButton href="/projects" variant="secondary">

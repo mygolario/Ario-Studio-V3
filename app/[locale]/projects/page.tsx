@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { getAllProjects } from "@/lib/projects-data";
+import { getAllProjects } from "@/sanity/queries";
 import ProjectsClient from "./ProjectsClient";
 import { getTranslations } from "next-intl/server";
 

@@ -26,7 +26,13 @@
 
 import dynamic from 'next/dynamic';
 import { Hero } from "@/components/sections/Hero";
-import { getAllProjects } from "@/lib/projects-data";
+import { draftMode } from 'next/headers';
+import { 
+  getFeaturedServices, 
+  getAllProjects, 
+  getAllTestimonials,
+  getSiteSettings 
+} from "@/sanity/queries";
 
 const Services = dynamic(() => import("@/components/sections/Services").then(mod => mod.Services));
 const Projects = dynamic(() => import("@/components/sections/Projects").then(mod => mod.Projects));
@@ -38,13 +44,30 @@ type PageProps = {
 };
 
 export default async function Home({ params }: PageProps) {
-  const projects = await getAllProjects();
+  const { isEnabled } = draftMode();
+  
+  // Fetch all data from Sanity in parallel
+  // Note: Homepage doesn't need draft preview, but we check for consistency
+  const [siteSettings, featuredServices, projects, testimonials] = await Promise.all([
+    getSiteSettings(),
+    getFeaturedServices(),
+    getAllProjects(),
+    getAllTestimonials(),
+  ]);
+
+  // Limit projects to 3-4 for homepage
+  const featuredProjects = projects.slice(0, 4);
+  
+  // Limit testimonials to 3 for homepage
+  const featuredTestimonials = testimonials.slice(0, 3);
 
   return (
     <div className="flex flex-col gap-0">
-      <Hero />
-      <Services />
-      <Projects projects={projects} />
+      <Hero 
+        siteSettings={siteSettings}
+      />
+      <Services services={featuredServices} />
+      <Projects projects={featuredProjects} />
       <About />
       <ContactCTA />
     </div>

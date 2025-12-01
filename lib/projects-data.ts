@@ -4,10 +4,10 @@ import {
   Project as StaticProject,
 } from "./projects";
 import {
-  fetchAllProjectsFromWP,
-  fetchProjectBySlugFromWP,
-  WPProject,
-} from "./cms/wordpress";
+  getAllProjects as getSanityProjects,
+  getProjectBySlug as getSanityProjectBySlug,
+} from "@/sanity/queries";
+import type { ProjectDetail as SanityProject } from "@/sanity/queries";
 
 // Define a unified Project type that covers both sources
 export type Project = {
@@ -42,54 +42,57 @@ function mapStaticProject(p: StaticProject): Project {
   };
 }
 
-// Helper to map WPProject to our unified Project type
-function mapWPProject(p: WPProject): Project {
+// Helper to map SanityProject to our unified Project type
+function mapSanityProject(p: SanityProject): Project {
   return {
-    ...p,
-    id: p.id.toString(), // Ensure ID is string or consistent
+    id: p._id,
+    slug: p.slug.current,
+    title: p.title,
+    excerpt: p.summary,
+    description: p.summary,
+    content: undefined, // Sanity uses problem/solution/result instead
+    coverImageUrl: p.thumbnail,
+    category: p.industry,
+    client: p.clientName,
+    year: undefined,
+    services: undefined,
+    challenge: undefined, // Use problem field from Sanity
+    solution: undefined, // Use solution field from Sanity
+    results: undefined, // Use result field from Sanity
+    gradient: undefined,
+    images: undefined,
+    approachVisuals: undefined,
+    thumbnailImage: p.thumbnail,
   };
 }
 
-export async function getAllProjects(): Promise<Project[]> {
+export async function getAllProjects(draftMode = false): Promise<Project[]> {
   try {
-    const wpProjects = await fetchAllProjectsFromWP();
-    if (wpProjects.length > 0) {
-      // console.log('[getAllProjects] Fetched', wpProjects.length, 'projects from WordPress');
-      const mapped = wpProjects.map(mapWPProject);
-      // Log thumbnail info for first project
-      if (mapped[0]) {
-        // console.log('[getAllProjects] First project:', mapped[0].title, 'thumbnailImage:', mapped[0].thumbnailImage);
-      }
-      return mapped;
+    const sanityProjects = await getSanityProjects(draftMode);
+    if (sanityProjects.length > 0) {
+      return sanityProjects.map(mapSanityProject);
     }
   } catch (e) {
-    console.error("Failed to fetch projects from WordPress, falling back to static data", e);
+    console.error("Failed to fetch projects from Sanity, falling back to static data", e);
   }
   
   // Fallback to static data
-  // console.log('[getAllProjects] Using static fallback data');
   return staticProjects.map(mapStaticProject);
 }
 
-export async function getProjectBySlug(slug: string): Promise<Project | null> {
-  // console.log('[getProjectBySlug] Fetching slug:', slug);
-  
+export async function getProjectBySlug(slug: string, draftMode = false): Promise<Project | null> {
   try {
-    const wpProject = await fetchProjectBySlugFromWP(slug);
-    if (wpProject) {
-      const mappedProject = mapWPProject(wpProject);
-      // console.log('[getProjectBySlug] Found project:', mappedProject.title, 'thumbnailImage:', mappedProject.thumbnailImage);
-      return mappedProject;
+    const sanityProject = await getSanityProjectBySlug(slug, draftMode);
+    if (sanityProject) {
+      return mapSanityProject(sanityProject);
     }
   } catch (e) {
-    console.error(`Failed to fetch project ${slug} from WordPress, falling back to static data`, e);
+    console.error(`Failed to fetch project ${slug} from Sanity, falling back to static data`, e);
   }
   
   // Fallback to static data
   const staticProject = getStaticProjectBySlug(slug);
-  if (staticProject) {
-    // console.log('[getProjectBySlug] Using static fallback for:', slug);
-  } else {
+  if (!staticProject) {
     console.warn('[getProjectBySlug] No project found for slug:', slug);
   }
   return staticProject ? mapStaticProject(staticProject) : null;

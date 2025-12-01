@@ -5,7 +5,7 @@ import { Section } from "@/components/ui/Section";
 import { Link } from "@/lib/navigation";
 import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { Project } from "@/lib/projects-data";
+import { Project } from "@/sanity/queries";
 import Image from "next/image";
 
 interface ProjectsClientProps {
@@ -35,21 +35,19 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
           <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
             {projects.map((project) => (
               <div
-                key={project.id}
+                key={project._id}
               >
                 <Link
-                  href={`/projects/${project.slug}`}
+                  href={`/projects/${project.slug.current}`}
                   className="group block space-y-4 relative z-10"
                 >
                   <div
-                    className={`relative aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br ${
-                      project.gradient || "from-gray-500/20 to-slate-500/20"
-                    } border border-border-subtle group-hover:border-border-subtle/50 transition-all duration-500`}
+                    className={`relative aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br from-gray-500/20 to-slate-500/20 border border-border-subtle group-hover:border-border-subtle/50 transition-all duration-500`}
                   >
-                    {project.coverImageUrl && (
+                    {project.thumbnail && (
                       <Image
-                        src={project.coverImageUrl}
-                        alt={`${project.title} - ${project.category}`}
+                        src={project.thumbnail}
+                        alt={`${project.title} - ${project.industry || 'Project'}`}
                         fill
                         className="object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500"
                         sizes="(max-width: 768px) 100vw, 50vw"
@@ -71,13 +69,17 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
                       <h3 className="text-2xl font-bold text-text-main group-hover:text-accent-purple transition-colors">
                         {project.title}
                       </h3>
-                      <span className="text-sm font-mono text-text-muted-custom">
-                        {project.category}
-                      </span>
+                      {project.industry && (
+                        <span className="text-sm font-mono text-text-muted-custom">
+                          {project.industry}
+                        </span>
+                      )}
                     </div>
-                    <p className="text-text-muted-custom text-sm md:text-base line-clamp-2">
-                      {project.description || project.excerpt}
-                    </p>
+                    {project.summary && (
+                      <p className="text-text-muted-custom text-sm md:text-base line-clamp-2">
+                        {project.summary}
+                      </p>
+                    )}
                   </div>
                 </Link>
               </div>

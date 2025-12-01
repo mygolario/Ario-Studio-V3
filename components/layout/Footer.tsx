@@ -90,6 +90,16 @@ export function Footer() {
             <Link href="#" className="hover:text-text-main transition-colors">
               {t("terms")}
             </Link>
+            {process.env.NODE_ENV === 'development' && (
+              <Link 
+                href="/studio" 
+                className="hover:text-text-main transition-colors text-accent-purple/80 hover:text-accent-purple"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Studio
+              </Link>
+            )}
           </div>
         </div>
       </Container>

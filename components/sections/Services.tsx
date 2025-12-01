@@ -3,33 +3,24 @@
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { useTranslations } from "next-intl";
+import type { Service } from "@/sanity/queries";
 
-export function Services() {
+type ServicesProps = {
+  services: Service[];
+};
+
+export function Services({ services }: ServicesProps) {
   const t = useTranslations("home.services");
 
-  const services = [
-    {
-      id: "01",
-      title: t("items.01.title"),
-      subtitle: t("items.01.subtitle"),
-      description: t("items.01.description"),
-      color: "bg-accent-purple",
-    },
-    {
-      id: "02",
-      title: t("items.02.title"),
-      subtitle: t("items.02.subtitle"),
-      description: t("items.02.description"),
-      color: "bg-accent-blue",
-    },
-    {
-      id: "03",
-      title: t("items.03.title"),
-      subtitle: t("items.03.subtitle"),
-      description: t("items.03.description"),
-      color: "bg-pink-500",
-    },
-  ];
+  // Map Sanity service data to match existing component structure
+  const mappedServices = services.map((service, index) => ({
+    id: String(index + 1).padStart(2, '0'), // Generate ID like "01", "02", etc.
+    title: service.title,
+    subtitle: service.tier || service.shortDescription || '',
+    description: service.shortDescription || '',
+    color: getColorForTier(service.tier) || "bg-accent-purple",
+    order: service.orderRank || index,
+  }));
 
   return (
     <Section id="services" className="bg-page-elevated">
@@ -44,7 +35,7 @@ export function Services() {
         </div>
 
         <div className="space-y-0">
-          {services.map((service) => (
+          {mappedServices.map((service) => (
             <div
               key={service.id}
               className="group relative border-t border-border-subtle py-8 sm:py-12 md:py-16 transition-colors hover:bg-surface-hover"
@@ -63,9 +54,11 @@ export function Services() {
                   <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-text-main mb-2 group-hover:translate-x-0 sm:group-hover:translate-x-2 transition-transform duration-300">
                     {service.title}
                   </h3>
-                  <span className="text-sm text-accent-purple/80 font-medium uppercase tracking-wider">
-                    {service.subtitle}
-                  </span>
+                  {service.subtitle && (
+                    <span className="text-sm text-accent-purple/80 font-medium uppercase tracking-wider">
+                      {service.subtitle}
+                    </span>
+                  )}
                 </div>
 
                 <div className="md:col-span-5">
@@ -81,4 +74,18 @@ export function Services() {
       </Container>
     </Section>
   );
+}
+
+// Helper function to map tier to color class
+function getColorForTier(tier?: string): string {
+  switch (tier) {
+    case 'Starter':
+      return 'bg-accent-blue';
+    case 'Growth':
+      return 'bg-accent-purple';
+    case 'Elite':
+      return 'bg-pink-500';
+    default:
+      return 'bg-accent-purple';
+  }
 }
