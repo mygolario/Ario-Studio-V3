@@ -14,7 +14,7 @@ export type Project = {
   title: string;
   excerpt?: string;
   description?: string;
-  content?: string;
+  content?: any; // PortableText array (array of blocks)
   coverImageUrl?: string;
   category?: string;
   client?: string;
@@ -27,6 +27,7 @@ export type Project = {
   images?: string[];
   approachVisuals?: { id: string; label: string; imageUrl: string }[];
   thumbnailImage?: string | null;
+  order?: number;
 };
 
 // Helper to map Sanity project to our unified Project type
@@ -74,13 +75,26 @@ function mapSanityProject(sanityProject: any): Project {
     return '';
   };
 
+  // Clean approachVisuals - ensure imageUrl is valid
+  const cleanApproachVisuals = (visuals: any[]): { id: string; label: string; imageUrl: string }[] => {
+    if (!Array.isArray(visuals)) return [];
+    return visuals
+      .filter((v: any) => v && typeof v === 'object')
+      .map((v: any) => ({
+        id: v.id || '',
+        label: v.label || '',
+        imageUrl: cleanImageUrl(v.imageUrl),
+      }))
+      .filter((v) => v.imageUrl); // Only include visuals with valid image URLs
+  };
+
   return {
     id: sanityProject._id || '',
     slug: getSlug(),
     title: sanityProject.title || "",
     excerpt: sanityProject.excerpt || sanityProject.description || "",
     description: sanityProject.description || "",
-    content: sanityProject.content || "",
+    content: Array.isArray(sanityProject.content) ? sanityProject.content : null,
     coverImageUrl: cleanImageUrl(sanityProject.coverImageUrl),
     category: sanityProject.category || "",
     client: sanityProject.client || "",
@@ -91,8 +105,9 @@ function mapSanityProject(sanityProject: any): Project {
     results: sanityProject.results || "",
     gradient: sanityProject.gradient || "",
     images: Array.isArray(sanityProject.images) ? sanityProject.images.filter((img: any) => img && typeof img === 'string') : [],
-    approachVisuals: Array.isArray(sanityProject.approachVisuals) ? sanityProject.approachVisuals : [],
+    approachVisuals: cleanApproachVisuals(sanityProject.approachVisuals),
     thumbnailImage: cleanImageUrl(sanityProject.thumbnailImageUrl) || null,
+    order: typeof sanityProject.order === 'number' ? sanityProject.order : undefined,
   };
 }
 

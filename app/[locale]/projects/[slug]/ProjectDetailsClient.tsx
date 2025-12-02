@@ -9,6 +9,7 @@ import { ArrowLeft, ArrowRight, CheckCircle2, ExternalLink } from "lucide-react"
 import { useTranslations, useLocale } from "next-intl";
 import type { Project } from "@/lib/projects-data";
 import Image from "next/image";
+import { PortableText } from "next-sanity";
 
 interface ProjectDetailsClientProps {
   project: Project;
@@ -97,8 +98,13 @@ export default function ProjectDetailsClient({
               {project.title}
             </h1>
             {project.excerpt && (
-              <p className="text-lg sm:text-xl md:text-2xl text-text-muted-custom max-w-3xl leading-relaxed">
+              <p className="text-lg sm:text-xl md:text-2xl text-text-muted-custom max-w-3xl leading-relaxed mb-4">
                 {project.excerpt}
+              </p>
+            )}
+            {project.description && (
+              <p className="text-base sm:text-lg text-text-muted-custom max-w-3xl leading-relaxed">
+                {project.description}
               </p>
             )}
           </motion.div>
@@ -118,7 +124,52 @@ export default function ProjectDetailsClient({
                 <p className="text-text-main font-medium">{project.client}</p>
               </div>
             )}
+            {project.year && (
+              <div>
+                <h3 className="text-sm font-mono text-text-muted-custom mb-2 uppercase tracking-wider">
+                  {isRtl ? "سال" : "Year"}
+                </h3>
+                <p className="text-text-main font-medium">{project.year}</p>
+              </div>
+            )}
+            {project.services && project.services.length > 0 && (
+              <div>
+                <h3 className="text-sm font-mono text-text-muted-custom mb-2 uppercase tracking-wider">
+                  {isRtl ? "خدمات" : "Services"}
+                </h3>
+                <p className="text-text-main font-medium">
+                  {project.services.join(', ')}
+                </p>
+              </div>
+            )}
+            {project.category && (
+              <div>
+                <h3 className="text-sm font-mono text-text-muted-custom mb-2 uppercase tracking-wider">
+                  {isRtl ? "دسته‌بندی" : "Category"}
+                </h3>
+                <p className="text-text-main font-medium">{project.category}</p>
+              </div>
+            )}
           </motion.div>
+
+          {/* Thumbnail Image (if no cover image) */}
+          {!project.coverImageUrl && project.thumbnailImage && project.thumbnailImage.startsWith('http') && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2 }}
+              className="w-full aspect-video rounded-2xl sm:rounded-3xl border border-border-subtle mb-12 sm:mb-16 md:mb-24 relative overflow-hidden bg-gradient-to-br from-gray-500/20 to-slate-500/20"
+            >
+              <Image
+                src={project.thumbnailImage}
+                alt={isRtl ? `تصویر کوچک پروژه ${project.title}` : `Thumbnail image for ${project.title} project`}
+                fill
+                className="object-cover"
+                sizes="100vw"
+                priority
+              />
+            </motion.div>
+          )}
 
           {/* Cover Image */}
           {project.coverImageUrl && project.coverImageUrl.startsWith('http') && (
@@ -126,7 +177,12 @@ export default function ProjectDetailsClient({
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
-              className="w-full aspect-video rounded-2xl sm:rounded-3xl border border-border-subtle mb-12 sm:mb-16 md:mb-24 relative overflow-hidden bg-gradient-to-br from-gray-500/20 to-slate-500/20"
+              className={`w-full aspect-video rounded-2xl sm:rounded-3xl border border-border-subtle mb-12 sm:mb-16 md:mb-24 relative overflow-hidden ${
+                project.gradient 
+                  ? project.gradient 
+                  : 'bg-gradient-to-br from-gray-500/20 to-slate-500/20'
+              }`}
+              style={project.gradient && !project.gradient.startsWith('bg-') ? { background: project.gradient } : {}}
             >
               <Image
                 src={project.coverImageUrl}
@@ -199,6 +255,95 @@ export default function ProjectDetailsClient({
                   </div>
                 </div>
               </div>
+            </div>
+          </Container>
+        </Section>
+      )}
+
+      {/* Content Section (Full Content) */}
+      {project.content && Array.isArray(project.content) && project.content.length > 0 && (
+        <Section>
+          <Container>
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-text-main">
+                {isRtl ? "محتوای کامل" : "Full Content"}
+              </h2>
+              <div className="prose prose-lg dark:prose-invert max-w-none">
+                <PortableText value={project.content} />
+              </div>
+            </div>
+          </Container>
+        </Section>
+      )}
+
+      {/* Gallery Images Section */}
+      {project.images && project.images.length > 0 && (
+        <Section>
+          <Container>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-8 sm:mb-12 text-text-main text-center">
+              {isRtl ? "گالری تصاویر" : "Gallery"}
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              {project.images
+                .filter((img) => img && img.startsWith('http'))
+                .map((imageUrl, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="group relative aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-gray-500/20 to-slate-500/20 border border-border-subtle group-hover:border-border-subtle/50 transition-all duration-500"
+                  >
+                    <Image
+                      src={imageUrl}
+                      alt={`${project.title} - Gallery image ${index + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      loading="lazy"
+                    />
+                  </motion.div>
+                ))}
+            </div>
+          </Container>
+        </Section>
+      )}
+
+      {/* Approach Visuals Section */}
+      {project.approachVisuals && project.approachVisuals.length > 0 && (
+        <Section className="bg-page-elevated">
+          <Container>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-8 sm:mb-12 text-text-main text-center">
+              {isRtl ? "تصاویر رویکرد" : "Approach Visuals"}
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              {project.approachVisuals.map((visual, index) => (
+                <motion.div
+                  key={visual.id || index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="group"
+                >
+                  <div className="relative aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-gray-500/20 to-slate-500/20 border border-border-subtle group-hover:border-border-subtle/50 transition-all duration-500">
+                    {visual.imageUrl && visual.imageUrl.startsWith('http') && (
+                      <Image
+                        src={visual.imageUrl}
+                        alt={visual.label || `Approach visual ${index + 1}`}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        loading="lazy"
+                      />
+                    )}
+                  </div>
+                  {visual.label && (
+                    <p className="mt-4 text-sm font-medium text-text-muted-custom text-center">
+                      {visual.label}
+                    </p>
+                  )}
+                </motion.div>
+              ))}
             </div>
           </Container>
         </Section>
