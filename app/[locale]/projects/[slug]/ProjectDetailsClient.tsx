@@ -121,7 +121,7 @@ export default function ProjectDetailsClient({
           </motion.div>
 
           {/* Cover Image */}
-          {project.coverImageUrl && (
+          {project.coverImageUrl && project.coverImageUrl.startsWith('http') && (
             <motion.div
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}

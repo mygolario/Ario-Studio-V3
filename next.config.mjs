@@ -11,6 +11,11 @@ const nextConfig = {
         hostname: 'mrario.ir',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+        pathname: '/**',
+      },
     ],
     // Modern formats for smaller sizes
     formats: ['image/avif', 'image/webp'],

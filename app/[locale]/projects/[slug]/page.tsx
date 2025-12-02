@@ -5,9 +5,14 @@ import ProjectDetailsClient from "./ProjectDetailsClient";
 
 export async function generateStaticParams() {
   const projects = await getAllProjects();
-  return projects.map((project) => ({
-    slug: project.slug,
-  }));
+  const locales = ['en', 'fa'];
+  
+  return locales.flatMap((locale) =>
+    projects.map((project) => ({
+      locale,
+      slug: project.slug,
+    }))
+  );
 }
 
 export async function generateMetadata({
@@ -78,11 +83,22 @@ export default async function ProjectDetails({
 }: {
   params: { slug: string; locale: string };
 }) {
-  const project = await getProjectBySlug(params.slug);
+  try {
+    const project = await getProjectBySlug(params.slug);
 
-  if (!project) {
+    if (!project) {
+      notFound();
+    }
+
+    // Validate required fields
+    if (!project.slug || !project.title) {
+      console.error('[ProjectDetails] Invalid project data:', project);
+      notFound();
+    }
+
+    return <ProjectDetailsClient project={project} />;
+  } catch (error) {
+    console.error('[ProjectDetails] Error loading project:', error);
     notFound();
   }
-
-  return <ProjectDetailsClient project={project} />;
 }

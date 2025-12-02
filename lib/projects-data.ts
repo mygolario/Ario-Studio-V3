@@ -31,25 +31,68 @@ export type Project = {
 
 // Helper to map Sanity project to our unified Project type
 function mapSanityProject(sanityProject: any): Project {
+  // Validate and clean image URLs
+  const cleanImageUrl = (url: string | null | undefined | object): string => {
+    if (!url) return '';
+    // If it's already a string, validate it
+    if (typeof url === 'string') {
+      try {
+        new URL(url);
+        return url;
+      } catch {
+        return '';
+      }
+    }
+    // If it's an object (Sanity image reference), try to extract URL
+    if (typeof url === 'object' && url !== null) {
+      // Handle Sanity image object structure
+      if ('asset' in url && url.asset && typeof url.asset === 'object' && 'url' in url.asset) {
+        const assetUrl = (url.asset as any).url;
+        if (typeof assetUrl === 'string') {
+          try {
+            new URL(assetUrl);
+            return assetUrl;
+          } catch {
+            return '';
+          }
+        }
+      }
+    }
+    return '';
+  };
+
+  // Ensure slug is a string (GROQ query already extracts slug.current as slug)
+  const getSlug = (): string => {
+    // The GROQ query already extracts slug.current as "slug", so it should be a string
+    if (typeof sanityProject.slug === 'string') {
+      return sanityProject.slug;
+    }
+    // Fallback in case the query didn't extract it properly
+    if (sanityProject.slug && typeof sanityProject.slug === 'object' && 'current' in sanityProject.slug) {
+      return sanityProject.slug.current || '';
+    }
+    return '';
+  };
+
   return {
-    id: sanityProject._id,
-    slug: sanityProject.slug || sanityProject.slug?.current || "",
+    id: sanityProject._id || '',
+    slug: getSlug(),
     title: sanityProject.title || "",
     excerpt: sanityProject.excerpt || sanityProject.description || "",
     description: sanityProject.description || "",
     content: sanityProject.content || "",
-    coverImageUrl: sanityProject.coverImageUrl || "",
+    coverImageUrl: cleanImageUrl(sanityProject.coverImageUrl),
     category: sanityProject.category || "",
     client: sanityProject.client || "",
     year: sanityProject.year || "",
-    services: sanityProject.services || [],
+    services: Array.isArray(sanityProject.services) ? sanityProject.services : [],
     challenge: sanityProject.challenge || "",
     solution: sanityProject.solution || "",
     results: sanityProject.results || "",
     gradient: sanityProject.gradient || "",
-    images: sanityProject.images || [],
-    approachVisuals: sanityProject.approachVisuals || [],
-    thumbnailImage: sanityProject.thumbnailImageUrl || null,
+    images: Array.isArray(sanityProject.images) ? sanityProject.images.filter((img: any) => img && typeof img === 'string') : [],
+    approachVisuals: Array.isArray(sanityProject.approachVisuals) ? sanityProject.approachVisuals : [],
+    thumbnailImage: cleanImageUrl(sanityProject.thumbnailImageUrl) || null,
   };
 }
 
