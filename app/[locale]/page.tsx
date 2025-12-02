@@ -38,13 +38,15 @@ type PageProps = {
   params: { locale: string };
 };
 
-export default function Home({ params }: PageProps) {
-  // Get static data
-  const featuredServices = getFeaturedServices(params.locale);
-  const projects = getAllProjects();
+export default async function Home({ params }: PageProps) {
+  // Fetch data from Sanity (with fallback to static data)
+  const [featuredServices, allProjects] = await Promise.all([
+    getFeaturedServices(params.locale),
+    getAllProjects(),
+  ]);
   
   // Limit projects to 4 for homepage
-  const featuredProjects = projects.slice(0, 4);
+  const featuredProjects = allProjects.slice(0, 4);
 
   return (
     <div className="flex flex-col gap-0">

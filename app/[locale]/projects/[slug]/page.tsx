@@ -3,19 +3,19 @@ import { getProjectBySlug, getAllProjects } from "@/lib/projects-data";
 import { notFound } from "next/navigation";
 import ProjectDetailsClient from "./ProjectDetailsClient";
 
-export function generateStaticParams() {
-  const projects = getAllProjects();
+export async function generateStaticParams() {
+  const projects = await getAllProjects();
   return projects.map((project) => ({
     slug: project.slug,
   }));
 }
 
-export function generateMetadata({
+export async function generateMetadata({
   params,
 }: {
   params: { slug: string; locale: string };
-}): Metadata {
-  const project = getProjectBySlug(params.slug);
+}): Promise<Metadata> {
+  const project = await getProjectBySlug(params.slug);
   const isFa = params.locale === "fa";
 
   if (!project) {
@@ -73,12 +73,12 @@ export function generateMetadata({
   };
 }
 
-export default function ProjectDetails({
+export default async function ProjectDetails({
   params,
 }: {
   params: { slug: string; locale: string };
 }) {
-  const project = getProjectBySlug(params.slug);
+  const project = await getProjectBySlug(params.slug);
 
   if (!project) {
     notFound();

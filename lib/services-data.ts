@@ -1,3 +1,7 @@
+import { sanityClient } from "./sanity";
+import { SERVICES_QUERY } from "./sanity-queries";
+import type { SanityDocument } from "next-sanity";
+
 export type Service = {
   id: string;
   title: string;
@@ -5,6 +9,22 @@ export type Service = {
   description: string;
   color: string;
   order: number;
+};
+
+type SanityService = {
+  _id: string;
+  title?: string;
+  titleEn?: string;
+  titleFa?: string;
+  subtitle?: string;
+  subtitleEn?: string;
+  subtitleFa?: string;
+  description?: string;
+  descriptionEn?: string;
+  descriptionFa?: string;
+  color?: string;
+  order?: number;
+  icon?: string;
 };
 
 /**
@@ -70,19 +90,52 @@ function getStaticServices(locale: string): Service[] {
   ];
 }
 
-/**
- * Get all services - returns static data
- * @param locale - The locale for translations (e.g., 'fa', 'en')
- */
-export function getAllServices(locale: string = 'en'): Service[] {
-  return getStaticServices(locale);
+// Helper to map Sanity service to our Service type
+function mapSanityService(sanityService: SanityService, locale: string): Service {
+  const isFa = locale === 'fa';
+  
+  return {
+    id: sanityService._id,
+    title: isFa 
+      ? (sanityService.titleFa || sanityService.title || "")
+      : (sanityService.titleEn || sanityService.title || ""),
+    subtitle: isFa
+      ? (sanityService.subtitleFa || sanityService.subtitle || "")
+      : (sanityService.subtitleEn || sanityService.subtitle || ""),
+    description: isFa
+      ? (sanityService.descriptionFa || sanityService.description || "")
+      : (sanityService.descriptionEn || sanityService.description || ""),
+    color: sanityService.color || "bg-accent-purple",
+    order: sanityService.order ?? 0,
+  };
 }
 
 /**
- * Get featured services - returns static data (all services are featured)
+ * Get all services - fetches from Sanity with fallback to static data
  * @param locale - The locale for translations (e.g., 'fa', 'en')
  */
-export function getFeaturedServices(locale: string = 'en'): Service[] {
-  return getStaticServices(locale);
+export async function getAllServices(locale: string = 'en'): Promise<Service[]> {
+  try {
+    const sanityServices = await sanityClient.fetch<SanityDocument[]>(SERVICES_QUERY);
+    
+    if (sanityServices && sanityServices.length > 0) {
+      return sanityServices.map(service => mapSanityService(service, locale));
+    }
+    
+    // Fallback to static data if no Sanity services found
+    console.log('[getAllServices] No Sanity services found, using static data');
+    return getStaticServices(locale);
+  } catch (error) {
+    console.error('[getAllServices] Error fetching from Sanity, using static data:', error);
+    return getStaticServices(locale);
+  }
 }
 
+/**
+ * Get featured services - fetches from Sanity with fallback to static data
+ * @param locale - The locale for translations (e.g., 'fa', 'en')
+ */
+export async function getFeaturedServices(locale: string = 'en'): Promise<Service[]> {
+  // For now, featured services are all services (can be filtered later)
+  return getAllServices(locale);
+}
