@@ -51,8 +51,12 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   };
 }
 
-export default async function ProjectsPage() {
-  const projects = await getAllProjects();
+export default async function ProjectsPage({
+  params,
+}: {
+  params: { locale: string };
+}) {
+  const projects = await getAllProjects(params.locale);
 
-  return <ProjectsClient projects={projects} />;
+  return <ProjectsClient projects={projects} locale={params.locale} />;
 }

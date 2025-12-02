@@ -36,7 +36,8 @@ export type Project = {
 };
 
 // Helper to map Sanity project to our unified Project type
-function mapSanityProject(sanityProject: any): Project {
+function mapSanityProject(sanityProject: any, locale: string = 'en'): Project {
+  const isFa = locale === 'fa';
   // Validate and clean image URLs
   const cleanImageUrl = (url: string | null | undefined | object): string => {
     if (!url) return '';
@@ -96,18 +97,20 @@ function mapSanityProject(sanityProject: any): Project {
   return {
     id: sanityProject._id || '',
     slug: getSlug(),
-    title: sanityProject.title || "",
-    excerpt: sanityProject.excerpt || sanityProject.description || "",
-    description: sanityProject.description || "",
-    content: Array.isArray(sanityProject.content) ? sanityProject.content : null,
+    title: isFa && sanityProject.titleFa ? sanityProject.titleFa : (sanityProject.title || ""),
+    excerpt: isFa && sanityProject.excerptFa ? sanityProject.excerptFa : (sanityProject.excerpt || sanityProject.description || ""),
+    description: isFa && sanityProject.descriptionFa ? sanityProject.descriptionFa : (sanityProject.description || ""),
+    content: isFa && Array.isArray(sanityProject.contentFa) && sanityProject.contentFa.length > 0 
+      ? sanityProject.contentFa 
+      : (Array.isArray(sanityProject.content) ? sanityProject.content : null),
     coverImageUrl: cleanImageUrl(sanityProject.coverImageUrl),
     category: sanityProject.category || "",
     client: sanityProject.client || "",
     year: sanityProject.year || "",
     services: Array.isArray(sanityProject.services) ? sanityProject.services : [],
-    challenge: sanityProject.challenge || "",
-    solution: sanityProject.solution || "",
-    results: sanityProject.results || "",
+    challenge: isFa && sanityProject.challengeFa ? sanityProject.challengeFa : (sanityProject.challenge || ""),
+    solution: isFa && sanityProject.solutionFa ? sanityProject.solutionFa : (sanityProject.solution || ""),
+    results: isFa && sanityProject.resultsFa ? sanityProject.resultsFa : (sanityProject.results || ""),
     gradient: sanityProject.gradient || "",
     images: Array.isArray(sanityProject.images) ? sanityProject.images.filter((img: any) => img && typeof img === 'string') : [],
     approachVisuals: cleanApproachVisuals(sanityProject.approachVisuals),
@@ -134,7 +137,7 @@ function mapStaticProject(p: StaticProject): Project {
 }
 
 // Fetch all projects from Sanity with fallback to static data
-export async function getAllProjects(): Promise<Project[]> {
+export async function getAllProjects(locale: string = 'en'): Promise<Project[]> {
   try {
     const sanityProjects = await sanityClient.fetch<SanityDocument[]>(
       PROJECTS_QUERY,
@@ -145,7 +148,7 @@ export async function getAllProjects(): Promise<Project[]> {
     console.log('[getAllProjects] Fetched projects from Sanity:', sanityProjects?.length || 0);
     
     if (sanityProjects && sanityProjects.length > 0) {
-      const mapped = sanityProjects.map(mapSanityProject);
+      const mapped = sanityProjects.map((p) => mapSanityProject(p, locale));
       console.log('[getAllProjects] Mapped projects:', mapped.length);
       return mapped;
     }
@@ -160,7 +163,7 @@ export async function getAllProjects(): Promise<Project[]> {
 }
 
 // Fetch project by slug from Sanity with fallback to static data
-export async function getProjectBySlug(slug: string): Promise<Project | null> {
+export async function getProjectBySlug(slug: string, locale: string = 'en'): Promise<Project | null> {
   try {
     const sanityProject = await sanityClient.fetch<SanityDocument>(
       PROJECT_BY_SLUG_QUERY,
@@ -169,7 +172,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
     );
     
     if (sanityProject) {
-      return mapSanityProject(sanityProject);
+      return mapSanityProject(sanityProject, locale);
     }
     
     // Fallback to static data

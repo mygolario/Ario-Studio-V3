@@ -13,6 +13,7 @@ import { PortableText } from "next-sanity";
 
 interface ProjectDetailsClientProps {
   project: Project;
+  locale?: string;
 }
 
 export default function ProjectDetailsClient({

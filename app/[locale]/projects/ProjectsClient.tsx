@@ -4,12 +4,13 @@ import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Link } from "@/lib/navigation";
 import { ArrowRight } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import type { Project } from "@/lib/projects-data";
 import Image from "next/image";
 
 interface ProjectsClientProps {
   projects: Project[];
+  locale?: string;
 }
 
 export default function ProjectsClient({ projects }: ProjectsClientProps) {

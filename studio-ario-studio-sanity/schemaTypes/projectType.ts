@@ -8,7 +8,14 @@ export const projectType = defineType({
     defineField({
       name: 'title',
       type: 'string',
+      title: 'Title (English)',
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'titleFa',
+      type: 'string',
+      title: 'Title (Farsi)',
+      description: 'Farsi version of the title',
     }),
     defineField({
       name: 'slug',
@@ -19,19 +26,38 @@ export const projectType = defineType({
     defineField({
       name: 'excerpt',
       type: 'text',
-      title: 'Excerpt',
+      title: 'Excerpt (English)',
       description: 'Short description for listings',
+    }),
+    defineField({
+      name: 'excerptFa',
+      type: 'text',
+      title: 'Excerpt (Farsi)',
+      description: 'Farsi version of the excerpt',
     }),
     defineField({
       name: 'description',
       type: 'text',
-      title: 'Description',
+      title: 'Description (English)',
+    }),
+    defineField({
+      name: 'descriptionFa',
+      type: 'text',
+      title: 'Description (Farsi)',
+      description: 'Farsi version of the description',
     }),
     defineField({
       name: 'content',
       type: 'array',
       of: [{type: 'block'}],
-      title: 'Full Content',
+      title: 'Full Content (English)',
+    }),
+    defineField({
+      name: 'contentFa',
+      type: 'array',
+      of: [{type: 'block'}],
+      title: 'Full Content (Farsi)',
+      description: 'Farsi version of the full content',
     }),
     defineField({
       name: 'coverImage',
@@ -85,17 +111,35 @@ export const projectType = defineType({
     defineField({
       name: 'challenge',
       type: 'text',
-      title: 'Challenge',
+      title: 'Challenge (English)',
+    }),
+    defineField({
+      name: 'challengeFa',
+      type: 'text',
+      title: 'Challenge (Farsi)',
+      description: 'Farsi version of the challenge',
     }),
     defineField({
       name: 'solution',
       type: 'text',
-      title: 'Solution',
+      title: 'Solution (English)',
+    }),
+    defineField({
+      name: 'solutionFa',
+      type: 'text',
+      title: 'Solution (Farsi)',
+      description: 'Farsi version of the solution',
     }),
     defineField({
       name: 'results',
       type: 'text',
-      title: 'Results',
+      title: 'Results (English)',
+    }),
+    defineField({
+      name: 'resultsFa',
+      type: 'text',
+      title: 'Results (Farsi)',
+      description: 'Farsi version of the results',
     }),
     defineField({
       name: 'gradient',

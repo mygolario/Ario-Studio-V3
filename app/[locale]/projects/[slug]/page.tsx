@@ -20,7 +20,7 @@ export async function generateMetadata({
 }: {
   params: { slug: string; locale: string };
 }): Promise<Metadata> {
-  const project = await getProjectBySlug(params.slug);
+  const project = await getProjectBySlug(params.slug, params.locale);
   const isFa = params.locale === "fa";
 
   if (!project) {
@@ -29,9 +29,10 @@ export async function generateMetadata({
     };
   }
 
-  const title = isFa ? `${project.title} | آریو استودیو` : `${project.title} | Ario Studio`;
+  const projectTitle = project.title || (isFa ? "پروژه" : "Project");
+  const title = isFa ? `${projectTitle} | آریو استودیو` : `${projectTitle} | Ario Studio`;
 
-  const description = project.excerpt || project.description || (isFa ? `پروژه ${project.title} توسط آریو استودیو` : `${project.title} project by Ario Studio`);
+  const description = project.excerpt || project.description || (isFa ? `پروژه ${projectTitle} توسط آریو استودیو` : `${projectTitle} project by Ario Studio`);
 
   return {
     title,
@@ -84,7 +85,7 @@ export default async function ProjectDetails({
   params: { slug: string; locale: string };
 }) {
   try {
-    const project = await getProjectBySlug(params.slug);
+    const project = await getProjectBySlug(params.slug, params.locale);
 
     if (!project) {
       notFound();
@@ -96,7 +97,7 @@ export default async function ProjectDetails({
       notFound();
     }
 
-    return <ProjectDetailsClient project={project} />;
+    return <ProjectDetailsClient project={project} locale={params.locale} />;
   } catch (error) {
     console.error('[ProjectDetails] Error loading project:', error);
     notFound();
