@@ -1,6 +1,5 @@
 import { sanityClient } from "./sanity";
 import { HOMEPAGE_QUERY } from "./sanity-queries";
-import type { SanityDocument } from "next-sanity";
 
 export type HomepageContent = {
   hero?: {
@@ -26,7 +25,7 @@ export type HomepageContent = {
  */
 export async function getHomepageContent(): Promise<HomepageContent | null> {
   try {
-    const homepage = await sanityClient.fetch<SanityDocument>(HOMEPAGE_QUERY);
+    const homepage = await sanityClient.fetch<HomepageContent>(HOMEPAGE_QUERY);
     return homepage || null;
   } catch (error) {
     console.error('[getHomepageContent] Error fetching from Sanity:', error);
