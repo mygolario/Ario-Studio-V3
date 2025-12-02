@@ -28,6 +28,11 @@ export type Project = {
   approachVisuals?: { id: string; label: string; imageUrl: string }[];
   thumbnailImage?: string | null;
   order?: number;
+  code?: {
+    code: string;
+    language?: string;
+    filename?: string;
+  };
 };
 
 // Helper to map Sanity project to our unified Project type
@@ -108,6 +113,13 @@ function mapSanityProject(sanityProject: any): Project {
     approachVisuals: cleanApproachVisuals(sanityProject.approachVisuals),
     thumbnailImage: cleanImageUrl(sanityProject.thumbnailImageUrl) || null,
     order: typeof sanityProject.order === 'number' ? sanityProject.order : undefined,
+    code: sanityProject.code && typeof sanityProject.code === 'object' && 'code' in sanityProject.code
+      ? {
+          code: sanityProject.code.code || '',
+          language: sanityProject.code.language || 'text',
+          filename: sanityProject.code.filename || undefined,
+        }
+      : undefined,
   };
 }
 

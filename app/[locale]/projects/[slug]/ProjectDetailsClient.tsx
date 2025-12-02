@@ -349,6 +349,48 @@ export default function ProjectDetailsClient({
         </Section>
       )}
 
+      {/* Code Section */}
+      {project.code && project.code.code && (
+        <Section className="bg-page-elevated">
+          <Container>
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-text-main">
+                {isRtl ? "کد" : "Code"}
+              </h2>
+              <div className="relative">
+                {project.code.filename && (
+                  <div className="flex items-center justify-between bg-gray-800 dark:bg-gray-900 px-4 py-2 rounded-t-lg border-b border-gray-700">
+                    <span className="text-sm font-mono text-gray-300">
+                      {project.code.filename}
+                    </span>
+                    {project.code.language && (
+                      <span className="text-xs text-gray-400 uppercase tracking-wider">
+                        {project.code.language}
+                      </span>
+                    )}
+                  </div>
+                )}
+                <pre
+                  className={`overflow-x-auto ${
+                    project.code.filename
+                      ? 'rounded-b-lg'
+                      : 'rounded-lg'
+                  } bg-gray-900 dark:bg-gray-950 border border-gray-800 dark:border-gray-800 p-4 sm:p-6`}
+                >
+                  <code
+                    className={`block text-sm sm:text-base font-mono text-gray-100 leading-relaxed ${
+                      project.code.language ? `language-${project.code.language}` : ''
+                    }`}
+                  >
+                    {project.code.code}
+                  </code>
+                </pre>
+              </div>
+            </div>
+          </Container>
+        </Section>
+      )}
+
       {/* Next Project CTA */}
       <Section>
         <Container>

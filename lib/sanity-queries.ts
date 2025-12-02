@@ -43,6 +43,7 @@ export const PROJECT_BY_SLUG_QUERY = `*[_type == "project" && slug.current == $s
   gradient,
   "images": images[].asset->url,
   approachVisuals,
+  code,
   publishedAt,
   featured,
   order
