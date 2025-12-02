@@ -4,7 +4,7 @@
 export const PROJECTS_QUERY = `*[_type == "project" && defined(slug.current) && !(_id in path("drafts.**"))] | order(order asc, publishedAt desc) {
   _id,
   title,
-  slug,
+  "slug": slug.current,
   excerpt,
   description,
   "coverImageUrl": coverImage.asset->url,
@@ -27,7 +27,7 @@ export const PROJECTS_QUERY = `*[_type == "project" && defined(slug.current) && 
 export const PROJECT_BY_SLUG_QUERY = `*[_type == "project" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
   _id,
   title,
-  slug,
+  "slug": slug.current,
   excerpt,
   description,
   content,
@@ -48,10 +48,10 @@ export const PROJECT_BY_SLUG_QUERY = `*[_type == "project" && slug.current == $s
   order
 }`;
 
-export const FEATURED_PROJECTS_QUERY = `*[_type == "project" && featured == true && defined(slug.current)] | order(order asc, publishedAt desc)[0...4] {
+export const FEATURED_PROJECTS_QUERY = `*[_type == "project" && featured == true && defined(slug.current) && !(_id in path("drafts.**"))] | order(order asc, publishedAt desc)[0...4] {
   _id,
   title,
-  slug,
+  "slug": slug.current,
   excerpt,
   description,
   "coverImageUrl": coverImage.asset->url,

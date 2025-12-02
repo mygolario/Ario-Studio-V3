@@ -33,7 +33,7 @@ export type Project = {
 function mapSanityProject(sanityProject: any): Project {
   return {
     id: sanityProject._id,
-    slug: sanityProject.slug?.current || "",
+    slug: sanityProject.slug || sanityProject.slug?.current || "",
     title: sanityProject.title || "",
     excerpt: sanityProject.excerpt || sanityProject.description || "",
     description: sanityProject.description || "",
