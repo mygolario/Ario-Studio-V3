@@ -5,7 +5,7 @@ import { Section } from "@/components/ui/Section";
 import { Link } from "@/lib/navigation";
 import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { Project } from "@/sanity/queries";
+import type { Project } from "@/lib/projects-data";
 import Image from "next/image";
 
 interface ProjectsClientProps {
@@ -35,19 +35,19 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
           <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
             {projects.map((project) => (
               <div
-                key={project._id}
+                key={project.id}
               >
                 <Link
-                  href={`/projects/${project.slug.current}`}
+                  href={`/projects/${project.slug}`}
                   className="group block space-y-4 relative z-10"
                 >
                   <div
                     className={`relative aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br from-gray-500/20 to-slate-500/20 border border-border-subtle group-hover:border-border-subtle/50 transition-all duration-500`}
                   >
-                    {project.thumbnail && (
+                    {project.coverImageUrl && (
                       <Image
-                        src={project.thumbnail}
-                        alt={`${project.title} - ${project.industry || 'Project'}`}
+                        src={project.coverImageUrl}
+                        alt={`${project.title} - ${project.category || 'Project'}`}
                         fill
                         className="object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500"
                         sizes="(max-width: 768px) 100vw, 50vw"
@@ -69,15 +69,15 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
                       <h3 className="text-2xl font-bold text-text-main group-hover:text-accent-purple transition-colors">
                         {project.title}
                       </h3>
-                      {project.industry && (
+                      {project.category && (
                         <span className="text-sm font-mono text-text-muted-custom">
-                          {project.industry}
+                          {project.category}
                         </span>
                       )}
                     </div>
-                    {project.summary && (
+                    {project.excerpt && (
                       <p className="text-text-muted-custom text-sm md:text-base line-clamp-2">
-                        {project.summary}
+                        {project.excerpt}
                       </p>
                     )}
                   </div>

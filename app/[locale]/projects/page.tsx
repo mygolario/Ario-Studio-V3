@@ -1,7 +1,6 @@
 import { Metadata } from "next";
-import { getAllProjects } from "@/sanity/queries";
+import { getAllProjects } from "@/lib/projects-data";
 import ProjectsClient from "./ProjectsClient";
-import { getTranslations } from "next-intl/server";
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const isFa = locale === 'fa';
@@ -52,8 +51,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   };
 }
 
-export default async function ProjectsPage() {
-  const projects = await getAllProjects();
+export default function ProjectsPage() {
+  const projects = getAllProjects();
 
   return <ProjectsClient projects={projects} />;
 }

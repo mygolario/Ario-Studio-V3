@@ -6,7 +6,7 @@ import { Link } from "@/lib/navigation";
 import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import type { Project } from "@/sanity/queries";
+import type { Project } from "@/lib/projects-data";
 import { cn } from "@/lib/utils";
 
 // Lightweight View All Projects Button - CSS only hover effects
@@ -67,17 +67,17 @@ export function Projects({ projects }: ProjectsProps) {
         <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
           {featuredProjects.map((project, index) => (
             <div
-              key={project._id}
+              key={project.id}
             >
-              <Link href={`/projects/${project.slug.current}`} className="group block relative z-10">
+              <Link href={`/projects/${project.slug}`} className="group block relative z-10">
                 <div
                   className={`relative aspect-[16/9] rounded-2xl overflow-hidden bg-page-elevated border border-border-subtle group-hover:border-accent-purple/30 group-hover:shadow-lg transition-all duration-500`}
                 >
                   {/* Thumbnail Image (if available) */}
-                  {project.thumbnail && (
+                  {project.coverImageUrl && (
                     <Image
-                      src={project.thumbnail}
-                      alt={`${project.title} - ${project.industry || 'Project'}`}
+                      src={project.coverImageUrl}
+                      alt={`${project.title} - ${project.category || 'Project'}`}
                       fill
                       className="object-cover"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -87,7 +87,7 @@ export function Projects({ projects }: ProjectsProps) {
                   )}
                   
                   {/* Gradient Overlay */}
-                  <div className={`absolute inset-0 pointer-events-none bg-gradient-to-br from-gray-500/20 to-slate-500/20 ${project.thumbnail ? 'opacity-60' : 'opacity-50'} group-hover:opacity-70 transition-opacity duration-500`} />
+                  <div className={`absolute inset-0 pointer-events-none bg-gradient-to-br from-gray-500/20 to-slate-500/20 ${project.coverImageUrl ? 'opacity-60' : 'opacity-50'} group-hover:opacity-70 transition-opacity duration-500`} />
                   
                   {/* Hover Glow */}
                   <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-black/20 via-transparent to-transparent dark:from-black/80" />
@@ -100,7 +100,7 @@ export function Projects({ projects }: ProjectsProps) {
                     {/* Text content */}
                     <div className="relative z-10">
                       <span className="text-xs md:text-sm font-semibold uppercase tracking-wider text-white/95 mb-2 block">
-                        {project.industry || 'Project'}
+                        {project.category || 'Project'}
                       </span>
                       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
                         <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white leading-tight">

@@ -1,26 +1,21 @@
 import { Metadata } from "next";
-import { getProjectBySlug, getAllProjectSlugs } from "@/sanity/queries";
+import { getProjectBySlug, getAllProjects } from "@/lib/projects-data";
 import { notFound } from "next/navigation";
-import { draftMode } from "next/headers";
-import { Suspense } from "react";
-import { PreviewProvider } from "@/sanity/PreviewProvider";
-import { PreviewProject } from "./PreviewProject";
 import ProjectDetailsClient from "./ProjectDetailsClient";
 
-export async function generateStaticParams() {
-  const slugs = await getAllProjectSlugs();
-  return slugs.map((item) => ({
-    slug: item.slug,
+export function generateStaticParams() {
+  const projects = getAllProjects();
+  return projects.map((project) => ({
+    slug: project.slug,
   }));
 }
 
-export async function generateMetadata({
+export function generateMetadata({
   params,
 }: {
   params: { slug: string; locale: string };
-}): Promise<Metadata> {
-  const { isEnabled } = draftMode();
-  const project = await getProjectBySlug(params.slug, isEnabled);
+}): Metadata {
+  const project = getProjectBySlug(params.slug);
   const isFa = params.locale === "fa";
 
   if (!project) {
@@ -31,7 +26,7 @@ export async function generateMetadata({
 
   const title = isFa ? `${project.title} | آریو استودیو` : `${project.title} | Ario Studio`;
 
-  const description = project.summary || (isFa ? `پروژه ${project.title} توسط آریو استودیو` : `${project.title} project by Ario Studio`);
+  const description = project.excerpt || project.description || (isFa ? `پروژه ${project.title} توسط آریو استودیو` : `${project.title} project by Ario Studio`);
 
   return {
     title,
@@ -43,10 +38,10 @@ export async function generateMetadata({
       type: "website",
       locale: isFa ? "fa_IR" : "en_US",
       siteName: isFa ? "آریو استودیو" : "Ario Studio",
-      images: project.thumbnail
+      images: project.coverImageUrl
         ? [
             {
-              url: project.thumbnail,
+              url: project.coverImageUrl,
               width: 1200,
               height: 630,
               alt: project.title,
@@ -65,7 +60,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title,
       description,
-      images: project.thumbnail ? [project.thumbnail] : [`/projects/${params.slug}/opengraph-image`],
+      images: project.coverImageUrl ? [project.coverImageUrl] : [`/projects/${params.slug}/opengraph-image`],
     },
     alternates: {
       canonical: `https://www.ariostudio.net/${params.locale}/projects/${params.slug}`,
@@ -78,34 +73,16 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProjectDetails({
+export default function ProjectDetails({
   params,
 }: {
   params: { slug: string; locale: string };
 }) {
-  const { isEnabled } = draftMode();
-  const project = await getProjectBySlug(params.slug, isEnabled);
+  const project = getProjectBySlug(params.slug);
 
   if (!project) {
     notFound();
   }
 
-  // If draft mode is enabled, use preview component with live query
-  if (isEnabled) {
-    const token = process.env.SANITY_API_READ_TOKEN;
-    if (!token) {
-      throw new Error('Missing SANITY_API_READ_TOKEN for preview mode');
-    }
-    
-    return (
-      <PreviewProvider token={token}>
-        <Suspense fallback={<div className="pt-20"><div className="container mx-auto px-4"><p>Loading preview...</p></div></div>}>
-          <PreviewProject project={project} slug={params.slug} />
-        </Suspense>
-      </PreviewProvider>
-    );
-  }
-
-  // Normal published content
   return <ProjectDetailsClient project={project} />;
 }
