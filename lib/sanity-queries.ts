@@ -1,7 +1,7 @@
 // GROQ queries for fetching data from Sanity
 
 // Projects queries
-export const PROJECTS_QUERY = `*[_type == "project" && defined(slug.current)] | order(order asc, publishedAt desc) {
+export const PROJECTS_QUERY = `*[_type == "project" && defined(slug.current) && !(_id in path("drafts.**"))] | order(order asc, publishedAt desc) {
   _id,
   title,
   slug,
@@ -24,7 +24,7 @@ export const PROJECTS_QUERY = `*[_type == "project" && defined(slug.current)] | 
   order
 }`;
 
-export const PROJECT_BY_SLUG_QUERY = `*[_type == "project" && slug.current == $slug][0] {
+export const PROJECT_BY_SLUG_QUERY = `*[_type == "project" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
   _id,
   title,
   slug,

@@ -66,10 +66,18 @@ function mapStaticProject(p: StaticProject): Project {
 // Fetch all projects from Sanity with fallback to static data
 export async function getAllProjects(): Promise<Project[]> {
   try {
-    const sanityProjects = await sanityClient.fetch<SanityDocument[]>(PROJECTS_QUERY);
+    const sanityProjects = await sanityClient.fetch<SanityDocument[]>(
+      PROJECTS_QUERY,
+      {},
+      { next: { revalidate: 60 } } // Revalidate every 60 seconds
+    );
+    
+    console.log('[getAllProjects] Fetched projects from Sanity:', sanityProjects?.length || 0);
     
     if (sanityProjects && sanityProjects.length > 0) {
-      return sanityProjects.map(mapSanityProject);
+      const mapped = sanityProjects.map(mapSanityProject);
+      console.log('[getAllProjects] Mapped projects:', mapped.length);
+      return mapped;
     }
     
     // Fallback to static data if no Sanity projects found
@@ -84,7 +92,11 @@ export async function getAllProjects(): Promise<Project[]> {
 // Fetch project by slug from Sanity with fallback to static data
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
   try {
-    const sanityProject = await sanityClient.fetch<SanityDocument>(PROJECT_BY_SLUG_QUERY, { slug });
+    const sanityProject = await sanityClient.fetch<SanityDocument>(
+      PROJECT_BY_SLUG_QUERY,
+      { slug },
+      { next: { revalidate: 60 } }
+    );
     
     if (sanityProject) {
       return mapSanityProject(sanityProject);
