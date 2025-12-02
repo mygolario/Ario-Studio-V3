@@ -194,12 +194,12 @@ export async function getProjectBySlug(slug: string, locale: string = 'en'): Pro
 }
 
 // Fetch featured projects from Sanity with fallback to static data
-export async function getFeaturedProjects(limit: number = 4): Promise<Project[]> {
+export async function getFeaturedProjects(limit: number = 4, locale: string = 'en'): Promise<Project[]> {
   try {
     const sanityProjects = await sanityClient.fetch<SanityDocument[]>(FEATURED_PROJECTS_QUERY);
     
     if (sanityProjects && sanityProjects.length > 0) {
-      return sanityProjects.slice(0, limit).map(mapSanityProject);
+      return sanityProjects.slice(0, limit).map((p) => mapSanityProject(p, locale));
     }
     
     // Fallback to static data
