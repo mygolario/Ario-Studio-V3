@@ -1,73 +1,147 @@
-import { NextRequest } from "next/server";
-import { sendContactEmail, sendAutoReplyEmail } from "@/lib/email/brevo";
-import { getRequestLang, getTranslation } from "@/lib/i18n";
-import { jsonSuccess, jsonError, jsonValidationError } from "@/lib/api/response";
+import { NextResponse } from "next/server";
+import { generateClientEmail, generateAdminEmail } from "@/lib/email-templates";
 
-/**
- * Contact form API route
- * 
- * Accepts POST requests with contact form data and sends emails via Brevo SMTP
- * Supports bilingual responses (EN/FA) based on request language detection
- */
-export async function POST(req: NextRequest) {
+const BREVO_API_URL = "https://api.brevo.com/v3/smtp/email";
+
+export async function POST(request: Request) {
   try {
-    // Detect language from request
-    const lang = getRequestLang(req);
-    const t = (key: string) => getTranslation(lang, key);
+    const body = await request.json();
+    const { 
+      projectType,
+      businessName,
+      currentWebsite,
+      primaryGoal,
+      projectSummary,
+      timeline,
+      budgetRange,
+      fullName,
+      email,
+      socialLink,
+      extraNotes,
+      locale = "en"
+    } = body;
 
-    const body = await req.json();
-    const { name, email, subject, message } = body;
+    // console.log("📧 Contact form submission received:", { fullName, email });
 
-    // Validation with i18n messages
-    if (!name || name.trim().length === 0) {
-      return jsonValidationError(lang, "contact.validation.nameRequired", {
-        name: t("contact.validation.nameRequired"),
+    // 1. Validation
+    if (!projectType || !primaryGoal || !projectSummary || !budgetRange || !fullName || !email) {
+      console.error("❌ Validation failed: Missing required fields");
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      console.error("❌ Validation failed: Invalid email format");
+      return NextResponse.json(
+        { error: "Invalid email format" },
+        { status: 400 }
+      );
+    }
+
+    const apiKey = process.env.BREVO_API_KEY;
+    const fromEmail = process.env.CONTACT_FROM_EMAIL;
+    const toEmail = process.env.CONTACT_TO_EMAIL;
+
+    if (!apiKey || !fromEmail || !toEmail) {
+      console.error("❌ Missing environment variables:", {
+        hasApiKey: !!apiKey,
+        hasFromEmail: !!fromEmail,
+        hasToEmail: !!toEmail,
       });
+      return NextResponse.json(
+        { error: "Server configuration error" },
+        { status: 500 }
+      );
     }
 
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return jsonValidationError(lang, "contact.validation.emailInvalid", {
-        email: t("contact.validation.emailInvalid"),
+    // console.log("✅ Environment variables validated");
+
+    // 2. Send Admin Notification
+    const adminPayload = {
+      sender: { name: "Ario Studio System", email: fromEmail },
+      to: [{ email: toEmail }],
+      subject: `New Project Request — From ${fullName}`,
+      htmlContent: generateAdminEmail(body, locale),
+    };
+
+    // console.log("📤 Sending admin email to:", toEmail);
+
+    const adminEmailRes = await fetch(BREVO_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "api-key": apiKey,
+      },
+      body: JSON.stringify(adminPayload),
+    });
+
+    const adminResponseData = await adminEmailRes.json();
+
+    if (!adminEmailRes.ok) {
+      console.error("❌ Brevo Admin Email Error:", {
+        status: adminEmailRes.status,
+        statusText: adminEmailRes.statusText,
+        response: adminResponseData,
       });
+      return NextResponse.json(
+        { 
+          error: "Failed to send email", 
+          details: adminResponseData.message || "Unknown Brevo error" 
+        },
+        { status: 500 }
+      );
     }
 
-    if (!message || message.trim().length === 0) {
-      return jsonValidationError(lang, "contact.validation.messageRequired", {
-        message: t("contact.validation.messageRequired"),
+    // console.log("✅ Admin email sent successfully:", adminResponseData);
+
+    // 3. Send Client Confirmation
+    const clientPayload = {
+      sender: { name: "Ario Studio", email: fromEmail },
+      to: [{ email: email, name: fullName }],
+      subject: "Ario Studio — Your project request has been received",
+      htmlContent: generateClientEmail(fullName, projectType, primaryGoal, budgetRange, locale),
+    };
+
+    // console.log("📤 Sending client confirmation to:", email);
+
+    const clientEmailRes = await fetch(BREVO_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "api-key": apiKey,
+      },
+      body: JSON.stringify(clientPayload),
+    });
+
+    const clientResponseData = await clientEmailRes.json();
+
+    if (!clientEmailRes.ok) {
+      // Log error but don't fail the request if client email fails (admin email already sent)
+      console.error("⚠️ Brevo Client Email Error (non-critical):", {
+        status: clientEmailRes.status,
+        statusText: clientEmailRes.statusText,
+        response: clientResponseData,
       });
+    } else {
+      // console.log("✅ Client confirmation sent successfully:", clientResponseData);
     }
 
-    // Send contact email to admin
-    try {
-      await sendContactEmail({
-        name: name.trim(),
-        email: email.trim(),
-        subject: subject?.trim(),
-        message: message.trim(),
-      }, lang);
-    } catch (emailError: any) {
-      console.error("Failed to send contact email:", emailError);
-      return jsonError(lang, "contact.error", 500);
-    }
-
-    // Send auto-reply to user (non-blocking, graceful degradation)
-    try {
-      await sendAutoReplyEmail(name.trim(), email.trim(), lang);
-    } catch (autoReplyError) {
-      // Log but don't fail - auto-reply failure shouldn't break the main flow
-      console.warn("Failed to send auto-reply email:", autoReplyError);
-    }
-
-    return jsonSuccess(lang, "contact.success");
-  } catch (error: any) {
-    console.error("CONTACT_FORM_ERROR", error);
-    // Try to get language for error message, but don't fail if it doesn't work
-    try {
-      const lang = getRequestLang(req);
-      return jsonError(lang, "contact.error", 500);
-    } catch {
-      // Fallback to English if language detection fails
-      return jsonError('en', "contact.error", 500);
-    }
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("❌ Contact API Critical Error:", {
+      error: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+    return NextResponse.json(
+      { 
+        error: "Internal Server Error",
+        details: error instanceof Error ? error.message : "Unknown error"
+      },
+      { status: 500 }
+    );
   }
 }

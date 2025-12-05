@@ -1,0 +1,23 @@
+{
+  "navigation": {
+    "home": "Home",
+    "services": "Services",
+    "projects": "Projects",
+    "about": "About",
+    "contact": "Contact",
+    "requestProject": "Request Project"
+  },
+  "footer": {
+    "rights": "© {year} Ario Studio. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "sitemap": "Sitemap",
+    "social": "Socials",
+    "description": "We design and build high-end, modern, cinematic websites. A hybrid digital studio focused on premium experiences.",
+    "emailLabel": "Email"
+  },
+  "actions": {
+    "toggleTheme": "Toggle theme",
+    "switchLanguage": "Switch Language"
+  }
+}

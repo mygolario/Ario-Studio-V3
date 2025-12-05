@@ -1,0 +1,113 @@
+{
+  "cta": {
+    "headline": {
+      "prefix": "آماده ساختن چیزی",
+      "highlight": "خارق‌العاده هستید؟"
+    },
+    "description": "بیایید چشم‌انداز شما را به یک تجربه دیجیتال در کلاس جهانی تبدیل کنیم. همین امروز یک جلسه مشاوره تنظیم کنید.",
+    "buttons": {
+      "request": "فرم درخواست پروژه",
+      "email": "info@ariostudio.net"
+    }
+  },
+  "page": {
+    "title": {
+      "prefix": "بیایید گفتگو را",
+      "highlight": "آغاز کنیم."
+    },
+    "description": "چه پروژه خاصی در ذهن داشته باشید یا فقط بخواهید امکانات را بررسی کنید، مشتاق شنیدن نظرات شما هستیم.",
+    "emailMeta": "در صورت تمایل می‌توانید مستقیماً برای ما ایمیل بفرستید:",
+    "steps": {
+      "1": "اطلاعات پایه",
+      "2": "اهداف و دامنه",
+      "3": "بودجه و تماس"
+    },
+    "form": {
+      "next": "مرحله بعد",
+      "back": "بازگشت",
+      "submit": "ارسال درخواست",
+      "sending": "در حال ارسال...",
+      "error": "خطایی رخ داد. لطفا دوباره تلاش کنید.",
+      "validation": {
+        "required": "این فیلد الزامی است",
+        "email": "لطفا یک ایمیل معتبر وارد کنید"
+      },
+      "success": {
+        "title": "پیام ارسال شد!",
+        "description": "با تشکر از تماس شما. به زودی با شما تماس خواهیم گرفت.",
+        "another": "ارسال پیام دیگر"
+      },
+      "fields": {
+        "projectType": {
+          "label": "نوع پروژه",
+          "placeholder": "انتخاب نوع پروژه",
+          "options": {
+            "new_website": "وب‌سایت جدید",
+            "redesign": "بازطراحی / نوسازی",
+            "landing_page": "لندینگ پیج",
+            "brand_visual": "هویت بصری و برند",
+            "other": "سایر"
+          }
+        },
+        "businessName": {
+          "label": "نام کسب‌وکار",
+          "placeholder": "شرکت شما"
+        },
+        "currentWebsite": {
+          "label": "وب‌سایت فعلی",
+          "placeholder": "https://example.com"
+        },
+        "primaryGoal": {
+          "label": "هدف اصلی",
+          "placeholder": "انتخاب هدف اصلی",
+          "options": {
+            "lead_generation": "تولید سرنخ (Lead)",
+            "online_sales": "فروش آنلاین",
+            "brand_presence": "آگاهی از برند و حضور آنلاین",
+            "portfolio_showcase": "نمایش نمونه کار",
+            "other": "سایر"
+          }
+        },
+        "projectSummary": {
+          "label": "خلاصه پروژه",
+          "placeholder": "به طور خلاصه پروژه و نیازهای خود را شرح دهید..."
+        },
+        "timeline": {
+          "label": "زمان‌بندی",
+          "placeholder": "انتخاب زمان‌بندی",
+          "options": {
+            "asap": "در اسرع وقت",
+            "one_to_two_months": "۱-۲ ماه",
+            "three_to_four_months": "۳-۴ ماه",
+            "flexible": "منعطف"
+          }
+        },
+        "budgetRange": {
+          "label": "محدوده بودجه",
+          "placeholder": "انتخاب بودجه",
+          "options": {
+            "tier1": "۳۰ تا ۶۰ میلیون تومان",
+            "tier2": "۶۰ تا ۱۲۰ میلیون تومان",
+            "tier3": "۱۲۰ تا ۲۵۰ میلیون تومان"
+          }
+        },
+        "fullName": {
+          "label": "نام و نام خانوادگی",
+          "placeholder": "علی محمدی"
+        },
+        "email": {
+          "label": "آدرس ایمیل",
+          "placeholder": "ali@example.com"
+        },
+        "socialLink": {
+          "label": "لینک شبکه اجتماعی (لینکدین/توییتر)",
+          "placeholder": "https://twitter.com/..."
+        },
+        "extraNotes": {
+          "label": "توضیحات تکمیلی",
+          "placeholder": "هر چیز دیگری که باید بدانیم؟"
+        }
+      }
+    }
+  }
+}

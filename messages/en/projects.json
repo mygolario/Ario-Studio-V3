@@ -1,0 +1,26 @@
+{
+  "page": {
+    "title": "Our Work",
+    "description": "A collection of digital experiences crafted with precision, passion, and a focus on user impact."
+  },
+  "title": "Selected Works",
+  "description": "A curated selection of our most recent digital products and experiences.",
+  "viewAll": "View All Projects",
+  "preview": "Preview",
+  "detail": {
+    "back": "Back to Projects",
+    "meta": {
+      "client": "Client",
+      "year": "Year",
+      "services": "Services"
+    },
+    "challenge": "The Challenge",
+    "solution": "Our Approach & Solution",
+    "results": "The Results",
+    "nextCta": {
+      "title": "Ready to build something similar?",
+      "description": "Let's collaborate to bring your vision to life with the same level of precision and passion.",
+      "button": "Start Your Project"
+    }
+  }
+}

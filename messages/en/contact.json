@@ -1,0 +1,113 @@
+{
+  "cta": {
+    "headline": {
+      "prefix": "Ready to build something",
+      "highlight": "extraordinary?"
+    },
+    "description": "Let's turn your vision into a world-class digital experience. Schedule a discovery call with us today.",
+    "buttons": {
+      "request": "Project Request Form",
+      "email": "info@ariostudio.net"
+    }
+  },
+  "page": {
+    "title": {
+      "prefix": "Let's start a",
+      "highlight": "conversation."
+    },
+    "description": "Whether you have a specific project in mind or just want to explore what's possible, we'd love to hear from you.",
+    "emailMeta": "You can also email us directly at",
+    "steps": {
+      "1": "Project Basics",
+      "2": "Goals & Scope",
+      "3": "Budget & Contact"
+    },
+    "form": {
+      "next": "Next Step",
+      "back": "Back",
+      "submit": "Send Request",
+      "sending": "Sending...",
+      "error": "Something went wrong. Please try again.",
+      "validation": {
+        "required": "This field is required",
+        "email": "Please enter a valid email address"
+      },
+      "success": {
+        "title": "Message Sent!",
+        "description": "Thanks for reaching out. We'll get back to you shortly.",
+        "another": "Send another message"
+      },
+      "fields": {
+        "projectType": {
+          "label": "Project Type",
+          "placeholder": "Select project type",
+          "options": {
+            "new_website": "New Website",
+            "redesign": "Redesign / Refresh",
+            "landing_page": "Landing Page",
+            "brand_visual": "Brand Identity & Visuals",
+            "other": "Other"
+          }
+        },
+        "businessName": {
+          "label": "Business Name",
+          "placeholder": "Your Company Ltd."
+        },
+        "currentWebsite": {
+          "label": "Current Website",
+          "placeholder": "https://example.com"
+        },
+        "primaryGoal": {
+          "label": "Primary Goal",
+          "placeholder": "Select primary goal",
+          "options": {
+            "lead_generation": "Lead Generation",
+            "online_sales": "Online Sales / E-commerce",
+            "brand_presence": "Brand Awareness & Presence",
+            "portfolio_showcase": "Portfolio Showcase",
+            "other": "Other"
+          }
+        },
+        "projectSummary": {
+          "label": "Project Summary",
+          "placeholder": "Briefly describe your project and what you need..."
+        },
+        "timeline": {
+          "label": "Timeline",
+          "placeholder": "Select timeline",
+          "options": {
+            "asap": "ASAP",
+            "one_to_two_months": "1-2 Months",
+            "three_to_four_months": "3-4 Months",
+            "flexible": "Flexible"
+          }
+        },
+        "budgetRange": {
+          "label": "Budget Range",
+          "placeholder": "Select budget range",
+          "options": {
+            "tier1": "1,000 – 3,000 USD",
+            "tier2": "3,000 – 6,000 USD",
+            "tier3": "6,000 – 12,000 USD"
+          }
+        },
+        "fullName": {
+          "label": "Full Name",
+          "placeholder": "John Doe"
+        },
+        "email": {
+          "label": "Email Address",
+          "placeholder": "john@example.com"
+        },
+        "socialLink": {
+          "label": "Social Link (LinkedIn/Twitter)",
+          "placeholder": "https://twitter.com/..."
+        },
+        "extraNotes": {
+          "label": "Extra Notes",
+          "placeholder": "Anything else we should know?"
+        }
+      }
+    }
+  }
+}

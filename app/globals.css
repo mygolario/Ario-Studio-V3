@@ -2,16 +2,182 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
+@layer base {
+  :root {
+    /* Existing Shadcn/UI (mapped to new system where possible or kept for compatibility) */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --border: 0 0% 89.8%;
+
+    /* New Design Tokens (Light Mode - Apple-like) */
+    --bg: #f5f5f7;
+    --bg-elevated: #ffffff;
+    --border-subtle: rgba(0, 0, 0, 0.08);
+    --text-main: #1d1d1f;
+    --text-muted: #515155; /* Darkened for better readability on light bg */
+    --accent: #8b5cf6; /* Purple */
+    --accent-soft: rgba(139, 92, 246, 0.1);
+    --nav-bg: rgba(
+      255,
+      255,
+      255,
+      0.85
+    ); /* Slightly more opaque for better legibility */
+    --nav-border: rgba(0, 0, 0, 0.05);
+    --card-glass: rgba(255, 255, 255, 0.7);
+  }
+
+  .dark {
+    /* Existing Shadcn/UI */
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --border: 0 0% 14.9%;
+
+    /* New Design Tokens (Dark Mode - Cinematic) */
+    --bg: #050509;
+    --bg-elevated: #0f0f13;
+    --border-subtle: rgba(255, 255, 255, 0.1);
+    --text-main: #f5f5f7;
+    --text-muted: #a1a1a6;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --nav-bg: rgba(5, 5, 9, 0.75);
+    --nav-border: rgba(255, 255, 255, 0.08);
+    --card-glass: rgba(15, 15, 19, 0.6);
+  }
+}
+
 body {
-  padding: 0;
-  margin: 0;
-  min-height: 100%;
-  background: #050816;
-  color: #f9fafb;
+  @apply bg-[var(--bg)] text-[color:var(--text-main)] font-sans antialiased selection:bg-accent-purple/30 selection:text-white transition-colors duration-300;
+  font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+  overflow-x: hidden;
 }
 
-* {
-  box-sizing: border-box;
+html {
+  overflow-x: hidden;
 }
 
+h1 {
+  @apply text-h1 text-[color:var(--text-main)];
+}
+
+h2 {
+  @apply text-h2 text-[color:var(--text-main)];
+}
+
+h3 {
+  @apply text-h3 text-[color:var(--text-main)];
+}
+
+p {
+  @apply text-body text-[color:var(--text-muted)];
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--border-subtle);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-muted);
+}
+
+/* Shimmer Animation for Premium Buttons */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-200%) skewX(-12deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-12deg);
+  }
+}
+
+/* Pulse Animation for Background Glow (Performance Optimized) */
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes pulse-slower {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.2);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 10s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.animate-pulse-slower {
+  animation: pulse-slower 15s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* Entry Animations (LCP Optimized) */
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s cubic-bezier(0.32, 0, 0.67, 0) forwards;
+  will-change: transform, opacity;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s cubic-bezier(0.32, 0, 0.67, 0) forwards;
+  will-change: opacity;
+}
+
+/* Stagger delays */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
