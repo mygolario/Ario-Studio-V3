@@ -188,6 +188,7 @@ export function Header() {
                         ? "text-amber-500 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.08)] border border-black/5" 
                         : "text-text-muted-custom hover:text-text-main"
                     )}
+                    aria-label={locale === 'fa' ? 'تغییر به حالت روشن' : 'Switch to light theme'}
                   >
                     <Sun className="w-4 h-4" strokeWidth={2.5} />
                   </button>
@@ -199,6 +200,7 @@ export function Header() {
                         ? "text-blue-400 bg-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.2)] border border-white/5" 
                         : "text-text-muted-custom hover:text-text-main"
                     )}
+                    aria-label={locale === 'fa' ? 'تغییر به حالت تاریک' : 'Switch to dark theme'}
                   >
                     <Moon className="w-4 h-4" strokeWidth={2.5} />
                   </button>
