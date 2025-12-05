@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { getProjectBySlug, getAllProjects } from "@/lib/projects-data";
 import { notFound } from "next/navigation";
+import { setRequestLocale } from "next-intl/server";
 import ProjectDetailsClient from "./ProjectDetailsClient";
 
 export async function generateStaticParams() {
@@ -84,6 +85,9 @@ export default async function ProjectDetails({
 }: {
   params: { slug: string; locale: string };
 }) {
+  // Enable static rendering
+  setRequestLocale(params.locale);
+
   try {
     const project = await getProjectBySlug(params.slug, params.locale);
 

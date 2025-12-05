@@ -38,8 +38,9 @@ const BackgroundGlow = dynamic(() => import("@/components/ui/BackgroundGlow").th
   loading: () => null,
 });
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages, getTranslations } from 'next-intl/server';
+import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import { routing } from '@/lib/navigation';
 
 const vazirmatn = Vazirmatn({
   subsets: ["arabic", "latin"],
@@ -61,6 +62,10 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
 };
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
   const isFa = locale === 'fa';
@@ -132,7 +137,10 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  if (!['en', 'fa'].includes(locale)) {
+  // Enable static rendering
+  setRequestLocale(locale);
+
+  if (!routing.locales.includes(locale as any)) {
     notFound();
   }
 
