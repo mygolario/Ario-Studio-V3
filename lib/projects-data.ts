@@ -94,23 +94,55 @@ function mapSanityProject(sanityProject: any, locale: string = 'en'): Project {
       .filter((v) => v.imageUrl); // Only include visuals with valid image URLs
   };
 
+  // Helper to extract localized string value
+  const getLocalizedString = (field: any): string => {
+    if (!field) return "";
+    if (typeof field === 'string') return field; // Fallback for old data structure
+    if (typeof field === 'object' && field !== null) {
+      const lang = isFa ? 'fa' : 'en';
+      return field[lang] || field.en || field.fa || "";
+    }
+    return "";
+  };
+
+  // Helper to extract localized text value
+  const getLocalizedText = (field: any): string => {
+    if (!field) return "";
+    if (typeof field === 'string') return field; // Fallback for old data structure
+    if (typeof field === 'object' && field !== null) {
+      const lang = isFa ? 'fa' : 'en';
+      return field[lang] || field.en || field.fa || "";
+    }
+    return "";
+  };
+
+  // Helper to extract localized block content
+  const getLocalizedContent = (field: any): any => {
+    if (!field) return null;
+    if (Array.isArray(field)) return field; // Fallback for old data structure
+    if (typeof field === 'object' && field !== null) {
+      const lang = isFa ? 'fa' : 'en';
+      const content = field[lang] || field.en || field.fa;
+      return Array.isArray(content) && content.length > 0 ? content : null;
+    }
+    return null;
+  };
+
   return {
     id: sanityProject._id || '',
     slug: getSlug(),
-    title: isFa && sanityProject.titleFa ? sanityProject.titleFa : (sanityProject.title || ""),
-    excerpt: isFa && sanityProject.excerptFa ? sanityProject.excerptFa : (sanityProject.excerpt || sanityProject.description || ""),
-    description: isFa && sanityProject.descriptionFa ? sanityProject.descriptionFa : (sanityProject.description || ""),
-    content: isFa && Array.isArray(sanityProject.contentFa) && sanityProject.contentFa.length > 0 
-      ? sanityProject.contentFa 
-      : (Array.isArray(sanityProject.content) ? sanityProject.content : null),
+    title: getLocalizedString(sanityProject.title),
+    excerpt: getLocalizedText(sanityProject.excerpt) || getLocalizedText(sanityProject.description),
+    description: getLocalizedText(sanityProject.description),
+    content: getLocalizedContent(sanityProject.content),
     coverImageUrl: cleanImageUrl(sanityProject.coverImageUrl),
     category: sanityProject.category || "",
     client: sanityProject.client || "",
     year: sanityProject.year || "",
     services: Array.isArray(sanityProject.services) ? sanityProject.services : [],
-    challenge: isFa && sanityProject.challengeFa ? sanityProject.challengeFa : (sanityProject.challenge || ""),
-    solution: isFa && sanityProject.solutionFa ? sanityProject.solutionFa : (sanityProject.solution || ""),
-    results: isFa && sanityProject.resultsFa ? sanityProject.resultsFa : (sanityProject.results || ""),
+    challenge: getLocalizedText(sanityProject.challenge),
+    solution: getLocalizedText(sanityProject.solution),
+    results: getLocalizedText(sanityProject.results),
     gradient: sanityProject.gradient || "",
     images: Array.isArray(sanityProject.images) ? sanityProject.images.filter((img: any) => img && typeof img === 'string') : [],
     approachVisuals: cleanApproachVisuals(sanityProject.approachVisuals),
